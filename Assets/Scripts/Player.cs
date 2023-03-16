@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviourPun
 {
     private float moveSpeed = 1f;
 
@@ -18,11 +20,23 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
     private void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        if (photonView.IsMine)
+        {
+            moveInput = value.Get<Vector2>();
+        }
+    }
+    
+    private void LateUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
+        }
     }
 }
