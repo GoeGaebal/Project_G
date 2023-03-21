@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviourPun
 {
-    private float moveSpeed = 1f;
+    private float moveSpeed = 5.0f;
 
     private Vector2 moveInput;
     private Rigidbody2D rb;
