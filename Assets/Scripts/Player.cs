@@ -31,7 +31,7 @@ public class Player : MonoBehaviourPun
             moveInput = value.Get<Vector2>();
         }
     }
-    
+
     private void LateUpdate()
     {
         if (photonView.IsMine)
