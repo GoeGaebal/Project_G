@@ -63,9 +63,8 @@ public class LobbyScene : BaseScene
     public override void OnJoinedRoom() {
         // 접속 상태 표시
         connectionInfoText.text = "방 참가 성공";
-        // 모든 룸 참가자들이 Main 씬을 로드하게 함
-        // PhotonNetwork.LoadLevel("Game");
-        Managers.Scene.LoadScene(Define.Scene.Game);
+        // 모든 룸 참가자들이 Game 씬을 로드하게 함
+        Managers.Scene.LoadLevel(Define.Scene.Game);
     }
     protected override void Init()
     {

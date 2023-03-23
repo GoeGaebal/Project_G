@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class GameScene : BaseScene
+public class GameScene : BaseScene,IPunObservable
 {
     protected override void Init()
     {
@@ -44,8 +46,19 @@ public class GameScene : BaseScene
         //pool.SetKeepMonsterCount(2);
     }
 
+    private void Start()
+    {
+        Vector3 SpawnPos = new Vector3(0, 0, 1);
+        PhotonNetwork.Instantiate("Prefabs/Player", SpawnPos, Quaternion.identity);
+    }
+
     public override void Clear()
     {
         
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        throw new System.NotImplementedException();
     }
 }
