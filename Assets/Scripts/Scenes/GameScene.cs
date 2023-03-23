@@ -11,7 +11,7 @@ public class GameScene : BaseScene,IPunObservable
         base.Init();
         SceneType = Define.Scene.Game;
         Managers.Map.LoadMap(1);
-        
+
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";
         // Managers.Object.Add(player);
@@ -48,6 +48,7 @@ public class GameScene : BaseScene,IPunObservable
 
     private void Start()
     {
+        Managers.Object.GenerateGathering(1);
         Vector3 SpawnPos = new Vector3(0, 0, 1);
         PhotonNetwork.Instantiate("Prefabs/Player", SpawnPos, Quaternion.identity);
     }
