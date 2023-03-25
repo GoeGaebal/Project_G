@@ -73,7 +73,7 @@ AnimatorStateMachine:
     m_Position: {x: 470, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 326559728135453368}
-    m_Position: {x: 740, y: 340, z: 0}
+    m_Position: {x: 760, y: 330, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -137,7 +137,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GoblinAnimController
+  m_Name: FlyingEyeAnimController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: hasTarget
@@ -186,7 +186,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a85260cec5bf99a4f88e897a1b4cdfad, type: 2}
+  m_Motion: {fileID: 7400000, guid: e9bc50b65cc3574448c2e34e2b6c60f5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -213,7 +213,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 2e8d7bd0f2e36324c86f077190455e8e, type: 2}
+  m_Motion: {fileID: 7400000, guid: c51717ed41fbe29478492968a92e7247, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -241,7 +241,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 3df7f3e2baccd2e438ba3130d8cce5f9, type: 2}
+  m_Motion: {fileID: 7400000, guid: e9bc50b65cc3574448c2e34e2b6c60f5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
