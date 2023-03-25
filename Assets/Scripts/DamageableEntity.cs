@@ -5,7 +5,7 @@ using System;
 
 public class DamageableEntity : MonoBehaviour, IDamageable
 {
-    [SerializeField] public float maxHP {get; protected set;}
+    public float maxHP {get; protected set;}
     public float HP{get;protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.
 
     public bool isDead {get;protected set;}
@@ -49,7 +49,8 @@ public class DamageableEntity : MonoBehaviour, IDamageable
     /// </summary>
     public virtual void Die()
     { 
-    
+        if (isDead) return;
+        
         if(onDeath != null)
         {
             onDeath();  
