@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 public class DragableUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
     [SerializeField] private Transform _target;//UI 시작 위치
-    private Vector2 _begin;
-    private Vector2 _move;
+    private Vector2 _begin;//시작 좌표
+    private Vector2 _move;//이동 좌표
 
     private void Awake()
     {
