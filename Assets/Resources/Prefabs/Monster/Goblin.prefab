@@ -154,3 +154,4 @@ MonoBehaviour:
     m_Bits: 64
   animator: {fileID: 1410843260874740534}
   spriteRenderer: {fileID: 1410843260874740528}
+  speed: 0.5
