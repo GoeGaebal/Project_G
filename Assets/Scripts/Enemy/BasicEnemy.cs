@@ -15,7 +15,7 @@ public class BasicEnemy : DamageableEntity
     protected bool hasTarget;
     protected GameObject target;
     protected float lastAttackTime;
-
+   
 
 
     private void Start() {
@@ -26,8 +26,7 @@ public class BasicEnemy : DamageableEntity
     private void Update() {
         Collider2D playerCollider = Physics2D.OverlapCircle(gameObject.transform.position, detectRadius,targetLayerMask);
        
-        //타겟 설정
-        // overlapCircle로 탐지된 collider가 없으면 그냥 넘김.
+        //reset target
         if(playerCollider == null)
         {
             hasTarget = false;
@@ -36,7 +35,7 @@ public class BasicEnemy : DamageableEntity
             
         }
 
-        //collider 탐지되었는데 target이 없으면 target 새로 설정
+        //set target when collider is detected but no target
         else if(!target && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             hasTarget = true;
@@ -51,19 +50,23 @@ public class BasicEnemy : DamageableEntity
             //target check
             if(target == null) return;
 
+            //flip sprite
             if(target.transform.position.x < transform.position.x) spriteRenderer.flipX = true;
             else spriteRenderer.flipX = false;
 
             Vector3 playerpos = target.transform.position;
-            animator.SetFloat("distance", (playerpos - transform.position).magnitude);
+            animator.SetFloat("distance", (playerpos - transform.position).sqrMagnitude);
             
+
+            //move
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
                 transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
             }
 
             else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-            {
+            {   
+                //play attack animation
                 if(Time.time - lastAttackTime >= attackCooldown) 
                 {
                     lastAttackTime = Time.time;
@@ -74,6 +77,13 @@ public class BasicEnemy : DamageableEntity
         }
         
     }
-
+    override public void OnDamage(float damage) 
+    {
+        base.OnDamage(damage);
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            animator.SetTrigger("hit");
+        }
+    }
     
 }
