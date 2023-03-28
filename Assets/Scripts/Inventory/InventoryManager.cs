@@ -16,7 +16,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void Update()
-    {
+    {//키입력에 따른 퀵슬롯 선택 변화(추후 New Input System으로 변경)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ChangeSelectedSlot(0);
@@ -32,7 +32,6 @@ public class InventoryManager : MonoBehaviour
         {
             ChangeSelectedSlot(3);
         }
-
     }
 
     void ChangeSelectedSlot(int newValue)//선택된 슬롯 색깔 변경
