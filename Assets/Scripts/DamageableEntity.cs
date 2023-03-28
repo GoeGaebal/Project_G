@@ -50,12 +50,14 @@ public class DamageableEntity : MonoBehaviour, IDamageable
     public virtual void Die()
     { 
         if (isDead) return;
-        
+        isDead = true;
+
         if(dieAction != null)
         {
+            Debug.Log("die action");
             dieAction();  
         }
         Debug.Log("Die");
-        isDead = true;
+        
     }
 }

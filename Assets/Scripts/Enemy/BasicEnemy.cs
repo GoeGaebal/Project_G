@@ -22,6 +22,8 @@ public class BasicEnemy : DamageableEntity
         hasTarget = false;
         target = null;
         lastAttackTime = 0;
+
+        dieAction += ()=> StartCoroutine("DieCoroutine");
     }
     private void Update() {
         Collider2D playerCollider = Physics2D.OverlapCircle(gameObject.transform.position, detectRadius,targetLayerMask);
@@ -77,7 +79,7 @@ public class BasicEnemy : DamageableEntity
                 {
                     lastAttackTime = Time.time;
                     animator.SetTrigger("attack");
-                    Debug.Log("attack");
+                    
                 }
             }
 
@@ -86,11 +88,23 @@ public class BasicEnemy : DamageableEntity
     }
     override public void OnDamage(float damage) 
     {
-        base.OnDamage(damage);
         if(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             animator.SetTrigger("hit");
         }
+        base.OnDamage(damage);
+        
+    }
+
+
+    private IEnumerator DieCoroutine()
+
+    {
+        animator.ResetTrigger("hit");   
+        animator.SetTrigger("die");
+        
+        yield return new WaitForSeconds(1.0f);
+        Destroy(gameObject);
     }
     
 }
