@@ -49,7 +49,7 @@ public class GameScene : BaseScene,IPunObservable
     private void Start()
     {
         Managers.Object.GenerateGathering(1);
-        Vector3 SpawnPos = new Vector3(0, 0, 1);
+        Vector3 SpawnPos = new Vector3(0, 0, 0);
         PhotonNetwork.Instantiate("Prefabs/Player", SpawnPos, Quaternion.identity);
     }
 
