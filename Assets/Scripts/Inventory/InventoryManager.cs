@@ -7,7 +7,46 @@ public class InventoryManager : MonoBehaviour
     public int maxStackedItems = 4;
     public Slot[] slots;
     public GameObject IconPrefab;//InventoryItemPrefab
-    public bool AddItem(Item item)
+
+    int selectedSlot = -1;//현재 선택된 퀵슬롯
+
+    private void Start()
+    {
+        ChangeSelectedSlot(0);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ChangeSelectedSlot(0);
+        } else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ChangeSelectedSlot(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeSelectedSlot(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ChangeSelectedSlot(3);
+        }
+
+    }
+
+    void ChangeSelectedSlot(int newValue)//선택된 슬롯 색깔 변경
+    {
+        if (selectedSlot >= 0)
+        {
+            slots[selectedSlot].Deselect();
+        }
+        
+        slots[newValue].Select();
+        selectedSlot = newValue;
+    }
+
+    public bool AddItem(Item item)//아이템 추가
     {
         for(int i = 0; i < slots.Length; i++)
         {
