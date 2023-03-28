@@ -26,7 +26,11 @@ public class BasicEnemy : DamageableEntity
     private void Update() {
         Collider2D playerCollider = Physics2D.OverlapCircle(gameObject.transform.position, detectRadius,targetLayerMask);
        
+      
+
+
         //reset target
+        //여긴 문제 없고
         if(playerCollider == null)
         {
             hasTarget = false;
@@ -36,7 +40,7 @@ public class BasicEnemy : DamageableEntity
         }
 
         //set target when collider is detected but no target
-        else if(!target && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        else if(!hasTarget && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             hasTarget = true;
             animator.SetBool("hasTarget", hasTarget);
@@ -44,9 +48,11 @@ public class BasicEnemy : DamageableEntity
 
         
         }
+
         
         if(hasTarget)
         {
+            
             //target check
             if(target == null) return;
 
@@ -55,7 +61,7 @@ public class BasicEnemy : DamageableEntity
             else spriteRenderer.flipX = false;
 
             Vector3 playerpos = target.transform.position;
-            animator.SetFloat("distance", (playerpos - transform.position).sqrMagnitude);
+            animator.SetFloat("distance", (playerpos - transform.position).magnitude);
             
 
             //move
@@ -71,6 +77,7 @@ public class BasicEnemy : DamageableEntity
                 {
                     lastAttackTime = Time.time;
                     animator.SetTrigger("attack");
+                    Debug.Log("attack");
                 }
             }
 
