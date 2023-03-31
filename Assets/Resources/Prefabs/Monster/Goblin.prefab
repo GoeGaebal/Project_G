@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1410843260874740528}
   - component: {fileID: 1410843260874740535}
   - component: {fileID: 1410843260874740534}
-  - component: {fileID: 28004328227328579}
+  - component: {fileID: 8198467949432258677}
   m_Layer: 3
   m_Name: Goblin
   m_TagString: Monster
@@ -135,7 +135,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &28004328227328579
+--- !u!114 &8198467949432258677
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,16 +144,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1410843260874740533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524c7a8f5969aef4a8a6f099c959ab02, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f986550232b62048854d0300623cd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 20
   attackPoint: 10
-  attackCooldown: 2
+  attackCooldown: 4
   detectRadius: 1.5
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
   animator: {fileID: 1410843260874740534}
   spriteRenderer: {fileID: 1410843260874740528}
-  speed: 1
+  speed: 1.1
+  minDisFromPlayer: 0.6
