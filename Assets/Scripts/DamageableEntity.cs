@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 using System;
 
-public class DamageableEntity : MonoBehaviour, IDamageable
+public class DamageableEntity : MonoBehaviourPun, IDamageable
 {
     public float maxHP;
     public float HP{get;protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.

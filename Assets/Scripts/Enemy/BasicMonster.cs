@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum EnumAnimationState{
-    Idle, Run
+public enum EnumAnimationStates{
+    Idle, Run, Attack, Hit
 };
 
 public class BasicMonster : DamageableEntity
@@ -24,8 +24,8 @@ public class BasicMonster : DamageableEntity
     protected bool hasTarget;
     protected GameObject target;
     protected float lastAttackTime;
-    private EnumAnimationState _animState;
-    public EnumAnimationState AnimState
+    private EnumAnimationStates _animState;
+    public EnumAnimationStates AnimState
     {
         get{
             return _animState;
@@ -41,14 +41,17 @@ public class BasicMonster : DamageableEntity
 
 
     private void Start() {
-        hasTarget = false;
-        target = null;
-        lastAttackTime = 0;
-        AnimState = EnumAnimationState.Idle;
-        dieAction += ()=> StartCoroutine("DieCoroutine");
 
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        hasTarget = false;
+        target = null;
+        lastAttackTime = 0;
+        AnimState = EnumAnimationStates.Idle;
+        dieAction += ()=> StartCoroutine("DieCoroutine");
+
+        
     }
 
     private void Update() {
@@ -57,14 +60,14 @@ public class BasicMonster : DamageableEntity
         if(playerCollider == null)
         {
             hasTarget = false;  
-            AnimState = EnumAnimationState.Idle;
+            AnimState = EnumAnimationStates.Idle;
             animator.SetBool("hasTarget",hasTarget);
             target = null;
             
         }
 
         //set target when collider is detected but no target
-        else if(!hasTarget && AnimState == EnumAnimationState.Idle)
+        else if(!hasTarget && AnimState == EnumAnimationStates.Idle)
         {
             hasTarget = true;
             animator.SetBool("hasTarget", hasTarget);
@@ -85,29 +88,29 @@ public class BasicMonster : DamageableEntity
             float distance = (target.transform.position - transform.position).magnitude;
             animator.SetFloat("distance", distance);
 
-            if(AnimState == EnumAnimationState.Idle && distance > minDisFromPlayer )
+            if(AnimState == EnumAnimationStates.Idle && distance > minDisFromPlayer )
             {
-                AnimState = EnumAnimationState.Run;
+                AnimState = EnumAnimationStates.Run;
 
             }
-            else if (AnimState == EnumAnimationState.Run && distance<= minDisFromPlayer)
+            else if (AnimState == EnumAnimationStates.Run && distance<= minDisFromPlayer)
             {
-                AnimState = EnumAnimationState.Idle;
+                AnimState = EnumAnimationStates.Idle;
             }
 
             
  
             switch(AnimState)
             {
-                case EnumAnimationState.Run:
+                case EnumAnimationStates.Run:
                     transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
                     break;
 
-                case EnumAnimationState.Idle:
+                case EnumAnimationStates.Idle:
                     if(Time.time - lastAttackTime >= attackCooldown && distance <= minDisFromPlayer)  
                     {
                         lastAttackTime = Time.time;
-                        animator.SetTrigger("attack");
+                        AnimState = EnumAnimationStates.Attack;
                         
                     }
                     break;
@@ -119,7 +122,7 @@ public class BasicMonster : DamageableEntity
     }
     override public void OnDamage(float damage) 
     {
-        animator.SetTrigger("hit");
+        AnimState = EnumAnimationStates.Hit;
         base.OnDamage(damage);
         
     }
@@ -143,15 +146,43 @@ public class BasicMonster : DamageableEntity
     {
         switch (AnimState)
         {
-            case EnumAnimationState.Idle:
+            case EnumAnimationStates.Idle:
                 animator.SetBool("run",false);
                 break;
 
-            case EnumAnimationState.Run:
+            case EnumAnimationStates.Run:
                 animator.SetBool("run",true);
+                break;
+            case EnumAnimationStates.Attack:
+                StartCoroutine("AttackCoroutine");
+                break;
+            case EnumAnimationStates.Hit:
+                StartCoroutine("HitCoroutine");
                 break;
             default:
                 break;
+        }
+    }
+
+
+    private IEnumerator AttackCoroutine()
+    {
+        animator.SetTrigger("attack");
+
+        yield return new WaitForSeconds(1.0f);
+        AnimState = EnumAnimationStates.Idle;
+    }
+
+    private IEnumerator HitCoroutine()
+    {
+        
+        EnumAnimationStates previousState = AnimState;
+
+        if(previousState == EnumAnimationStates.Idle || previousState == EnumAnimationStates.Run)
+        {
+            animator.SetTrigger("hit");
+            yield return new WaitForSeconds(1.0f);
+            AnimState = previousState;
         }
     }
 }
