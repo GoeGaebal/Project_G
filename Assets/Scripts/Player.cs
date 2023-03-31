@@ -5,17 +5,29 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviourPun
+public enum EnumPlayerStates
 {
-    private float moveSpeed = 5.0f;
+    Idle, Attack1, Attack2, Attack3, Run
+}
+
+public class Player : DamageableEntity
+{
+    [SerializeField]private float moveSpeed = 5.0f;
 
     private Vector2 moveInput;
     private Rigidbody2D rb;
+    protected SpriteRenderer spriteRenderer;
+    protected Animator animator;
+
+    private 
+
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
