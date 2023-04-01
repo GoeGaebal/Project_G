@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1351636911484048334}
   - component: {fileID: 8515420714504366498}
   - component: {fileID: 6297641338902079944}
+  - component: {fileID: 4247152490787274753}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -154,6 +155,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845651cad91537a418d42ce75a6bafc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHP: 0
+  moveSpeed: 5
+  inputAction:
+    m_Name: Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a57d2bcf-6abd-4863-9630-877ccf4d2599
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  playerInput: {fileID: 4997453326224182940}
 --- !u!114 &1351636911484048334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,3 +232,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.65625, y: 1.4}
   m_EdgeRadius: 0
+--- !u!95 &4247152490787274753
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4997453326224182915}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e29c9449666251a498e52522887266da, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
