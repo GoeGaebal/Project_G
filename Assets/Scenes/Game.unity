@@ -310,6 +310,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8198467949432258677, guid: 7cd247de0f088e4449ac8ef7dfd628e5,
         type: 3}
+      propertyPath: maxHP
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8198467949432258677, guid: 7cd247de0f088e4449ac8ef7dfd628e5,
+        type: 3}
       propertyPath: minDisFromPlayer
       value: 0.8
       objectReference: {fileID: 0}

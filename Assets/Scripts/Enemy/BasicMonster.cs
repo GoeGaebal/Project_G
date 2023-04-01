@@ -33,7 +33,7 @@ public class BasicMonster : DamageableEntity
 
         protected set{ 
             _animState = value; 
-            UpdateAnimation();
+            UpdateState();
             
         }
 
@@ -55,19 +55,24 @@ public class BasicMonster : DamageableEntity
     }
 
     private void Update() {
+        
+        if(isDead) return;
+
         Collider2D playerCollider = Physics2D.OverlapCircle(gameObject.transform.position, detectRadius,targetLayerMask);
  
         if(playerCollider == null)
         {
             hasTarget = false;  
-            AnimState = EnumAnimationStates.Idle;
+            if( AnimState != EnumAnimationStates.Attack ||AnimState != EnumAnimationStates.Hit )    
+                AnimState = EnumAnimationStates.Idle;
+            
             animator.SetBool("hasTarget",hasTarget);
             target = null;
             
         }
 
         //set target when collider is detected but no target
-        else if(!hasTarget && AnimState == EnumAnimationStates.Idle)
+        else if(!hasTarget)
         {
             hasTarget = true;
             animator.SetBool("hasTarget", hasTarget);
@@ -100,30 +105,42 @@ public class BasicMonster : DamageableEntity
 
             
  
-            switch(AnimState)
-            {
-                case EnumAnimationStates.Run:
-                    transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-                    break;
-
-                case EnumAnimationStates.Idle:
-                    if(Time.time - lastAttackTime >= attackCooldown && distance <= minDisFromPlayer)  
-                    {
-                        lastAttackTime = Time.time;
-                        AnimState = EnumAnimationStates.Attack;
-                        
-                    }
-                    break;
-                default:
-                    break;
-            }
+            
         }
         
     }
+
+    private void LateUpdate() {
+
+        if(isDead) return;
+        
+        if(hasTarget)
+        {
+            float distance = (target.transform.position - transform.position).magnitude;
+            switch(AnimState)
+                {
+                    case EnumAnimationStates.Run:
+                        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+                        break;
+
+                    case EnumAnimationStates.Idle:
+                        if(Time.time - lastAttackTime >= attackCooldown && distance <= minDisFromPlayer)  
+                        {
+                            lastAttackTime = Time.time;
+                            AnimState = EnumAnimationStates.Attack;
+                        }
+                        break;
+                    default:
+                        break;
+            }
+        }
+    }
     override public void OnDamage(float damage) 
     {
-        AnimState = EnumAnimationStates.Hit;
+        
         base.OnDamage(damage);
+        if(!isDead)
+            AnimState = EnumAnimationStates.Hit;
         
     }
 
@@ -142,7 +159,7 @@ public class BasicMonster : DamageableEntity
     
 
 
-    private void UpdateAnimation()
+    private void UpdateState()
     {
         switch (AnimState)
         {
@@ -176,13 +193,14 @@ public class BasicMonster : DamageableEntity
     private IEnumerator HitCoroutine()
     {
         
-        EnumAnimationStates previousState = AnimState;
-
-        if(previousState == EnumAnimationStates.Idle || previousState == EnumAnimationStates.Run)
-        {
+       
             animator.SetTrigger("hit");
-            yield return new WaitForSeconds(1.0f);
-            AnimState = previousState;
-        }
+            yield return new WaitForSeconds(2.0f);
+
+            if(target == null) yield break;
+        
+            float distance = (target.transform.position - transform.position).magnitude;
+            if(hasTarget && distance > minDisFromPlayer) AnimState = EnumAnimationStates.Run;
+            else AnimState = EnumAnimationStates.Idle;
     }
 }
