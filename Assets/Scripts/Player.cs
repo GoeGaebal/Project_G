@@ -44,6 +44,10 @@ public class Player : DamageableEntity
 
         inputAction = playerInput.actions["Move"];
 
+        dieAction += () => {
+            animator.SetTrigger("die");
+        };
+
         Debug.Log(inputAction == null);
 
     }
@@ -111,6 +115,7 @@ public class Player : DamageableEntity
     public override void OnDamage(float damage)
     {
         if(isDead) return;
+        Debug.Log("damage");
         base.OnDamage(damage);
         if(State == EnumPlayerStates.Idle || State == EnumPlayerStates.Run) 
             State = EnumPlayerStates.Hit;
@@ -120,7 +125,7 @@ public class Player : DamageableEntity
     private IEnumerator HitCoroutine()
     {
         animator.SetTrigger("hit");
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(1.5f);
         State = EnumPlayerStates.Idle;
     }
 
