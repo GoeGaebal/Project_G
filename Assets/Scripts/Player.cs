@@ -58,31 +58,33 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
 
-        if(State == EnumPlayerStates.Idle && inputAction.IsPressed())
-            State = EnumPlayerStates.Run;
-        else if(State == EnumPlayerStates.Run && !inputAction.IsPressed())
-            State = EnumPlayerStates.Idle;
+        
 
         if(State == EnumPlayerStates.Run)
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
-    private void OnMove(InputValue value)
+    public void OnMove(InputAction.CallbackContext context)
     {
+
         if (photonView.IsMine)
         {
              if(isDead) return;
 
-            moveInput = value.Get<Vector2>();
+            moveInput = context.ReadValue<Vector2>();
             if(moveInput == null) return;
 
             if(moveInput.x >0) spriteRenderer.flipX = false;
             else if (moveInput.x <0) spriteRenderer.flipX = true;
 
+            if(State == EnumPlayerStates.Idle && inputAction.IsPressed())
+                State = EnumPlayerStates.Run;
+            else if(State == EnumPlayerStates.Run && !inputAction.IsPressed())
+            State = EnumPlayerStates.Idle;
             
             
         }
-    }
+    }   
 
     private void LateUpdate()
     {
@@ -128,5 +130,9 @@ public class Player : DamageableEntity
         yield return new WaitForSeconds(1.5f);
         State = EnumPlayerStates.Idle;
     }
-
+    public void asd(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        Debug.Log("click");
+    }
 }
