@@ -33,8 +33,8 @@ Transform:
   m_GameObject: {fileID: 4997453326224182915}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.79, y: 0.79, z: 0.79}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -155,18 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845651cad91537a418d42ce75a6bafc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 0
+  maxHP: 20
   moveSpeed: 5
-  inputAction:
-    m_Name: Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: a57d2bcf-6abd-4863-9630-877ccf4d2599
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  playerInput: {fileID: 4997453326224182940}
 --- !u!114 &1351636911484048334
 MonoBehaviour:
   m_ObjectHideFlags: 0
