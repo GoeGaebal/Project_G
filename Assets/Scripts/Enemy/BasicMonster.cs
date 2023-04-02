@@ -145,17 +145,7 @@ public class BasicMonster : DamageableEntity
     }
 
 
-    private IEnumerator DieCoroutine()
-
-    {
-
-        animator.ResetTrigger("hit");   
-        animator.SetTrigger("die");
-        
-        
-        yield return new WaitForSeconds(1.0f);
-        Destroy(gameObject);
-    }
+   
     
 
 
@@ -202,5 +192,16 @@ public class BasicMonster : DamageableEntity
             float distance = (target.transform.position - transform.position).magnitude;
             if(hasTarget && distance > minDisFromPlayer) AnimState = EnumAnimationStates.Run;
             else AnimState = EnumAnimationStates.Idle;
+    }
+
+     private IEnumerator DieCoroutine()
+
+    {
+        animator.ResetTrigger("hit");   
+        animator.SetTrigger("die");
+        
+        
+        yield return new WaitForSeconds(1.0f);
+        Destroy(gameObject);
     }
 }
