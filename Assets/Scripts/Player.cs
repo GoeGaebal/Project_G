@@ -48,19 +48,27 @@ public class Player : DamageableEntity
 
     }
     
+
+
     private void FixedUpdate()
     {
+        if(isDead) return;
+
         if(State == EnumPlayerStates.Idle && inputAction.IsPressed())
             State = EnumPlayerStates.Run;
         else if(State == EnumPlayerStates.Run && !inputAction.IsPressed())
             State = EnumPlayerStates.Idle;
-        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+
+        if(State == EnumPlayerStates.Run)
+            rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
     private void OnMove(InputValue value)
     {
         if (photonView.IsMine)
         {
+             if(isDead) return;
+
             moveInput = value.Get<Vector2>();
             if(moveInput == null) return;
 
@@ -74,6 +82,8 @@ public class Player : DamageableEntity
 
     private void LateUpdate()
     {
+        if(isDead) return;
+
         if (photonView.IsMine)
         {
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
@@ -90,8 +100,28 @@ public class Player : DamageableEntity
             case EnumPlayerStates.Run:
                 animator.SetBool("run",true);
                 break;
+            case EnumPlayerStates.Hit:
+                StartCoroutine("HitCoroutine");
+                break;
             default:
                 break;
         }
     }
+
+    public override void OnDamage(float damage)
+    {
+        if(isDead) return;
+        base.OnDamage(damage);
+        if(State == EnumPlayerStates.Idle || State == EnumPlayerStates.Run) 
+            State = EnumPlayerStates.Hit;
+        
+    }
+
+    private IEnumerator HitCoroutine()
+    {
+        animator.SetTrigger("hit");
+        yield return new WaitForSeconds(0.75f);
+        State = EnumPlayerStates.Idle;
+    }
+
 }
