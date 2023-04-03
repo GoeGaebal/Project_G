@@ -189,6 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 100
   moveSpeed: 5
+  attackDelay: 1.5
 --- !u!114 &1351636911484048334
 MonoBehaviour:
   m_ObjectHideFlags: 0
