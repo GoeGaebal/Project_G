@@ -24,6 +24,8 @@ public class Player : DamageableEntity
 
     private EnumPlayerStates _state;
     private Coroutine resetAttackCountCoroutine;
+    private bool attackInputBuffer = false;
+    private Vector2 runInputBuffer = Vector2.zero;
    
     public EnumPlayerStates State
     {
@@ -74,13 +76,23 @@ public class Player : DamageableEntity
         {
              if(isDead) return;
 
+            
             moveInput = context.ReadValue<Vector2>();
+            Debug.Log("move");
+            Debug.Log(moveInput.x);
             if(moveInput == null) return;
+
+
+            if(State == EnumPlayerStates.Attack && context.started)
+            {
+                runInputBuffer  = moveInput;
+                return;
+            }
 
             if(moveInput.x >0) spriteRenderer.flipX = false;
             else if (moveInput.x <0) spriteRenderer.flipX = true;
 
-            if(State == EnumPlayerStates.Idle && context.started)
+            if(State == EnumPlayerStates.Idle && (context.performed || context.started))
                 State = EnumPlayerStates.Run;
             else if(State == EnumPlayerStates.Run && context.canceled)
             State = EnumPlayerStates.Idle;
@@ -111,6 +123,9 @@ public class Player : DamageableEntity
                 break;
             case EnumPlayerStates.Hit:
                 StartCoroutine("HitCoroutine");
+                break;
+            case EnumPlayerStates.Attack:
+                animator.SetTrigger("attack");
                 break;
             default:
                 break;
@@ -144,14 +159,23 @@ public class Player : DamageableEntity
         if(!context.started) return;
         if(State != EnumPlayerStates.Idle && State != EnumPlayerStates.Attack && State != EnumPlayerStates.Run) return;
       
-    
+
+
+        
         //이전에 돌아가고 있던 코루틴이 있으면 종료 시킴.
         if(resetAttackCountCoroutine != null)
             StopCoroutine(resetAttackCountCoroutine);
         resetAttackCountCoroutine = StartCoroutine(ResetAttackCountCoroutine());
 
+        //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
+        rb.velocity = Vector2.zero;
+
+        if( State == EnumPlayerStates.Attack)
+            attackInputBuffer = true;
+        else if (State == EnumPlayerStates.Run)
+            animator.SetBool("run",false);
         State = EnumPlayerStates.Attack;
-        animator.SetBool("attack",true);
+       
 
     }
 
@@ -177,17 +201,49 @@ public class Player : DamageableEntity
         animator.SetInteger("attackCount",0);
     }
 
-    public void FinishAttackState()
+    public void FinishAttackState(int attackCount)
     {
-        if(State != EnumPlayerStates.Attack) return;
+        
 
-        Debug.Log(animator.GetInteger("attackCount"));
-        animator.SetInteger("attackCount",(animator.GetInteger("attackCount")+1)%3);
+        
 
-        //공격 애니메이션을 마치고 조금 더 매끄러운 이동을 위한 코드
-        if(inputAction.IsPressed()) State = EnumPlayerStates.Run;
-        else State = EnumPlayerStates.Idle;
-        animator.SetBool("attack",false);
+        switch(attackCount)
+        {
+            case 0:
+                animator.SetInteger("attackCount",1);
+                break;
+            case 1:
+                animator.SetInteger("attackCount",2);
+                break;
+            case 2:
+                Debug.Log(animator.GetInteger("attackCount"));
+                animator.SetInteger("attackCount",0);
+                break;
+            default:
+                break;
+        }        
+
+        if(attackInputBuffer) 
+        {
+            State = EnumPlayerStates.Attack;
+            attackInputBuffer = false;
+        }
+        else if (!runInputBuffer.Equals(Vector2.zero))
+        {
+            State = EnumPlayerStates.Run;
+            moveInput = runInputBuffer;
+            runInputBuffer = Vector2.zero;
+        }
+        
+        else 
+        {
+            State = EnumPlayerStates.Idle;
+        }
+        //animator.SetBool("attack",false);
     }
-
+    public void ResetState()
+    {
+        if(isDead) return;
+        State = EnumPlayerStates.Idle;
+    }
 }
