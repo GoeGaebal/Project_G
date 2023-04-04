@@ -37,7 +37,28 @@ public class Player : DamageableEntity
                 UpdateState();
         }
     }
-
+    
+    private void UpdateState()
+    {
+        switch (State)
+        {
+            case EnumPlayerStates.Idle:
+                animator.SetBool("run",false);
+                break;
+            case EnumPlayerStates.Run:
+                animator.SetBool("run",true);
+                break;
+            case EnumPlayerStates.Hit:
+                //hit를 코루틴이 애니메이션 이벤트로 한 번 해보자
+                StartCoroutine(HitStateCoroutine());
+                break;
+            case EnumPlayerStates.Attack:
+                animator.SetTrigger("attack");
+                break;
+            default:
+                break;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +74,6 @@ public class Player : DamageableEntity
             animator.SetTrigger("die");
         };
 
-        Debug.Log(inputAction == null);
 
     }
     
@@ -62,8 +82,6 @@ public class Player : DamageableEntity
     private void FixedUpdate()
     {
         if(isDead) return;
-
-        
 
         if(State == EnumPlayerStates.Run)
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
@@ -78,24 +96,42 @@ public class Player : DamageableEntity
 
             
             moveInput = context.ReadValue<Vector2>();
-            Debug.Log("move");
-            Debug.Log(moveInput.x);
+    
             if(moveInput == null) return;
 
-
-            if(State == EnumPlayerStates.Attack && context.started)
+            
+            switch(State)
             {
-                runInputBuffer  = moveInput;
-                return;
+                case EnumPlayerStates.Idle:
+                 if((context.performed || context.started))
+                    State = EnumPlayerStates.Run;
+                break;
+                case EnumPlayerStates.Run:
+                    if(context.canceled)
+                        State = EnumPlayerStates.Idle;
+                    break;
+                case EnumPlayerStates.Attack:
+                    if(context.started)
+                    {
+                        //공격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
+                        runInputBuffer  = moveInput;
+                        return;
+                    }
+                    break;
+                case EnumPlayerStates.Hit:
+                    if(context.started)
+                    {
+                        //피격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
+                        runInputBuffer  = moveInput;
+                        return;
+                    }
+                    break;
+                default:
+                    break;
             }
-
+           
             if(moveInput.x >0) spriteRenderer.flipX = false;
             else if (moveInput.x <0) spriteRenderer.flipX = true;
-
-            if(State == EnumPlayerStates.Idle && (context.performed || context.started))
-                State = EnumPlayerStates.Run;
-            else if(State == EnumPlayerStates.Run && context.canceled)
-            State = EnumPlayerStates.Idle;
             
             
         }
@@ -111,42 +147,30 @@ public class Player : DamageableEntity
         }
     }
 
-    private void UpdateState()
-    {
-        switch (State)
-        {
-            case EnumPlayerStates.Idle:
-                animator.SetBool("run",false);
-                break;
-            case EnumPlayerStates.Run:
-                animator.SetBool("run",true);
-                break;
-            case EnumPlayerStates.Hit:
-                StartCoroutine("HitCoroutine");
-                break;
-            case EnumPlayerStates.Attack:
-                animator.SetTrigger("attack");
-                break;
-            default:
-                break;
-        }
-    }
+    
 
     public override void OnDamage(float damage)
     {
         if(isDead) return;
-        Debug.Log("damage");
         base.OnDamage(damage);
         if(State == EnumPlayerStates.Idle || State == EnumPlayerStates.Run) 
             State = EnumPlayerStates.Hit;
         
     }
 
-    private IEnumerator HitCoroutine()
+
+    private  IEnumerator HitStateCoroutine()
     {
+
         animator.SetTrigger("hit");
-        yield return new WaitForSeconds(1.5f);
-        State = EnumPlayerStates.Idle;
+        yield return new WaitForSeconds(0.5f);
+        if (!runInputBuffer.Equals(Vector2.zero))
+        {
+            State = EnumPlayerStates.Run;
+            moveInput = runInputBuffer;
+            runInputBuffer = Vector2.zero;
+        }
+        else State = EnumPlayerStates.Idle;
     }
 
     ///
@@ -203,10 +227,6 @@ public class Player : DamageableEntity
 
     public void FinishAttackState(int attackCount)
     {
-        
-
-        
-
         switch(attackCount)
         {
             case 0:
@@ -246,4 +266,7 @@ public class Player : DamageableEntity
         if(isDead) return;
         State = EnumPlayerStates.Idle;
     }
+
+
+    
 }

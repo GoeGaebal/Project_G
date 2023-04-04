@@ -83,7 +83,7 @@
                 {
                     "name": "",
                     "id": "5c4fa106-9978-4f16-b652-77e57372e174",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "Press",
                     "processors": "",
                     "groups": "PC",
