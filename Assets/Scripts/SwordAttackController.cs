@@ -10,6 +10,6 @@ public class SwordAttackController : IWeapon
 
         if(monster == null) return;
 
-        monster.OnDamage(10f);
+        monster.OnDamage(10.0f);
     }
 }
