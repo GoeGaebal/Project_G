@@ -40,6 +40,7 @@ public class Player : DamageableEntity
     
     private void UpdateState()
     {
+        if(isDead) return;
         switch (State)
         {
             
