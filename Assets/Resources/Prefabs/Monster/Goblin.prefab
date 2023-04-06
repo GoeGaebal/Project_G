@@ -147,14 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f986550232b62048854d0300623cd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 20
+  maxHP: 50
   attackPoint: 10
   attackCooldown: 4
-  detectRadius: 1.5
+  detectRadius: 3
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  animator: {fileID: 1410843260874740534}
-  spriteRenderer: {fileID: 1410843260874740528}
   speed: 1.1
   minDisFromPlayer: 0.6
