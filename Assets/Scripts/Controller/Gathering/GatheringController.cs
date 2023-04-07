@@ -9,26 +9,31 @@ public class GatheringController : DamageableEntity
     private Vector3 endPosition = new Vector3(2,0,0);
 
     private float currentTIme = 0;
-    private float lerpTime = 1.0f;
+    private float lerpTime = 2.0f;
+
     private void Start()
     {
         transform.position = Vector3.zero;
-        StartCoroutine(LerpPosition(endPosition, lerpTime));
     }
 
     private void Update()
     {
         
     }
+
+    public void Bouncing(Vector3 endPosition,float duration)
+    {
+        StartCoroutine(BouncingPosition(endPosition, duration));
+    }
     
-    IEnumerator BouncingPosition(Vector3 targetPosition,float duration, float cof = 0.6f, int bounceCount = 5, float threshold = 1.0f)
+    IEnumerator BouncingPosition(Vector3 targetPosition,float duration, float maxHeight = 1.0f,int bounceCount = 5,float cof = 0.6f, float threshold = 1.0f)
     {
         // 초기 값 세팅
         float time = 0.0f;
         float curH = 0.0f;
         float Sn = (1.0f - Mathf.Pow(cof, bounceCount)) / (1.0f - cof);
         
-        float hSpeed = 10.0f;
+        float hSpeed = (4.0f*maxHeight*Sn)/ duration;
         float gravity = (2.0f * hSpeed * Sn) / duration;
         Vector3 startPosition = transform.position;
         
