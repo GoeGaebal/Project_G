@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class ResourceManager
 {
     /// <summary>
     /// Resources 폴더 내 자료를 Hierarchy창에 올린다.
-    /// 만일 Object라면 이미 Pool에 올라와 있는 경우 Pool에서
+    /// 만일 GameObject라면 이미 Pool에 올라와 있는 경우 Pool에서
     /// 꺼내 쓰도록 한다.
     /// </summary>
     /// <param name="path">
@@ -54,14 +56,15 @@ public class ResourceManager
 
         if (original.GetComponent<Poolable>() != null)
             return Managers.Pool.Pop(original, parent).gameObject;
-
-        // TODO : PhotonNetwork는 자체적으로 Pool을 사용하므로 추후에 문제가 없는지 확인할 것
+        
         GameObject go = Object.Instantiate(original, position, rotation, parent);
-        // GameObject go = PhotonNetwork.Instantiate($"Prefabs/{path}", position, rotation);
+        
         go.name = original.name;
+        
+        // GameObject go = PhotonNetwork.Instantiate($"Prefabs/{path}", position, rotation);
         return go;
     }
-    
+
     /// <summary>
     /// 객체가 Pool
     /// </summary>
