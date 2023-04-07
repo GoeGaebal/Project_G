@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void Attack(Collider2D other);
+    public void Attack(IDamageable damageable);
 
 }

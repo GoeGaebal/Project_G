@@ -9,9 +9,9 @@ public class AttackController : MonoBehaviour
     
     private Player parentPlayerComponent;
     private IWeapon weaponController;
+    [SerializeField] private LayerMask targetLayerMask;
     private void Start() {
-        parentPlayerComponent = GetComponentInParent<Player>();
-        weaponController = new SwordAttackController();
+        weaponController = new MeleeAttackController();
     }
 
    
@@ -21,11 +21,18 @@ public class AttackController : MonoBehaviour
         Debug.Log("tirgger enter");
         if(other == null) return;
         
-        BasicMonster damageable = other.GetComponent<BasicMonster>();
+        IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable == null) return;
+        
+        if(IsInLayerMask(other.gameObject))
+        {
+            weaponController.Attack(damageable);
+        }
 
-        Debug.Log("player attack");
-        weaponController.Attack(other);
     }
     
+    private bool IsInLayerMask(GameObject go)
+    {
+        return ((targetLayerMask.value & (1<<go.layer))>0);
+    }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2120728773275182423}
   - component: {fileID: 7672331164095286715}
   m_Layer: 0
-  m_Name: AttackCollider
+  m_Name: AttackController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 1.2733225, y: 0.03223598}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -79,7 +79,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.4513042, y: 1.1934161}
   m_EdgeRadius: 0
 --- !u!114 &7672331164095286715
 MonoBehaviour:
@@ -94,6 +94,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacCoefficient: 0
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &4997453326224182915
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845651cad91537a418d42ce75a6bafc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
+  maxHP: 20
   moveSpeed: 5
   attackDelay: 1.5
 --- !u!114 &1351636911484048334
