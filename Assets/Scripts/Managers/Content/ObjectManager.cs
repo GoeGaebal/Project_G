@@ -1,17 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class ObjectManager
 {
+    [System.Serializable]
     public class ObjectInfo
     {
         public int objectId;
         public int y;
         public int x;
     }
+    
+    // If you have multiple custom events, it is recommended to define them in the used class
+    public const byte MoveUnitsToTargetPositionEventCode = 1;
     
     private Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
     
@@ -57,24 +65,45 @@ public class ObjectManager
         }
     }
     
+    // serialize the dictionary into a byte array
+    public byte[] SerializeDictionary()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream();
+        bf.Serialize(ms, _objects);
+        return ms.ToArray();
+    }
+
+    // deserialize the byte array into a dictionary
+    public void DeserializeDictionary(byte[] data)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream(data);
+        _objects = (Dictionary<int, ObjectInfo>)bf.Deserialize(ms);
+    }
+
+    public void SpawningList()
+    {
+        foreach (ObjectInfo info in _objects.Values)
+        {
+            Vector3Int pos = new Vector3Int( info.x,  info.y, 0);
+            Managers.Resource.Instantiate("Gathering/Stone", pos, Quaternion.identity);
+        }
+    }
+    
     // 서버측
-    [PunRPC]
-    void SendDictionaryToClients(PhotonMessageInfo info)
+    public void SendDictionaryToClients()
     {
         // Send the dictionary to all clients
-        Managers.PhotonView.RPC("ReceiveDictionaryFromHost", RpcTarget.AllBuffered, _objects);
+        byte[] content = SerializeDictionary(); // Array contains the target position and the IDs of the selected units
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(MoveUnitsToTargetPositionEventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
     
     // 클라측
-    [PunRPC]
-    void ReceiveDictionaryFromHost(Dictionary<int, ObjectInfo> dict)
+    public void RequireObjects()
     {
-        // Move the received dictionary into your own dictionary
-        foreach (KeyValuePair<int, ObjectInfo> pair in dict)
-        {
-            _objects[pair.Key] = pair.Value;
-            Vector3Int pos = new Vector3Int( pair.Value.x,  pair.Value.y, 0);
-            Managers.Resource.Instantiate("Gathering/Stone", pos, Quaternion.identity);
-        }
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(2, null, raiseEventOptions, SendOptions.SendReliable);
     }
 }

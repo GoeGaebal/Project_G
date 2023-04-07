@@ -13,9 +13,10 @@ public class Managers : MonoBehaviourPun
     #region Content
     private MapManager _map = new();
     private ObjectManager _object = new();
+    private NetworkManager _network = new();
     public static MapManager Map { get { return Instance._map; } }
     public static ObjectManager Object { get { return Instance._object; } }
-    public static PhotonView PhotonView { get { return Instance.photonView; } }
+    public static NetworkManager Network { get { return Instance._network; } }
     #endregion
 
     #region Core
@@ -50,8 +51,9 @@ public class Managers : MonoBehaviourPun
 
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
-            
+
             _instance._pool.Init();
+            _instance._network.Init();
         }
     }
     
