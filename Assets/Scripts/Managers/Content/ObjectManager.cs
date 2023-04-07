@@ -32,7 +32,9 @@ public class ObjectManager
             Vector2 randPos = Random.insideUnitCircle * radious;
             randPos.x += spawnPos.x;
             randPos.y += spawnPos.y;
-            Managers.Resource.Instantiate("Gathering/Coin", randPos, Quaternion.identity);
+            GameObject go =  Managers.Resource.Instantiate("Gathering/Coin", spawnPos, Quaternion.identity);
+            GatheringController gc = go.GetComponent<GatheringController>();
+            gc.Bouncing(randPos, 1.5f);
         }
     }
 }
