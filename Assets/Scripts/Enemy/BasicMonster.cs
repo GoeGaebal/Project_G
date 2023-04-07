@@ -39,7 +39,30 @@ public class BasicMonster : DamageableEntity
 
     }
 
+     private void UpdateState()
+    {
+        if (isDead) return;
 
+        switch (AnimState)
+        {
+            case EnumAnimationStates.Idle:
+
+                animator.SetBool("run",false);
+                break;
+
+            case EnumAnimationStates.Run:
+                animator.SetBool("run",true);
+                break;
+            case EnumAnimationStates.Attack:
+                animator.SetTrigger("attack");
+                break;
+            case EnumAnimationStates.Hit:
+                animator.SetTrigger("hit");
+                break;
+            default:
+                break;
+        }
+    }
     private void Start() {
 
         animator = GetComponent<Animator>();
@@ -49,7 +72,7 @@ public class BasicMonster : DamageableEntity
         target = null;
         lastAttackTime = 0;
         AnimState = EnumAnimationStates.Idle;
-        dieAction += ()=> StartCoroutine("DieCoroutine");
+        dieAction += ()=> StartCoroutine(DieCoroutine());
 
         
     }
@@ -63,10 +86,9 @@ public class BasicMonster : DamageableEntity
         if(playerCollider == null)
         {
             hasTarget = false;  
-            if( AnimState != EnumAnimationStates.Attack ||AnimState != EnumAnimationStates.Hit )    
+            if( AnimState != EnumAnimationStates.Attack || AnimState != EnumAnimationStates.Hit )    
                 AnimState = EnumAnimationStates.Idle;
             
-            animator.SetBool("hasTarget",hasTarget);
             target = null;
             
         }
@@ -75,7 +97,6 @@ public class BasicMonster : DamageableEntity
         else if(!hasTarget)
         {
             hasTarget = true;
-            animator.SetBool("hasTarget", hasTarget);
             target = playerCollider.gameObject;
         }
 
@@ -93,106 +114,47 @@ public class BasicMonster : DamageableEntity
             float distance = (target.transform.position - transform.position).magnitude;
             animator.SetFloat("distance", distance);
 
-            if(AnimState == EnumAnimationStates.Idle && distance > minDisFromPlayer )
-            {
-                AnimState = EnumAnimationStates.Run;
 
-            }
-            else if (AnimState == EnumAnimationStates.Run && distance<= minDisFromPlayer)
-            {
-                AnimState = EnumAnimationStates.Idle;
-            }
-
-            
+            switch(AnimState){
+                case EnumAnimationStates.Idle:
+                    if(distance > minDisFromPlayer )
+                    {
+                        AnimState = EnumAnimationStates.Run;
+                    }
+                    else if(Time.time - lastAttackTime >= attackCooldown)  
+                    {
+                        lastAttackTime = Time.time;
+                        AnimState = EnumAnimationStates.Attack;
+                    }
+                    break;
+                case EnumAnimationStates.Run:
+                    if (distance<= minDisFromPlayer)
+                    {
+                        AnimState = EnumAnimationStates.Idle;
+                    }
+                    else
+                        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+                    break;
+                default:
+                    break;
+            }         
  
             
         }
         
     }
 
-    private void LateUpdate() {
 
-        if(isDead) return;
-        
-        if(hasTarget)
-        {
-            float distance = (target.transform.position - transform.position).magnitude;
-            switch(AnimState)
-                {
-                    case EnumAnimationStates.Run:
-                        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-                        break;
-
-                    case EnumAnimationStates.Idle:
-                        if(Time.time - lastAttackTime >= attackCooldown && distance <= minDisFromPlayer)  
-                        {
-                            lastAttackTime = Time.time;
-                            AnimState = EnumAnimationStates.Attack;
-                        }
-                        break;
-                    default:
-                        break;
-            }
-        }
-    }
     override public void OnDamage(float damage) 
     {
         
         base.OnDamage(damage);
-        if(!isDead)
-            AnimState = EnumAnimationStates.Hit;
+        if(isDead) return;
+        if(AnimState != EnumAnimationStates.Idle && AnimState != EnumAnimationStates.Run) return;
+        AnimState = EnumAnimationStates.Hit;
         
     }
 
-
-   
-    
-
-
-    private void UpdateState()
-    {
-        switch (AnimState)
-        {
-            case EnumAnimationStates.Idle:
-                animator.SetBool("run",false);
-                break;
-
-            case EnumAnimationStates.Run:
-                animator.SetBool("run",true);
-                break;
-            case EnumAnimationStates.Attack:
-                StartCoroutine("AttackCoroutine");
-                break;
-            case EnumAnimationStates.Hit:
-                StartCoroutine("HitCoroutine");
-                break;
-            default:
-                break;
-        }
-    }
-
-
-    private IEnumerator AttackCoroutine()
-    {
-        animator.SetTrigger("attack");
-
-        yield return new WaitForSeconds(1.0f);
-        AnimState = EnumAnimationStates.Idle;
-    }
-
-    private IEnumerator HitCoroutine()
-    {
-        
-       
-            animator.SetTrigger("hit");
-            yield return new WaitForSeconds(2.0f);
-
-            if(target == null) yield break;
-        
-            float distance = (target.transform.position - transform.position).magnitude;
-            if(hasTarget && distance > minDisFromPlayer) AnimState = EnumAnimationStates.Run;
-            else AnimState = EnumAnimationStates.Idle;
-    }
 
      private IEnumerator DieCoroutine()
 
@@ -203,5 +165,16 @@ public class BasicMonster : DamageableEntity
         
         yield return new WaitForSeconds(1.0f);
         Destroy(gameObject);
+    }
+
+    public void FinishAttackState()
+    {
+
+        AnimState = EnumAnimationStates.Idle;
+    }
+
+    public void FinishHitState()
+    {
+        AnimState = EnumAnimationStates.Idle;
     }
 }
