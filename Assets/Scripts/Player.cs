@@ -40,8 +40,10 @@ public class Player : DamageableEntity
     
     private void UpdateState()
     {
+        if(isDead) return;
         switch (State)
         {
+            
             case EnumPlayerStates.Idle:
                 animator.SetBool("run",false);
                 break;
@@ -57,6 +59,7 @@ public class Player : DamageableEntity
                 break;
             default:
                 break;
+            
         }
     }
 
@@ -126,7 +129,7 @@ public class Player : DamageableEntity
                         return;
                     }
                     break;
-                default:
+                default: 
                     break;
             }
            
@@ -248,7 +251,7 @@ public class Player : DamageableEntity
             State = EnumPlayerStates.Attack;
             attackInputBuffer = false;
         }
-        else if (!runInputBuffer.Equals(Vector2.zero))
+        else if (!runInputBuffer.Equals(Vector2.zero) && inputAction.IsPressed())
         {
             State = EnumPlayerStates.Run;
             moveInput = runInputBuffer;
