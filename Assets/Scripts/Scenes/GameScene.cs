@@ -48,10 +48,17 @@ public class GameScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Object.SpawnGatherings(5);
-        Managers.Object.SpawnLootings(20,new Vector3(0,0,0),5.0f,3.0f);
         Vector3 SpawnPos = Vector3.zero;
         PhotonNetwork.Instantiate("Prefabs/Player", SpawnPos, Quaternion.identity);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Managers.Object.SpawnGatherings(5);
+            // Managers.Object.SpawnLootings(20,new Vector3(0,0,0),5.0f,3.0f);
+        }
+        else
+        {
+            Managers.PhotonView.RPC("SendDictionaryToClients", RpcTarget.MasterClient, null);
+        }
     }
 
     public override void Clear()

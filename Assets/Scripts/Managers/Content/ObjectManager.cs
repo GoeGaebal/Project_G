@@ -1,11 +1,20 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
-using UnityEngine.InputSystem.Composites;
-using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class ObjectManager
 {
+    public class ObjectInfo
+    {
+        public int objectId;
+        public int y;
+        public int x;
+    }
+    
+    private Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
+    
     public void SpawnGatherings(int count)
     {
         var minX = Managers.Map.CurrentMapInfo.MinX;
@@ -17,11 +26,12 @@ public class ObjectManager
             //랜덤 위치 스폰 (일단 겹치더라도 상관없이)
             Vector3Int pos = new Vector3Int()
             {
-                x = Random.Range(minX, maxX),
-                y = Random.Range(minY, maxY)
+                y = Random.Range(minY, maxY),
+                x = Random.Range(minX, maxX)
             };
 
             Managers.Resource.Instantiate("Gathering/Stone", pos, Quaternion.identity);
+            _objects.Add(i,new ObjectInfo(){objectId = 0, y = pos.y,x = pos.x});
         }
     }
 
@@ -44,6 +54,27 @@ public class ObjectManager
             // 아마 오브젝트 풀링을 적용하면 조금은 해결될 것
             LootingItemController lc = go.GetComponent<LootingItemController>();
             lc.Bounce(randPos, 1.0f, 1.0f);
+        }
+    }
+    
+    // 서버측
+    [PunRPC]
+    void SendDictionaryToClients(PhotonMessageInfo info)
+    {
+        // Send the dictionary to all clients
+        Managers.PhotonView.RPC("ReceiveDictionaryFromHost", RpcTarget.AllBuffered, _objects);
+    }
+    
+    // 클라측
+    [PunRPC]
+    void ReceiveDictionaryFromHost(Dictionary<int, ObjectInfo> dict)
+    {
+        // Move the received dictionary into your own dictionary
+        foreach (KeyValuePair<int, ObjectInfo> pair in dict)
+        {
+            _objects[pair.Key] = pair.Value;
+            Vector3Int pos = new Vector3Int( pair.Value.x,  pair.Value.y, 0);
+            Managers.Resource.Instantiate("Gathering/Stone", pos, Quaternion.identity);
         }
     }
 }
