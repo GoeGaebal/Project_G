@@ -25,11 +25,20 @@ public class ObjectManager
         public int x;
     }
     
-    // If you have multiple custom events, it is recommended to define them in the used class
-    public const byte MoveUnitsToTargetPositionEventCode = 1;
-    
-    private Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
-    
+    private static Dictionary<int, ObjectInfo> _objectsDict;
+    private Dictionary<int, ObjectInfo> _objectsDict1;
+
+    public Dictionary<int, ObjectInfo> ObjectsDict
+    {
+        get => _objectsDict1;
+        private set => _objectsDict1 = value;
+    }
+
+    public void Init()
+    {
+        ObjectsDict = new Dictionary<int, ObjectInfo>();
+    }
+
     public void SpawnGatherings(int count)
 >>>>>>> bfdaf0d (feat: Lobby System 구축)
     {
@@ -66,7 +75,7 @@ public class ObjectManager
             };
 
             Managers.Resource.Instantiate("Gathering/Stone", pos, Quaternion.identity);
-            _objects.Add(i,new ObjectInfo(){objectId = 0, y = pos.y,x = pos.x});
+            ObjectsDict.Add(i,new ObjectInfo(){objectId = 0, y = pos.y,x = pos.x});
         }
     }
 
@@ -92,46 +101,14 @@ public class ObjectManager
 >>>>>>> bfdaf0d (feat: Lobby System 구축)
         }
     }
-    
-    // serialize the dictionary into a byte array
-    public byte[] SerializeDictionary()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        MemoryStream ms = new MemoryStream();
-        bf.Serialize(ms, _objects);
-        return ms.ToArray();
-    }
 
-    // deserialize the byte array into a dictionary
-    public void DeserializeDictionary(byte[] data)
+    public void SpawningList(Dictionary<int, ObjectInfo> objectInfos)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        MemoryStream ms = new MemoryStream(data);
-        _objects = (Dictionary<int, ObjectInfo>)bf.Deserialize(ms);
-    }
-
-    public void SpawningList()
-    {
-        foreach (ObjectInfo info in _objects.Values)
+        foreach (KeyValuePair<int,ObjectInfo> info in objectInfos)
         {
-            Vector3Int pos = new Vector3Int( info.x,  info.y, 0);
+            ObjectsDict[info.Key] = info.Value;
+            Vector3Int pos = new Vector3Int( info.Value.x,  info.Value.y, 0);
             Managers.Resource.Instantiate("Gathering/Stone", pos, Quaternion.identity);
         }
-    }
-    
-    // 서버측
-    public void SendDictionaryToClients()
-    {
-        // Send the dictionary to all clients
-        byte[] content = SerializeDictionary(); // Array contains the target position and the IDs of the selected units
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
-        PhotonNetwork.RaiseEvent(MoveUnitsToTargetPositionEventCode, content, raiseEventOptions, SendOptions.SendReliable);
-    }
-    
-    // 클라측
-    public void RequireObjects()
-    {
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
-        PhotonNetwork.RaiseEvent(2, null, raiseEventOptions, SendOptions.SendReliable);
     }
 }

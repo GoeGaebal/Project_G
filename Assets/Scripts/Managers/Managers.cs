@@ -53,6 +53,7 @@ public class Managers : MonoBehaviourPun
             _instance = go.GetComponent<Managers>();
 
             _instance._pool.Init();
+            _instance._object.Init();
             _instance._network.Init();
         }
     }
