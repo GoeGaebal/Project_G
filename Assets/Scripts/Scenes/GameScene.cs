@@ -48,17 +48,16 @@ public class GameScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Network.SpawnPlayer();
+        Managers.Network.SpawnLocalPlayer();
         
         if (PhotonNetwork.IsMasterClient)
         {
             Managers.Object.SpawnGatherings(5);
-            
             // Managers.Object.SpawnLootings(20,new Vector3(0,0,0),5.0f,3.0f);
         }
         else
         {
-            Managers.Object.RequireObjects();
+            Managers.Network.SendSignalToMaster();
         }
     }
 
