@@ -8,11 +8,11 @@ public enum EnumTimeSlot
 };
 
 
-public class TimeSlotManager : MonoBehaviour
+public class TimeSlotManager
 {
     private float timeChangePeriod = 5.0f;
-    private float _curremtTime;
-    private EnumTimeSlot _timeSlot;
+    private float _curremtTime = 0f;
+    private EnumTimeSlot _timeSlot = EnumTimeSlot.Day;
     public float CurrentTime{
         get{
             return _curremtTime;
@@ -36,15 +36,20 @@ public class TimeSlotManager : MonoBehaviour
     public delegate void _timeSlotChangeDel(EnumTimeSlot time);
 
     public event _timeSlotChangeDel TimeSlotChangeEvent;
-    // Start is called before the first frame update
-    void Start()
+
+
+    public void AddListener(ITimeSlotChangeEventListener timeChangeEventListener) 
     {
-        TimeSlot = EnumTimeSlot.Day;
-        CurrentTime = 0f;
+        Debug.Log("addListener");
+        this.TimeSlotChangeEvent += timeChangeEventListener.TimeSlotChangeEventHandler;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RemoveListener(ITimeSlotChangeEventListener timeChangeEventListener)
+    {
+        this.TimeSlotChangeEvent -= timeChangeEventListener.TimeSlotChangeEventHandler;
+    }
+
+    public void AddDelataTime(float deltaTime)
     {
         CurrentTime+=Time.deltaTime;
         if(CurrentTime >= timeChangePeriod)
@@ -67,16 +72,5 @@ public class TimeSlotManager : MonoBehaviour
             }
            
         }
-    }
-
-    public void AddListener(ITimeSlotChangeEventListener timeChangeEventListener) 
-    {
-        Debug.Log("addListener");
-        this.TimeSlotChangeEvent += timeChangeEventListener.TimeSlotChangeEventHandler;
-    }
-
-    public void RemoveListener(ITimeSlotChangeEventListener timeChangeEventListener)
-    {
-        this.TimeSlotChangeEvent -= timeChangeEventListener.TimeSlotChangeEventHandler;
     }
 }

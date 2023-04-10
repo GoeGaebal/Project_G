@@ -11,8 +11,10 @@ public class Managers : MonoBehaviour
     #region Content
     private MapManager _map = new MapManager();
     private ObjectManager _object = new ObjectManager();
+    private TimeSlotManager _timeSlot = new TimeSlotManager();
     public static MapManager Map { get { return Instance._map; } }
     public static ObjectManager Object { get { return Instance._object; } }
+    public static TimeSlotManager TimeSlot { get { return Instance._timeSlot;} }
     #endregion
 
     #region Core
@@ -32,6 +34,7 @@ public class Managers : MonoBehaviour
     
     void Update()
     {
+        TimeSlot.AddDelataTime(Time.deltaTime);
     }
     
     static void Init()

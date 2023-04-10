@@ -5,7 +5,6 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventListener
 {
-    public TimeSlotManager timeSlotManager;
     private ColorGrading colorGrading;
     [SerializeField]private PostProcessProfile profile;
 
@@ -39,7 +38,7 @@ public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventLis
 
     public void AssignEventHandler()
     {
-        timeSlotManager.AddListener(this);
+        Managers.TimeSlot.AddListener(this);
     }
     
 }
