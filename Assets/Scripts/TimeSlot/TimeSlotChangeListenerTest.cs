@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class TimeChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventListener
+public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventListener
 {
     public TimeSlotManager timeSlotManager;
-    public PostProcessVolume postProcessVolume;
-
     private ColorGrading colorGrading;
-    public PostProcessProfile profile;
+    [SerializeField]private PostProcessProfile profile;
+
+    [SerializeField]private Color dayTimeColor;
+    [SerializeField]private Color nightTimeColor;
     // Start is called before the first frame update
     void Start()
     {
         this.AssignEventHandler();
-        this.postProcessVolume = GetComponent<PostProcessVolume>();
+      
 
         profile.TryGetSettings(out colorGrading);
     }   
@@ -26,11 +27,11 @@ public class TimeChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventListene
         switch(timeSlot)
         {
             case EnumTimeSlot.Day:
-                this.colorGrading.colorFilter.value = new Color(1.0f, 1.0f, 1.0f,1.0f);
+                this.colorGrading.colorFilter.value = this.dayTimeColor;
                 Debug.Log("day time test");
                 break;
             case EnumTimeSlot.Night:
-                this.colorGrading.colorFilter.value = new Color(0.243592f, 0.2473907f, 0.3018868f,1.0f);
+                this.colorGrading.colorFilter.value = this.nightTimeColor;
                 Debug.Log("night time test");
                 break;
         }
@@ -40,4 +41,5 @@ public class TimeChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventListene
     {
         timeSlotManager.AddListener(this);
     }
+    
 }
