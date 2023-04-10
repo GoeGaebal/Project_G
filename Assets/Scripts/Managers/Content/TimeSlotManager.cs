@@ -10,8 +10,8 @@ public enum EnumTimeSlot
 
 public class TimeSlotManager
 {
-    private float timeChangePeriod = 5.0f;
-    private float _curremtTime = 0f;
+    private float timeChangePeriod;
+    private float _curremtTime;
     private EnumTimeSlot _timeSlot = EnumTimeSlot.Day;
     public float CurrentTime{
         get{
@@ -37,7 +37,11 @@ public class TimeSlotManager
 
     public event _timeSlotChangeDel TimeSlotChangeEvent;
 
-
+    public void Init()
+    {
+        CurrentTime = 0f;
+        TimeSlot = EnumTimeSlot.Day;
+    }
     public void AddListener(ITimeSlotChangeEventListener timeChangeEventListener) 
     {
         Debug.Log("addListener");
