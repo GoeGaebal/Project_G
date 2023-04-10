@@ -11,9 +11,11 @@ public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventLis
     [SerializeField]private Color dayTimeColor;
     [SerializeField]private Color nightTimeColor;
     // Start is called before the first frame update
+
+ 
     void Start()
     {
-        this.AssignEventHandler();
+         Managers.TimeSlot.AddListener(this);
       
 
         profile.TryGetSettings(out colorGrading);
@@ -36,9 +38,6 @@ public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventLis
         }
     }
 
-    public void AssignEventHandler()
-    {
-        Managers.TimeSlot.AddListener(this);
-    }
+   
     
 }

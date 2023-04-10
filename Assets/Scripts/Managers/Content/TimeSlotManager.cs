@@ -40,11 +40,14 @@ public class TimeSlotManager
     public void Init()
     {
         CurrentTime = 0f;
+        timeChangePeriod = 5f;
         TimeSlot = EnumTimeSlot.Day;
     }
     public void AddListener(ITimeSlotChangeEventListener timeChangeEventListener) 
     {
         Debug.Log("addListener");
+
+        
         this.TimeSlotChangeEvent += timeChangeEventListener.TimeSlotChangeEventHandler;
     }
 
@@ -56,7 +59,7 @@ public class TimeSlotManager
     public void AddDelataTime(float deltaTime)
     {
         CurrentTime+=Time.deltaTime;
-        if(CurrentTime >= timeChangePeriod)
+        if(CurrentTime >= timeChangePeriod && TimeSlotChangeEvent != null)
         {
             this.CurrentTime = 0;
             switch(TimeSlot)

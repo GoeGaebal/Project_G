@@ -6,5 +6,5 @@ public interface ITimeSlotChangeEventListener
 {
    public void TimeSlotChangeEventHandler(EnumTimeSlot timeSlot);
 
-   public void AssignEventHandler();
+
 }
