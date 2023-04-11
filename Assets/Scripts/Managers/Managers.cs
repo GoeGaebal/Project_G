@@ -12,9 +12,11 @@ public class Managers : MonoBehaviourPun
     
     #region Content
     private MapManager _map = new();
+    private DataManager _data = new();
     private ObjectManager _object = new();
     private NetworkManager _network = new();
     public static MapManager Map { get { return Instance._map; } }
+    public static DataManager Data { get { return Instance._data; } }
     public static ObjectManager Object { get { return Instance._object; } }
     public static NetworkManager Network { get { return Instance._network; } }
     #endregion
