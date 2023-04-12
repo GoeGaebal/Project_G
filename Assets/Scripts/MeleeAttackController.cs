@@ -6,7 +6,6 @@ public class MeleeAttackController : IWeapon
 {
     public virtual void Attack(IDamageable damageable)
     {
-       
         damageable.OnDamage(10.0f);
     }
 }
