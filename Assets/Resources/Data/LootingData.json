@@ -1,0 +1,20 @@
+{
+  "lootings": [
+    {
+      "id" : "1",
+      "name" : "stone",
+      "cof": " 0.6f;",
+      "bounceCount": "5",
+      "threshold" : "1.0f",
+      "Sn" : "2.3056"
+    },
+    {
+      "id" : "2",
+      "name" : "coin",
+      "cof": " 0.6f;",
+      "bounceCount": "5",
+      "threshold" : "1.0f",
+      "Sn" : "2.3056"
+    }
+  ]
+}

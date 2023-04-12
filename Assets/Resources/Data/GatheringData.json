@@ -1,0 +1,14 @@
+{
+  "gatherings": [
+    {
+      "id" : "1",
+      "maxHp": "100",
+      "lootingId": "1"
+    },
+    {
+      "id" : "2",
+      "maxHp": "100",
+      "lootingId": "2"
+    }
+  ]
+}
