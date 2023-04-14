@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class PoolManager
+public class PoolManager 
 {
     #region Pool
 
@@ -61,6 +62,16 @@ public class PoolManager
             poolable.IsUsing = true;
 
             return poolable;
+        }
+
+        public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Destroy(GameObject gameObject)
+        {
+            throw new System.NotImplementedException();
         }
     }
     #endregion
