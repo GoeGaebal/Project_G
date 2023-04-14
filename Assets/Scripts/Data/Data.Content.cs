@@ -32,6 +32,7 @@ public class StatData : ILoader<int,Stat>
 public class Gathering
 {
     public int id;
+    public string name;
     public float maxHp;
     public int lootingId;
 }

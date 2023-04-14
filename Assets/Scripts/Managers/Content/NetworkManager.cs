@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -11,8 +12,8 @@ public class NetworkManager : IOnEventCallback
     public GameObject LocalPlayer { get; private set; }
     
     // If you have multiple custom events, it is recommended to define them in the used class
-    public static byte SendMasterToClientsEventCode = 1;
-    public static byte SendClientToMasterEventCode = 2;
+    private const byte SendMasterToClientsEventCode = 1;
+    private const byte SendClientToMasterEventCode = 2;
 
     private void OnEnable()
     {
@@ -35,28 +36,30 @@ public class NetworkManager : IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-        byte eventCode = photonEvent.Code;
-        if (eventCode == SendMasterToClientsEventCode)
+        var eventCode = photonEvent.Code;
+        switch (eventCode)
         {
-            byte[] data = (byte[])photonEvent.CustomData;
-            Managers.Object.SpawningList(this.Deserialize<Dictionary<int,ObjectManager.ObjectInfo>>(data));
-
-        }
-        else if (eventCode == SendClientToMasterEventCode)
-        {
-            BroadCastClients(this.Serialize<Dictionary<int,ObjectManager.ObjectInfo>>(Managers.Object.ObjectsDict));
+            case SendMasterToClientsEventCode:
+            {
+                var data = (byte[])photonEvent.CustomData;
+                Managers.Object.SpawningList(Deserialize<Dictionary<int, ObjectManager.ObjectInfo>>(data));
+                break;
+            }
+            case SendClientToMasterEventCode:
+                BroadCastClients(Serialize(Managers.Object.ObjectsDict));
+                break;
         }
     }
-    
-    public byte[] Serialize<T>(T data)
+
+    private static IEnumerable<byte> Serialize<T>(T data)
     {
         BinaryFormatter bf = new();
         MemoryStream ms = new();
         bf.Serialize(ms, data);
         return ms.ToArray();
     }
-    
-    public T Deserialize<T>(byte[] data)
+
+    private static T Deserialize<T>(byte[] data)
     {
         BinaryFormatter bf = new();
         MemoryStream ms = new(data);
@@ -64,7 +67,8 @@ public class NetworkManager : IOnEventCallback
     }
     
     #region 서버측
-    public void BroadCastClients(byte[] content)
+
+    private static void BroadCastClients(IEnumerable content)
     {
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
         PhotonNetwork.RaiseEvent(SendMasterToClientsEventCode, content, raiseEventOptions, SendOptions.SendReliable);

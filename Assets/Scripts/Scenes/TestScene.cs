@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class GameScene : BaseScene,IPunObservable
+public class TestScene : BaseScene,IPunObservable
 {
     protected override void Init()
     {
@@ -48,16 +48,7 @@ public class GameScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Network.SpawnLocalPlayer();
-        
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Managers.Object.SpawnGatherings(1,5);
-        }
-        else
-        {
-            Managers.Network.SendSignalToMaster();
-        }
+        Managers.Object.SpawnGatherings(1,5);
     }
 
     public override void Clear()
