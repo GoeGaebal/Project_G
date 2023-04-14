@@ -71,7 +71,8 @@ public class ResourceManager
     /// <param name="go">
     /// 파괴할 객체를 의미한다.
     /// </param>
-    public void Destroy(GameObject go)
+    /// <param name="t"> 파괴하는데 걸리는 시간을 의미한다. </param>
+    public void Destroy(GameObject go, float t = 0.0f)
     {
         if (go == null)
             return;
@@ -83,6 +84,9 @@ public class ResourceManager
             return;
         }
 
-        Object.Destroy(go);
+        if (t > 0)
+            Object.Destroy(go,t);
+        else
+            Object.Destroy(go);
     }
 }

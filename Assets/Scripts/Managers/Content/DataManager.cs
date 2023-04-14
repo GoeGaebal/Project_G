@@ -10,10 +10,12 @@ public class DataManager
 {
     // public Dictionary<int, Stat> StatDict { get; private set; } = new Dictionary<int, Stat>();
     public Dictionary<int, Looting> LootingDict { get; private set; } = new Dictionary<int, Looting>();
-
+    public Dictionary<int, Gathering> GatheringDict { get; private set; } = new Dictionary<int, Gathering>();
+    
     public void Init()
     {
         LootingDict = LoadJson<LootingData, int, Looting>("LootingData").MakeDict();
+        GatheringDict = LoadJson<GatheringData, int, Gathering>("GatheringData").MakeDict();
     }
 
     Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

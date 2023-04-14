@@ -2,11 +2,13 @@
   "gatherings": [
     {
       "id" : "1",
-      "maxHp": "100",
+      "name" : "rock",
+      "maxHp": "30",
       "lootingId": "1"
     },
     {
       "id" : "2",
+      "name" : "gold",
       "maxHp": "100",
       "lootingId": "2"
     }
