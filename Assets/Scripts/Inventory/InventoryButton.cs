@@ -5,15 +5,15 @@ using UnityEngine;
 public class InventoryButton : MonoBehaviour
 {
     public GameObject inventoryUI;
-    public void OnClick()
+    public void OnClick()//가방 버튼 클릭했을 때
     {
-        if (inventoryUI.activeSelf)
+        if (inventoryUI.activeSelf)//인벤토리가 켜져 있으면 
         {
-            inventoryUI.SetActive(false);
+            inventoryUI.SetActive(false);//인벤토리 끔
         }
-        else
+        else//인벤토리가 꺼져 있으면
         {
-            inventoryUI.SetActive(true);
+            inventoryUI.SetActive(true);//인벤토리 켬
         }
     }
 }

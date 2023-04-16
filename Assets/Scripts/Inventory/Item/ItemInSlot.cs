@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] private Image _icon;//아이템의 아이콘
+    [SerializeField] private Image _icon;//아이템의 이미지
 
     public Text countText;
     [HideInInspector] public Item item;//아이템
