@@ -169,6 +169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845651cad91537a418d42ce75a6bafc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 4490166408117906638, guid: 72002aa7aefa74c41acdde3f11a17701, type: 3}
+  inventoryManager: {fileID: 6294884744617080756, guid: a4ba590403bed544ba0ac6b80cc2168e, type: 3}
 --- !u!114 &1351636911484048334
 MonoBehaviour:
   m_ObjectHideFlags: 0
