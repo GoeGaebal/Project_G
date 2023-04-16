@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 
 public class Slot : MonoBehaviour, IDropHandler
 {
-    public Image icon;
-    public Color selectedColor, notSelectedColor;
+    public Image icon;//아이템의 이미지
+    public Color selectedColor, notSelectedColor;//선택된 슬롯의 색깔 변경을 위한 변수
     private ItemInSlot originalItem;//Swap에 사용
 
     private void Awake()
@@ -28,11 +28,11 @@ public class Slot : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData)//아이템을 슬롯에 놓았을 때
     {
         ItemInSlot item = eventData.pointerDrag.GetComponent<ItemInSlot>();
-        if (transform.childCount == 0)//빈칸으로 이동
+        if (transform.childCount == 0)//빈 슬롯일 때
         {
             item.parentAfterDrag = transform;
         }
-        else//swap
+        else//빈 슬롯이 아닐 경우 Swap
         {
             originalItem = transform.GetChild(0).GetComponent<ItemInSlot>();
             originalItem.parentAfterDrag = item.parentAfterDrag;
