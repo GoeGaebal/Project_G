@@ -104,7 +104,7 @@ public class Player : DamageableEntity
             localSc.x = Math.Abs(localSc.x);
             transform.localScale = localSc;
         }
-        if(isDead) return;
+
 
         if(State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
