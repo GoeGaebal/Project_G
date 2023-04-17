@@ -9,6 +9,12 @@ public enum EnumPlayerStates
 {
     Idle, Attack, Run, Hit
 }
+    [SerializeField] private GameObject inventoryUI;//가방 아이콘
+    private GameObject inventoryManager;//인벤토리매니저
+    private InventoryManager inventorymanager;//스크립트
+    private InputAction quickSlotAction;
+    
+    private float moveSpeed = 1f;
 
 public class Player : DamageableEntity
 {
@@ -63,7 +69,12 @@ public class Player : DamageableEntity
         }
     }
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        quickSlotAction = new InputAction(binding: "<Mouse>/scroll/Y");
+        quickSlotAction.performed += OnQuickSlot_Mouse;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -78,6 +89,8 @@ public class Player : DamageableEntity
         };
 
 
+        inventoryManager = GameObject.Find("InventoryManager");
+        inventorymanager = inventoryManager.GetComponent<InventoryManager>();
     }
     
 
@@ -88,6 +101,7 @@ public class Player : DamageableEntity
 
         if(State == EnumPlayerStates.Run)
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -139,6 +153,51 @@ public class Player : DamageableEntity
             
         }
     }   
+            moveInput = value.Get<Vector2>();
+        }
+    }
+
+    private void OnInventory()//가방 껐다 켜기
+    {
+        if (inventoryUI.activeSelf)
+        {
+            inventoryUI.SetActive(false);
+        }
+        else
+        {
+            inventoryUI.SetActive(true);
+        }
+    }
+
+    private void OnQuickSlot_Keyboard(InputValue value)
+    {
+        
+    }
+
+    private void OnQuickSlot_Mouse(InputAction.CallbackContext context)
+    {
+        float scrollValue = Mouse.current.scroll.ReadValue().normalized.y;
+
+        if (scrollValue > 0)
+        {
+            inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot - 1);
+        }
+        else if (scrollValue < 0)
+        {
+            inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot + 1);
+        }
+    }
+
+
+    private void OnEnable()
+    {
+        quickSlotAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        quickSlotAction.Disable();
+    }
 
     private void LateUpdate()
     {
