@@ -1,12 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
-using UnityEngine.Tilemaps;
-
-public class ObjectManager
-{
-    public void GenerateGathering(int mapId)
-=======
 using Random = UnityEngine.Random;
 
 public class ObjectManager
@@ -26,41 +19,17 @@ public class ObjectManager
         ObjectsDict = new Dictionary<int, ObjectInfo>();
     }
 
-<<<<<<< HEAD
-    public void SpawnGatherings(int count)
->>>>>>> bfdaf0d (feat: Lobby System 구축)
-=======
     public void SpawnGatherings(int objectId, int count)
->>>>>>> aa2e552 (feat: Implemnet GatheringController)
     {
-        string mapName = "Map_" + mapId.ToString("000");
-        GameObject go = Resources.Load<GameObject>($"Prefabs/Map/{mapName}");
-        if (go == null)
-        {
-            Debug.Log("Map을 불러오지 못했습니다.");
-            return;
-        }
-
-        Tilemap tmBase = Util.FindChild<Tilemap>(go, "Grass_Tilemap", true);
-
-        var cellBounds = tmBase.cellBounds;
-        int xMin = cellBounds.xMin;
-        int xMax = cellBounds.xMax;
-        int yMin = cellBounds.yMin;
-        int yMax = cellBounds.yMax;
-
-        for (int i = 0; i < 5; i++)
+        var minX = Managers.Map.CurrentMapInfo.MinX;
+        var maxX = Managers.Map.CurrentMapInfo.MaxX;
+        var minY = Managers.Map.CurrentMapInfo.MinY;
+        var maxY = Managers.Map.CurrentMapInfo.MaxY;
+        for (int i = 0; i < count; i++)
         {
             //랜덤 위치 스폰 (일단 겹치더라도 상관없이)
             Vector3Int pos = new Vector3Int()
             {
-<<<<<<< HEAD
-                x = Random.Range(xMin, xMax),
-                y = Random.Range(yMin, yMax)
-            };
-
-            Managers.Resource.Instantiate("Gathering/Bush", pos, Quaternion.identity);
-=======
                 y = Random.Range(minY, maxY),
                 x = Random.Range(minX, maxX)
             };
@@ -101,12 +70,7 @@ public class ObjectManager
             // TODO : GetComponent라는 비싼 연산을 수행하며 시간과 거리가 하드코딩 되어있음.
             // 아마 오브젝트 풀링을 적용하면 조금은 해결될 수도
             LootingItemController lc = go.GetComponent<LootingItemController>();
-<<<<<<< HEAD
-            lc.Bounce(randPos, 1.0f, 1.0f);
->>>>>>> bfdaf0d (feat: Lobby System 구축)
-=======
             lc?.Bounce(randPos, 1.0f, 1.0f);
->>>>>>> aa2e552 (feat: Implemnet GatheringController)
         }
     }
 

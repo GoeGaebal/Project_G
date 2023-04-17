@@ -132,7 +132,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.79, y: 0.79, z: 0.79}
   m_ConstrainProportionsScale: 1
-  m_Children: [{fileID: 1263107759096614252}]
+  m_Children:
+  - {fileID: 1263107759096614252}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -213,18 +214,63 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: [{m_PersistentCalls: {m_Calls: [{m_Target: {fileID: 4997453326224182937},
-            m_TargetAssemblyTypeName: 'Player, Assembly-CSharp', m_MethodName: OnMove,
-            m_Mode: 0, m_Arguments: {m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: 'UnityEngine.Object,
-                UnityEngine', m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: '',
-              m_BoolArgument: 0}, m_CallState: 2}]}, m_ActionId: a1476ca7-6ea0-4177-b823-17807c75bc69,
-      m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'},
-    {m_PersistentCalls: {m_Calls: [{m_Target: {fileID: 4997453326224182937}, m_TargetAssemblyTypeName: 'Player,
-              Assembly-CSharp', m_MethodName: OnAttack, m_Mode: 0, m_Arguments: {
-              m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: 'UnityEngine.Object,
-                UnityEngine', m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: '',
-              m_BoolArgument: 0}, m_CallState: 2}]}, m_ActionId: fd4cc325-b0fe-46ff-ab08-6eaa8cfd6688,
-      m_ActionName: 'Player/Attack[/Mouse/leftButton]'}]
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4997453326224182937}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a1476ca7-6ea0-4177-b823-17807c75bc69
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4997453326224182937}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1c76db19-9556-4aba-b359-23c8afc9fe41
+    m_ActionName: Player/Attack[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4997453326224182937}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnInventory
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 84889458-b579-42b9-9c02-599edf7c8a80
+    m_ActionName: Player/Inventory[/Keyboard/i]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 616dd558-3041-4daa-8670-d359bacdd51e
+    m_ActionName: Player/QuickSlot_Keyboard[/Keyboard/1,/Keyboard/2,/Keyboard/3,/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f2956a09-0758-4db9-b32a-b96b40b6e3a2
+    m_ActionName: Player/QuickSlot_Mouse[/Mouse/scroll/y]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
@@ -263,11 +309,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845651cad91537a418d42ce75a6bafc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHP: 20
   inventoryUI: {fileID: 4490166408117906638, guid: 72002aa7aefa74c41acdde3f11a17701,
     type: 3}
-  inventoryManager: {fileID: 6294884744617080756, guid: a4ba590403bed544ba0ac6b80cc2168e,
-    type: 3}
-  maxHP: 20
   moveSpeed: 5
   attackDelay: 1.5
 --- !u!114 &1351636911484048334
