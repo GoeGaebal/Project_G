@@ -105,7 +105,7 @@ public class Player : DamageableEntity
         }
         if(isDead) return;
 
-        if(State == EnumPlayerStates.Run)
+        if(State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -217,8 +217,9 @@ public class Player : DamageableEntity
 
         if( State == EnumPlayerStates.Attack)
             attackInputBuffer = true;
-        else if (State == EnumPlayerStates.Run)
-            animator.SetBool("run",false);
+
+        // else if (State == EnumPlayerStates.Run)
+        //     animator.SetBool("run",false);
         State = EnumPlayerStates.Attack;
        
 
