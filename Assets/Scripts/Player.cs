@@ -19,7 +19,7 @@ public class Player : DamageableEntity
     private PlayerInput playerInput; 
     private Vector2 moveInput;
     private Rigidbody2D rb;
-    protected SpriteRenderer spriteRenderer;
+
     protected Animator animator;
 
     private EnumPlayerStates _state;
@@ -67,7 +67,6 @@ public class Player : DamageableEntity
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
 
@@ -133,8 +132,7 @@ public class Player : DamageableEntity
                     break;
             }
            
-            if(moveInput.x >0) spriteRenderer.flipX = false;
-            else if (moveInput.x <0) spriteRenderer.flipX = true;
+
             
             
         }
