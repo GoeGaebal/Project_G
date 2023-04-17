@@ -18,6 +18,7 @@ public class Player : DamageableEntity
     private InputAction inputAction; 
     private PlayerInput playerInput; 
     private Vector2 moveInput;
+    private SpriteRenderer[] spriteRenderers;
     private Rigidbody2D rb;
 
     protected Animator animator;
@@ -70,6 +71,8 @@ public class Player : DamageableEntity
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
 
+        spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+
         inputAction = playerInput.actions["Move"];
 
         dieAction += () => {
@@ -83,6 +86,23 @@ public class Player : DamageableEntity
 
     private void FixedUpdate()
     {
+
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = Camera.main.transform.position.z;
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        if(worldPos.x >=  transform.position.x)
+        {
+            Vector2 localSc = transform.localScale;
+            localSc.x = -1 * Math.Abs(localSc.x);
+            transform.localScale = localSc;
+        }
+        else
+        {
+            Vector2 localSc = transform.localScale;
+            localSc.x = Math.Abs(localSc.x);
+            transform.localScale = localSc;
+        }
         if(isDead) return;
 
         if(State == EnumPlayerStates.Run)
@@ -223,27 +243,10 @@ public class Player : DamageableEntity
             yield return null;
         }
 
-        animator.SetInteger("attackCount",0);
     }
 
-    public void FinishAttackState(int attackCount)
+    public void FinishAttackState()
     {
-        switch(attackCount)
-        {
-            case 0:
-                animator.SetInteger("attackCount",1);
-                break;
-            case 1:
-                animator.SetInteger("attackCount",2);
-                break;
-            case 2:
-                Debug.Log(animator.GetInteger("attackCount"));
-                animator.SetInteger("attackCount",0);
-                break;
-            default:
-                break;
-        }        
-
         if(attackInputBuffer) 
         {
             State = EnumPlayerStates.Attack;
