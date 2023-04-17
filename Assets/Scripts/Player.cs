@@ -86,6 +86,7 @@ public class Player : DamageableEntity
 
     private void FixedUpdate()
     {
+        if(isDead) return;
 
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = Camera.main.transform.position.z;
