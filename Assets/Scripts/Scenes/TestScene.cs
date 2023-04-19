@@ -48,7 +48,7 @@ public class TestScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Object.SpawnGatherings(1,5);
+        Managers.Network.SpawnGatherings(1,5);
     }
 
     public override void Clear()

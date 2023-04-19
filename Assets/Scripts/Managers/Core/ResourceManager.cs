@@ -62,11 +62,12 @@ public class ResourceManager
         go.name = original.name;
         
         // GameObject go = PhotonNetwork.Instantiate($"Prefabs/{path}", position, rotation);
+        
         return go;
     }
 
     /// <summary>
-    /// 객체가 Pool
+    /// 객체가 Poolable이면 자연스럽게 pool로 들어간다.
     /// </summary>
     /// <param name="go">
     /// 파괴할 객체를 의미한다.
