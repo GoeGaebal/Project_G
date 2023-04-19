@@ -49,7 +49,6 @@ public class InventoryManager : MonoBehaviour
         {
             quickslots[selectedSlot].Deselect();//원래 선택되어 있던 슬롯 선택 해제
         }
-
         quickslots[newValue].Select();//새로운 슬롯 선택
         selectedSlot = newValue;//현재 선택 중인 슬롯 새로운 슬롯으로 변경
     }
