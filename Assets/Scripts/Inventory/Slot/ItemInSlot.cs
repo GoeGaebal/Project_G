@@ -10,7 +10,8 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     public Text countText;
     [HideInInspector] public Item item;//아이템
-    [HideInInspector] public int count = 1;//아이템 개수
+    [HideInInspector] public CountableItem countableItem;//아이템
+    //[HideInInspector] public int count = 1;//아이템 개수
     [HideInInspector] public Transform parentAfterDrag;
 
     private void Start()
@@ -22,14 +23,27 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         item = newItem;
         _icon.sprite = newItem.Icon;
+        if(item is CountableItem)
+        {
+            ((CountableItem)item).Count = 1;
+        }
         RefreshCount();
     }
 
     public void RefreshCount()//아이템 개수 표시
     {
+        bool textActive = false;
+        if (item is CountableItem)
+        {
+            countText.text = ((CountableItem)item).Count.ToString();
+            textActive = ((CountableItem)item).Count > 1;
+        }
+        countText.gameObject.SetActive(textActive);
+        /*
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
+        */
     }
 
     public void OnBeginDrag(PointerEventData eventData)//클릭했을 때

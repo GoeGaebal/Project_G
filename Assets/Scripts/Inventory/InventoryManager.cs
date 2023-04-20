@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public int maxStackedItems = 4;
+    //public int maxStackedItems = 4;
     public Slot[] slots;//전체 슬롯(퀵슬롯 포함)
     public Slot[] quickslots;//퀵슬롯만
     public GameObject IconPrefab;//InventoryItemPrefab
@@ -55,6 +55,7 @@ public class InventoryManager : MonoBehaviour
 
     public bool AddItem(Item item)//아이템 추가
     {
+
         for(int i = 0; i < slots.Length; i++)//모든 슬롯을 돌면서
         {
             Slot slot = slots[i];
@@ -62,10 +63,10 @@ public class InventoryManager : MonoBehaviour
             
             if (itemInSlot != null &&//빈칸 아님
                 itemInSlot.item == item &&//추가하려는 아이템과 동일한 아이템이 슬롯에 있음
-                itemInSlot.count < maxStackedItems &&//최대 개수 미만
-                itemInSlot.item.stackable)//이미 stackable한 아이템이 인벤토리에 최대 개수 이하로 들어있을 때
+                itemInSlot.item is CountableItem &&//이미 countable한 아이템이 인벤토리에 들어있을 때
+                ((CountableItem)itemInSlot.item).Count < ((CountableItem)itemInSlot.item).MaxCount)//최대 개수 미만
             {
-                itemInSlot.count++;//개수 추가
+                ((CountableItem)itemInSlot.item).Count++;//개수 추가
                 itemInSlot.RefreshCount();
                 return true;//추가 완료함
             }
