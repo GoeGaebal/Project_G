@@ -7,17 +7,18 @@ using UnityEngine.InputSystem;
 
 public enum EnumPlayerStates
 {
+    [SerializeField] private GameObject inventoryUI;//가방 아이콘
+    private GameObject inventoryManager;//인벤토리매니저
+    private InventoryManager inventorymanager;//스크립트
+    private InputAction quickSlotAction;
+    
+    private float moveSpeed = 1f;
     Idle, Attack, Run, Hit
 }
 
 public class Player : DamageableEntity
 {
-    [SerializeField] private GameObject inventoryUI;//가방 아이콘
-    private GameObject inventoryManager;//인벤토리매니저
-    private InventoryManager inventorymanager;//스크립트
-    private InputAction quickSlotAction;
-
-    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField]private float moveSpeed = 5.0f;
     [SerializeField] private float attackDelay = 1.5f; 
 
     private InputAction inputAction; 
@@ -151,11 +152,11 @@ public class Player : DamageableEntity
             
         }
     }   
+        }
+    }
 
-    public void OnInventory(InputAction.CallbackContext context)//가방 껐다 켜기
+    private void OnInventory()//가방 껐다 켜기
     {
-        
-
         if (inventoryUI.activeSelf)
         {
             inventoryUI.SetActive(false);
@@ -165,13 +166,13 @@ public class Player : DamageableEntity
             inventoryUI.SetActive(true);
         }
     }
-    /*
+
     private void OnQuickSlot_Keyboard(InputValue value)
     {
         
     }
-    */
-    public void OnQuickSlot_Mouse(InputAction.CallbackContext context)
+
+    private void OnQuickSlot_Mouse(InputAction.CallbackContext context)
     {
         float scrollValue = Mouse.current.scroll.ReadValue().normalized.y;
 
@@ -185,9 +186,9 @@ public class Player : DamageableEntity
         }
     }
 
-    protected override void OnEnable()
+
+    private void OnEnable()
     {
-        base.OnEnable();
         quickSlotAction.Enable();
     }
 
@@ -206,6 +207,8 @@ public class Player : DamageableEntity
         }
     }
 
+    
+
     public override void OnDamage(float damage)
     {
         if(isDead) return;
@@ -214,6 +217,7 @@ public class Player : DamageableEntity
             State = EnumPlayerStates.Hit;
         
     }
+
 
     private  IEnumerator HitStateCoroutine()
     {
