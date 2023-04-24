@@ -13,7 +13,6 @@ public enum EnumPlayerStates
 public class Player : DamageableEntity
 {
     [SerializeField]private float moveSpeed = 5.0f;
-    [SerializeField] private float attackDelay = 1.5f; 
 
     private InputAction inputAction; 
     private PlayerInput playerInput; 

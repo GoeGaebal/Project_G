@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 
 public enum EnumLayerMask
 {
     Player = 6, Monster = 3, Mineral = 8
 };
+
+
+
+
 public class WeaponController : MonoBehaviour
 {
-    
+    [SerializeField] Sprite swordSprite;
+     [SerializeField] Sprite axeSprite;
     public float attacCoefficient;
     
     private Player parentPlayerComponent;
@@ -20,7 +27,7 @@ public class WeaponController : MonoBehaviour
     private IWeapon pickaxWeaponController;
 
     private GameObject playerGameObject;
-
+    private SpriteRenderer spriteRenderer;
     private void Awake() {
        
     }
@@ -28,7 +35,7 @@ public class WeaponController : MonoBehaviour
         meleeWeaponController = new MeleeWeaponController();
         pickaxWeaponController = new PickaxWeaponController();
 
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
         
         playerGameObject = transform.root.gameObject;
 
@@ -58,7 +65,6 @@ public class WeaponController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
 
-        Debug.Log("tirgger enter");
         if(other == null) return;
         
         IDamageable damageable = other.GetComponent<IDamageable>();
@@ -87,5 +93,24 @@ public class WeaponController : MonoBehaviour
         
     }
 
+    public void ChangeWeapon(InputAction.CallbackContext context)
+    {
+       
+        if(context.ReadValue<float>() > 0 && context.started)
+        {
+         Debug.Log("wheel up");
+                spriteRenderer.sprite = axeSprite;
+                spriteRenderer.sortingOrder = 3;
+            
+            
+        }
+        else if(context.ReadValue<float>() < 0 && context.started)
+        {
+              Debug.Log("wheel down");
+                spriteRenderer.sprite = swordSprite;
+                spriteRenderer.sortingOrder = 3;
+                
+        }
+    }
 
 }
