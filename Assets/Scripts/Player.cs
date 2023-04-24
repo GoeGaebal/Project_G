@@ -207,16 +207,10 @@ public class Player : DamageableEntity
       
 
 
-        
-        //이전에 돌아가고 있던 코루틴이 있으면 종료 시킴.
-        if(resetAttackCountCoroutine != null)
-            StopCoroutine(resetAttackCountCoroutine);
-        resetAttackCountCoroutine = StartCoroutine(ResetAttackCountCoroutine());
-
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
         rb.velocity = Vector2.zero;
 
-        if( State == EnumPlayerStates.Attack)
+        if( State == EnumPlayerStates.Attack && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
             attackInputBuffer = true;
 
         // else if (State == EnumPlayerStates.Run)
@@ -228,33 +222,15 @@ public class Player : DamageableEntity
 
     
 
-    ///<summary>
-    ///마지막 공격에서부터 얼마나 시간이 걸렸는지 체크한다.
-    ///공격 할 때마다 호출 됨. 마지막 공격으로부터 attackDelay만큼의 시간이 지나면 attackCounter를 0으로 만듦
-    ///</summary>
-    private IEnumerator ResetAttackCountCoroutine()
-    {
-        float curTime = 0f;
-        while(true)
-        {
-            curTime+=Time.deltaTime;
-            if(curTime >= attackDelay)
-            {
-                break;
-            }
-            yield return null;
-        }
 
-    }
 
     public void FinishAttackState()
     {
         if(attackInputBuffer) 
         {
-            State = EnumPlayerStates.Attack;
             attackInputBuffer = false;
         }
-        else if (!runInputBuffer.Equals(Vector2.zero) && inputAction.IsPressed())
+        else if (inputAction.IsPressed())
         {
             State = EnumPlayerStates.Run;
             moveInput = runInputBuffer;
@@ -265,7 +241,7 @@ public class Player : DamageableEntity
         {
             State = EnumPlayerStates.Idle;
         }
-        //animator.SetBool("attack",false);
+
     }
     public void ResetState()
     {
