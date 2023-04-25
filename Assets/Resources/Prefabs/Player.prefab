@@ -751,7 +751,7 @@ MonoBehaviour:
   attacCoefficient: 0
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!50 &8121877934628705266
 Rigidbody2D:
   serializedVersion: 4
