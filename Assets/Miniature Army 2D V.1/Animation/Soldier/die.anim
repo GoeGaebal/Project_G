@@ -348,7 +348,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0.023, y: 0.914, z: 0}
+        value: {x: 0.023, y: 0, z: 0}
         inSlope: {x: -2.6579998, y: 0, z: 0}
         outSlope: {x: -2.6579998, y: 0, z: 0}
         tangentMode: 0
@@ -357,7 +357,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.16666667
-        value: {x: -0.42, y: 0.593, z: 0}
+        value: {x: -0.42, y: -0.321, z: 0}
         inSlope: {x: -1.9829999, y: 0, z: 0}
         outSlope: {x: -1.9829999, y: 0, z: 0}
         tangentMode: 0
@@ -366,7 +366,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333334
-        value: {x: -0.638, y: 0.15, z: 0}
+        value: {x: -0.638, y: -0.764, z: 0}
         inSlope: {x: -0.65400004, y: 0, z: 0}
         outSlope: {x: -0.65400004, y: 0, z: 0}
         tangentMode: 0
@@ -375,7 +375,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.5
-        value: {x: -0.638, y: 0.229, z: 0}
+        value: {x: -0.638, y: -0.685, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -384,7 +384,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.6666667
-        value: {x: -0.638, y: 0.15, z: 0}
+        value: {x: -0.638, y: -0.764, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -393,7 +393,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.8333333
-        value: {x: -0.638, y: 0.183, z: 0}
+        value: {x: -0.638, y: -0.731, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -992,7 +992,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.914
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1001,7 +1001,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.16666667
-        value: 0.593
+        value: -0.321
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1010,7 +1010,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: 0.15
+        value: -0.764
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1019,7 +1019,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.5
-        value: 0.229
+        value: -0.685
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1028,7 +1028,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.6666667
-        value: 0.15
+        value: -0.764
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1037,7 +1037,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.8333333
-        value: 0.183
+        value: -0.731
         inSlope: 0
         outSlope: 0
         tangentMode: 0
