@@ -64,16 +64,17 @@ public class InventoryManager : MonoBehaviour
             if (itemInSlot != null &&//빈칸 아님
                 itemInSlot.item == item &&//추가하려는 아이템과 동일한 아이템이 슬롯에 있음
                 itemInSlot.item is CountableItem &&//이미 countable한 아이템이 인벤토리에 들어있을 때
-                ((CountableItem)itemInSlot.item).Count < ((CountableItem)itemInSlot.item).MaxCount)//최대 개수 미만
+                itemInSlot.count < ((CountableItem)itemInSlot.item).MaxCount)//최대 개수 미만
             {
-                ((CountableItem)itemInSlot.item).Count++;//개수 추가
-                itemInSlot.RefreshCount();
+                itemInSlot.count++;//개수 추가
+                itemInSlot.RefreshCount();//텍스트 변경
                 return true;//추가 완료함
             }
+            
             else if (itemInSlot == null)//위의 모든 조건을 제외하고 빈칸을 만났을 때
             {
                 SpawnNewItem(item, slot);//그냥 해당 슬롯에 아이템 추가
-                return true;//추가 완료함
+                return true;//생성 완료함
             }
         }
 
