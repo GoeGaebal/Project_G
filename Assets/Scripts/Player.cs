@@ -12,7 +12,7 @@ public enum EnumPlayerStates
 
 public class Player : DamageableEntity
 {
-    private GameObject inventoryUI;//가방 아이콘
+    [SerializeField] private GameObject inventoryUI;//가방 아이콘
     private GameObject inventoryManager;//인벤토리매니저
     private InventoryManager inventorymanager;//스크립트
     private InputAction quickSlotAction;
