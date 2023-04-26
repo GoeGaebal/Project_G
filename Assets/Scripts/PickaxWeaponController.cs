@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickaxAttackController : IWeapon
+public class PickaxWeaponController : IWeapon
 {
     public virtual void Attack(IDamageable damageable)
     {
