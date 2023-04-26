@@ -43,7 +43,7 @@
                 },
                 {
                     "name": "QuickSlot_Mouse",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "f2956a09-0758-4db9-b32a-b96b40b6e3a2",
                     "expectedControlType": "",
                     "processors": "",

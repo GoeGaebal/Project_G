@@ -311,9 +311,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryManager: {fileID: 672691213}
   itemsToPickUp:
-  - {fileID: 11400000, guid: d42d40d7881a7584a9967c55da816be0, type: 2}
-  - {fileID: 11400000, guid: b8fb5b58b426a4a40b3e693e15cf74f1, type: 2}
-  - {fileID: 11400000, guid: d343522f1bc3055448fbc7241e0ecb34, type: 2}
+  - {fileID: 11400000, guid: 936143f86c75b104ea79a024dde492a9, type: 2}
+  - {fileID: 11400000, guid: 4313e2a68858b274e9200727bbd16507, type: 2}
+  - {fileID: 11400000, guid: c133e599971f7ee469d758839f0739dd, type: 2}
   - {fileID: 11400000, guid: 2fd5caa1ee8d1fa429d6546098228270, type: 2}
 --- !u!114 &150249403
 MonoBehaviour:

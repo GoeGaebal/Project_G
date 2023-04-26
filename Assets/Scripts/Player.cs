@@ -77,6 +77,8 @@ public class Player : DamageableEntity
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        inventoryUI = GameObject.Find("UI");
+        inventoryUI = inventoryUI.transform.GetChild(0).gameObject;
         inventoryManager = GameObject.Find("InventoryManager");
         inventorymanager = inventoryManager.GetComponent<InventoryManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -92,7 +94,6 @@ public class Player : DamageableEntity
 
     }
     
-
 
     private void FixedUpdate()
     {
@@ -154,15 +155,16 @@ public class Player : DamageableEntity
 
     public void OnInventory(InputAction.CallbackContext context)//가방 껐다 켜기
     {
-        
-
-        if (inventoryUI.activeSelf)
+        if (photonView.IsMine && context.performed)
         {
-            inventoryUI.SetActive(false);
-        }
-        else
-        {
-            inventoryUI.SetActive(true);
+            if (inventoryUI.activeSelf)
+            {
+                inventoryUI.SetActive(false);
+            }
+            else
+            {
+                inventoryUI.SetActive(true);
+            }
         }
     }
     /*
@@ -173,15 +175,19 @@ public class Player : DamageableEntity
     */
     public void OnQuickSlot_Mouse(InputAction.CallbackContext context)
     {
-        float scrollValue = Mouse.current.scroll.ReadValue().normalized.y;
+        if (photonView.IsMine && context.started)
+        {
+            float scrollValue = Mouse.current.scroll.ReadValue().normalized.y;
+            //float scrollValue = context.ReadValue<Vector2>().normalized.y;
 
-        if (scrollValue > 0)
-        {
-            inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot - 1);
-        }
-        else if (scrollValue < 0)
-        {
-            inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot + 1);
+            if (scrollValue > 0)
+            {
+                inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot - 1);
+            }
+            else if (scrollValue < 0)
+            {
+                inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot + 1);
+            }
         }
     }
 

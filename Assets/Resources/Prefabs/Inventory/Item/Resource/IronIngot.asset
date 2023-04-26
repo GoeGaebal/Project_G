@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a16a3d1334012545ba50d735778d88a, type: 3}
+  m_Script: {fileID: 11500000, guid: 387a1275cf852ae40b7651dc9e6cda55, type: 3}
   m_Name: IronIngot
   m_EditorClassIdentifier: 
-  type: 0
-  actionType: 4
-  range: {x: 5, y: 4}
-  stackable: 1
-  Icon: {fileID: 21300000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
+  _id: 1
+  _name: "\uCCA0\uAD34"
+  _tooltip: "\uCCA0\uAD34, \uB2E4\uC591\uD55C \uAC78 \uB9CC\uB4E4 \uC218 \uC788\uC744
+    \uAC83 \uAC19\uB2E4."
+  _count: 1
+  _icon: {fileID: 21300000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
+  _droppedItemPrefab: {fileID: 0}
+  _maxCount: 3
