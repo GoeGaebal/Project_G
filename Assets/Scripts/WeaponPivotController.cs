@@ -29,7 +29,6 @@ public class WeaponPivotController : MonoBehaviour
  
          //Rotate the object to face the mouse
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-        Debug.Log(angle);
 
         transform.position = new Vector3(-disFromBody * Mathf.Sin(angle * Mathf.Deg2Rad), disFromBody* Mathf.Cos(angle* Mathf.Deg2Rad),0) + transform.root.position;
 

@@ -319,13 +319,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: fd4cc325-b0fe-46ff-ab08-6eaa8cfd6688
-    m_ActionName: Player/Attack[/Mouse/leftButton]
+    m_ActionId: 1c76db19-9556-4aba-b359-23c8afc9fe41
+    m_ActionName: Player/Attack[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8070354320611697476}
-        m_TargetAssemblyTypeName: WeaponController, Assembly-CSharp
-        m_MethodName: ChangeWeapon
+      - m_Target: {fileID: -2119068767171333025}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnInventory
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -335,8 +335,28 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: a42a1afc-c06b-4290-8317-7510be68320e
-    m_ActionName: Player/ChangeWeapon[/Mouse/middleButton]
+    m_ActionId: 84889458-b579-42b9-9c02-599edf7c8a80
+    m_ActionName: Player/Inventory[/Keyboard/i]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 616dd558-3041-4daa-8670-d359bacdd51e
+    m_ActionName: Player/QuickSlot_Keyboard[/Keyboard/1,/Keyboard/2,/Keyboard/3,/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -2119068767171333025}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnQuickSlot_Mouse
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f2956a09-0758-4db9-b32a-b96b40b6e3a2
+    m_ActionName: Player/QuickSlot_Mouse[/Mouse/scroll/y]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player

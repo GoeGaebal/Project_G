@@ -12,18 +12,17 @@ public enum EnumPlayerStates
 
 public class Player : DamageableEntity
 {
-    [SerializeField] private GameObject inventoryUI;//가방 아이콘
+    private GameObject inventoryUI;//가방 아이콘
     private GameObject inventoryManager;//인벤토리매니저
     private InventoryManager inventorymanager;//스크립트
     private InputAction quickSlotAction;
 
     [SerializeField] private float moveSpeed = 5.0f;
-    [SerializeField] private float attackDelay = 1.5f; 
 
     private InputAction inputAction; 
     private PlayerInput playerInput; 
     private Vector2 moveInput;
-    private SpriteRenderer[] spriteRenderers;
+
     private Rigidbody2D rb;
 
     protected Animator animator;
@@ -82,11 +81,11 @@ public class Player : DamageableEntity
         inventoryUI = inventoryUI.transform.GetChild(0).gameObject;
         inventoryManager = GameObject.Find("InventoryManager");
         inventorymanager = inventoryManager.GetComponent<InventoryManager>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
 
-        spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+  ;
 
         inputAction = playerInput.actions["Move"];
 
@@ -303,12 +302,7 @@ public class Player : DamageableEntity
         }
 
     }
-    public void ResetState()
-    {
-        if(isDead) return;
-        State = EnumPlayerStates.Idle;
-    }
-
+ 
 
     
 }

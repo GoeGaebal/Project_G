@@ -15,6 +15,7 @@ public class Managers : MonoBehaviourPun
     private DataManager _data = new();
     private ObjectManager _object = new();
     private NetworkManager _network = new();
+    private TimeSlotManager _timeSlot = new();
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
     public static ObjectManager Object { get { return Instance._object; } }
@@ -60,6 +61,7 @@ public class Managers : MonoBehaviourPun
             _instance._pool.Init();
             _instance._object.Init();
             _instance._network.Init();
+            _instance._timeSlot.Init();
         }
     }
     
