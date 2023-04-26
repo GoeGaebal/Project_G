@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Managers : MonoBehaviour
+public class Managers : MonoBehaviourPun
 {
-    private static Managers s_instance; // 유일성이 보장된다
-    private static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
+    private static Managers _instance; // 유일성이 보장된다
+    private static Managers Instance { get { Init(); return _instance; } } // 유일한 매니저를 갖고온다
     
     #region Content
-    private MapManager _map = new MapManager();
-    private ObjectManager _object = new ObjectManager();
-    private TimeSlotManager _timeSlot = new TimeSlotManager();
+    private MapManager _map = new();
+    private DataManager _data = new();
+    private ObjectManager _object = new();
+    private NetworkManager _network = new();
     public static MapManager Map { get { return Instance._map; } }
+    public static DataManager Data { get { return Instance._data; } }
     public static ObjectManager Object { get { return Instance._object; } }
+    public static NetworkManager Network { get { return Instance._network; } }
     public static TimeSlotManager TimeSlot { get { return Instance._timeSlot;} }
     #endregion
 
@@ -39,7 +44,7 @@ public class Managers : MonoBehaviour
     
     static void Init()
     {
-        if (s_instance == null)
+        if (_instance == null)
         {
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
@@ -49,10 +54,12 @@ public class Managers : MonoBehaviour
             }
 
             DontDestroyOnLoad(go);
-            s_instance = go.GetComponent<Managers>();
-            
-            s_instance._pool.Init();
-            s_instance._timeSlot.Init();
+            _instance = go.GetComponent<Managers>();
+
+            _instance._data.Init();
+            _instance._pool.Init();
+            _instance._object.Init();
+            _instance._network.Init();
         }
     }
     
