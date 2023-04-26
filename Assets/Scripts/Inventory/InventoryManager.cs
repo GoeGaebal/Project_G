@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public int maxStackedItems = 4;
+    //public int maxStackedItems = 4;
     public Slot[] slots;//전체 슬롯(퀵슬롯 포함)
     public Slot[] quickslots;//퀵슬롯만
     public GameObject IconPrefab;//InventoryItemPrefab
@@ -49,13 +49,13 @@ public class InventoryManager : MonoBehaviour
         {
             quickslots[selectedSlot].Deselect();//원래 선택되어 있던 슬롯 선택 해제
         }
-
         quickslots[newValue].Select();//새로운 슬롯 선택
         selectedSlot = newValue;//현재 선택 중인 슬롯 새로운 슬롯으로 변경
     }
 
     public bool AddItem(Item item)//아이템 추가
     {
+
         for(int i = 0; i < slots.Length; i++)//모든 슬롯을 돌면서
         {
             Slot slot = slots[i];
@@ -63,17 +63,18 @@ public class InventoryManager : MonoBehaviour
             
             if (itemInSlot != null &&//빈칸 아님
                 itemInSlot.item == item &&//추가하려는 아이템과 동일한 아이템이 슬롯에 있음
-                itemInSlot.count < maxStackedItems &&//최대 개수 미만
-                itemInSlot.item.stackable)//이미 stackable한 아이템이 인벤토리에 최대 개수 이하로 들어있을 때
+                itemInSlot.item is CountableItem &&//이미 countable한 아이템이 인벤토리에 들어있을 때
+                itemInSlot.count < ((CountableItem)itemInSlot.item).MaxCount)//최대 개수 미만
             {
                 itemInSlot.count++;//개수 추가
-                itemInSlot.RefreshCount();
+                itemInSlot.RefreshCount();//텍스트 변경
                 return true;//추가 완료함
             }
+            
             else if (itemInSlot == null)//위의 모든 조건을 제외하고 빈칸을 만났을 때
             {
                 SpawnNewItem(item, slot);//그냥 해당 슬롯에 아이템 추가
-                return true;//추가 완료함
+                return true;//생성 완료함
             }
         }
 
