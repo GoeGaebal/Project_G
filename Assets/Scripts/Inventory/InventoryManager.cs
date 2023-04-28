@@ -51,6 +51,21 @@ public class InventoryManager : MonoBehaviour
         }
         quickslots[newValue].Select();//새로운 슬롯 선택
         selectedSlot = newValue;//현재 선택 중인 슬롯 새로운 슬롯으로 변경
+
+
+        //quick slot[selectedSlot].GetComponentInChildren<ItemInSlot>();으로 아이템 슬롯 가져온다
+        //itemInSlot.item의 타입을 확인하여 칼인지 도끼인지 체크한 후 changeweapon
+        // 이해랑이 바꿈
+        ItemInSlot selectedItem = quickslots[selectedSlot].GetComponentInChildren<ItemInSlot>();
+        if(selectedItem == null) return;
+
+        Item slotItem = (selectedItem.item);
+        if(slotItem != null && slotItem is EquipableItem)
+        {
+            Debug.Log(slotItem.GetType());
+            ((EquipableItem)slotItem).ChangeEquipableItem();
+        }
+        
     }
 
     public bool AddItem(Item item)//아이템 추가
