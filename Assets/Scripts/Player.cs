@@ -12,19 +12,19 @@ public enum EnumPlayerStates
 
 public class Player : DamageableEntity
 {
-    [SerializeField] private GameObject inventoryUI;//가방 아이콘
+    private GameObject inventoryUI;//가방 아이콘
     private GameObject inventoryManager;//인벤토리매니저
     private InventoryManager inventorymanager;//스크립트
     private InputAction quickSlotAction;
 
     [SerializeField] private float moveSpeed = 5.0f;
-    [SerializeField] private float attackDelay = 1.5f; 
 
     private InputAction inputAction; 
     private PlayerInput playerInput; 
     private Vector2 moveInput;
+
     private Rigidbody2D rb;
-    protected SpriteRenderer spriteRenderer;
+
     protected Animator animator;
 
     private EnumPlayerStates _state;
@@ -77,11 +77,15 @@ public class Player : DamageableEntity
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        inventoryUI = GameObject.Find("UI");
+        inventoryUI = inventoryUI.transform.GetChild(0).gameObject;
         inventoryManager = GameObject.Find("InventoryManager");
         inventorymanager = inventoryManager.GetComponent<InventoryManager>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
+
+  ;
 
         inputAction = playerInput.actions["Move"];
 
@@ -93,12 +97,29 @@ public class Player : DamageableEntity
     }
     
 
-
     private void FixedUpdate()
     {
         if(isDead) return;
 
-        if(State == EnumPlayerStates.Run)
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = Camera.main.transform.position.z;
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        if(worldPos.x >=  transform.position.x)
+        {
+            Vector2 localSc = transform.localScale;
+            localSc.x = -1 * Math.Abs(localSc.x);
+            transform.localScale = localSc;
+        }
+        else
+        {
+            Vector2 localSc = transform.localScale;
+            localSc.x = Math.Abs(localSc.x);
+            transform.localScale = localSc;
+        }
+
+
+        if(State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -145,8 +166,7 @@ public class Player : DamageableEntity
                     break;
             }
            
-            if(moveInput.x >0) spriteRenderer.flipX = false;
-            else if (moveInput.x <0) spriteRenderer.flipX = true;
+
             
             
         }
@@ -154,15 +174,16 @@ public class Player : DamageableEntity
 
     public void OnInventory(InputAction.CallbackContext context)//가방 껐다 켜기
     {
-        
-
-        if (inventoryUI.activeSelf)
+        if (photonView.IsMine && context.performed)
         {
-            inventoryUI.SetActive(false);
-        }
-        else
-        {
-            inventoryUI.SetActive(true);
+            if (inventoryUI.activeSelf)
+            {
+                inventoryUI.SetActive(false);
+            }
+            else
+            {
+                inventoryUI.SetActive(true);
+            }
         }
     }
     /*
@@ -173,15 +194,19 @@ public class Player : DamageableEntity
     */
     public void OnQuickSlot_Mouse(InputAction.CallbackContext context)
     {
-        float scrollValue = Mouse.current.scroll.ReadValue().normalized.y;
+        if (photonView.IsMine && context.started)
+        {
+            float scrollValue = Mouse.current.scroll.ReadValue().normalized.y;
+            //float scrollValue = context.ReadValue<Vector2>().normalized.y;
 
-        if (scrollValue > 0)
-        {
-            inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot - 1);
-        }
-        else if (scrollValue < 0)
-        {
-            inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot + 1);
+            if (scrollValue > 0)
+            {
+                inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot - 1);
+            }
+            else if (scrollValue < 0)
+            {
+                inventorymanager.ChangeSelectedQuickSlot(inventorymanager.selectedSlot + 1);
+            }
         }
     }
 
@@ -241,19 +266,14 @@ public class Player : DamageableEntity
       
 
 
-        
-        //이전에 돌아가고 있던 코루틴이 있으면 종료 시킴.
-        if(resetAttackCountCoroutine != null)
-            StopCoroutine(resetAttackCountCoroutine);
-        resetAttackCountCoroutine = StartCoroutine(ResetAttackCountCoroutine());
-
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
         rb.velocity = Vector2.zero;
 
-        if( State == EnumPlayerStates.Attack)
+        if( State == EnumPlayerStates.Attack && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
             attackInputBuffer = true;
-        else if (State == EnumPlayerStates.Run)
-            animator.SetBool("run",false);
+
+        // else if (State == EnumPlayerStates.Run)
+        //     animator.SetBool("run",false);
         State = EnumPlayerStates.Attack;
        
 
@@ -261,50 +281,15 @@ public class Player : DamageableEntity
 
     
 
-    ///<summary>
-    ///마지막 공격에서부터 얼마나 시간이 걸렸는지 체크한다.
-    ///공격 할 때마다 호출 됨. 마지막 공격으로부터 attackDelay만큼의 시간이 지나면 attackCounter를 0으로 만듦
-    ///</summary>
-    private IEnumerator ResetAttackCountCoroutine()
+
+
+    public void FinishAttackState()
     {
-        float curTime = 0f;
-        while(true)
-        {
-            curTime+=Time.deltaTime;
-            if(curTime >= attackDelay)
-            {
-                break;
-            }
-            yield return null;
-        }
-
-        animator.SetInteger("attackCount",0);
-    }
-
-    public void FinishAttackState(int attackCount)
-    {
-        switch(attackCount)
-        {
-            case 0:
-                animator.SetInteger("attackCount",1);
-                break;
-            case 1:
-                animator.SetInteger("attackCount",2);
-                break;
-            case 2:
-                Debug.Log(animator.GetInteger("attackCount"));
-                animator.SetInteger("attackCount",0);
-                break;
-            default:
-                break;
-        }        
-
         if(attackInputBuffer) 
         {
-            State = EnumPlayerStates.Attack;
             attackInputBuffer = false;
         }
-        else if (!runInputBuffer.Equals(Vector2.zero) && inputAction.IsPressed())
+        else if (inputAction.IsPressed())
         {
             State = EnumPlayerStates.Run;
             moveInput = runInputBuffer;
@@ -315,14 +300,9 @@ public class Player : DamageableEntity
         {
             State = EnumPlayerStates.Idle;
         }
-        //animator.SetBool("attack",false);
-    }
-    public void ResetState()
-    {
-        if(isDead) return;
-        State = EnumPlayerStates.Idle;
-    }
 
+    }
+ 
 
     
 }

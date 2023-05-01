@@ -14,9 +14,11 @@ public class Managers : MonoBehaviourPun
     private MapManager _map = new();
     private DataManager _data = new();
     private NetworkManager _network = new();
+    private TimeSlotManager _timeSlot = new();
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
     public static NetworkManager Network { get { return Instance._network; } }
+    public static TimeSlotManager TimeSlot { get { return Instance._timeSlot;} }
     #endregion
 
     #region Core
@@ -36,6 +38,7 @@ public class Managers : MonoBehaviourPun
     
     void Update()
     {
+        TimeSlot.AddDelataTime(Time.deltaTime);
     }
     
     static void Init()
@@ -55,6 +58,7 @@ public class Managers : MonoBehaviourPun
             _instance._data.Init();
             _instance._pool.Init();
             _instance._network.Init();
+            _instance._timeSlot.Init();
         }
     }
     

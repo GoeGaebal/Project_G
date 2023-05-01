@@ -12,7 +12,7 @@ public class Test : MonoBehaviour
         bool result = inventoryManager.AddItem(itemsToPickUp[id]);
         if (result)
         {
-            Debug.Log("아이템 추가됨");
+            //Debug.Log("아이템 추가됨");
         }
         else
         {
