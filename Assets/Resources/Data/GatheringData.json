@@ -7,10 +7,16 @@
       "lootingId": "1"
     },
     {
-      "id" : "2",
-      "name" : "gold",
+      "id": "2",
+      "name": "gold",
       "maxHp": "100",
       "lootingId": "2"
+    },
+    {
+      "id" : "3",
+      "name" : "bush",
+      "maxHp": "20",
+      "lootingId": "3"
     }
   ]
 }
