@@ -95,6 +95,8 @@ GameObject:
   - component: {fileID: 3864668449649255903}
   - component: {fileID: 5802697889737198890}
   - component: {fileID: 2032360475413248509}
+  - component: {fileID: 6088235532885793723}
+  - component: {fileID: -6342399583511599428}
   m_Layer: 0
   m_Name: stone
   m_TagString: Untagged
@@ -186,3 +188,51 @@ MonoBehaviour:
   cof: 0
   bounceCount: 0
   threshold: 0
+--- !u!60 &6088235532885793723
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5959609154814808893}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 0.32, y: 0.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.09482694, y: 0.21863034}
+      - {x: -0.10213542, y: 0.21864522}
+      - {x: -0.39181614, y: 0.05903001}
+      - {x: -0.42178512, y: -0.44930106}
+      - {x: -0.2654159, y: -0.50788724}
+      - {x: 0.19553924, y: -0.5133623}
+      - {x: 0.41016364, y: -0.37873423}
+      - {x: 0.41395783, y: -0.042512536}
+      - {x: 0.339597, y: 0.124820516}
+      - {x: 0.17931366, y: 0.12861457}
+--- !u!114 &-6342399583511599428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5959609154814808893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096f6d3207075ab4ab5560aaf4db843f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ironIngot: {fileID: 11400000, guid: 4313e2a68858b274e9200727bbd16507, type: 2}
