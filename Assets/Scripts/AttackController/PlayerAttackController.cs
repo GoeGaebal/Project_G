@@ -16,12 +16,12 @@ public class PlayerAttackController : AttackController
     private Weapon meleeWeaponController;
     private Weapon pickaxWeaponController;
     private EnumWeaponList currentWeapon;
-
+    private static GameObject localPlayer;
     private SpriteRenderer spriteRenderer;
     // Start is called before the first frame update
     void Start()
     {
-        ChangeWeapon = (EnumWeaponList changeWeapon) => 
+        ChangeWeapon += (EnumWeaponList changeWeapon) => 
         {
             _ChangeWeapon(changeWeapon);
         };
@@ -34,15 +34,18 @@ public class PlayerAttackController : AttackController
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         
-
-        
+        if(photonView.IsMine)
+        {
+            localPlayer = this.gameObject;
+        }        
     }
 
 
     public void _ChangeWeapon(EnumWeaponList changeWeapon)
     {  
         if(changeWeapon == currentWeapon) return;
-
+        if(!photonView.IsMine) return;
+        
         switch(changeWeapon)
         {
             case EnumWeaponList.Sword:
