@@ -53,17 +53,9 @@ public class InventoryManager : MonoBehaviour
         selectedSlot = newValue;//현재 선택 중인 슬롯 새로운 슬롯으로 변경
     }
 
-    public Item GetSelectedItem()//현재 선택 중인 슬롯의 아이템 가져오기
+    public ItemInSlot GetSelectedSlot()//현재 선택 중인 슬롯의 아이템 가져오기
     {
-        Slot slot = slots[selectedSlot];
-        ItemInSlot itemInSlot = slot.GetComponentInChildren<ItemInSlot>();
-
-        if (itemInSlot != null)
-        {
-            return itemInSlot.item;
-        }
-
-        return null;
+        return slots[selectedSlot].GetComponentInChildren<ItemInSlot>();
     }
 
     public bool AddItem(Item item)//아이템 추가

@@ -24,6 +24,10 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         _icon.sprite = item.Icon;
         RefreshCount();
     }
+    public void RevmoveItem()//슬롯의 아이템 삭제
+    {
+        Destroy(gameObject);
+    }
 
     public void RefreshCount()//아이템 개수 표시
     {
@@ -32,7 +36,6 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         countText.gameObject.SetActive(textActive);
         
     }
-
     public void OnBeginDrag(PointerEventData eventData)//클릭했을 때
     {
         _icon.raycastTarget = false;
