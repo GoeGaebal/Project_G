@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -23,7 +22,7 @@ public struct MapInfo
 public class MapManager
 {
     /// <summary>현재 Grid 즉 맵</summary>
-    public Grid CurrentGrid { get; private set; }
+    private Dictionary<ulong, bool> _currentMapInfo;
 
     public MapInfo CurrentMapInfo { get; private set; }
 
@@ -48,8 +47,8 @@ public class MapManager
         Tilemap tmBase = Util.FindChild<Tilemap>(go, "Grass_Tilemap", true);
         var cellBounds = tmBase.cellBounds;
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
-
-        CurrentGrid = go.GetComponent<Grid>();
+        
+        
     }
     
     /// <summary>
@@ -61,8 +60,20 @@ public class MapManager
         if (map != null)
         {
             Object.Destroy(map);
-            CurrentGrid = null;
+            _currentMapInfo = null;
             currentMapId = 0;
         }
+    }
+
+    private ulong Vector2ulong(Vector3 pos)
+    {
+        int y = (int) pos.y;
+        int x = (int) pos.x;
+        return ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
+    }
+
+    public bool IsCollision(Vector3 pos)
+    {
+        return _currentMapInfo[Vector2ulong(pos)];
     }
 }
