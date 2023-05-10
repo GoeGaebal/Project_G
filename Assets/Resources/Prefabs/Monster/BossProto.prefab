@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8848457229015284199}
   - component: {fileID: 7030104513904931494}
   - component: {fileID: -7150734512121841761}
+  - component: {fileID: 4417218321329297627}
   m_Layer: 0
   m_Name: BossProto
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -750047184722822154, guid: 1914d95466e3d4341a618c35a56d5f82,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -129,3 +130,29 @@ MonoBehaviour:
     m_Bits: 64
   speed: 1.1
   minDisFromPlayer: 0.6
+--- !u!61 &4417218321329297627
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7349318779710265433}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.01495216, y: -0.18421382}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.71, y: 0.93}
+    newSize: {x: 1.4, y: 0.93}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.40762895, y: 0.56157243}
+  m_EdgeRadius: 0

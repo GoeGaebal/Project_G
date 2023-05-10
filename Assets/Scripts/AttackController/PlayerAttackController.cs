@@ -68,3 +68,20 @@ public class PlayerAttackController : AttackController
     }
 
 }
+
+
+class MeleeWeaponController : Weapon
+{
+   public MeleeWeaponController()
+   {
+        AddTargetLayer((int)EnumLayerMask.Monster);
+   }
+}
+
+class PickaxWeaponController : Weapon
+{
+   public PickaxWeaponController()
+   {
+        AddTargetLayer((int)EnumLayerMask.Mineral);
+   }
+}

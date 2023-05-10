@@ -20,6 +20,11 @@ public abstract class Weapon
         targetLayerMask &=  ~(1<<layerNum);
     }
 
+    private void ResetTargetLayer()
+    {
+        targetLayerMask = 0;
+    }
+
 
     
 }
