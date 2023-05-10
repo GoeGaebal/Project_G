@@ -17,7 +17,7 @@ public class BasicMonster : DamageableEntity
     [SerializeField] private float minDisFromPlayer;
 
     protected Animator animator;
-    private SpriteRenderer spriteRenderer;
+    protected SpriteRenderer spriteRenderer;
 
 
 
@@ -108,9 +108,7 @@ public class BasicMonster : DamageableEntity
             if(target == null) return;
 
             //flip sprite
-            if(target.transform.position.x < transform.position.x) spriteRenderer.flipX = true;
-            else spriteRenderer.flipX = false;
-
+            if(AnimState == EnumAnimationStates.Idle || AnimState == EnumAnimationStates.Run)FlipXSprite();
             float distance = (target.transform.position - transform.position).magnitude;
             animator.SetFloat("distance", distance);
 
@@ -176,5 +174,12 @@ public class BasicMonster : DamageableEntity
     public void FinishHitState()
     {
         AnimState = EnumAnimationStates.Idle;
+    }
+
+    protected virtual void FlipXSprite()
+    {
+        if(target.transform.position.x < transform.position.x) spriteRenderer.flipX = true;
+        else spriteRenderer.flipX = false;
+
     }
 }
