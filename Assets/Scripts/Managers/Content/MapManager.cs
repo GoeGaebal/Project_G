@@ -12,11 +12,11 @@ public struct MapInfo
         MinY = minY;
         MaxY = maxY;
     }
-    public int MapId { get; set; }
-    public int MinX { get; set; }
-    public int MaxX { get; set; }
-    public int MinY { get; set; }
-    public int MaxY { get; set; }
+    public int MapId { get; private set; }
+    public int MinX { get; private set; }
+    public int MaxX { get; private set; }
+    public int MinY { get; private set; }
+    public int MaxY { get; private set; }
 }
 
 public class MapManager
@@ -47,8 +47,7 @@ public class MapManager
         Tilemap tmBase = Util.FindChild<Tilemap>(go, "Grass_Tilemap", true);
         var cellBounds = tmBase.cellBounds;
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
-        
-        
+        _currentMapInfo = Managers.Data.LoadMapData(mapName);
     }
     
     /// <summary>

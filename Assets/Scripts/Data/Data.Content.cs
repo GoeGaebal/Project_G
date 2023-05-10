@@ -91,11 +91,11 @@ public class MapData
 [Serializable]
 public class MapDataLoader : ILoader<ulong,bool>
 {
-    public List<MapData> MapDatas = new();
+    public List<MapData> mapdatas = new();
     public Dictionary<ulong, bool> MakeDict()
     {
         var dict = new Dictionary<ulong, bool>();
-        foreach (var mapData in MapDatas)
+        foreach (var mapData in mapdatas)
         {
             dict.Add(mapData.key, mapData.isCollision);
         }
