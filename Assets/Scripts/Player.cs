@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -83,17 +81,15 @@ public class Player : DamageableEntity
         inventorymanager = inventoryManager.GetComponent<InventoryManager>();
 
         animator = GetComponent<Animator>();
-        playerInput = GetComponent<PlayerInput>();
+        // playerInput = GetComponent<PlayerInput>();
 
-  ;
-
-        inputAction = playerInput.actions["Move"];
+        // inputAction = playerInput.actions["Move"];
 
         dieAction += () => {
             animator.SetTrigger("die");
         };
 
-
+        Managers.Input.PlayerActions.Move. += OnMove;
     }
     
 
@@ -125,23 +121,19 @@ public class Player : DamageableEntity
 
     public void OnMove(InputAction.CallbackContext context)
     {
-
         if (photonView.IsMine)
         {
              if(isDead) return;
-
-            
-            moveInput = context.ReadValue<Vector2>();
-    
-            if(moveInput == null) return;
-
-            
+             moveInput = context.ReadValue<Vector2>();
+             
+             if(moveInput == null) return;
+             
             switch(State)
             {
                 case EnumPlayerStates.Idle:
                  if((context.performed || context.started))
                     State = EnumPlayerStates.Run;
-                break;
+                    break;
                 case EnumPlayerStates.Run:
                     if(context.canceled)
                         State = EnumPlayerStates.Idle;
@@ -165,10 +157,6 @@ public class Player : DamageableEntity
                 default: 
                     break;
             }
-           
-
-            
-            
         }
     }   
 
@@ -278,11 +266,7 @@ public class Player : DamageableEntity
        
 
     }
-
     
-
-
-
     public void FinishAttackState()
     {
         if(attackInputBuffer) 
@@ -295,14 +279,9 @@ public class Player : DamageableEntity
             moveInput = runInputBuffer;
             runInputBuffer = Vector2.zero;
         }
-        
         else 
         {
             State = EnumPlayerStates.Idle;
         }
-
     }
- 
-
-    
 }
