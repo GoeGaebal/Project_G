@@ -47,6 +47,7 @@ public class BossMonster : BasicMonster
     {
         foreach(var thunder in thunders)
         {
+            thunder.SetParent(transform);
             thunder.gameObject.SetActive(false);
         }
     }
@@ -109,7 +110,10 @@ public class BossMonster : BasicMonster
             tfs[2].localPosition = new Vector2(0f,-0.5f);
             tfs[3].localPosition = new Vector2(-0.5f,0f);
 
-            
+            foreach(Transform tf in tfs)
+            {
+                tf.SetParent(null);
+            }
             
             
         }
