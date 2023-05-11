@@ -25,6 +25,10 @@ using UnityEngine;
 
     protected bool hasTarget;
     protected GameObject target;
+    public GameObject Target
+    {
+        get{return target;}
+    }
     protected float lastAttackTime;
     private State _animState;
     public State AnimState
@@ -145,7 +149,9 @@ using UnityEngine;
     {
         protected BasicMonster basicMonster;
         public abstract void Init();
-        public abstract void UpdateInState();
+        public virtual void UpdateInState()
+        {
+        }
     }
 
      protected class IdleState : State

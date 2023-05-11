@@ -12,6 +12,10 @@ public class BossMonster : BasicMonster
     private CastingState castingState;
     private List<CastingSpell> spells = new();
     private List<Transform> thunders = new();
+    public List<Transform> Thunders
+    {
+        get{return thunders;}
+    }
     bool CanCastingState = true;
      protected override void Start() {
         base.Start();
@@ -20,7 +24,7 @@ public class BossMonster : BasicMonster
 
         castingState = new CastingState(this);
         spells.Add(new NEWSSpell());
-        //spells.Add(new RemoteAttackSpell());
+        spells.Add(new TeleportTargetSpell());
 
         for(int i = 0;i< 4;i++)
         {
@@ -52,9 +56,9 @@ public class BossMonster : BasicMonster
         }
     }
 
-    public void SpawnSpellThunders()
+    public void DoSpell()
     {
-        spells[UnityEngine.Random.Range(0,spells.Count)].DoSpell(thunders);
+        spells[UnityEngine.Random.Range(0,spells.Count)].Spell(this);
     }
     public void FinishCasthingState()
     {
@@ -87,20 +91,20 @@ public class BossMonster : BasicMonster
 
         public override void UpdateInState()
         {
-
         }
     }
 
     interface CastingSpell
     {
-        void DoSpell(List<Transform> tfs);
+        void Spell(BossMonster bm);
     }
 
     class NEWSSpell: CastingSpell
     {
-        public void DoSpell(List<Transform> tfs)
+        public void Spell(BossMonster bm)
         {
             Debug.Log("do spell");
+            List<Transform> tfs = bm.Thunders;
             foreach(Transform tf in tfs)
             {
                 tf.gameObject.SetActive(true);
@@ -119,11 +123,16 @@ public class BossMonster : BasicMonster
         }
     }
 
-    class RemoteAttackSpell:CastingSpell
+    class TeleportTargetSpell:CastingSpell
     {
-        public void DoSpell(List<Transform> tfs)
+        public void Spell(BossMonster bs)
         {
-
+            if (bs.Target == null)
+            {
+                return;
+            }
+            bs.Target.transform.position = (Vector2)bs.transform.position + Vector2.right*0.5f;
+           
         }
     }
 }

@@ -222,7 +222,7 @@ MonoBehaviour:
   maxHP: 50
   attackPoint: 10
   attackCooldown: 0.5
-  detectRadius: 1.8
+  detectRadius: 3
   chaseTargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
