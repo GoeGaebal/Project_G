@@ -245,7 +245,7 @@ MonoBehaviour:
   attackPoint: 10
   attackCooldown: 4
   detectRadius: 3
-  targetLayerMask:
+  chaseTargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
   speed: 1.1
