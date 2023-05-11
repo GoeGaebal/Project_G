@@ -15,7 +15,7 @@ using UnityEngine;
     [SerializeField] protected float speed;
     [SerializeField] private float minDisFromPlayer;
 
-    protected Animator animator;
+    internal Animator animator;
     protected SpriteRenderer spriteRenderer;
 
     protected IdleState idleState;
@@ -41,7 +41,7 @@ using UnityEngine;
     }
 
    
-    private void Start() {
+    protected virtual void Start() {
 
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -90,7 +90,6 @@ using UnityEngine;
             
             //target check
             if(target == null) return;
-            if (AnimState != null) Debug.Log("has target and has state");
             AnimState.UpdateInState();
  
             
@@ -120,10 +119,13 @@ using UnityEngine;
         yield return new WaitForSeconds(1.0f);
         Destroy(gameObject);
     }
+        protected float GetDistance()
+    {
+        return (target.transform.position - transform.position).magnitude;
+    }
 
     public void FinishAttackState()
     {
-
         ChangeState(idleState);
     }
 
@@ -159,7 +161,6 @@ using UnityEngine;
 
         public override void UpdateInState()
         {
-            Debug.Log("idle update");
             basicMonster.FlipXSprite();
 
             if(basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
@@ -241,12 +242,6 @@ using UnityEngine;
     protected void ChangeState(State newState) {
         AnimState = newState;
         AnimState.Init();
-    }
-
-    protected float GetDistance()
-    {
-        Debug.Log((target.transform.position - transform.position).magnitude);
-        return (target.transform.position - transform.position).magnitude;
     }
 }
 
