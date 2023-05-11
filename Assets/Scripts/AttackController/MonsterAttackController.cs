@@ -8,6 +8,9 @@ public class MonsterAttackController : AttackController
         weaponController = new MonsterWeaponController();
     }
     
+    public void SetActive(bool active) {
+        gameObject.SetActive(active);
+    }
 }
 
 class MonsterWeaponController : Weapon

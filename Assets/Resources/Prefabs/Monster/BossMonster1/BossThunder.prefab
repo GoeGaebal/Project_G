@@ -14,13 +14,14 @@ GameObject:
   - component: {fileID: 6054942909322640660}
   - component: {fileID: 8276205261830794354}
   - component: {fileID: 4056636208945672721}
+  - component: {fileID: 7274805402020728912}
   m_Layer: 0
   m_Name: BossThunder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9179425763618190653
 Transform:
   m_ObjectHideFlags: 0
@@ -108,7 +109,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 7
 --- !u!61 &6054942909322640660
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -166,5 +167,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da82b7f8e18d8fe40a915ac6ca866ffd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7274805402020728912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529652100159793821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd14468abee5efc48ae73928d1794c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
