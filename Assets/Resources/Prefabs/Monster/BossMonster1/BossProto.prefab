@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 7030104513904931494}
   - component: {fileID: -7150734512121841761}
   - component: {fileID: 4417218321329297627}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BossProto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
