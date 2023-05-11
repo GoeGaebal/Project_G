@@ -11,7 +11,7 @@ public class UsableItem : CountableItem
             selectedSlot.count--;
             if (selectedSlot.count <= 0)//아이템 개수 0이면 아이템 삭제
             {
-                selectedSlot.RevmoveItem();
+                selectedSlot.RemoveItem();
             }
             else//아이템 개수 변경
             {

@@ -24,7 +24,7 @@ public class LootingItemController : MonoBehaviourPun
     {
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        Invoke("EnableCollider", 0.5f);
+        Invoke("EnableCollider", 0.7f);
     }
 
     private void Init()

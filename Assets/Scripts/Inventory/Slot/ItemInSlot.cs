@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemInSlot : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private Image _icon;//아이템의 이미지
+    GameObject[] players;
+    GameObject player;
     public Text countText;//개수 텍스트
 
     [HideInInspector] public Item item;//아이템
@@ -15,6 +18,15 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     private void Start()
     {
+        players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
+        foreach (GameObject p in players)
+        {
+            PhotonView photonView = p.GetPhotonView();
+            if (photonView != null && photonView.IsMine)//내 플레이어 오브젝트 찾기
+            {
+                player = p;
+            }
+        }
         InitializeItem(item);
     }
 
@@ -24,7 +36,7 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         _icon.sprite = item.Icon;
         RefreshCount();
     }
-    public void RevmoveItem()//슬롯의 아이템 삭제
+    public void RemoveItem()//슬롯의 아이템 삭제
     {
         Destroy(gameObject);
     }
@@ -50,7 +62,17 @@ public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     public void OnEndDrag(PointerEventData eventData)//드랍했을 때
     {
+        if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
+        {
+            if (player != null)
+            {
+                //사과 개수만큼 드랍
+                Managers.Object.SpawnLootings(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
+                RemoveItem();//인벤토리에서 삭제
+            }
+            
+        }
         _icon.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);
+        transform.SetParent(parentAfterDrag);//해당 위치의 슬롯에 아이템 저장}
     }
 }
