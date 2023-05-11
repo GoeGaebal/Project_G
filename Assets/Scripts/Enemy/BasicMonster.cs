@@ -240,8 +240,17 @@ using UnityEngine;
     }
 
     protected void ChangeState(State newState) {
+
+        if(newState is RunState)
+            StartCoroutine(DelayRun());
         AnimState = newState;
         AnimState.Init();
+
+
+        IEnumerator DelayRun()
+        {
+            yield return new WaitForSeconds(0.4f);
+        }
     }
 }
 
