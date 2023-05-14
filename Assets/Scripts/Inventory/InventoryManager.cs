@@ -68,6 +68,11 @@ public class InventoryManager : MonoBehaviour
         
     }
 
+    public ItemInSlot GetSelectedSlot()//현재 선택 중인 슬롯의 아이템 가져오기
+    {
+        return slots[selectedSlot].GetComponentInChildren<ItemInSlot>();
+    }
+
     public bool AddItem(Item item)//아이템 추가
     {
 

@@ -23,4 +23,9 @@ public class DataManager
         TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/{path}");
         return JsonUtility.FromJson<Loader>(textAsset.text);
     }
+
+    public Dictionary<ulong, bool> LoadMapData(string path)
+    {
+        return LoadJson<MapDataLoader, ulong, bool>($"Map/{path}").MakeDict();
+    }
 }
