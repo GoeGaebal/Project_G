@@ -13,12 +13,9 @@ public class Player : DamageableEntity
     private GameObject inventoryUI;//가방 아이콘
     private GameObject inventoryManager;//인벤토리매니저
     private InventoryManager inventorymanager;//스크립트
-    private InputAction quickSlotAction;
 
     [SerializeField] private float moveSpeed = 5.0f;
-
-    private InputAction inputAction; 
-    private PlayerInput playerInput; 
+    
     private Vector2 moveInput;
 
     private Rigidbody2D rb;
@@ -68,8 +65,7 @@ public class Player : DamageableEntity
 
     private void Awake()
     {
-        quickSlotAction = new InputAction(binding: "<Mouse>/scroll/Y");
-        quickSlotAction.performed += OnQuickSlot_Mouse;
+        
     }
 
     void Start()
@@ -82,14 +78,26 @@ public class Player : DamageableEntity
 
         animator = GetComponent<Animator>();
         // playerInput = GetComponent<PlayerInput>();
-
         // inputAction = playerInput.actions["Move"];
+        
+        Binding();
 
         dieAction += () => {
             animator.SetTrigger("die");
         };
+    }
 
-        Managers.Input.PlayerActions.Move. += OnMove;
+    private void Binding()
+    {
+        Managers.Input.PlayerActions.Move.started += OnMove;
+        Managers.Input.PlayerActions.Move.performed += OnMove;
+        Managers.Input.PlayerActions.Move.canceled += OnMove;
+        Managers.Input.PlayerActions.Attack.started += OnAttack;
+        Managers.Input.PlayerActions.Attack.performed += OnAttack;
+        Managers.Input.PlayerActions.Attack.canceled += OnAttack;
+        Managers.Input.PlayerActions.ScrollQuickSlot.started += OnQuickSlot_Mouse;
+        Managers.Input.PlayerActions.ScrollQuickSlot.performed += OnQuickSlot_Mouse;
+        Managers.Input.PlayerActions.ScrollQuickSlot.canceled += OnQuickSlot_Mouse;
     }
     
 
@@ -97,7 +105,8 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
 
-        Vector3 mousePos = Input.mousePosition;
+
+        Vector3 mousePos = Managers.Input.UIActions.Point.ReadValue<Vector2>();
         mousePos.z = Camera.main.transform.position.z;
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
@@ -198,17 +207,6 @@ public class Player : DamageableEntity
         }
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        quickSlotAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        quickSlotAction.Disable();
-    }
-
     private void LateUpdate()
     {
         if(isDead) return;
@@ -251,9 +249,7 @@ public class Player : DamageableEntity
         if(isDead) return;
         if(!context.started) return;
         if(State != EnumPlayerStates.Idle && State != EnumPlayerStates.Attack && State != EnumPlayerStates.Run) return;
-      
-
-
+        
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
         rb.velocity = Vector2.zero;
 
@@ -273,7 +269,7 @@ public class Player : DamageableEntity
         {
             attackInputBuffer = false;
         }
-        else if (inputAction.IsPressed())
+        else if (Managers.Input.PlayerActions.Move.IsPressed())
         {
             State = EnumPlayerStates.Run;
             moveInput = runInputBuffer;
