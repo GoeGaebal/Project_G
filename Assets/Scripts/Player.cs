@@ -89,15 +89,9 @@ public class Player : DamageableEntity
 
     private void Binding()
     {
-        Managers.Input.PlayerActions.Move.started += OnMove;
-        Managers.Input.PlayerActions.Move.performed += OnMove;
-        Managers.Input.PlayerActions.Move.canceled += OnMove;
-        Managers.Input.PlayerActions.Attack.started += OnAttack;
-        Managers.Input.PlayerActions.Attack.performed += OnAttack;
-        Managers.Input.PlayerActions.Attack.canceled += OnAttack;
-        Managers.Input.PlayerActions.ScrollQuickSlot.started += OnQuickSlot_Mouse;
-        Managers.Input.PlayerActions.ScrollQuickSlot.performed += OnQuickSlot_Mouse;
-        Managers.Input.PlayerActions.ScrollQuickSlot.canceled += OnQuickSlot_Mouse;
+        Managers.Input.PlayerActions.Move.AddEvent(OnMove);
+        Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        Managers.Input.PlayerActions.ScrollQuickSlot.AddEvent(OnQuickSlot_Mouse);
     }
     
 
