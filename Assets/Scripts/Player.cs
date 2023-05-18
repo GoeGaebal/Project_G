@@ -95,7 +95,6 @@ public class Player : DamageableEntity
 
 
     }
-    
 
     private void FixedUpdate()
     {

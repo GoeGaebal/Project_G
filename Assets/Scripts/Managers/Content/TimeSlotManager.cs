@@ -10,7 +10,7 @@ public enum EnumTimeSlot
 
 public class TimeSlotManager
 {
-    private float timeChangePeriod;
+    public float timeChangePeriod;
     private float _curremtTime;
     private EnumTimeSlot _timeSlot = EnumTimeSlot.Day;
     public float CurrentTime{
@@ -77,7 +77,6 @@ public class TimeSlotManager
                 default:
                     break;
             }
-           
         }
     }
 }
