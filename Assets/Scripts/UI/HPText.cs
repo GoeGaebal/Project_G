@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class HPBar : MonoBehaviourPun
+public class HPText : MonoBehaviourPun
 {
-    private Image hpBar;
-    
+    private TMP_Text hpText;
+
     private GameObject[] players;
     private GameObject playerGO;
     private Player player;
@@ -16,12 +17,12 @@ public class HPBar : MonoBehaviourPun
     {
         player = FindPlayer();
 
-        hpBar = GetComponent<Image>();
+        hpText = GetComponent<TMP_Text>();
     }
-    
+
     private void Update()
     {
-        UpdateHPBar();
+        UpdateHPText();
     }
 
     private Player FindPlayer()
@@ -39,11 +40,11 @@ public class HPBar : MonoBehaviourPun
         return null;
     }
 
-    private void UpdateHPBar()
+    private void UpdateHPText()
     {
         if (player != null)
         {
-            hpBar.fillAmount = player.HP / player.maxHP;
+            hpText.text = player.HP + " / " + player.maxHP;
         }
 
     }
