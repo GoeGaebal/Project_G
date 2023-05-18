@@ -85,6 +85,7 @@ public class InputManager
             .With("Right", "<Keyboard>/rightArrow", groups: PCBindingGroup)
             .With("Right", "<Keyboard>/d", groups: PCBindingGroup);
         PlayerActions.Attack.AddBinding("<Mouse>/rightButton", groups: PCBindingGroup);
+        PlayerActions.Inventory.AddBinding("<Keyboard>/i", groups: PCBindingGroup);
         PlayerActions.QuickSlot1.AddBinding("<Keyboard>/1", groups: PCBindingGroup);
         PlayerActions.QuickSlot2.AddBinding("<Keyboard>/2", groups: PCBindingGroup);
         PlayerActions.QuickSlot3.AddBinding("<Keyboard>/3", groups: PCBindingGroup);

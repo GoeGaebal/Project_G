@@ -49,6 +49,8 @@ public class TestScene : BaseScene,IPunObservable
     private void Start()
     {
         Managers.Object.SpawnGatherings(1,5);
+        Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        Managers.UI.ShowSceneUI<UI_Inven>();
     }
 
     public override void Clear()

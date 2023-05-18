@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public abstract class UI_Base : MonoBehaviour
 {
     private Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
+    protected GraphicRaycaster _graphicRaycaster;
 
     public abstract void Init();
 
@@ -42,7 +43,8 @@ public abstract class UI_Base : MonoBehaviour
     }
     
     protected GameObject GetObject(int idx) { return Get<GameObject>(idx); }
-    protected TextMeshProUGUI GetText(int idx) { return Get<TextMeshProUGUI>(idx); }
+    protected Text GetText(int idx) { return Get<Text>(idx); }
+    protected TextMeshProUGUI GetTextMeshPro(int idx) { return Get<TextMeshProUGUI>(idx); }
     protected Button GetButton(int idx) { return Get<Button>(idx); }
     protected Image GetImage(int idx) { return Get<Image>(idx); }
 
@@ -59,6 +61,18 @@ public abstract class UI_Base : MonoBehaviour
             case Define.UIEvent.Drag:
                 evt.OnDragHandler -= action;
                 evt.OnDragHandler += action;
+                break;
+            case Define.UIEvent.BeginDrag:
+                evt.OnBeginDragHandler -= action;
+                evt.OnBeginDragHandler += action;
+                break;
+            case Define.UIEvent.EndDrag:
+                evt.OnEndDragHandler -= action;
+                evt.OnEndDragHandler += action;
+                break;
+            case Define.UIEvent.Drop:
+                evt.OnDropHandler -= action;
+                evt.OnDropHandler += action;
                 break;
         }
     }
