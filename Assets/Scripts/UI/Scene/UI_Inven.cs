@@ -29,7 +29,7 @@ public class UI_Inven : UI_Scene
 
     public int selectedSlot = -1; //현재 선택된 퀵슬롯
     public int QuickSlotCount = 4;
-    public int InventorySlotCount = 15;
+    public int InventorySlotCount = 16;
 
     private bool _inventory_activeself;
     
@@ -46,16 +46,22 @@ public class UI_Inven : UI_Scene
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
 
-        _quickSlotsPanel = Get<GameObject>((int)GameObjects.QuickSlot);
-        _inventory = Get<GameObject>((int)GameObjects.Inventory);
-        GameObject contents = Get<GameObject>((int)GameObjects.Contents);
+        _quickSlotsPanel = GetObject((int)GameObjects.QuickSlot);
+        _inventory = GetObject((int)GameObjects.Inventory);
+        GameObject contents = GetObject((int)GameObjects.Contents);
         
         // 퀵슬롯 초기화
-        foreach(Transform child in _quickSlotsPanel.transform)
-            Managers.Resource.Destroy(child.gameObject);
+        foreach (Transform child in _quickSlotsPanel.transform)
+        {
+            if (child != null && child.gameObject.activeSelf)
+                Managers.Resource.Destroy(child.gameObject);
+        }
         // 인벤토리 초기화
-        foreach(Transform child in contents.transform)
-            Managers.Resource.Destroy(child.gameObject);
+        foreach (Transform child in contents.transform)
+        {
+            if (child != null && child.gameObject.activeSelf)
+                Managers.Resource.Destroy(child.gameObject);
+        }
 
         slots = new UI_Slot[QuickSlotCount+InventorySlotCount];
         quickslots = new UI_Slot[QuickSlotCount];

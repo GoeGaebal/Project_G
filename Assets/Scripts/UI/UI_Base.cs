@@ -8,8 +8,9 @@ using UnityEngine.UI;
 
 public abstract class UI_Base : MonoBehaviour
 {
+    // TODO: 딕셔너리 형태로 가지고 있는 것은 좋으나, 문제는 프리팹에 존재하는 게임오브젝트 이름과 정확히 동일하게끔 enum들을 만들어야함
+    // UI 폴더를 훑으면서 자동화 하는 코드가 생기면 편할듯
     private Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
-    protected GraphicRaycaster _graphicRaycaster;
 
     public abstract void Init();
 

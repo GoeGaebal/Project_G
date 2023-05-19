@@ -61,6 +61,8 @@ public class UI_Item : UI_Base
         transform.position = eventData.position;
     }
     
+    // TODO: Slot과 Item이 거의 비슷한 동작을 하는데 이는 EventHandler가 둘다 OnDrop을 받기 때문에 어느 것이 반응하더라도 동작하게끔 설계되어 있음
+    // 중복된 코드이므로 정리가 필요함
     public void OnDrop(PointerEventData eventData)// 슬롯 안에 아이템이 존재하여 먼저 반응할 때
     {
         UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();
