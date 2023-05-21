@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 public class UIManager
 {
@@ -37,6 +39,23 @@ public class UIManager
             canvas.sortingOrder = 0;
         }
     }
+    
+    /// <summary>
+    /// 현재 Scene에서의 Event System을 설정하는 함수
+    /// Input Manager의 Asset을 넣는다.
+    /// </summary>
+    public void SetEventSystem()
+    {
+        EventSystem ev = Object.FindObjectOfType<EventSystem>();
+        if (ev == null)
+        {
+            GameObject go = Managers.Resource.Instantiate("UI/EventSystem", Vector3.zero, Quaternion.identity);
+            ev = go.GetComponent<EventSystem>();
+        }
+
+        InputSystemUIInputModule inputModule = ev.gameObject.GetOrAddComponent<InputSystemUIInputModule>();
+        inputModule.actionsAsset = Managers.Input.Asset;
+    }
 
     public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UI_Base
     {
@@ -50,7 +69,7 @@ public class UIManager
         
         return Util.GetOrAddComponent<T>(go);
     }
-    
+
     /// <summary>
     /// UI_Scene 객체를 생성하는 함수
     /// </summary>

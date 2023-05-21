@@ -32,7 +32,7 @@ public class InputManager
 {
     // Create an .inputactions asset.
     private const string PCBindingGroup = "PC";
-    private InputActionAsset _asset;
+    public InputActionAsset Asset { get; private set; }
     private InputControlScheme _pcControlScheme;
     private InputActionMap _playerActionMap;
     private InputActionMap _uiActionMap;
@@ -45,16 +45,16 @@ public class InputManager
 
     public void Init()
     {
-        _asset = ScriptableObject.CreateInstance<InputActionAsset>();
+        Asset = ScriptableObject.CreateInstance<InputActionAsset>();
         _pcControlScheme  = new InputControlScheme("PC", new InputControlScheme.DeviceRequirement[]
         {
             new(){ controlPath = "<Keyboard>" },
             new(){ controlPath = "<Mouse>" },
         });
 
-        _asset.AddControlScheme(_pcControlScheme);
-        _playerActionMap = _asset.AddActionMap("Player");
-        _uiActionMap = _asset.AddActionMap("UI");
+        Asset.AddControlScheme(_pcControlScheme);
+        _playerActionMap = Asset.AddActionMap("Player");
+        _uiActionMap = Asset.AddActionMap("UI");
 
         // Actions
         PlayerActions.Move = _playerActionMap.AddAction("Move", type: InputActionType.Value);
@@ -104,13 +104,13 @@ public class InputManager
         UIActions.Cancel.AddBinding("*/{Cancel}", groups: PCBindingGroup);
         UIActions.Point.AddBinding("<Mouse>/position", groups: PCBindingGroup);
         UIActions.ScrollWheel.AddBinding("<Mouse>/scroll/y", groups: PCBindingGroup);
-        UIActions.MiddleClick.AddBinding("<Mouse>/leftButton", groups: PCBindingGroup);
+        UIActions.Click.AddBinding("<Mouse>/leftButton", groups: PCBindingGroup);
         UIActions.MiddleClick.AddBinding("<Mouse>/middleButton", groups: PCBindingGroup);
         UIActions.RightClick.AddBinding("<Mouse>/rightButton", groups: PCBindingGroup);
 
         // Initial Check
         UIActions.Click.wantsInitialStateCheck = true;
 
-        _asset.Enable();
+        Asset.Enable();
     }
 }

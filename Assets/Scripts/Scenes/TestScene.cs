@@ -54,6 +54,7 @@ public class TestScene : BaseScene,IPunObservable
         PhotonView view = player.GetComponent<PhotonView>();
         PhotonNetwork.AllocateViewID(view);
         
+        Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
         Managers.UI.ShowSceneUI<UI_Map>();
     }
