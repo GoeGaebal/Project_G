@@ -11,7 +11,7 @@ public class RotateTimer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ratio = Time.deltaTime / Managers.TimeSlot.timeChangePeriod;
+        ratio = Time.fixedDeltaTime / Managers.TimeSlot.timeChangePeriod;
     }
 
     // Update is called once per frame
@@ -22,6 +22,6 @@ public class RotateTimer : MonoBehaviour
     
     private void AddTime()
     {
-        rotatingTimer.transform.rotation *= Quaternion.Euler(0f, 0f, 360f * ratio);
+        rotatingTimer.transform.rotation *= Quaternion.Euler(0f, 0f, 180f * ratio);
     }
 }
