@@ -16,13 +16,13 @@ public class LootingItemController : MonoBehaviourPun
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
     [SerializeField] private Item item;
-    private InventoryManager inventoryManager;
+    private UI_Inven ui_inven;
 
     private float Sn;
 
     private void Start()
     {
-        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        ui_inven = FindObjectOfType<UI_Inven>();
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
         Invoke("EnableCollider", 0.7f);
     }
@@ -90,10 +90,10 @@ public class LootingItemController : MonoBehaviourPun
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (inventoryManager.AddItem(item))
+            if (ui_inven.AddItem(item))
             {
                 Debug.Log("아이템 획득 성공");
-                Destroy(gameObject);
+                Managers.Resource.Destroy(gameObject);
             }
             else
             {

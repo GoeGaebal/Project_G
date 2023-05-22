@@ -10,10 +10,6 @@ public enum EnumPlayerStates
 
 public class Player : DamageableEntity
 {
-    private GameObject inventoryUI;//가방 아이콘
-    private GameObject inventoryManager;//인벤토리매니저
-    private InventoryManager inventorymanager;//스크립트
-
     [SerializeField] private float moveSpeed = 5.0f;
     
     private Vector2 moveInput;
@@ -92,7 +88,7 @@ public class Player : DamageableEntity
         if(!photonView.IsMine) return;
         if(isDead) return;
 
-
+        // Vector3 mousePos = Mouse.current.position.value;
         Vector3 mousePos = Managers.Input.UIActions.Point.ReadValue<Vector2>();
         mousePos.z = Camera.main.transform.position.z;
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);

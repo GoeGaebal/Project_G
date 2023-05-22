@@ -25,7 +25,7 @@ public class UI_Map : UI_Scene
 
     enum Buttons
     {
-        MinimapBtn
+        MapButton
     }
 
     private void Start()
@@ -42,7 +42,7 @@ public class UI_Map : UI_Scene
         Bind<Button>(typeof(Buttons));
         Bind<Camera>(typeof(Cameras));
         
-        GetButton((int)Buttons.MinimapBtn).gameObject.BindEvent(ClickBtn);
+        GetButton((int)Buttons.MapButton).gameObject.BindEvent(ClickBtn);
         Managers.Input.PlayerActions.MiniMap.AddEvent(PushShortKey);
         
         GetObject((int)GameObjects.MapPanel).SetActive(false);

@@ -22,7 +22,7 @@ public class Test : MonoBehaviour
 
     public void GetSelectedItem()
     {
-        ItemInSlot selectedSlot = inventoryManager.GetSelectedSlot();
+        UI_Item selectedSlot = ui_inven.GetSelectedSlot();
 
         if (selectedSlot != null)
         {
@@ -36,7 +36,7 @@ public class Test : MonoBehaviour
 
     public void UseSelectedItem()
     {
-        ItemInSlot selectedSlot = inventoryManager.GetSelectedSlot();
+        UI_Item selectedSlot = ui_inven.GetSelectedSlot();
         Item currentItem = selectedSlot.item;
 
         if (selectedSlot.item is UsableItem)

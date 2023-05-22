@@ -51,3 +51,6 @@ TagManager:
   - name: Layer 3
     uniqueID: 4189426099
     locked: 0
+  - name: Minimap
+    uniqueID: 3740670929
+    locked: 0

@@ -38,7 +38,7 @@ public class InputManager
     private InputActionMap _uiActionMap;
     public PlayerActions PlayerActions;
     public UIActions UIActions;
-    // public DefaultInputActions.UIActions UIActions;
+    //public DefaultInputActions.UIActions UIActions;
     
     
 
@@ -72,9 +72,9 @@ public class InputManager
         UIActions.Cancel = _uiActionMap.AddAction("Cancel", type: InputActionType.Button);
         UIActions.Point = _uiActionMap.AddAction("Point", type: InputActionType.PassThrough);
         UIActions.ScrollWheel = _uiActionMap.AddAction("ScrollWheel", type: InputActionType.PassThrough);
-        UIActions.Click = _uiActionMap.AddAction("Click", type: InputActionType.Button);
-        UIActions.MiddleClick = _uiActionMap.AddAction("MiddleClick", type: InputActionType.Button);
-        UIActions.RightClick = _uiActionMap.AddAction("RightClick", type: InputActionType.Button);
+        UIActions.Click = _uiActionMap.AddAction("Click", type: InputActionType.PassThrough);
+        UIActions.MiddleClick = _uiActionMap.AddAction("MiddleClick", type: InputActionType.PassThrough);
+        UIActions.RightClick = _uiActionMap.AddAction("RightClick", type: InputActionType.PassThrough);
 
         // Binding
         PlayerActions.Move.AddCompositeBinding("2DVector(mode=1)")
@@ -93,7 +93,7 @@ public class InputManager
         PlayerActions.QuickSlot3.AddBinding("<Keyboard>/3", groups: PCBindingGroup);
         PlayerActions.QuickSlot4.AddBinding("<Keyboard>/4", groups: PCBindingGroup);
         PlayerActions.MiniMap.AddBinding("<Keyboard>/m", groups: PCBindingGroup);
-        PlayerActions.ScrollQuickSlot.AddBinding("<Mouse>/scroll/y", groups: PCBindingGroup);
+        PlayerActions.ScrollQuickSlot.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
         
         UIActions.Navigate.AddCompositeBinding("2DVector(mode=1)")
             .With("Up", "<Keyboard>/w",groups: PCBindingGroup)
@@ -103,7 +103,7 @@ public class InputManager
         UIActions.Submit.AddBinding("*/{Submit}", groups: PCBindingGroup);
         UIActions.Cancel.AddBinding("*/{Cancel}", groups: PCBindingGroup);
         UIActions.Point.AddBinding("<Mouse>/position", groups: PCBindingGroup);
-        UIActions.ScrollWheel.AddBinding("<Mouse>/scroll/y", groups: PCBindingGroup);
+        UIActions.ScrollWheel.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
         UIActions.Click.AddBinding("<Mouse>/leftButton", groups: PCBindingGroup);
         UIActions.MiddleClick.AddBinding("<Mouse>/middleButton", groups: PCBindingGroup);
         UIActions.RightClick.AddBinding("<Mouse>/rightButton", groups: PCBindingGroup);
