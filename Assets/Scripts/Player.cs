@@ -98,6 +98,7 @@ public class Player : DamageableEntity
 
     private void FixedUpdate()
     {
+        if(!photonView.IsMine) return;
         if(isDead) return;
 
         Vector3 mousePos = Input.mousePosition;

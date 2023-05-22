@@ -29,11 +29,9 @@ public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventLis
         {
             case EnumTimeSlot.Day:
                 this.colorGrading.colorFilter.value = this.dayTimeColor;
-                Debug.Log("day time test");
                 break;
             case EnumTimeSlot.Night:
                 this.colorGrading.colorFilter.value = this.nightTimeColor;
-                Debug.Log("night time test");
                 break;
         }
     }

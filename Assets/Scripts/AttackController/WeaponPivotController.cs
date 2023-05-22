@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class WeaponPivotController : MonoBehaviour
+using Photon.Pun;
+public class WeaponPivotController : MonoBehaviourPun
 {
     [SerializeField]private float disFromBody; 
     private GameObject playerGameObject;
@@ -17,6 +17,7 @@ public class WeaponPivotController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!photonView.IsMine) return;
         if (playerComponent.isDead) return;
           //Get the Screen positions of the object
          Vector3 positionOnScreen = playerGameObject.transform.position;

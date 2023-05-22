@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2623200036352847427}
   - component: {fileID: 4569004192101836762}
   - component: {fileID: 450999650661124115}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: rock
   m_TagString: Monster
   m_Icon: {fileID: 0}
