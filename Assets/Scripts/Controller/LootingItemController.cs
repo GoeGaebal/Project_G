@@ -15,15 +15,24 @@ public class LootingItemController : MonoBehaviourPun
     [SerializeField] private int bounceCount;
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
+    [SerializeField] private Item item;
+    private InventoryManager inventoryManager;
 
     private float Sn;
 
+    private void Start()
+    {
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        Invoke("EnableCollider", 0.7f);
+    }
+
     private void Init()
     {
-        cof = Managers.Data.LootingDict[1].cof;
-        bounceCount = Managers.Data.LootingDict[1].bounceCount;
-        threshold = Managers.Data.LootingDict[1].threshold;
-        Sn = Managers.Data.LootingDict[1].Sn;
+        cof = Managers.Data.LootingDict[id].cof;
+        bounceCount = Managers.Data.LootingDict[id].bounceCount;
+        threshold = Managers.Data.LootingDict[id].threshold;
+        Sn = Managers.Data.LootingDict[id].Sn;
     }
 
     public void Bounce(Vector3 endPosition,float duration, float maxHeight = 1.0f)
@@ -70,5 +79,26 @@ public class LootingItemController : MonoBehaviourPun
             yield return null;
         }
         transform.position = targetPosition;
+    }
+
+    public void EnableCollider()
+    {
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            if (inventoryManager.AddItem(item))
+            {
+                Debug.Log("아이템 획득 성공");
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Log("아이템 획득 실패");
+            }
+        }
     }
 }

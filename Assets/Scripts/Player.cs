@@ -86,10 +86,10 @@ public class Player : DamageableEntity
         Managers.Input.PlayerActions.Move.AddEvent(OnMove);
         Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
     }
-    
 
     private void FixedUpdate()
     {
+        if(!photonView.IsMine) return;
         if(isDead) return;
 
 
