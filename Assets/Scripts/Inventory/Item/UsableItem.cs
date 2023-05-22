@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UsableItem : CountableItem
 {
-    public void UseItem(ItemInSlot selectedSlot)//음식 먹기, 포션 섭취 등 아이템 사용
+    public void UseItem(UI_Item selectedSlot)//음식 먹기, 포션 섭취 등 아이템 사용
     {
         if (selectedSlot.item != null)
         {

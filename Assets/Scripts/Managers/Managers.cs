@@ -16,11 +16,15 @@ public class Managers : MonoBehaviourPun
     private ObjectManager _object = new();
     private NetworkManager _network = new();
     private TimeSlotManager _timeSlot = new();
+    private UIManager _ui = new();
+    private InputManager _input = new();
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
     public static ObjectManager Object { get { return Instance._object; } }
     public static NetworkManager Network { get { return Instance._network; } }
     public static TimeSlotManager TimeSlot { get { return Instance._timeSlot;} }
+    public static UIManager UI { get { return Instance._ui; } }
+    public static InputManager Input { get { return Instance._input;} }
     #endregion
 
     #region Core
@@ -57,6 +61,7 @@ public class Managers : MonoBehaviourPun
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
 
+            _instance._input.Init();
             _instance._data.Init();
             _instance._pool.Init();
             _instance._object.Init();

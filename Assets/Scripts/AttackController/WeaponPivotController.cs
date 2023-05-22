@@ -23,7 +23,8 @@ public class WeaponPivotController : MonoBehaviourPun
          Vector3 positionOnScreen = playerGameObject.transform.position;
          
          //Get the Screen position of the mouse
-         Vector3 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+         // Vector3 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+         Vector3 mouseOnScreen = Camera.main.ScreenToWorldPoint(Managers.Input.UIActions.Point.ReadValue<Vector2>());
          
          //Get the angle between the points
          float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) + 90.0f; //90도 보정
@@ -36,6 +37,5 @@ public class WeaponPivotController : MonoBehaviourPun
          float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {
          return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
         }
-
     }
 }

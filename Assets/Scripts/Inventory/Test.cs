@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    public InventoryManager inventoryManager;
+    public UI_Inven ui_inven;
     public Item[] itemsToPickUp;
 
     public void PickUpItem(int id)
     {
-        bool result = inventoryManager.AddItem(itemsToPickUp[id]);
+        bool result = ui_inven.AddItem(itemsToPickUp[id]);
         if (result)
         {
             //Debug.Log("아이템 추가됨");
@@ -22,7 +22,7 @@ public class Test : MonoBehaviour
 
     public void GetSelectedItem()
     {
-        ItemInSlot selectedSlot = inventoryManager.GetSelectedSlot();
+        UI_Item selectedSlot = ui_inven.GetSelectedSlot();
 
         if (selectedSlot != null)
         {
@@ -36,7 +36,7 @@ public class Test : MonoBehaviour
 
     public void UseSelectedItem()
     {
-        ItemInSlot selectedSlot = inventoryManager.GetSelectedSlot();
+        UI_Item selectedSlot = ui_inven.GetSelectedSlot();
         Item currentItem = selectedSlot.item;
 
         if (selectedSlot.item is UsableItem)

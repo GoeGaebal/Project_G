@@ -58,6 +58,11 @@ public class GameScene : BaseScene,IPunObservable
         {
             Managers.Network.SendSignalToMaster();
         }
+        
+        Managers.UI.SetEventSystem();
+        Managers.UI.ShowSceneUI<UI_Inven>();
+        Managers.UI.ShowSceneUI<UI_Map>();
+        Managers.UI.ShowSceneUI<UI_Status>();
     }
 
     public override void Clear()

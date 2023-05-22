@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2333484574000129185}
   - component: {fileID: 8814973318580101363}
   - component: {fileID: 3584252536025317512}
-  - component: {fileID: 2845511788129111299}
+  - component: {fileID: 6815889572687903325}
   - component: {fileID: 8775992226156302369}
   m_Layer: 5
-  m_Name: Slot
+  m_Name: UI_Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2845511788129111299
+--- !u!114 &6815889572687903325
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,11 +87,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1524012079322203256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb160f8693ae00429ea0884272e04d9, type: 3}
+  m_Script: {fileID: 11500000, guid: e4274ab7ee0c0b7468085ae1fe006342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 3584252536025317512}
-  selectedColor: {r: 0.6556604, g: 1, b: 0.780965, a: 1}
+  selectedColor: {r: 0, g: 1, b: 0.72070265, a: 1}
   notSelectedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &8775992226156302369
 MonoBehaviour:

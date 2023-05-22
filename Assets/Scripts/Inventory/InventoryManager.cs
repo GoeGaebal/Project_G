@@ -18,18 +18,18 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {//키입력에 따른 퀵슬롯 선택 변화(추후 New Input System으로 변경)
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Managers.Input.PlayerActions.QuickSlot1.IsPressed())
         {
             ChangeSelectedQuickSlot(0);
-        } else if (Input.GetKeyDown(KeyCode.Alpha2))
+        } else if (Managers.Input.PlayerActions.QuickSlot2.IsPressed())
         {
             ChangeSelectedQuickSlot(1);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())
         {
             ChangeSelectedQuickSlot(2);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Managers.Input.PlayerActions.QuickSlot4.IsPressed())
         {
             ChangeSelectedQuickSlot(3);
         }

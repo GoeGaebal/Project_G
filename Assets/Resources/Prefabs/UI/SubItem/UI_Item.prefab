@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8995225966666642269}
   - component: {fileID: 4298569602194010164}
   - component: {fileID: 1423358227618085924}
-  - component: {fileID: 5745598355096289294}
+  - component: {fileID: 3166502430615298541}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: UI_Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5745598355096289294
+--- !u!114 &3166502430615298541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 951065258523476440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6f0fd02047e2fa46bc57e6fef5a1cb9, type: 3}
+  m_Script: {fileID: 11500000, guid: 7be2a2b2585d6ae4c895d14cfeaaeac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 1423358227618085924}

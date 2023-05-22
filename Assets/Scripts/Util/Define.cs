@@ -24,5 +24,8 @@ public class Define
     {
         Click,
         Drag,
+        BeginDrag,
+        EndDrag,
+        Drop,
     }
 }

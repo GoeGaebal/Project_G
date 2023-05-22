@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2055102311959635368}
   - component: {fileID: 6340663741335105403}
   - component: {fileID: -1241197006958709118}
-  m_Layer: 3
-  m_Name: bush
+  m_Layer: 8
+  m_Name: Bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2055102312182832481}
   - component: {fileID: 2055102312182832480}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

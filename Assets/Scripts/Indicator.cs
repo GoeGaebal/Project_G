@@ -19,7 +19,8 @@ public class Indicator : MonoBehaviourPun
 
          RectTransform indicatorRect = indicatorUIInstance.GetComponent<RectTransform>();
 
-        indicatorUICanvas = GameObject.Find("UI");
+        // TODO: Canvas를 가지는 첫 번째 오브젝트를 찾는다. 추후에 UI로 통합할 예정
+        indicatorUICanvas = FindObjectOfType<Canvas>().gameObject;
         indicatorRect.SetParent(indicatorUICanvas.transform);
         indicatorUIInstance.transform.localScale = new Vector3(1, 1, 1);
  
