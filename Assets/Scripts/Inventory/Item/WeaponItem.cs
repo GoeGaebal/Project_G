@@ -10,4 +10,9 @@ public class WeaponItem : EquipableItem
 
     [SerializeField] private float _attackDamage = 1f;
     [SerializeField] private float _attackSpeed = 1f;
+
+    public override void ChangeEquipableItem()
+    {
+        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+    }
 }

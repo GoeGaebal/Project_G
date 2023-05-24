@@ -48,7 +48,19 @@ public class TestScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Network.SpawnGatherings(1,5);
+        Managers.Object.SpawnGatherings(1,5);
+        GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        // 테스트용 강제 설정
+        PhotonView view = player.GetComponent<PhotonView>();
+        PhotonView[] weaponView = player.GetPhotonViewsInChildren();
+        PhotonNetwork.AllocateViewID(view);
+        PhotonNetwork.AllocateViewID(weaponView[1]);
+        
+        Managers.UI.SetEventSystem();
+        Managers.UI.ShowSceneUI<UI_Inven>();
+        Managers.UI.ShowSceneUI<UI_Map>();
+        Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Chat>();
     }
 
     public override void Clear()

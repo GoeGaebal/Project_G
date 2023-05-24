@@ -9,8 +9,5 @@ public class FoodItem : UsableItem
 
     [SerializeField] private float _healAmount = 0;
 
-    public override void UseItem()//음식 먹기
-    {
-        throw new System.NotImplementedException();
-    }
+    //public void UseItem()//음식 먹기
 }

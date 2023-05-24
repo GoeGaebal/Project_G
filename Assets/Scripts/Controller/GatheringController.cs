@@ -30,7 +30,7 @@ public class GatheringController : DamageableEntity
         _originalColor = _sprite.color;
         base.dieAction += () =>
         {
-            Managers.Network.SpawnLootingItems(lootingId,5,transform.position, 2.0f, 1.0f);
+            Managers.Object.SpawnLootingItems(lootingId,5,transform.position, 2.0f, 1.0f);
             // TODO: 바로 삭제가 아니라 ObjectDict에서도 제외가 되어야 한다. 그래야 데이터가 연동 되기 때문이다. (ObjectDict이 좌표 혹은 아예 고유한 id를 key로 받게끔 조정해야 된다. )
             Managers.Resource.Destroy(gameObject);
         };

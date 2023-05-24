@@ -16,10 +16,19 @@ public class LootingItemController : MonoBehaviourPun
     [SerializeField] private int bounceCount;
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
+    [SerializeField] private Item item;
+    private UI_Inven ui_inven;
 
     private float Sn;
     private Transform _meshTransform;
     private Transform _shadowTransform;
+
+    private void Start()
+    {
+        ui_inven = FindObjectOfType<UI_Inven>();
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        Invoke("EnableCollider", 0.7f);
+    }
 
     private void Init()
     {
@@ -35,10 +44,10 @@ public class LootingItemController : MonoBehaviourPun
             Debug.Log("루팅 아이템의 그림자를 찾지 못하였습니다.");
             return;
         }
-        cof = Managers.Data.LootingDict[1].cof;
-        bounceCount = Managers.Data.LootingDict[1].bounceCount;
-        threshold = Managers.Data.LootingDict[1].threshold;
-        Sn = Managers.Data.LootingDict[1].Sn;
+        cof = Managers.Data.LootingDict[id].cof;
+        bounceCount = Managers.Data.LootingDict[id].bounceCount;
+        threshold = Managers.Data.LootingDict[id].threshold;
+        Sn = Managers.Data.LootingDict[id].Sn;
     }
 
     public void Bounce(Vector3 endPosition,float duration, float maxHeight = 1.0f)
@@ -84,9 +93,31 @@ public class LootingItemController : MonoBehaviourPun
             transform.position =  Vector3.Lerp(startPosition, targetPosition, t);
             _meshTransform.localPosition = Vector3.up * curH;
             _shadowTransform.localScale = shadowSize / (1 + curH / 20);
+            transform.position = Vector3.up * curH + Vector3.Lerp(startPosition, targetPosition, t);
             time += Time.deltaTime;
             yield return null;
         }
         transform.position = targetPosition;
+    }
+
+    public void EnableCollider()
+    {
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            if (ui_inven.AddItem(item))
+            {
+                Debug.Log("아이템 획득 성공");
+                Managers.Resource.Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Log("아이템 획득 실패");
+            }
+        }
     }
 }
