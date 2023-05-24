@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -65,7 +63,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
             }
             case RequestViewIDEventCode:
             {
-                BroadCastClients(Serialize(Managers.Object.ObjectInfos), ReceiveViewIDEventCode);
+                BroadCastClients(Serialize(View.ViewID), ReceiveViewIDEventCode);
                 break;
             }
             case ReceiveViewIDEventCode:
@@ -87,6 +85,14 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     {
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
         PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+    #endregion
+    
+    #region ClientSide
+    public void RequestGatherings()
+    {
+        RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(RequestObjectInfosEventCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
     #endregion
 

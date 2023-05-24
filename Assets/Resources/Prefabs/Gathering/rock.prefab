@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2623200036352847427}
   - component: {fileID: 4569004192101836762}
   - component: {fileID: 450999650661124115}
+  - component: {fileID: 535580575636506777}
   m_Layer: 8
   m_Name: rock
   m_TagString: Monster
@@ -129,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 0
   id: 1
+  guid: 1
   lootingId: 1
   flashDuration: 1
   flashColor: {r: 1, g: 1, b: 1, a: 1}
@@ -153,6 +155,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &535580575636506777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217334994109620711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532713fbc1b4bd745a9e59b2c9992542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsUsing: 1
 --- !u!1 &6702667007832620501
 GameObject:
   m_ObjectHideFlags: 0

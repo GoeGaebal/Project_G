@@ -8,7 +8,8 @@ public class ObjectInfo
 {
     public int objectID;
     public int guid;
-    public Vector3 pos;
+    public float y;
+    public float x;
 }
 
 public class ObjectManager
@@ -40,7 +41,7 @@ public class ObjectManager
                     Vector3 randPos = Managers.Map.GenerateCurrentRandPos();
                     GameObject go = SpawnGathering(objectId,randPos);
                     int guid = go.GetInstanceID();
-                    ObjectInfos.Add(guid, new ObjectInfo(){objectID=objectId,guid=guid,pos = randPos});
+                    ObjectInfos.Add(guid, new ObjectInfo(){objectID=objectId,guid=guid,y = randPos.y,x = randPos.x});
                     LocalObjectsDict.Add(guid,go);
                 }
             }
@@ -49,17 +50,21 @@ public class ObjectManager
                 foreach (Vector3 spawnPos in spawnPoses)
                 {
                     GameObject go = SpawnGathering(objectId, spawnPos);
-                    ObjectInfos.Add(go.GetInstanceID(),new ObjectInfo(){objectID=objectId,guid=go.GetInstanceID(),pos = spawnPos});
+                    ObjectInfos.Add(go.GetInstanceID(),new ObjectInfo(){objectID=objectId,guid=go.GetInstanceID(),y = spawnPos.y,x = spawnPos.x});
                     LocalObjectsDict.Add(go.GetInstanceID(),go);
                 }
                 for (int i = 0; i < count - spawnPoses.Length; i++)
                 {
                     Vector3 randPos = Managers.Map.GenerateCurrentRandPos();
                     GameObject go = SpawnGathering(objectId,randPos);
-                    ObjectInfos.Add(go.GetInstanceID(),new ObjectInfo(){objectID=objectId,guid=go.GetInstanceID(),pos = randPos});
+                    ObjectInfos.Add(go.GetInstanceID(),new ObjectInfo(){objectID=objectId,guid=go.GetInstanceID(),y = randPos.y,x = randPos.x});
                     LocalObjectsDict.Add(go.GetInstanceID(),go);
                 }
             }
+        }
+        else
+        {
+            Managers.Network.RequestGatherings();
         }
     }
     
@@ -89,22 +94,19 @@ public class ObjectManager
 
     public void SyncronizeObjects(Dictionary<int, ObjectInfo> infos)
     {
-        foreach (KeyValuePair<int,ObjectInfo> info in infos)
+        var infokeys = infos.Keys;
+        var objkeys = LocalObjectsDict.Keys;
+        var toDestoryKeys = objkeys.Except(infokeys);
+        var toInstantiateKeys = infokeys.Except(objkeys);
+        foreach (var toDestoryKey in toDestoryKeys)
         {
-            var infokeys = ObjectInfos.Keys;
-            var objkeys = LocalObjectsDict.Keys;
-            var toDestoryKeys = objkeys.Except(infokeys);
-            var toInstantiateKeys = infokeys.Except(objkeys);
-            foreach (var toDestoryKey in toDestoryKeys)
-            {
-                Managers.Resource.Destroy(LocalObjectsDict[toDestoryKey]);
-                LocalObjectsDict.Remove(toDestoryKey);
-            }
-            foreach (var toInstantiateKey in toInstantiateKeys)
-            {
-                var go = SpawnGathering(ObjectInfos[toInstantiateKey].objectID, ObjectInfos[toInstantiateKey].pos);
-                LocalObjectsDict.Add(toInstantiateKey,go);
-            }
+            Managers.Resource.Destroy(LocalObjectsDict[toDestoryKey]);
+            LocalObjectsDict.Remove(toDestoryKey);
+        }
+        foreach (var toInstantiateKey in toInstantiateKeys)
+        {
+            var go = SpawnGathering(infos[toInstantiateKey].objectID, new Vector3(infos[toInstantiateKey].x,infos[toInstantiateKey].y) );
+            LocalObjectsDict.Add(toInstantiateKey,go);
         }
     }
 }
