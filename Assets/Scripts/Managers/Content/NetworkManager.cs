@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,8 @@ public class NetworkManager : IOnEventCallback, IPunObservable
 {
     public PhotonView View { get; private set; }
     public GameObject LocalPlayer { get; private set; }
+
+    public Action<string> ReceiveChatHandler;
     
     private static readonly RaiseEventOptions SendMasterOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
     private static readonly RaiseEventOptions SendClientOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
@@ -20,6 +23,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     private const byte ReceiveObjectInfosEventCode = 2;
     private const byte RequestViewIDEventCode = 3;
     private const byte ReceiveViewIDEventCode = 4;
+    private const byte ReceiveChatEventCode = 5;
 
     #region Network
     private void OnEnable()
@@ -77,6 +81,13 @@ public class NetworkManager : IOnEventCallback, IPunObservable
                 }
                 break;
             }
+            case ReceiveChatEventCode:
+            {
+                var data = (byte[])photonEvent.CustomData;
+                if (ReceiveChatHandler != null)
+                    ReceiveChatHandler.Invoke(Deserialize<string>(data));
+                break;
+            }
         }
     }
     
@@ -95,6 +106,12 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         PhotonNetwork.RaiseEvent(RequestObjectInfosEventCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
     #endregion
+
+    public void SendChat(string text)
+    {
+        RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(ReceiveChatEventCode, Serialize(text), raiseEventOptions, SendOptions.SendReliable);
+    }
 
     private static IEnumerable<byte> Serialize<T>(T data)
     {
