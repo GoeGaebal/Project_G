@@ -41,6 +41,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - ReceiveDictionaryFromHost
   - SendDictionaryToClients
+  - UpdateTime
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

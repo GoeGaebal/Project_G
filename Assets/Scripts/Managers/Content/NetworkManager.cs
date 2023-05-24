@@ -14,6 +14,8 @@ public class NetworkManager : IOnEventCallback
     // If you have multiple custom events, it is recommended to define them in the used class
     private const byte SendMasterToClientsEventCode = 1;
     private const byte SendClientToMasterEventCode = 2;
+    public const byte SynchronizeTimeEventCode = 3;
+    public const byte RequestSynchronizeTimeEventCode = 4;
 
     private void OnEnable()
     {
@@ -84,4 +86,25 @@ public class NetworkManager : IOnEventCallback
     
 
     #endregion
+
+    public void SynchronizeTime()
+    {
+        if(Managers.TimeSlot == null) return;
+
+        if(!PhotonNetwork.IsMasterClient) return;
+
+        Debug.Log("send time event");
+        object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot,Managers.TimeSlot.CountTimeSlotChanged};
+        RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.Others};  
+        PhotonNetwork.RaiseEvent(SynchronizeTimeEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+    public void RequestSynchronizeTime()
+    {
+        if(Managers.TimeSlot == null) return;
+
+        if(PhotonNetwork.IsMasterClient) return;
+
+        RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient};  
+        PhotonNetwork.RaiseEvent(RequestSynchronizeTimeEventCode, null, raiseEventOptions, SendOptions.SendReliable);
+    }
 }
