@@ -92,7 +92,7 @@ public class LootingItemController : MonoBehaviourPun
             t = Mathf.Sin(t * Mathf.PI * 0.5f);
             transform.position =  Vector3.Lerp(startPosition, targetPosition, t);
             _meshTransform.localPosition = Vector3.up * curH;
-            _shadowTransform.localScale = shadowSize / (1 + curH / 20);
+            _shadowTransform.localScale = shadowSize / (1 + curH);
             transform.position = Vector3.up * curH + Vector3.Lerp(startPosition, targetPosition, t);
             time += Time.deltaTime;
             yield return null;
