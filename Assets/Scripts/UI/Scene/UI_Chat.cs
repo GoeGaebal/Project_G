@@ -61,7 +61,6 @@ public class UI_Chat : UI_Scene
 
     private void UpdateChat(string text)
     {
-        TMP_InputField inputField = Get<TMP_InputField>((int)InputFields.InputField);
         GameObject chatText = Managers.Resource.Instantiate("UI/SubItem/UI_ChatText", Vector3.zero, Quaternion.identity,
             parent: Get<GameObject>((int)GameObjects.Content).transform);
         // Managers.UI.MakeSubItem<UI_ChatText>(parent : Get<GameObject>((int)GameObjects.Content).transform);
