@@ -17,6 +17,7 @@ public class LootingItemController : MonoBehaviourPun
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
     [SerializeField] private Item item;
+    public Item GetItem => item;
     private UI_Inven ui_inven;
 
     private float Sn;
@@ -107,17 +108,35 @@ public class LootingItemController : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (ui_inven.AddItem(item))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Debug.Log("아이템 획득 성공");
-                Managers.Resource.Destroy(gameObject);
-            }
-            else
-            {
-                Debug.Log("아이템 획득 실패");
+                if (collision.gameObject.GetPhotonView().IsMine)
+                {
+                    if (ui_inven.AddItem(item))
+                    {
+                        Debug.Log("아이템 획득 성공");
+                        Managers.Network.BroadCastObjectDestroy(guid);
+                    }
+                    else
+                    {
+                        Debug.Log("아이템 획득 실패");
+                    }
+                }
+                else
+                {
+                    Managers.Network.SendLootingAddItem(collision.gameObject.GetPhotonView().ViewID,guid);
+                    Managers.Network.BroadCastObjectDestroy(guid);
+                }
             }
         }
+    }
+    
+    public void ApplyDie()
+    {
+        Managers.Object.LocalObjectsDict.Remove(guid);
+        Managers.Object.ObjectInfos.Remove(guid);
+        Managers.Resource.Destroy(gameObject);
     }
 }

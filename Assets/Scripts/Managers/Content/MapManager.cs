@@ -74,15 +74,8 @@ public class MapManager
         }
     }
 
-    private ulong Vector2ulong(Vector3 pos)
-    {
-        int y = (int) pos.y;
-        int x = (int) pos.x;
-        return ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
-    }
-
     public bool IsCollision(Vector3 pos)
     {
-        return _currentMapInfo[Vector2ulong(pos)];
+        return _currentMapInfo[Util.Vector2ulong(pos)];
     }
 }
