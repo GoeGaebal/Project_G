@@ -94,8 +94,9 @@ using UnityEngine;
             
             //target check
             if(target == null) return;
+            if(target.GetComponent<DamageableEntity>().isDead) return;
             AnimState.UpdateInState();
- 
+            
             
         }
         

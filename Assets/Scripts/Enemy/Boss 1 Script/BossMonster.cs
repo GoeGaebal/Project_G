@@ -39,9 +39,11 @@ public class BossMonster : BasicMonster
     protected override void Update() {
         base.Update();
 
+        if(target==null) return;
+        if(target.GetComponent<DamageableEntity>().isDead) return;
         if(isDead) return;
         if(hasTarget == false || target == null) return;
-
+        
         if(CanCastingState && (AnimState is RunState || AnimState is IdleState)) ChangeState(castingState);
 
 
