@@ -69,9 +69,9 @@ using UnityEngine;
         
         if(isDead) return;
 
-        Collider2D playerCollider = Physics2D.OverlapCircle(gameObject.transform.position, detectRadius,chaseTargetLayerMask);
+        Collider2D[] playerColliders = Physics2D.OverlapCircleAll(gameObject.transform.position, detectRadius,chaseTargetLayerMask);
  
-        if(playerCollider == null)
+        if(playerColliders == null)
         {
             hasTarget = false;  
             if( !(AnimState is  AttackState) || !(AnimState is  HitState ))
@@ -84,8 +84,12 @@ using UnityEngine;
         //set target when collider is detected but no target
         else if(!hasTarget)
         {
-            hasTarget = true;
-            target = playerCollider.gameObject;
+            foreach(var playerCollider in playerColliders)
+            {
+                if(playerCollider.GetComponent<DamageableEntity>().isDead) continue;
+                hasTarget = true;
+                target = playerCollider.gameObject;
+            }
         }
 
         
@@ -94,7 +98,12 @@ using UnityEngine;
             
             //target check
             if(target == null) return;
-            if(target.GetComponent<DamageableEntity>().isDead) return;
+            if(target.GetComponent<DamageableEntity>().isDead) 
+            {
+                target = null;
+                hasTarget = false;
+                return;
+            }
             AnimState.UpdateInState();
             
             
