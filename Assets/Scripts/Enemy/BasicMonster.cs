@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 
 
@@ -111,7 +112,7 @@ using UnityEngine;
         
     }
 
-
+    [PunRPC]
     override public void OnDamage(float damage) 
     {
         

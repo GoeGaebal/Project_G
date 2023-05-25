@@ -24,17 +24,29 @@ public class DamageableEntity : MonoBehaviourPun, IDamageable
     ///<summary>
     ///  적이 데미지를 입었을 때 호출되는 함수
     ///</summary>
+    [PunRPC]
     public virtual void OnDamage(float damage)
     {
         if (isDead) return;
-
-        HP -= damage;
+        if(PhotonNetwork.IsMasterClient)
+        {
+            HP -= damage;
+            photonView.RPC("UpdateHP",RpcTarget.Others,HP, isDead);
+            photonView.RPC("OnDamage",RpcTarget.Others,damage);
+        }
+        
         if (HP<=0 && !isDead)
         {
             Die();
         }
     }
-
+    [PunRPC]
+    public void UpdateHP(float health, bool dead) 
+    {
+        this.HP = health;
+        this.isDead = dead;
+    }
+    
     public virtual void RestoreHP(float restoreHP)
     {
         if (isDead) return;     

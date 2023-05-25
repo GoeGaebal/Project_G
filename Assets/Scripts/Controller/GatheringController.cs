@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using UnityEditor;
+using Photon.Pun;
 
 public class GatheringController : DamageableEntity
 {
@@ -36,6 +37,7 @@ public class GatheringController : DamageableEntity
         };
     }
 
+    [PunRPC]
     public override void OnDamage(float damage)
     {
         base.OnDamage(damage);

@@ -607,13 +607,13 @@ Tilemap:
   - m_RefCount: 37
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 3
-    m_Data: {r: 0.83337784, g: 0.4773742, b: 0.49535558, a: 1}
+    m_Data: {r: 0.93472046, g: 0.6442641, b: 0.706416, a: 1}
   - m_RefCount: 3
-    m_Data: {r: 0.7790415, g: 0.38300726, b: 0.43255913, a: 1}
+    m_Data: {r: 0.7540003, g: 0.3490071, b: 0.39485973, a: 1}
   - m_RefCount: 0
-    m_Data: {r: 7.3969e-41, g: 7.3969e-41, b: 7.3969e-41, a: 7.3969e-41}
+    m_Data: {r: 6.9886e-41, g: 6.9886e-41, b: 6.9886e-41, a: 6.9886e-41}
   - m_RefCount: 0
-    m_Data: {r: 7.3969e-41, g: 7.3969e-41, b: 7.3969e-41, a: 7.3969e-41}
+    m_Data: {r: 6.9886e-41, g: 6.9886e-41, b: 6.9886e-41, a: 6.9886e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

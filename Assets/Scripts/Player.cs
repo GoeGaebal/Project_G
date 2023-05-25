@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Photon.Pun;
 
 public enum EnumPlayerStates
 {
@@ -161,7 +162,8 @@ public class Player : DamageableEntity
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
         }
     }
-
+    
+    [PunRPC]
     public override void OnDamage(float damage)
     {
         if(isDead) return;
