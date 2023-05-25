@@ -49,6 +49,16 @@ public class MapManager
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
     }
+
+    public Vector3 GenerateCurrentRandPos()
+    {
+        //랜덤 위치 스폰 (일단 겹치더라도 상관없이)
+        return new Vector3()
+        {
+            y = Random.Range(CurrentMapInfo.MinY, CurrentMapInfo.MaxY),
+            x = Random.Range(CurrentMapInfo.MinX, CurrentMapInfo.MaxX)
+        };
+    }
     
     /// <summary>
     /// Hierarchy창에서 Map 오브젝트를 찾아 Destory하는 함수
