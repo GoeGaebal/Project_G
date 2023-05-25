@@ -193,6 +193,7 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
         if(!context.started) return;
+        if(!photonView.IsMine) return;
         if(State != EnumPlayerStates.Idle && State != EnumPlayerStates.Attack && State != EnumPlayerStates.Run) return;
         
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정

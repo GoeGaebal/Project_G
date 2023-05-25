@@ -94,7 +94,7 @@ public class NetworkManager : IOnEventCallback
         if(!PhotonNetwork.IsMasterClient) return;
 
         Debug.Log("send time event");
-        object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot,Managers.TimeSlot.CountTimeSlotChanged};
+        object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot,Managers.TimeSlot.CountTimeSlotChanged, RotateTimer.GetTimerAngle()};
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.Others};  
         PhotonNetwork.RaiseEvent(SynchronizeTimeEventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }

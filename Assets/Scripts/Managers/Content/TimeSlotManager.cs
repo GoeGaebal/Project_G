@@ -13,6 +13,7 @@ public enum EnumTimeSlot
 
 public class TimeSlotManager : IOnEventCallback
 {
+
     public float timeChangePeriod;
     private float _curremtTime;
     private EnumTimeSlot _timeSlot = EnumTimeSlot.Day;
@@ -29,7 +30,7 @@ public class TimeSlotManager : IOnEventCallback
             _curremtTime = value;
         }
     }
-
+    
     public EnumTimeSlot TimeSlot
     {
         get{
@@ -49,7 +50,6 @@ public class TimeSlotManager : IOnEventCallback
     {
         CurrentTime = 0f;
         timeChangePeriod = 5f;
-
         PhotonNetwork.AddCallbackTarget(this);
 
         if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
@@ -136,6 +136,7 @@ public class TimeSlotManager : IOnEventCallback
                     CurrentTime = (float)data[0];
                     TimeSlot = (EnumTimeSlot)data[1];
                     CountTimeSlotChanged = (int)data[2];
+                    RotateTimer.SetTimerAngle((Quaternion)data[3]);
                 }
                 UpdateTimeSlot(TimeSlot);
                 break;
