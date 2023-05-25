@@ -140,7 +140,6 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     }
     
 
-    #endregion
 
     public void SynchronizeTime()
     {
