@@ -67,7 +67,7 @@ public class ItemInSlot : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEn
             if (player != null)
             {
                 //사과 개수만큼 드랍
-                Managers.Object.SpawnLootings(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
+                Managers.Object.SpawnLootingItems(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
                 RemoveItem();//인벤토리에서 삭제
             }
             

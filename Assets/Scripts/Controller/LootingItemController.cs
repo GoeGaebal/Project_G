@@ -7,6 +7,7 @@ using UnityEngine;
 public class LootingItemController : MonoBehaviourPun
 {
     public int id = 1;
+    public int guid = 1;
     [Header("Physics")]
     [Tooltip("충돌계수")]
     [Range(0.0f,1.0f)]
@@ -19,6 +20,8 @@ public class LootingItemController : MonoBehaviourPun
     private UI_Inven ui_inven;
 
     private float Sn;
+    private Transform _meshTransform;
+    private Transform _shadowTransform;
 
     private void Start()
     {
@@ -29,6 +32,18 @@ public class LootingItemController : MonoBehaviourPun
 
     private void Init()
     {
+        _meshTransform = transform.GetChild(0);
+        if (_meshTransform == null)
+        {
+            Debug.Log("루팅 아이템의 mesh를 찾지 못하였습니다.");
+            return;
+        }
+        _shadowTransform = transform.GetChild(1);
+        if (_shadowTransform == null)
+        {
+            Debug.Log("루팅 아이템의 그림자를 찾지 못하였습니다.");
+            return;
+        }
         cof = Managers.Data.LootingDict[id].cof;
         bounceCount = Managers.Data.LootingDict[id].bounceCount;
         threshold = Managers.Data.LootingDict[id].threshold;
@@ -52,6 +67,7 @@ public class LootingItemController : MonoBehaviourPun
         float hSpeed = (4.0f * maxHeight * Sn) / duration;
         float gravity = (2.0f * hSpeed * Sn) / duration;
         Vector3 startPosition = transform.position;
+        Vector3 shadowSize = _shadowTransform.localScale;
         
         while (time < duration)
         {
@@ -74,6 +90,9 @@ public class LootingItemController : MonoBehaviourPun
             
             float t = time / duration;
             t = Mathf.Sin(t * Mathf.PI * 0.5f);
+            transform.position =  Vector3.Lerp(startPosition, targetPosition, t);
+            _meshTransform.localPosition = Vector3.up * curH;
+            _shadowTransform.localScale = shadowSize / (1 + curH);
             transform.position = Vector3.up * curH + Vector3.Lerp(startPosition, targetPosition, t);
             time += Time.deltaTime;
             yield return null;

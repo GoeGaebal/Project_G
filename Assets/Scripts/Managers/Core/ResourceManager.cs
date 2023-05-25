@@ -54,19 +54,25 @@ public class ResourceManager
             return null;
         }
 
+        GameObject go;
         if (original.GetComponent<Poolable>() != null)
-            return Managers.Pool.Pop(original, parent).gameObject;
-        
-        GameObject go = Object.Instantiate(original, position, rotation, parent);
-        
+        {
+            go = Managers.Pool.Pop(original, parent).gameObject;
+            go.transform.position = position;
+            go.transform.rotation = rotation;
+        }
+        else
+            go = Object.Instantiate(original, position, rotation, parent);
+
         go.name = original.name;
         
         // GameObject go = PhotonNetwork.Instantiate($"Prefabs/{path}", position, rotation);
+        
         return go;
     }
 
     /// <summary>
-    /// 객체가 Pool
+    /// 객체가 Poolable이면 자연스럽게 pool로 들어간다.
     /// </summary>
     /// <param name="go">
     /// 파괴할 객체를 의미한다.

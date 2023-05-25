@@ -9,19 +9,22 @@ public class Managers : MonoBehaviourPun
 {
     private static Managers _instance; // 유일성이 보장된다
     private static Managers Instance { get { Init(); return _instance; } } // 유일한 매니저를 갖고온다
+
+    private static PhotonView _photonView;
+    private static PhotonView ManagersPhotonView { get { return _photonView; } } // 유일한 포톤뷰를 들고 온다.
     
     #region Content
     private MapManager _map = new();
     private DataManager _data = new();
-    private ObjectManager _object = new();
     private NetworkManager _network = new();
+    private ObjectManager _object = new();
     private TimeSlotManager _timeSlot = new();
     private UIManager _ui = new();
     private InputManager _input = new();
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
-    public static ObjectManager Object { get { return Instance._object; } }
     public static NetworkManager Network { get { return Instance._network; } }
+    public static ObjectManager Object { get { return Instance._object; } }
     public static TimeSlotManager TimeSlot { get { return Instance._timeSlot;} }
     public static UIManager UI { get { return Instance._ui; } }
     public static InputManager Input { get { return Instance._input;} }
@@ -56,16 +59,18 @@ public class Managers : MonoBehaviourPun
             {
                 go = new GameObject { name = "@Managers" };
                 go.AddComponent<Managers>();
+                go.AddComponent<PhotonView>();
             }
 
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
+            _photonView = go.GetComponent<PhotonView>();
 
             _instance._input.Init();
             _instance._data.Init();
             _instance._pool.Init();
             _instance._object.Init();
-            _instance._network.Init();
+            _instance._network.Init(ManagersPhotonView);
             _instance._timeSlot.Init();
         }
     }
