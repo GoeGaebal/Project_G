@@ -47,7 +47,9 @@ public struct LootingItemInfo
     public float destX;
 }
 
-
+// TODO : 리팩토링 
+// 1. 패킷을 큐 형태로 모아 보내기
+// 2. Player들을 미리 찾아놓기
 public class NetworkManager : IOnEventCallback, IPunObservable
 {
     public PhotonView View { get; private set; }
@@ -62,18 +64,21 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     private static readonly RaiseEventOptions SendClientOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 
     // If you have multiple custom events, it is recommended to define them in the used class
-    private const byte RequestObjectInfosEventCode = 1;
-    private const byte ReceiveObjectInfosEventCode = 2;
-    private const byte RequestViewIDEventCode = 3;
-    private const byte ReceiveViewIDEventCode = 4;
-    private const byte ReceiveChatEventCode = 5;
-    private const byte ReceiveGatheringPacketEventCode = 7;
-    private const byte ReceiveLootingsEventCode = 8;
-    private const byte ReceiveAddItemEventCode = 9;
-    private const byte ReceiveSpawnLootingsEventCode = 10;
+    public enum CustomRaiseEventCode : byte
+    {
+        RequestObjectInfos,
+        ReceiveObjectInfos,
+        RequestViewID,
+        ReceiveViewID,
+        ReceiveChat,
+        ReceiveGatheringPacket,
+        ReceiveLootings,
+        ReceiveAddItem,
+        ReceiveSpawnLootings,
 
-    public const byte SynchronizeTimeEventCode = 6;
-    public const byte RequestSynchronizeTimeEventCode = 7;
+        SynchronizeTime,
+        RequestSynchronizeTime,
+    }
 
     #region Network
     private void OnEnable()
@@ -96,7 +101,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
             PhotonNetwork.AllocateViewID(View);
         else
-            PhotonNetwork.RaiseEvent(RequestViewIDEventCode, null, SendMasterOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.RequestViewID, null, SendMasterOptions, SendOptions.SendReliable);
     }
 
     public void OnEvent(EventData photonEvent)
@@ -104,23 +109,23 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         var eventCode = photonEvent.Code;
         switch (eventCode)
         {
-            case RequestObjectInfosEventCode:
+            case (byte)CustomRaiseEventCode.RequestObjectInfos:
             {
-                BroadCastClients(Serialize(Managers.Object.ObjectInfos), ReceiveObjectInfosEventCode);
+                BroadCastClients(Serialize(Managers.Object.ObjectInfos), (byte)CustomRaiseEventCode.ReceiveObjectInfos);
                 break;
             }
-            case ReceiveObjectInfosEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveObjectInfos:
             {
                 var data = (byte[])photonEvent.CustomData;
                 Managers.Object.SyncronizeObjects(Deserialize<Dictionary<int, ObjectInfo>>(data));
                 break;
             }
-            case RequestViewIDEventCode:
+            case (byte)CustomRaiseEventCode.RequestViewID:
             {
-                BroadCastClients(Serialize(View.ViewID), ReceiveViewIDEventCode);
+                BroadCastClients(Serialize(View.ViewID), (byte)CustomRaiseEventCode.ReceiveViewID);
                 break;
             }
-            case ReceiveViewIDEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveViewID:
             {
                 var data = (byte[])photonEvent.CustomData;
                 if (data != null)
@@ -131,28 +136,28 @@ public class NetworkManager : IOnEventCallback, IPunObservable
                 }
                 break;
             }
-            case ReceiveChatEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveChat:
             {
                 var data = (byte[])photonEvent.CustomData;
                 if (ReceiveChatHandler != null)
                     ReceiveChatHandler.Invoke(Deserialize<string>(data));
                 break;
             }
-            case ReceiveGatheringPacketEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveGatheringPacket:
             {
                 var data = (byte[])photonEvent.CustomData;
                 if (data != null)
                     PacketHandler(Deserialize<Packet>(data));
                 break;
             }
-            case ReceiveLootingsEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveLootings:
             {
                 var data = (byte[])photonEvent.CustomData;
                 if (data != null)
                     Managers.Object.ApplySpawnLootingItems(Deserialize<List<LootingItemInfo>>(data));
                 break;
             }
-            case ReceiveAddItemEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveAddItem:
             {
                 var data = (byte[])photonEvent.CustomData;
                 if (data != null)
@@ -170,7 +175,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
 
                 break;
             }
-            case ReceiveSpawnLootingsEventCode:
+            case (byte)CustomRaiseEventCode.ReceiveSpawnLootings:
             {
                 var data = (byte[])photonEvent.CustomData;
                 if (data != null)
@@ -195,23 +200,23 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     
     public void BroadCastGatheringDamaged(int guid, float damage)
     {
-        BroadCastClients(Serialize(new Packet() { state = 0, damage = damage, guid = guid }), ReceiveGatheringPacketEventCode);
+        BroadCastClients(Serialize(new Packet() { state = 0, damage = damage, guid = guid }), (byte)CustomRaiseEventCode.ReceiveGatheringPacket);
         
     }
     
     public void BroadCastObjectDestroy(int guid)
     {
-        BroadCastClients(Serialize(new Packet() { state = 1, damage = 0.0f, guid = guid }), ReceiveGatheringPacketEventCode);
+        BroadCastClients(Serialize(new Packet() { state = 1, damage = 0.0f, guid = guid }), (byte)CustomRaiseEventCode.ReceiveGatheringPacket);
     }
     
     public void BroadCastLootingInfos(List<LootingItemInfo> infos)
     {
-        BroadCastClients(Serialize(infos), ReceiveLootingsEventCode);
+        BroadCastClients(Serialize(infos), (byte)CustomRaiseEventCode.ReceiveLootings);
     }
 
     public void SendLootingAddItem(int viewId,int guid)
     {
-        BroadCastClients(Serialize(new LootingPacket(){viewId = viewId, guid = guid}), ReceiveAddItemEventCode);
+        BroadCastClients(Serialize(new LootingPacket(){viewId = viewId, guid = guid}), (byte)CustomRaiseEventCode.ReceiveAddItem);
     }
     
     #endregion
@@ -220,7 +225,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     public void RequestGatherings()
     {
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
-        PhotonNetwork.RaiseEvent(RequestObjectInfosEventCode, null, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.RequestObjectInfos, null, raiseEventOptions, SendOptions.SendReliable);
     }
 
     public void PacketHandler(Packet packet)
@@ -249,14 +254,14 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     {
         RequestSpawnLootingsPacket packet = new RequestSpawnLootingsPacket() { objectId = objectId, count = count, y = y, x = x, maxRadious = maxRadious, minRadious = minRadious};
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
-        PhotonNetwork.RaiseEvent(ReceiveSpawnLootingsEventCode, Serialize(packet), raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.ReceiveSpawnLootings, Serialize(packet), raiseEventOptions, SendOptions.SendReliable);
     }
     #endregion
 
     public void SendChat(string text)
     {
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
-        PhotonNetwork.RaiseEvent(ReceiveChatEventCode, Serialize(text), raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.ReceiveChat, Serialize(text), raiseEventOptions, SendOptions.SendReliable);
     }
 
     private static IEnumerable<byte> Serialize<T>(T data)
@@ -291,7 +296,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         Debug.Log("send time event");
         object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot,Managers.TimeSlot.CountTimeSlotChanged, RotateTimer.GetTimerAngle()};
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.Others};  
-        PhotonNetwork.RaiseEvent(SynchronizeTimeEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.SynchronizeTime, content, raiseEventOptions, SendOptions.SendReliable);
     }
     public void RequestSynchronizeTime()
     {
@@ -300,7 +305,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         if(PhotonNetwork.IsMasterClient) return;
 
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient};  
-        PhotonNetwork.RaiseEvent(RequestSynchronizeTimeEventCode, null, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.RequestSynchronizeTime, null, raiseEventOptions, SendOptions.SendReliable);
    
     }
      public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
