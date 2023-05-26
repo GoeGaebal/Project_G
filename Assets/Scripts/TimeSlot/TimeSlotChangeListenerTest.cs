@@ -19,6 +19,8 @@ public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventLis
       
 
         profile.TryGetSettings(out colorGrading);
+
+        this.colorGrading.colorFilter.value = this.dayTimeColor;
     }   
 
 

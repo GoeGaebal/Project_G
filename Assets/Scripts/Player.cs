@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Photon.Pun;
 
 public enum EnumPlayerStates
 {
@@ -161,7 +162,8 @@ public class Player : DamageableEntity
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
         }
     }
-
+    
+    [PunRPC]
     public override void OnDamage(float damage)
     {
         if(isDead) return;
@@ -192,6 +194,7 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
         if(!context.started) return;
+        if(!photonView.IsMine) return;
         if(State != EnumPlayerStates.Idle && State != EnumPlayerStates.Attack && State != EnumPlayerStates.Run) return;
         
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정

@@ -47,7 +47,7 @@ public class Managers : MonoBehaviourPun
     
     void Update()
     {
-        TimeSlot.AddDelataTime(Time.deltaTime);
+       if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
     }
     
     static void Init()
@@ -80,5 +80,4 @@ public class Managers : MonoBehaviourPun
         Scene.Clear();
         Pool.Clear();
     }
-
 }

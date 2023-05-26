@@ -200,6 +200,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossProto
       objectReference: {fileID: 0}
+    - target: {fileID: 9168397809358324139, guid: 85b5eae4bce03494f85b9219c0eeeb41,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85b5eae4bce03494f85b9219c0eeeb41, type: 3}
 --- !u!1 &519420028
@@ -388,6 +393,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 58692221822477235, guid: 7cd247de0f088e4449ac8ef7dfd628e5,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1410843260874740528, guid: 7cd247de0f088e4449ac8ef7dfd628e5,
         type: 3}
       propertyPath: m_SortingOrder

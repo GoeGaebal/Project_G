@@ -52,6 +52,8 @@ public class NetworkManager : IOnEventCallback, IPunObservable
 {
     public PhotonView View { get; private set; }
     public GameObject LocalPlayer { get; private set; }
+    
+    
 
     public Action<string> ReceiveChatHandler;
     public Action<int> ReceiveAddItemHandler;
@@ -69,6 +71,9 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     private const byte ReceiveLootingsEventCode = 8;
     private const byte ReceiveAddItemEventCode = 9;
     private const byte ReceiveSpawnLootingsEventCode = 10;
+
+    public const byte SynchronizeTimeEventCode = 6;
+    public const byte RequestSynchronizeTimeEventCode = 7;
 
     #region Network
     private void OnEnable()
@@ -274,8 +279,31 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     {
         LocalPlayer = PhotonNetwork.Instantiate("Prefabs/Player", spawnPos, Quaternion.identity);
     }
+    
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+
+    public void SynchronizeTime()
+    {
+        if(Managers.TimeSlot == null) return;
+
+        if(!PhotonNetwork.IsMasterClient) return;
+
+        Debug.Log("send time event");
+        object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot,Managers.TimeSlot.CountTimeSlotChanged, RotateTimer.GetTimerAngle()};
+        RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.Others};  
+        PhotonNetwork.RaiseEvent(SynchronizeTimeEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+    public void RequestSynchronizeTime()
+    {
+        if(Managers.TimeSlot == null) return;
+
+        if(PhotonNetwork.IsMasterClient) return;
+
+        RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient};  
+        PhotonNetwork.RaiseEvent(RequestSynchronizeTimeEventCode, null, raiseEventOptions, SendOptions.SendReliable);
+   
+    }
+     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         // if (stream.IsWriting)
         // {

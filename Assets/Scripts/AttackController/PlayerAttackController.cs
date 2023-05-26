@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using Photon.Pun;
 
 public enum EnumWeaponList
 {
@@ -40,7 +41,28 @@ public class PlayerAttackController : AttackController
         }        
     }
 
-
+    [PunRPC]
+    private void SyncWeapon(EnumWeaponList changeWeapon)
+    {
+        if(changeWeapon == currentWeapon) return;        
+        switch(changeWeapon)
+        {
+            case EnumWeaponList.Sword:
+                Debug.Log("sword change");
+                spriteRenderer.sprite = swordSprite;
+                weaponController = this.meleeWeaponController;
+                currentWeapon = EnumWeaponList.Sword;
+                break;
+            case EnumWeaponList.Axe:
+                Debug.Log("axe change");
+                spriteRenderer.sprite = axeSprite;
+                weaponController = pickaxWeaponController;
+                currentWeapon = EnumWeaponList.Axe;
+                break;
+            
+        }
+        spriteRenderer.sortingOrder = 3;
+    }
     public void _ChangeWeapon(EnumWeaponList changeWeapon)
     {  
         if(changeWeapon == currentWeapon) return;
@@ -64,7 +86,7 @@ public class PlayerAttackController : AttackController
         }
         spriteRenderer.sortingOrder = 3;
        
-        
+        photonView.RPC("SyncWeapon",RpcTarget.Others,currentWeapon);
     }
 
 }
