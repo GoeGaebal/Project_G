@@ -7,6 +7,7 @@ using UnityEngine;
 public class LootingItemController : MonoBehaviourPun
 {
     public int id = 1;
+    public int guid = 1;
     [Header("Physics")]
     [Tooltip("충돌계수")]
     [Range(0.0f,1.0f)]
@@ -23,9 +24,7 @@ public class LootingItemController : MonoBehaviourPun
 
     private void Start()
     {
-        findPlayer();
-
-        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        ui_inven = GameObject.FindObjectOfType<UI_Inven>();
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
         Invoke("EnableCollider", 0.7f);
     }
