@@ -111,6 +111,10 @@ public class ObjectManager
             }
             Managers.Network.BroadCastLootingInfos(lootingInfos);
         }
+        else
+        {
+            Managers.Network.RequestSpawnLootingItems(objectId,count, spawnPos, maxRadious, minRadious);
+        }
     }
     
     public void SpawnLootingItems(){}

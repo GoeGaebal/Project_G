@@ -53,9 +53,10 @@ public struct LootingItemInfo
 public class NetworkManager : IOnEventCallback, IPunObservable
 {
     public PhotonView View { get; private set; }
-    public GameObject LocalPlayer { get; private set; }
-    
-    
+    public Player LocalPlayer { get; private set; }
+    public Dictionary<int, Player> PlayerDict { get; private set; }
+
+
 
     public Action<string> ReceiveChatHandler;
     public Action<int> ReceiveAddItemHandler;
@@ -75,6 +76,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         ReceiveLootings,
         ReceiveAddItem,
         ReceiveSpawnLootings,
+        CustomInstantiate,
 
         SynchronizeTime,
         RequestSynchronizeTime,
@@ -93,6 +95,7 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     public void Init(PhotonView inPhotonView)
     {
         OnEnable();
+        PlayerDict = new Dictionary<int, Player>();
         View = inPhotonView;
     }
 
@@ -163,14 +166,10 @@ public class NetworkManager : IOnEventCallback, IPunObservable
                 if (data != null)
                 {
                     LootingPacket packet = Deserialize<LootingPacket>(data);
-                    foreach (var player in Object.FindObjectsOfType<PhotonView>())
-                    {
-                        if (player.ViewID == packet.viewId && player.IsMine)
-                        {
-                           if (ReceiveAddItemHandler != null)
-                               ReceiveAddItemHandler.Invoke(packet.guid);
-                        }
-                    } 
+                    if (packet.viewId == LocalPlayer.photonView.ViewID)
+                    { 
+                        if (ReceiveAddItemHandler != null) ReceiveAddItemHandler.Invoke(packet.guid);
+                    }
                 }
 
                 break;
@@ -186,8 +185,19 @@ public class NetworkManager : IOnEventCallback, IPunObservable
                         packet.maxRadious,
                         packet.minRadious);
                 }
-            }
                 break;
+            }
+            case (byte)CustomRaiseEventCode.CustomInstantiate:
+            {
+                object[] data = (object[]) photonEvent.CustomData;
+                GameObject player = Managers.Resource.Instantiate("Player", (Vector3) data[0], (Quaternion) data[1]);
+                PhotonView photonView = player.GetComponent<PhotonView>();
+                PhotonView weaponView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+                photonView.ViewID = (int) data[2];
+                weaponView.ViewID = (int) data[3];
+                PlayerDict.Add(photonView.ViewID, LocalPlayer.GetComponent<Player>());
+                break;
+            }
         }
     }
     
@@ -250,9 +260,9 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         }
     }
 
-    public void RequestSpawnLootingItems(int objectId, int count, float y, float x, float maxRadious = 10.0f,float minRadious = 0.0f)
+    public void RequestSpawnLootingItems(int objectId, int count, Vector3 pos, float maxRadious = 10.0f,float minRadious = 0.0f)
     {
-        RequestSpawnLootingsPacket packet = new RequestSpawnLootingsPacket() { objectId = objectId, count = count, y = y, x = x, maxRadious = maxRadious, minRadious = minRadious};
+        RequestSpawnLootingsPacket packet = new RequestSpawnLootingsPacket() { objectId = objectId, count = count, y = pos.y, x = pos.x, maxRadious = maxRadious, minRadious = minRadious};
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
         PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.ReceiveSpawnLootings, Serialize(packet), raiseEventOptions, SendOptions.SendReliable);
     }
@@ -282,7 +292,31 @@ public class NetworkManager : IOnEventCallback, IPunObservable
     
     public void SpawnLocalPlayer(Vector3 spawnPos = default(Vector3))
     {
-        LocalPlayer = PhotonNetwork.Instantiate("Prefabs/Player", spawnPos, Quaternion.identity);
+        // LocalPlayer = PhotonNetwork.Instantiate("Prefabs/Player", spawnPos, Quaternion.identity).GetComponent<Player>();
+        GameObject player = Managers.Resource.Instantiate("Player", spawnPos, Quaternion.identity);
+        PhotonView photonView = player.GetComponent<PhotonView>();
+        PhotonView weaponView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+        if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView))
+        {
+            object[] data = new object[]
+            {
+                player.transform.position, player.transform.rotation, photonView.ViewID, weaponView.ViewID
+            };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.Others,
+                CachingOption = EventCaching.AddToRoomCache
+            };
+
+            SendOptions sendOptions = new SendOptions
+            {
+                Reliability = true
+            };
+            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.CustomInstantiate, data, raiseEventOptions, sendOptions);
+            LocalPlayer = player.GetComponent<Player>();
+            PlayerDict.Add(photonView.ViewID,LocalPlayer); 
+        }
     }
     
 

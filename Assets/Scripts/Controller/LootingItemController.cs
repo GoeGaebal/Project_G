@@ -21,20 +21,17 @@ public class LootingItemController : MonoBehaviourPun
     private UI_Inven ui_inven;
 
     private float Sn;
-
-    private void Start()
-    {
-        ui_inven = GameObject.FindObjectOfType<UI_Inven>();
-        gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        Invoke("EnableCollider", 0.7f);
-    }
-
+    
     private void Init()
     {
         cof = Managers.Data.LootingDict[id].cof;
         bounceCount = Managers.Data.LootingDict[id].bounceCount;
         threshold = Managers.Data.LootingDict[id].threshold;
         Sn = Managers.Data.LootingDict[id].Sn;
+        
+        ui_inven = FindObjectOfType<UI_Inven>();
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        Invoke("EnableCollider", 0.7f);
     }
 
     public void Bounce(Vector3 endPosition,float duration, float maxHeight = 1.0f)
