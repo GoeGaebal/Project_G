@@ -26,7 +26,6 @@ public struct RequestSpawnLootingsPacket
     public float x;
     public float maxRadious;
     public float minRadious;
-
 }
 
 [System.Serializable]

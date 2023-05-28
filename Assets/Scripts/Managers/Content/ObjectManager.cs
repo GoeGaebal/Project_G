@@ -18,13 +18,12 @@ public class ObjectManager
     public Dictionary<int, ObjectInfo> ObjectInfos { get; private set; }
     public Dictionary<int, GameObject> LocalObjectsDict { get; private set; }
 
-    private List<int> usedGuid;
+    private System.Random rand = new System.Random();
 
     public void Init()
     {
         ObjectInfos = new Dictionary<int, ObjectInfo>();
         LocalObjectsDict = new Dictionary<int, GameObject>();
-        usedGuid = new();
     }
     
     private void SpawnGathering(int objectId, Vector3 pos, int guid = 0)
@@ -130,19 +129,20 @@ public class ObjectManager
         }
     }
 
+    /// <summary>
+    /// 랜덤으로 int형 guid 값을 만드는 함수, 만일 모든 int형을 다 쓰면 무한루프를 돌 것이다.
+    /// </summary>
+    /// <returns>int형 랜덤값</returns>
     public int GenerateGuid()
     {
-        int key = 0;
-        for (int i = 1; i < 255; i++)
-        {
-            if (!ObjectInfos.ContainsKey(i) && !usedGuid.Contains(i))
-            {
-                key = i;
-                usedGuid.Add(i);
-                break;
-            }
-        }
-        return key;
+        if (LocalObjectsDict == null)
+            return -1;
+        
+        int guid = 0;
+        while (guid == 0 || LocalObjectsDict.ContainsKey(guid))
+            guid = rand.Next();
+
+        return guid;
     }
 
     public void SyncronizeObjects(Dictionary<int, ObjectInfo> infos)
