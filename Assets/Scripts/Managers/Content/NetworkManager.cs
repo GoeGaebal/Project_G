@@ -49,7 +49,7 @@ public struct LootingItemInfo
 // TODO : 리팩토링 
 // 1. 패킷을 큐 형태로 모아 보내기
 // 2. Player들을 미리 찾아놓기
-public class NetworkManager : IOnEventCallback, IPunObservable
+public class NetworkManager : IOnEventCallback
 {
     public PhotonView View { get; private set; }
     public Player LocalPlayer { get; private set; }
@@ -191,9 +191,11 @@ public class NetworkManager : IOnEventCallback, IPunObservable
                 object[] data = (object[]) photonEvent.CustomData;
                 GameObject player = Managers.Resource.Instantiate("Player", (Vector3) data[0], (Quaternion) data[1]);
                 PhotonView photonView = player.GetComponent<PhotonView>();
-                PhotonView weaponView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+                PhotonView weaponPivotView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+                PhotonView weaponView = player.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
                 photonView.ViewID = (int) data[2];
-                weaponView.ViewID = (int) data[3];
+                weaponPivotView.ViewID = (int) data[3];
+                weaponView.ViewID = (int) data[4];
                 PlayerDict.Add(photonView.ViewID, LocalPlayer.GetComponent<Player>());
                 break;
             }
@@ -294,12 +296,13 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         // LocalPlayer = PhotonNetwork.Instantiate("Prefabs/Player", spawnPos, Quaternion.identity).GetComponent<Player>();
         GameObject player = Managers.Resource.Instantiate("Player", spawnPos, Quaternion.identity);
         PhotonView photonView = player.GetComponent<PhotonView>();
-        PhotonView weaponView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
-        if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView))
+        PhotonView weaponPivotView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+        PhotonView weaponView = player.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
+        if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView) && PhotonNetwork.AllocateViewID(weaponPivotView))
         {
             object[] data = new object[]
             {
-                player.transform.position, player.transform.rotation, photonView.ViewID, weaponView.ViewID
+                player.transform.position, player.transform.rotation, photonView.ViewID, weaponPivotView.ViewID ,weaponView.ViewID
             };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions
@@ -317,8 +320,6 @@ public class NetworkManager : IOnEventCallback, IPunObservable
             PlayerDict.Add(photonView.ViewID,LocalPlayer); 
         }
     }
-    
-
 
     public void SynchronizeTime()
     {
@@ -340,32 +341,5 @@ public class NetworkManager : IOnEventCallback, IPunObservable
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient};  
         PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.RequestSynchronizeTime, null, raiseEventOptions, SendOptions.SendReliable);
    
-    }
-     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        // if (stream.IsWriting)
-        // {
-        //     var data = Serialize(LocalObjectsDict); // serialize the dictionary into a byte array
-        //     stream.SendNext(data); // write the byte array to the PhotonStream
-        // }
-        // else
-        // {
-        //     var data = (byte[])stream.ReceiveNext(); // read the byte array from the PhotonStream
-        //     ObjectInfos = Deserialize<Dictionary<int,ObjectInfo>>(data); // deserialize the byte array into a dictionary
-        //     var infokeys = ObjectInfos.Keys;
-        //     var objkeys = LocalObjectsDict.Keys;
-        //     var toDestoryKeys = objkeys.Except(infokeys);
-        //     var toInstantiateKeys = infokeys.Except(objkeys);
-        //     foreach (var toDestoryKey in toDestoryKeys)
-        //     {
-        //         Managers.Resource.Destroy(LocalObjectsDict[toDestoryKey]);
-        //         LocalObjectsDict.Remove(toDestoryKey);
-        //     }
-        //     foreach (var toInstantiateKey in toInstantiateKeys)
-        //     {
-        //         var go = SpawnGathering(ObjectInfos[toInstantiateKey].objectID, ObjectInfos[toInstantiateKey].pos);
-        //         LocalObjectsDict.Add(toInstantiateKey,go);
-        //     }
-        // }
     }
 }
