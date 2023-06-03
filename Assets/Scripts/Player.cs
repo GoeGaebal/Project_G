@@ -108,8 +108,13 @@ public class Player : DamageableEntity
         }
 
 
-        if(State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
-            rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        if (State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
+        {
+            Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
+            if(Managers.Map.CheckCanGo(dest))
+                rb.MovePosition(dest);
+        }
+            
     }
 
     public void OnMove(InputAction.CallbackContext context)
