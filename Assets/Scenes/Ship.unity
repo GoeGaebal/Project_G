@@ -645,8 +645,8 @@ MonoBehaviour:
   m_Resolution: 0
   m_useNativeSize: 0
   m_points:
-  - {x: 699, y: 373}
-  - {x: 638, y: 323}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   lineThickness: 5
   relativeSize: 0
   lineList: 0

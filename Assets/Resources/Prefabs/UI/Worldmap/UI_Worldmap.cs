@@ -7,11 +7,11 @@ using UnityEngine.UI.Extensions;
 public class UI_Worldmap : MonoBehaviour
 {
     private GameObject ship;
+    private GameObject target;
+    private Vector3 curPos = new();
     private GameObject lrGO;
     UILineRenderer lr;
-    private Vector3 curPos = new();
-    private GameObject target;
-    
+
     void Start()
     {
         lrGO = transform.GetChild(0).gameObject;
@@ -24,7 +24,15 @@ public class UI_Worldmap : MonoBehaviour
     {
         setLine();
     }
-    
+
+    private void FixedUpdate()
+    {
+        if(Vector2.Distance(ship.transform.position, target.transform.position) >= 1f)
+        {
+            moveToTarget();
+        }
+    }
+
     public void setTarget(GameObject t)
     {
         target = t;
@@ -37,5 +45,12 @@ public class UI_Worldmap : MonoBehaviour
         lr.Points[0] = curPos;
         lr.Points[1] = ship.transform.InverseTransformPoint(target.transform.position);
         lr.SetAllDirty();
+    }
+
+    private void moveToTarget()
+    {
+        float distance = Vector2.Distance(ship.transform.position, target.transform.position);
+        Vector2 direction = target.transform.position - ship.transform.position;
+        ship.transform.position += (Vector3)(direction / distance);
     }
 }
