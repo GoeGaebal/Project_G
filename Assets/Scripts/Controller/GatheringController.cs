@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using Photon.Pun;
 using UnityEditor;
 using Photon.Pun;
 
@@ -31,17 +32,36 @@ public class GatheringController : DamageableEntity
         _originalColor = _sprite.color;
         base.dieAction += () =>
         {
-            Managers.Object.SpawnLootingItems(lootingId,5,transform.position, 2.0f, 1.0f);
-            // TODO: 바로 삭제가 아니라 ObjectDict에서도 제외가 되어야 한다. 그래야 데이터가 연동 되기 때문이다. (ObjectDict이 좌표 혹은 아예 고유한 id를 key로 받게끔 조정해야 된다. )
-            Managers.Resource.Destroy(gameObject);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Managers.Network.BroadCastGatheringDamaged(guid,10.0f);
+            }
         };
     }
 
     [PunRPC]
     public override void OnDamage(float damage)
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Managers.Network.BroadCastObjectDestroy(guid);
+        }
+    }
+
+    public void ApplyDamage(float damage)
+    {
         base.OnDamage(damage);
         StartCoroutine(nameof(CoFlashWhite));
+    }
+
+    public void ApplyDie()
+    {
+        // Managers.Object.SpawnLootingItems(lootingId,5,transform.position, 2.0f, 1.0f);
+        Managers.Network.RequestSpawnLootingItems(lootingId, 5, transform.position, 2.0f, 1.0f);
+        // TODO: 바로 삭제가 아니라 ObjectDict에서도 제외가 되어야 한다. 그래야 데이터가 연동 되기 때문이다. (ObjectDict이 좌표 혹은 아예 고유한 id를 key로 받게끔 조정해야 된다. )
+        Managers.Object.LocalObjectsDict.Remove(guid);
+        Managers.Object.ObjectInfos.Remove(guid);
+        Managers.Resource.Destroy(gameObject);
     }
 
     private IEnumerator CoFlashWhite()
@@ -52,5 +72,4 @@ public class GatheringController : DamageableEntity
         _anim.Play("rock_idle");
         // _sprite.color = _originalColor;
     }
-    // TODO : 피격하며 죽을 시 아이템 뿌리기
 }

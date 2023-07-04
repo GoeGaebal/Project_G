@@ -89,6 +89,13 @@ public class UI_Inven : UI_Scene
         _inventory.SetActive(false);
         _inventory_activeself = _inventory.activeSelf;
 
+        Managers.Network.ReceiveAddItemHandler += AddItem;
+
+    }
+
+    public void AddItem(int guid)
+    {
+        AddItem(Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().GetItem);
     }
     
     private void Update()

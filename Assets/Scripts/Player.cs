@@ -108,8 +108,13 @@ public class Player : DamageableEntity
         }
 
 
-        if(State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
-            rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        if (State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
+        {
+            Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
+            if(Managers.Map.CheckCanGo(dest))
+                rb.MovePosition(dest);
+        }
+            
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -175,7 +180,6 @@ public class Player : DamageableEntity
 
     private  IEnumerator HitStateCoroutine()
     {
-
         animator.SetTrigger("hit");
         yield return new WaitForSeconds(0.5f);
         if (!runInputBuffer.Equals(Vector2.zero))
@@ -207,8 +211,6 @@ public class Player : DamageableEntity
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
         State = EnumPlayerStates.Attack;
-       
-
     }
     
     public void FinishAttackState()

@@ -15,7 +15,7 @@ public class GameScene : BaseScene
 
     private void Start()
     {
-        Managers.Network.SpawnLocalPlayer();
+        Managers.Network.SpawnLocalPlayer(Vector3.zero);
         Managers.Object.SpawnGatherings(1,5);
 
         Managers.UI.SetEventSystem();

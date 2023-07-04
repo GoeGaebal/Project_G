@@ -28,4 +28,13 @@ public class Define
         EndDrag,
         Drop,
     }
+
+    public enum RaiseEventCode
+    {
+        RequestObjectInfos,
+        ReceiveObjectInfos,
+        RequestViewID,
+        ReceiveViewID,
+        ReceiveChat,
+    }
 }
