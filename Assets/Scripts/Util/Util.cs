@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Util
@@ -55,6 +58,15 @@ public class Util
     {
         int y = (int) pos.y;
         int x = (int) pos.x;
-        return ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
+        // return ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
+        return BitConverter.ToUInt64(BitConverter.GetBytes(y).Concat(BitConverter.GetBytes(x)).ToArray(), 0);
+    }
+    
+    public static Vector2 Ulong2Vector(ulong val)
+    {
+        byte[] byteArray = BitConverter.GetBytes(val);
+        int y = BitConverter.ToInt32(byteArray, 0);
+        int x = BitConverter.ToInt32(byteArray, 4);
+        return new Vector2(x:x,y:y);
     }
 }

@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UI_Inven : UI_Scene
+public class UI_Inven : UI_Scene, IDataPersistence
 {
     enum GameObjects
     {
@@ -91,6 +91,7 @@ public class UI_Inven : UI_Scene
 
         Managers.Network.ReceiveAddItemHandler += AddItem;
 
+        LoadData();
     }
 
     public void AddItem(int guid)
@@ -230,5 +231,48 @@ public class UI_Inven : UI_Scene
         }
 
         _inventory_activeself = _inventory.activeSelf;
+    }
+
+    public void SaveData()
+    {
+        List<ulong> list = new();
+        foreach (var slot in slots)
+        {
+            UI_Item item = null;
+            if(slot.transform.childCount > 0)
+                item = slot.transform.GetChild(0)?.GetComponent<UI_Item>();
+            if (item != null)
+            {
+                int count = item.count;
+                int id = item.item.ID;
+                list.Add(Util.Vector2ulong(new Vector3(count, id)));
+            }
+        }
+
+        SaveData data = new();
+        data.InventoryList = list;
+        Managers.Data.Save(JsonUtility.ToJson(data), "Save.json");
+    }
+
+    public void LoadData()
+    {
+        SaveData loadDataList = JsonUtility.FromJson<SaveData>(Managers.Data.Load("Save.json"));
+        if (loadDataList == null)
+            return;
+        foreach (var item in loadDataList.InventoryList)
+        {
+            Vector2 info = Util.Ulong2Vector(item);
+            int count = (int)info.x;
+            int id = (int)info.y;
+            //TODO: 현재는 사과만 + 아이템 개수만큼 넣어버리기 때문에 완벽히 재현되지 않는다.
+            Item loadItem = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
+            for(int i = 0; i < count; i++)
+                AddItem(loadItem);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveData();
     }
 }

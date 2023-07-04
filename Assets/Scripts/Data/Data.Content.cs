@@ -103,3 +103,11 @@ public class MapDataLoader : ILoader<ulong,bool>
     }
 }
 #endregion
+
+#region SaveData
+[Serializable]
+public class SaveData
+{
+    public List<ulong> InventoryList;
+}
+#endregion

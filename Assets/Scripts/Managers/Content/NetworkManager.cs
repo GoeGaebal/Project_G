@@ -54,9 +54,7 @@ public class NetworkManager : IOnEventCallback
     public PhotonView View { get; private set; }
     public Player LocalPlayer { get; private set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
-
-
-
+    
     public Action<string> ReceiveChatHandler;
     public Action<int> ReceiveAddItemHandler;
 
