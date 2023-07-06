@@ -53,7 +53,7 @@ public class Player : DamageableEntity
 
     private void UpdateState()
     {
-        if(isDead) return;
+        if(isDead || animator == null) return;
         switch (State)
         {
             
@@ -75,6 +75,7 @@ public class Player : DamageableEntity
             
         }
     }
+
 
     void Start()
     {
