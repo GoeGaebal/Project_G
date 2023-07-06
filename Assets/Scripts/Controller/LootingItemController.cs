@@ -7,6 +7,7 @@ using UnityEngine;
 public class LootingItemController : MonoBehaviourPun
 {
     public int id = 1;
+    public int guid = 1;
     [Header("Physics")]
     [Tooltip("충돌계수")]
     [Range(0.0f,1.0f)]
@@ -16,28 +17,21 @@ public class LootingItemController : MonoBehaviourPun
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
     [SerializeField] private Item item;
-    private InventoryManager inventoryManager;
-
-    GameObject[] players;
-    GameObject player;
+    public Item GetItem => item;
+    private UI_Inven ui_inven;
 
     private float Sn;
-
-    private void Start()
-    {
-        findPlayer();
-
-        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
-        gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        Invoke("EnableCollider", 0.7f);
-    }
-
+    
     private void Init()
     {
         cof = Managers.Data.LootingDict[id].cof;
         bounceCount = Managers.Data.LootingDict[id].bounceCount;
         threshold = Managers.Data.LootingDict[id].threshold;
         Sn = Managers.Data.LootingDict[id].Sn;
+        
+        ui_inven = FindObjectOfType<UI_Inven>();
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        Invoke("EnableCollider", 0.7f);
     }
 
     public void Bounce(Vector3 endPosition,float duration, float maxHeight = 1.0f)
@@ -93,30 +87,35 @@ public class LootingItemController : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (player.GetComponent<Player>().photonView.IsMine && inventoryManager.AddItem(item))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Debug.Log("아이템 획득 성공");
-                Destroy(gameObject);
-            }
-            else
-            {
-                Debug.Log("아이템 획득 실패");
+                if (collision.gameObject.GetPhotonView().IsMine)
+                {
+                    if (ui_inven.AddItem(item))
+                    {
+                        Debug.Log("아이템 획득 성공");
+                        Managers.Network.BroadCastObjectDestroy(guid);
+                    }
+                    else
+                    {
+                        Debug.Log("아이템 획득 실패");
+                    }
+                }
+                else
+                {
+                    Managers.Network.SendLootingAddItem(collision.gameObject.GetPhotonView().ViewID,guid);
+                    Managers.Network.BroadCastObjectDestroy(guid);
+                }
             }
         }
     }
-
-    public void findPlayer()
+    
+    public void ApplyDie()
     {
-        players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
-        foreach (GameObject p in players)
-        {
-            PhotonView photonView = p.GetPhotonView();
-            if (photonView != null && photonView.IsMine)//내 플레이어 오브젝트 찾기
-            {
-                player = p;
-            }
-        }
+        Managers.Object.LocalObjectsDict.Remove(guid);
+        Managers.Object.ObjectInfos.Remove(guid);
+        Managers.Resource.Destroy(gameObject);
     }
 }

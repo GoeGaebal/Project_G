@@ -51,5 +51,10 @@ public class Util
         return null;
     }
 
-
+    public static ulong Vector2ulong(Vector3 pos)
+    {
+        int y = (int) pos.y;
+        int x = (int) pos.x;
+        return ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
+    }
 }
