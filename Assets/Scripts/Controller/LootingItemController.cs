@@ -8,6 +8,10 @@ public class LootingItemController : MonoBehaviourPun
 {
     public int id = 1;
     public int guid = 1;
+    [SerializeField] private Item item;
+    public Item GetItem => item;
+    private UI_Inven ui_inven;
+
     [Header("Physics")]
     [Tooltip("충돌계수")]
     [Range(0.0f,1.0f)]
@@ -16,11 +20,7 @@ public class LootingItemController : MonoBehaviourPun
     [SerializeField] private int bounceCount;
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
-    [SerializeField] private Item item;
-    public Item GetItem => item;
-    private UI_Inven ui_inven;
-
-    private float Sn;
+    private static float Sn;
     
     private void Init()
     {

@@ -26,15 +26,15 @@ public class DataManager
         GatheringDict = LoadJson<GatheringData, int, Gathering>("GatheringData").MakeDict();
     }
 
-    Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+    Loader LoadJson<Loader, TKey, TValue>(string path) where Loader : ILoader<TKey, TValue>
     {
-        TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/{path}");
+        TextAsset textAsset = Managers.Resource.Load<TextAsset>(Path.Combine("Data", path));
         return JsonUtility.FromJson<Loader>(textAsset.text);
     }
 
     public Dictionary<ulong, bool> LoadMapData(string path)
     {
-        return LoadJson<MapDataLoader, ulong, bool>($"Map/{path}").MakeDict();
+        return LoadJson<MapDataLoader, ulong, bool>(Path.Combine("Map", path)).MakeDict();
     }
 
     public void Save(string data, string fileName)
@@ -42,7 +42,7 @@ public class DataManager
         string fullPath = Path.Combine(Application.persistentDataPath, fileName);
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath) ?? string.Empty);
 
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
@@ -66,9 +66,9 @@ public class DataManager
         {
             try
             {
-                using (FileStream stream = new FileStream(fullPath, FileMode.Open))
+                using (FileStream stream = new(fullPath, FileMode.Open))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    using (StreamReader reader = new(stream))
                     {
                         dataToLoad = reader.ReadToEnd();
                     }

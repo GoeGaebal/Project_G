@@ -170,7 +170,6 @@ public class UI_Inven : UI_Scene, IDataPersistence
                 itemInSlot.RefreshCount();//텍스트 변경
                 return true;//추가 완료함
             }
-            
             else if (itemInSlot == null)//위의 모든 조건을 제외하고 빈칸을 만났을 때
             {
                 SpawnNewItem(item, slot);//그냥 해당 슬롯에 아이템 추가
@@ -239,16 +238,13 @@ public class UI_Inven : UI_Scene, IDataPersistence
         foreach (var slot in slots)
         {
             UI_Item item = null;
-            if(slot.transform.childCount > 0)
+            if (slot.transform.childCount > 0)
                 item = slot.transform.GetChild(0)?.GetComponent<UI_Item>();
             if (item != null)
-            {
-                int count = item.count;
-                int id = item.item.ID;
-                list.Add(Util.Vector2ulong(new Vector3(count, id)));
-            }
+                list.Add(Util.Vector2ulong(new Vector3(item.count, item.item.ID)));
+            else
+                list.Add(Util.Vector2ulong(new Vector3(0, -1)));
         }
-
         SaveData data = new();
         data.InventoryList = list;
         Managers.Data.Save(JsonUtility.ToJson(data), "Save.json");
@@ -259,15 +255,20 @@ public class UI_Inven : UI_Scene, IDataPersistence
         SaveData loadDataList = JsonUtility.FromJson<SaveData>(Managers.Data.Load("Save.json"));
         if (loadDataList == null)
             return;
-        foreach (var item in loadDataList.InventoryList)
+        for (int i = 0; i < loadDataList.InventoryList.Count; i++)
         {
-            Vector2 info = Util.Ulong2Vector(item);
+            Vector2 info = Util.Ulong2Vector(loadDataList.InventoryList[i]);
             int count = (int)info.x;
             int id = (int)info.y;
-            //TODO: 현재는 사과만 + 아이템 개수만큼 넣어버리기 때문에 완벽히 재현되지 않는다.
-            Item loadItem = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
-            for(int i = 0; i < count; i++)
-                AddItem(loadItem);
+
+            if (id > -1)
+            {
+                //TODO: GetComponentInChildren 너무 많이 쓰는 듯 + 사과만 생성된다.
+                Item loadItem = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
+                SpawnNewItem(loadItem, slots[i]);
+                slots[i].GetComponentInChildren<UI_Item>().count = count;
+                slots[i].GetComponentInChildren<UI_Item>().RefreshCount();
+            }
         }
     }
 
