@@ -75,14 +75,17 @@ public class ObjectManager
     // TODO: 생성시에 최종적으로 등장하는 랜덤한 위치를 서로 공유해야함
     private LootingItemController SpawnLootingItem(int objectId, Vector3 pos, int guid = 0)
     {
-        var name = Managers.Data.LootingDict[objectId].name;
-        GameObject go =  Managers.Resource.Instantiate($"Lootings/{name}", pos, Quaternion.identity);
+        
+        GameObject go =  Managers.Resource.Instantiate($"Lootings/apple", pos, Quaternion.identity);
         LootingItemController lc = go.GetOrAddComponent<LootingItemController>();
+        
         if (guid == 0)
             lc.guid = go.GetInstanceID();
         else
             lc.guid = guid;
-        lc.id = objectId;
+        
+        var item = Managers.Data.ItemDict[objectId];
+        lc.Item = item;
         ObjectInfos.Add(lc.guid, new ObjectInfo(){objectID=objectId,guid=lc.guid,y = pos.y,x = pos.x});
         LocalObjectsDict.Add(lc.guid, go);
         return lc;

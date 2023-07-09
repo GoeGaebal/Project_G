@@ -17,13 +17,23 @@ public interface IDataPersistence
 public class DataManager
 {
     // public Dictionary<int, Stat> StatDict { get; private set; } = new Dictionary<int, Stat>();
-    public Dictionary<int, Looting> LootingDict { get; private set; } = new Dictionary<int, Looting>();
+    public Dictionary<int, Item> ItemDict { get; private set; } = new Dictionary<int, Item>();
     public Dictionary<int, Gathering> GatheringDict { get; private set; } = new Dictionary<int, Gathering>();
     
     public void Init()
     {
-        LootingDict = LoadJson<LootingData, int, Looting>("LootingData").MakeDict();
         GatheringDict = LoadJson<GatheringData, int, Gathering>("GatheringData").MakeDict();
+        
+        // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
+        Item item = null;
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
+        ItemDict.Add(item.ID,item);
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Resource/IronIngot");
+        ItemDict.Add(item.ID,item);
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Tool/Axe");
+        ItemDict.Add(item.ID,item);
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Weapon/Sword");
+        ItemDict.Add(item.ID,item);
     }
 
     Loader LoadJson<Loader, TKey, TValue>(string path) where Loader : ILoader<TKey, TValue>

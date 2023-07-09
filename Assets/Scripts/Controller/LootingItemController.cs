@@ -1,16 +1,31 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LootingItemController : MonoBehaviourPun
 {
-    public int id = 1;
     public int guid = 1;
-    [SerializeField] private Item item;
-    public Item GetItem => item;
+    private Item _item;
+    public Item Item
+    {
+        get { return _item; }
+        set
+        {
+            // TODO : icon이 인벤토리와 겹침
+            _item = value;
+            if (mesh == null)
+                mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            mesh.sprite = value.Icon;
+            if (shadow == null)
+                shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
+            shadow.sprite = value.Icon;
+        }
+    }
+
     private UI_Inven ui_inven;
+    private SpriteRenderer mesh;
+    private SpriteRenderer shadow;
 
     [Header("Physics")]
     [Tooltip("충돌계수")]
@@ -21,22 +36,30 @@ public class LootingItemController : MonoBehaviourPun
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
     private static float Sn;
-    
-    private void Init()
+
+    private void Awake()
     {
-        cof = Managers.Data.LootingDict[id].cof;
-        bounceCount = Managers.Data.LootingDict[id].bounceCount;
-        threshold = Managers.Data.LootingDict[id].threshold;
-        Sn = Managers.Data.LootingDict[id].Sn;
+        mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
+        mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        
+        cof = 0.6f;
+        bounceCount = 5;
+        threshold = 1.0f;
+        Sn = 2.3056f;
         
         ui_inven = FindObjectOfType<UI_Inven>();
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        Invoke("EnableCollider", 0.7f);
     }
 
     public void Bounce(Vector3 endPosition,float duration, float maxHeight = 1.0f)
     {
-        Init();
+        Invoke("EnableCollider", 0.7f);
         StartCoroutine(CoCalcBouncePos(endPosition, duration, maxHeight));
     }
 
@@ -93,7 +116,7 @@ public class LootingItemController : MonoBehaviourPun
             {
                 if (collision.gameObject.GetPhotonView().IsMine)
                 {
-                    if (ui_inven.AddItem(item))
+                    if (ui_inven.AddItem(Item))
                     {
                         Debug.Log("아이템 획득 성공");
                         Managers.Network.BroadCastObjectDestroy(guid);
@@ -111,7 +134,7 @@ public class LootingItemController : MonoBehaviourPun
             }
         }
     }
-    
+
     public void ApplyDie()
     {
         Managers.Object.LocalObjectsDict.Remove(guid);

@@ -165,7 +165,7 @@ public class NetworkManager : IOnEventCallback
                     LootingPacket packet = Deserialize<LootingPacket>(data);
                     if (packet.viewId == LocalPlayer.photonView.ViewID)
                     { 
-                        if (ReceiveAddItemHandler != null) ReceiveAddItemHandler.Invoke(packet.guid);
+                        ReceiveAddItemHandler?.Invoke(packet.guid);
                     }
                 }
 

@@ -234,10 +234,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   guid: 1
+  item: {fileID: 11400000, guid: 4313e2a68858b274e9200727bbd16507, type: 2}
   cof: 0
   bounceCount: 0
   threshold: 0
-  item: {fileID: 11400000, guid: 4313e2a68858b274e9200727bbd16507, type: 2}
 --- !u!114 &612141275511669081
 MonoBehaviour:
   m_ObjectHideFlags: 0

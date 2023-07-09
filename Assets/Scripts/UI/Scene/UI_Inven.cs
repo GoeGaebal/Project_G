@@ -96,7 +96,9 @@ public class UI_Inven : UI_Scene, IDataPersistence
 
     public void AddItem(int guid)
     {
-        AddItem(Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().GetItem);
+        var item = Managers.Data.ItemDict[
+            Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().Item.ID];
+        AddItem(item);
     }
     
     private void Update()
@@ -264,7 +266,7 @@ public class UI_Inven : UI_Scene, IDataPersistence
             if (id > -1)
             {
                 //TODO: GetComponentInChildren 너무 많이 쓰는 듯 + 사과만 생성된다.
-                Item loadItem = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
+                Item loadItem = Managers.Data.ItemDict[id];
                 SpawnNewItem(loadItem, slots[i]);
                 slots[i].GetComponentInChildren<UI_Item>().count = count;
                 slots[i].GetComponentInChildren<UI_Item>().RefreshCount();
