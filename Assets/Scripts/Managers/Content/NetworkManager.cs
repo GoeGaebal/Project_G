@@ -196,7 +196,7 @@ public class NetworkManager : IOnEventCallback
                 photonView.ViewID = (int) data[2];
                 weaponPivotView.ViewID = (int) data[3];
                 weaponView.ViewID = (int) data[4];
-                PlayerDict.Add(photonView.ViewID, LocalPlayer.GetComponent<Player>());
+                PlayerDict.Add(photonView.ViewID, player.GetComponent<Player>());
                 break;
             }
         }
