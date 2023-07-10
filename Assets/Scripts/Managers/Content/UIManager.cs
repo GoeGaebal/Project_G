@@ -6,8 +6,6 @@ using UnityEngine.InputSystem.UI;
 
 public class UIManager
 {
-    //TODO : InputManager의 Asset을 EventSystem이 받도록 만들어야 함
-    
     private int _order = 10;
     
     private Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
