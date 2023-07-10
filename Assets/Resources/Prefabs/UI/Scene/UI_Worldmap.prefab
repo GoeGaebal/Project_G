@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 3689342717597547051}
   - component: {fileID: 1559582481190034723}
   m_Layer: 5
-  m_Name: Worldmap_Button_Map003
+  m_Name: Map_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -870,7 +870,7 @@ GameObject:
   - component: {fileID: 4763926530035621676}
   - component: {fileID: 4543505058063346061}
   m_Layer: 5
-  m_Name: Worldmap_Button_Map001
+  m_Name: Map_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1073,7 +1073,7 @@ GameObject:
   - component: {fileID: 1403503655537922349}
   - component: {fileID: 438364545203856943}
   m_Layer: 5
-  m_Name: Worldmap_Button_Map002
+  m_Name: Map_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -18,9 +18,9 @@ public class UI_Worldmap : UI_Scene
     {
         Worldmap_Button,
         Worldmap_Button_Close,
-        Worldmap_Button_Map001,
-        Worldmap_Button_Map002,
-        Worldmap_Button_Map003,
+        Map_001,
+        Map_002,
+        Map_003,
         Worldmap_Button_Stop
     }
     //enum Lines { Worldmap_Line }
@@ -29,29 +29,35 @@ public class UI_Worldmap : UI_Scene
     private GameObject _target;//이동 목표
     private GameObject _lrGO;
     private GameObject _worldmap;
-    UILineRenderer lr;
+    private UILineRenderer _lr;
 
-    private bool moveFlag = true;
+    private bool _moveFlag = true;//이동 중
+    private bool _arriveFlag = false;//도착
+
+    private string _mapName; 
 
     void Start()
     {
         Init();
-        /*
-        _lrGO = transform.Find("Worldmap_Background/Worldmap_Line").gameObject;
-        lr = _lrGO.GetComponent<UILineRenderer>();
-        _ship = transform.Find("Worldmap_Background/Worldmap_Ship").gameObject;
-        _target = _ship;
-        */
     }
 
     private void FixedUpdate()
     {
-        if (moveFlag)
+        if (_moveFlag)
         {
             if (Vector2.Distance(_ship.transform.position, _target.transform.position) >= 1f)
             {
                 MoveToTarget();
             }
+            else
+            {
+                _arriveFlag = true;
+            }
+        }
+        if (_arriveFlag && _mapName != "Worldmap_Ship")
+        {
+            //TODO: 필드로 이동 가능하게 하는 코드
+            //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
         }
     }
 
@@ -61,30 +67,28 @@ public class UI_Worldmap : UI_Scene
         //base.Init();
         Managers.UI.SetCanvas(gameObject, true);
 
-        //Bind<UILineRenderer>(typeof(Lines));
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
-        //Bind<Image>(typeof(Images));
 
-        //lr = Get<UILineRenderer>((int)Lines.Worldmap_Line);
         _worldmap=Get<GameObject>((int)GameObjects.Worldmap_Background);
         _worldmap.SetActive(false);
         _ship = Get<GameObject>((int)GameObjects.Worldmap_Ship);
         _target = _ship;
         _lrGO = Get<GameObject>((int)GameObjects.Worldmap_Line);
-        lr = _lrGO.GetComponent<UILineRenderer>();
+        _lr = _lrGO.GetComponent<UILineRenderer>();
 
         GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
-        GetButton((int)Buttons.Worldmap_Button_Map001).gameObject.BindEvent(OnWorldmapButtonClick);
-        GetButton((int)Buttons.Worldmap_Button_Map002).gameObject.BindEvent(OnWorldmapButtonClick);
-        GetButton((int)Buttons.Worldmap_Button_Map003).gameObject.BindEvent(OnWorldmapButtonClick);
+        GetButton((int)Buttons.Map_001).gameObject.BindEvent(OnWorldmapButtonClick);
+        GetButton((int)Buttons.Map_002).gameObject.BindEvent(OnWorldmapButtonClick);
+        GetButton((int)Buttons.Map_003).gameObject.BindEvent(OnWorldmapButtonClick);
         GetButton((int)Buttons.Worldmap_Button_Stop).gameObject.BindEvent(PauseMove);
     }
 
     public void SetTarget(GameObject t)//목표 지정
     {
         _target = t;
+        _mapName = t.name;
     }
 
     private void MoveToTarget()//목표 방향으로 이동
@@ -98,24 +102,26 @@ public class UI_Worldmap : UI_Scene
     private void SetLine()//배와 목표 사이 선 새로 긋기
     {
         _lrGO.transform.position = _ship.transform.position;
-        lr.Points[0] = _ship.transform.InverseTransformPoint(_ship.transform.position); ;
-        lr.Points[1] = _ship.transform.InverseTransformPoint(_target.transform.position);
-        lr.SetAllDirty();
+        _lr.Points[0] = _ship.transform.InverseTransformPoint(_ship.transform.position); ;
+        _lr.Points[1] = _ship.transform.InverseTransformPoint(_target.transform.position);
+        _lr.SetAllDirty();
     }
 
     public void OnWorldmapButtonClick(PointerEventData evt)
     {
-        moveFlag = true;
-        lr.enabled = true;
         SetTarget(evt.pointerPress);
+        _arriveFlag = false;
+        _moveFlag = true;
+        _lr.enabled = true;
     }
 
     public void PauseMove(PointerEventData evt)
     {
         SetTarget(_ship);
-        moveFlag = false;
-        lr.enabled = false;
+        _moveFlag = false;
+        _lr.enabled = false;
     }
+
     public void OpenWorldmapUI(PointerEventData evt)
     {
         _worldmap.SetActive(true);
