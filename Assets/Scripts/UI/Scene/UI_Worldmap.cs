@@ -5,14 +5,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class UI_Worldmap : UI_Scene
 {
     //enum Images { Worldmap_Background }
+
     enum GameObjects {
         Worldmap_Background,
         Worldmap_Ship,
-        Worldmap_Line
+        Worldmap_Line,
+        Weather
     }
     enum Buttons
     {
@@ -23,6 +26,7 @@ public class UI_Worldmap : UI_Scene
         Map_003,
         Worldmap_Button_Stop
     }
+
     //enum Lines { Worldmap_Line }
     
     private GameObject _ship;//배
@@ -30,11 +34,12 @@ public class UI_Worldmap : UI_Scene
     private GameObject _lrGO;
     private GameObject _worldmap;
     private UILineRenderer _lr;
+    private GameObject _weather;
 
     private bool _moveFlag = true;//이동 중
     private bool _arriveFlag = false;//도착
 
-    private string _mapName; 
+    private string _mapName;
 
     void Start()
     {
@@ -48,6 +53,10 @@ public class UI_Worldmap : UI_Scene
             if (Vector2.Distance(_ship.transform.position, _target.transform.position) >= 1f)
             {
                 MoveToTarget();
+                if (!CheckWeather())
+                {
+                    _weather.GetComponent<TMP_Text>().SetText("Nothing Detected!");
+                }
             }
             else
             {
@@ -76,6 +85,7 @@ public class UI_Worldmap : UI_Scene
         _target = _ship;
         _lrGO = Get<GameObject>((int)GameObjects.Worldmap_Line);
         _lr = _lrGO.GetComponent<UILineRenderer>();
+        _weather = Get<GameObject>((int)GameObjects.Weather);
 
         GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
@@ -130,5 +140,48 @@ public class UI_Worldmap : UI_Scene
     public void CloseWorldmapUI(PointerEventData evt)
     {
         _worldmap.SetActive(false);
+    }
+
+    /*
+    public void GetMapPosition(Button btn)
+    {
+        Debug.Log(btn.name);
+        Vector3[] temp = new Vector3[4];
+        Vector3[] pos = new Vector3[2];
+
+        btn.transform.GetChild(1).GetComponent<RectTransform>().GetWorldCorners(temp);
+        pos[0] = temp[0];
+        pos[1] = temp[2];
+        Debug.Log(pos[0]);
+        Debug.Log(pos[1]);
+    }
+    */
+    
+    public bool CheckWeather()
+    {
+        for (int i = 1; i <= Managers.Data.WorldmapDict.Count; i++)
+        {
+            if (CheckPosition(i))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool CheckPosition(int i)
+    {
+        if (_ship.transform.position.x >= Managers.Data.WorldmapDict[i].minX
+            && _ship.transform.position.x <= Managers.Data.WorldmapDict[i].maxX
+            && _ship.transform.position.y >= Managers.Data.WorldmapDict[i].minY
+            && _ship.transform.position.y <= Managers.Data.WorldmapDict[i].maxY)
+        {
+            _weather.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[i].name + " " + Managers.Data.WorldmapDict[i].weather);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
