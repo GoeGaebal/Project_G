@@ -174,7 +174,7 @@ public class LobbyScene : BaseScene
         connectionInfoText.text = "방 참가 성공";
         Managers.Network.AllocateViewId();
         // 모든 룸 참가자들이 Game 씬을 로드하게 함
-        Managers.Scene.LoadLevel(Define.Scene.Game);
+        Managers.Scene.LoadLevel(Define.Scene.Ship);
     }
     protected override void Init()
     {

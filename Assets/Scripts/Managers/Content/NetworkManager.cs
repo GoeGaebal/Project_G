@@ -46,6 +46,11 @@ public struct LootingItemInfo
     public float destX;
 }
 
+struct PlayerInfo
+{
+    public int playerId, weaponPivotId, weaponId;
+}
+
 // TODO : 리팩토링 
 // 1. 패킷을 큐 형태로 모아 보내기
 // 2. Player들을 미리 찾아놓기
@@ -53,6 +58,7 @@ public class NetworkManager : IOnEventCallback
 {
     public PhotonView View { get; private set; }
     public Player LocalPlayer { get; private set; }
+    private PlayerInfo _playerInfo;
     public Dictionary<int, Player> PlayerDict { get; private set; }
     
     public Action<string> ReceiveChatHandler;
@@ -94,6 +100,7 @@ public class NetworkManager : IOnEventCallback
         OnEnable();
         PlayerDict = new Dictionary<int, Player>();
         View = inPhotonView;
+        _playerInfo = new PlayerInfo();
     }
 
     public void AllocateViewId()
@@ -194,7 +201,7 @@ public class NetworkManager : IOnEventCallback
                 photonView.ViewID = (int) data[2];
                 weaponPivotView.ViewID = (int) data[3];
                 weaponView.ViewID = (int) data[4];
-                PlayerDict.Add(photonView.ViewID, LocalPlayer.GetComponent<Player>());
+                PlayerDict.Add(photonView.ViewID, player.GetComponent<Player>());
                 break;
             }
         }
@@ -296,7 +303,13 @@ public class NetworkManager : IOnEventCallback
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView weaponPivotView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
         PhotonView weaponView = player.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
-        if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView) && PhotonNetwork.AllocateViewID(weaponPivotView))
+        if (_playerInfo.playerId != 0)
+        {
+            photonView.ViewID = _playerInfo.playerId;
+            weaponPivotView.ViewID = _playerInfo.weaponPivotId;
+            weaponView.ViewID = _playerInfo.weaponId;
+        }
+        else if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView) && PhotonNetwork.AllocateViewID(weaponPivotView))
         {
             object[] data = new object[]
             {
@@ -315,6 +328,9 @@ public class NetworkManager : IOnEventCallback
             };
             PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.CustomInstantiate, data, raiseEventOptions, sendOptions);
             LocalPlayer = player.GetComponent<Player>();
+             _playerInfo.playerId = photonView.ViewID ;
+            _playerInfo.weaponPivotId = weaponPivotView.ViewID;
+            _playerInfo.weaponId = weaponView.ViewID;
             PlayerDict.Add(photonView.ViewID,LocalPlayer); 
         }
     }
