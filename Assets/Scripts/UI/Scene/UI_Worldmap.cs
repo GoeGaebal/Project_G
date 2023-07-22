@@ -36,6 +36,8 @@ public class UI_Worldmap : UI_Scene
     //enum Lines { Worldmap_Line }
     
     private GameObject _ship;//배
+    private Sprite _rightShip;//배 오른쪽 이미지
+    private Sprite _leftShip;//배 왼쪽 이미지
     private GameObject _target;//이동 목표
     private float _elapsedTime = 0f;
     private int _speed = 50;//초당 이동 거리
@@ -102,6 +104,8 @@ public class UI_Worldmap : UI_Scene
         _worldmap=Get<GameObject>((int)GameObjects.Worldmap_Background);
         _worldmap.SetActive(false);
         _ship = Get<GameObject>((int)GameObjects.Worldmap_Ship);
+        _rightShip = Managers.Resource.Load<Sprite>("Art/UI/WorldMap/Worldmap_Ship");
+        _leftShip = Managers.Resource.Load<Sprite>("Art/UI/WorldMap/Worldmap_Ship_Left");
         _target = _ship;
         _timePerMeter = 1f / _speed;
         _lrGO = Get<GameObject>((int)GameObjects.Worldmap_Line);
@@ -142,11 +146,13 @@ public class UI_Worldmap : UI_Scene
         SetLine();
         if (direction.x >= 0)
         {
-            //_ship.transform.localScale = new Vector3(1,1,1);
+            _ship.GetComponent<Image>().sprite = _rightShip;
+            _minimapShip.GetComponent<Image>().sprite = _rightShip;
         }
         else
         {
-            //_ship.transform.localScale = new Vector3(-1, 1, 1);
+            _ship.GetComponent<Image>().sprite = _leftShip;
+            _minimapShip.GetComponent<Image>().sprite = _leftShip;
         }
 
         SetTimeDistanceText(direction);
