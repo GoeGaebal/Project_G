@@ -37,6 +37,9 @@ public class UI_Worldmap : UI_Scene
     
     private GameObject _ship;//배
     private GameObject _target;//이동 목표
+    private float _elapsedTime = 0f;
+    private int _speed = 50;//초당 이동 거리
+    private float _timePerMeter;//거리 1 이동하는데 걸리는 시간
     private GameObject _lrGO;
     private GameObject _worldmap;
     private UILineRenderer _lr;
@@ -57,7 +60,7 @@ public class UI_Worldmap : UI_Scene
         Init();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (_moveFlag)
         {
@@ -100,6 +103,7 @@ public class UI_Worldmap : UI_Scene
         _worldmap.SetActive(false);
         _ship = Get<GameObject>((int)GameObjects.Worldmap_Ship);
         _target = _ship;
+        _timePerMeter = 1f / _speed;
         _lrGO = Get<GameObject>((int)GameObjects.Worldmap_Line);
         _lr = _lrGO.GetComponent<UILineRenderer>();
         _arrow = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Arrow);
@@ -128,8 +132,13 @@ public class UI_Worldmap : UI_Scene
 
     private void MoveToTarget()//목표 방향으로 이동
     {
+        _elapsedTime += Time.deltaTime;
         Vector2 direction = _target.transform.position - _ship.transform.position;
-        _ship.transform.position += (Vector3)(direction.normalized);
+        if (_elapsedTime >= _timePerMeter)
+        {
+            _ship.transform.position += ((Vector3)(direction.normalized) * (_elapsedTime / _timePerMeter));
+            _elapsedTime %= _timePerMeter;
+        }
         SetLine();
         if (direction.x >= 0)
         {
@@ -148,7 +157,7 @@ public class UI_Worldmap : UI_Scene
     {
         _timeText.SetActive(true);
         _distanceText.SetActive(true);
-        _timeText.GetComponent<TMP_Text>().SetText("남은 시간: " + (int)(direction.magnitude * Time.fixedDeltaTime) + "sec");
+        _timeText.GetComponent<TMP_Text>().SetText("남은 시간: " + (int)(direction.magnitude / _speed) + "sec");
         _distanceText.GetComponent<TMP_Text>().SetText("남은 거리: " + (int)(direction.magnitude) + "m");
     }
 
@@ -156,7 +165,6 @@ public class UI_Worldmap : UI_Scene
     {
         _arrow.SetActive(true);
         float angle = Vector2.SignedAngle(Vector2.up, direction);
-        Debug.Log(angle);
         Quaternion rot = Quaternion.Euler(0f, 0f, angle);
         _arrow.transform.rotation = rot;
     }
