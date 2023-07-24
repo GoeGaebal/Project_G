@@ -61,7 +61,7 @@ public class UIManager
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
         
-        GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}", Vector3.zero, Quaternion.identity);
+        GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}");
         
         if (parent != null)
             go.transform.SetParent(parent);
@@ -105,8 +105,6 @@ public class UIManager
         GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}", Vector3.zero, Quaternion.identity);
         T popup = Util.GetOrAddComponent<T>(go);
         _popupStack.Push(popup);
-        
-        
         
         go.transform.SetParent(Root.transform);
         
