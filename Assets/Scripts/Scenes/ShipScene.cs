@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class TestScene : BaseScene,IPunObservable
+public class ShipScene : BaseScene,IPunObservable
 {
     protected override void Init()
     {
         base.Init();
         SceneType = Define.Scene.Game;
-        Managers.Map.LoadMap(1);
+        Managers.Map.LoadMap(4);
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";
@@ -48,7 +48,6 @@ public class TestScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Object.SpawnGatherings(1,5);
         GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
         // 테스트용 강제 설정
         PhotonView view = player.GetComponent<PhotonView>();
@@ -58,10 +57,10 @@ public class TestScene : BaseScene,IPunObservable
         
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
-        Managers.UI.ShowSceneUI<UI_Map>();
+        //Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
-        //Managers.UI.ShowSceneUI<UI_Worldmap>();
+        Managers.UI.ShowSceneUI<UI_Worldmap>();
     }
 
     public override void Clear()
