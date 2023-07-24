@@ -11,9 +11,9 @@ enum GameObjects
         Background
 }
  enum Buttons
-    {
+{
         CloseButton
-    }
+}
 public class UI_PlayerStatus : UI_Scene
 {
     private GameObject _backgroundUI;
@@ -39,13 +39,13 @@ public class UI_PlayerStatus : UI_Scene
 
     public void OnOffPlayerStatus(InputAction.CallbackContext context)
     {
-        if (_backgroundUI.activeSelf)//인벤토리가 켜져 있으면 
+        if (_backgroundUI.activeSelf)//
         {
-            _backgroundUI.SetActive(false);//인벤토리 끔
+            _backgroundUI.SetActive(false);//
         }
-        else//인벤토리가 꺼져 있으면
+        else//
         {
-            _backgroundUI.SetActive(true);//인벤토리 켬
+            _backgroundUI.SetActive(true);//
         }
 
     }
