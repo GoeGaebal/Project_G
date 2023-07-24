@@ -200,6 +200,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossProto
       objectReference: {fileID: 0}
+    - target: {fileID: 9168397809358324139, guid: 85b5eae4bce03494f85b9219c0eeeb41,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85b5eae4bce03494f85b9219c0eeeb41, type: 3}
 --- !u!1001 &402468814
@@ -284,6 +289,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420034}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -450,6 +456,19 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 285b347e2f568c3448f4bd3079455846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!1001 &537426446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -457,6 +476,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 58692221822477235, guid: 7cd247de0f088e4449ac8ef7dfd628e5,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1410843260874740528, guid: 7cd247de0f088e4449ac8ef7dfd628e5,
         type: 3}
       propertyPath: m_SortingOrder
