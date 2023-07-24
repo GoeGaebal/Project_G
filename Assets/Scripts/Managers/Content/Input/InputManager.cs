@@ -13,6 +13,7 @@ public struct PlayerActions
     public InputAction QuickSlot4;
     public InputAction MiniMap;
     public InputAction ScrollQuickSlot;
+    public InputAction  PlayerStatus;
 }
 
 public struct UIActions
@@ -66,6 +67,7 @@ public class InputManager
         PlayerActions.QuickSlot4 = PlayerActionMap.AddAction("QuickSlot4", type: InputActionType.Button);
         PlayerActions.MiniMap = PlayerActionMap.AddAction("Minimap", type: InputActionType.Button);
         PlayerActions.ScrollQuickSlot = PlayerActionMap.AddAction("ScrollQuickSlot", type: InputActionType.Value);
+        PlayerActions.PlayerStatus = PlayerActionMap.AddAction("PlayerStatus", type: InputActionType.Button);
 
         UIActions.Navigate = _uiActionMap.AddAction("Navigate", type: InputActionType.PassThrough);
         UIActions.Submit = _uiActionMap.AddAction("Submit", type: InputActionType.Button);
@@ -94,6 +96,7 @@ public class InputManager
         PlayerActions.QuickSlot4.AddBinding("<Keyboard>/4", groups: PCBindingGroup);
         PlayerActions.MiniMap.AddBinding("<Keyboard>/m", groups: PCBindingGroup);
         PlayerActions.ScrollQuickSlot.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
+        PlayerActions.PlayerStatus.AddBinding("<Keyboard>/c", groups: PCBindingGroup);
         
         UIActions.Navigate.AddCompositeBinding("2DVector(mode=1)")
             .With("Up", "<Keyboard>/w",groups: PCBindingGroup)
