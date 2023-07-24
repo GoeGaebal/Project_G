@@ -50,6 +50,22 @@ public class MapManager
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
     }
 
+    // TODO : 충돌 지점이 정중앙이기 때문에 원하는 느낌이 나오지 못함
+    public bool CheckCanGo(Vector2 pos)
+    {
+        bool value;
+        int y = (int)pos.y;
+        int x = (int)pos.x;
+        // 만일 음수면 -0.xx가 -1이 아니라 0이 되버린다. 그걸 방지
+        if (pos.y < 0.0f) y--; if (pos.x < 0.0f) x--;
+       
+        ulong key = ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
+        if (_currentMapInfo.TryGetValue(key, out value))
+            return !value;
+        else
+            return !false;
+    }
+
     public Vector3 GenerateCurrentRandPos()
     {
         //랜덤 위치 스폰 (일단 겹치더라도 상관없이)
@@ -74,15 +90,8 @@ public class MapManager
         }
     }
 
-    private ulong Vector2ulong(Vector3 pos)
-    {
-        int y = (int) pos.y;
-        int x = (int) pos.x;
-        return ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
-    }
-
     public bool IsCollision(Vector3 pos)
     {
-        return _currentMapInfo[Vector2ulong(pos)];
+        return _currentMapInfo[Util.Vector2ulong(pos)];
     }
 }

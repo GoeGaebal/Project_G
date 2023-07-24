@@ -13,6 +13,7 @@ public class Player : DamageableEntity
 {
     [SerializeField] private float moveSpeed = 5.0f;
     
+    private PlayerCameraController playerCameraController;
     private Vector2 moveInput;
 
     private Rigidbody2D rb;
@@ -35,9 +36,24 @@ public class Player : DamageableEntity
         }
     }
     
+    protected override void OnEnable() {
+        base.OnEnable();
+        State = EnumPlayerStates.Idle;
+        //카메라 이동 제한
+        if(photonView.IsMine)
+        {
+            playerCameraController.SetPosition(transform.position);
+            if(playerCameraController.enabled)
+                playerCameraController.enabled = false;
+        }
+        
+        
+        
+    }
+
     private void UpdateState()
     {
-        if(isDead) return;
+        if(isDead || animator == null) return;
         switch (State)
         {
             
@@ -60,17 +76,14 @@ public class Player : DamageableEntity
         }
     }
 
-    private void Awake()
-    {
-        
-    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
-
+        playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+        playerCameraController.enabled = false;
         Binding();
 
         dieAction += () => {
@@ -108,8 +121,13 @@ public class Player : DamageableEntity
         }
 
 
-        if(State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
-            rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        if (State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
+        {
+            Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
+            if(Managers.Map.CheckCanGo(dest))
+                rb.MovePosition(dest);
+        }
+            
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -175,7 +193,6 @@ public class Player : DamageableEntity
 
     private  IEnumerator HitStateCoroutine()
     {
-
         animator.SetTrigger("hit");
         yield return new WaitForSeconds(0.5f);
         if (!runInputBuffer.Equals(Vector2.zero))
@@ -207,8 +224,6 @@ public class Player : DamageableEntity
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
         State = EnumPlayerStates.Attack;
-       
-
     }
     
     public void FinishAttackState()
@@ -227,5 +242,19 @@ public class Player : DamageableEntity
         {
             State = EnumPlayerStates.Idle;
         }
+    }
+
+    public void FinishDieAnimClip()
+    {
+
+        gameObject.SetActive(false);
+
+        if(photonView.IsMine)
+        {
+            if(!playerCameraController.enabled)
+                playerCameraController.enabled = true;
+            playerCameraController.SetPosition(transform.position);
+        }
+        
     }
 }

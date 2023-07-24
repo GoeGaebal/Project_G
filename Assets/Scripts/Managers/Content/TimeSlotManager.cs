@@ -120,14 +120,13 @@ public class TimeSlotManager : IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-       
 
         byte eventCode = photonEvent.Code;
 
         switch (eventCode)
 
         {
-            case NetworkManager.SynchronizeTimeEventCode:
+            case (byte)NetworkManager.CustomRaiseEventCode.SynchronizeTime:
                 if (!PhotonNetwork.IsMasterClient)
                 {
                     Debug.Log("recieved time event");
@@ -140,7 +139,7 @@ public class TimeSlotManager : IOnEventCallback
                 }
                 UpdateTimeSlot(TimeSlot);
                 break;
-            case NetworkManager.RequestSynchronizeTimeEventCode:
+            case (byte)NetworkManager.CustomRaiseEventCode.RequestSynchronizeTime:
                 if(!PhotonNetwork.IsMasterClient) break;
                 Managers.Network.SynchronizeTime();
                 break;
