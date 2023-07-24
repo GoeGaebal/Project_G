@@ -21,6 +21,8 @@ public class Managers : MonoBehaviourPun
     private TimeSlotManager _timeSlot = new();
     private UIManager _ui = new();
     private InputManager _input = new();
+    private SoundManager _sound = new();
+
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
     public static NetworkManager Network { get { return Instance._network; } }
@@ -28,6 +30,7 @@ public class Managers : MonoBehaviourPun
     public static TimeSlotManager TimeSlot { get { return Instance._timeSlot;} }
     public static UIManager UI { get { return Instance._ui; } }
     public static InputManager Input { get { return Instance._input;} }
+    public static SoundManager Sound { get { return Instance._sound; } }
     #endregion
 
     #region Core
@@ -72,6 +75,7 @@ public class Managers : MonoBehaviourPun
             _instance._object.Init();
             _instance._network.Init(ManagersPhotonView);
             _instance._timeSlot.Init();
+            _instance._sound.Init();
         }
     }
     
