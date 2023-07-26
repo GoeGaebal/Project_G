@@ -32,6 +32,19 @@ public class SoundManager
         }
     }
 
+    public void AudioStop(string path, Define.Sound type)
+    {
+        AudioClip audioClip = GetOrAddAudioClip(path, type);
+        foreach (AudioSource source in _audioSources)
+        {
+            if (source.clip == audioClip)
+            {
+                source.Stop();
+                break;
+            }
+        }
+    }
+
     public void Clear()
     {
         foreach (AudioSource audioSource in _audioSources)
