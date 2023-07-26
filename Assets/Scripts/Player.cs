@@ -124,8 +124,10 @@ public class Player : DamageableEntity
         if (State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
         {
             Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
-            if(Managers.Map.CheckCanGo(dest))
+            if (Managers.Map.CheckCanGo(dest))
+            {
                 rb.MovePosition(dest);
+            }
         }
             
     }
@@ -146,7 +148,7 @@ public class Player : DamageableEntity
                     State = EnumPlayerStates.Run;
                     break;
                 case EnumPlayerStates.Run:
-                    if(context.canceled)
+                    if (context.canceled)
                         State = EnumPlayerStates.Idle;
                     break;
                 case EnumPlayerStates.Attack:

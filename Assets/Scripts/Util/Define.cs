@@ -16,6 +16,7 @@ public class Define
     public enum Sound
     {
         Bgm,
+        Weather,
         Effect,
         MaxCount,
     }
