@@ -10,9 +10,25 @@ using UnityEngine.UI;
 
 public class UI_Status : UI_Scene
 {
-    enum GameObjects { Timer }
+    enum GameObjects
+    {
+        Timer,
+        OptionPanel
+    }
     enum Images { HPBar }
     enum Texts { HPText }
+    enum Buttons 
+    { 
+        OptionButton,
+        ResumeButton
+    }
+    enum Sliders { VolumeSlider }
+    enum Toggles
+    {
+        QHD,
+        FHD,
+        HD
+    }
 
     private Image hpBar;
     private TextMeshProUGUI hpText;
@@ -23,7 +39,8 @@ public class UI_Status : UI_Scene
     
     private GameObject rotatingTimer;
     private float ratio = 0;
-    
+
+    private GameObject _optionPanel;
 
     private void Start()
     {
@@ -37,6 +54,9 @@ public class UI_Status : UI_Scene
         Bind<Image>(typeof(Images));
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
+        Bind<Button>(typeof(Buttons));
+        Bind<Slider>(typeof(Sliders));
+        Bind<Toggle>(typeof(Toggles));
 
         hpBar = GetImage((int)Images.HPBar);
         hpText = GetTextMeshPro((int)Texts.HPText);
@@ -44,6 +64,16 @@ public class UI_Status : UI_Scene
         rotatingTimer = GetObject((int)GameObjects.Timer);
 
         player = FindPlayer(); //players 배열을 검색해오지 못하는 버그
+
+        _optionPanel = Get<GameObject>((int)GameObjects.OptionPanel);
+        _optionPanel.SetActive(false);
+
+        GetButton((int)Buttons.OptionButton).gameObject.BindEvent(OpenOption);
+        GetButton((int)Buttons.ResumeButton).gameObject.BindEvent(CloseOption);
+        Get<Toggle>((int)Toggles.QHD).onValueChanged.AddListener(ChangeResolutionQHD);
+        Get<Toggle>((int)Toggles.FHD).onValueChanged.AddListener(ChangeResolutionFHD);
+        Get<Toggle>((int)Toggles.HD).onValueChanged.AddListener(ChangeResolutionHD);
+        Get<Slider>((int)Sliders.VolumeSlider).onValueChanged.AddListener(ChangeBGMVolume);
     }
     
     private void Update()
@@ -51,7 +81,12 @@ public class UI_Status : UI_Scene
         UpdateHPBar();
         UpdateHPText();
     }
-    
+
+    void FixedUpdate()
+    {
+        AddTime();
+    }
+
     private Player FindPlayer()
     {
         players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
@@ -87,13 +122,49 @@ public class UI_Status : UI_Scene
         
     }
     
-    void FixedUpdate()
-    {
-        AddTime();
-    }
-    
     private void AddTime()
     {
         rotatingTimer.transform.rotation *= Quaternion.Euler(0f, 0f, 180f * ratio);
+    }
+
+    private void OpenOption(PointerEventData evt)
+    {
+        _optionPanel.SetActive(true);
+    }
+
+    private void CloseOption(PointerEventData evt)
+    {
+        _optionPanel.SetActive(false);
+    }
+
+    public void ChangeResolutionQHD(bool isOn)
+    {
+        if (isOn)
+        {
+            Screen.SetResolution(2560, 1440, true);
+            Debug.Log("QHD");
+        }
+    }
+
+    public void ChangeResolutionFHD(bool isOn)
+    {
+        if (isOn)
+        {
+            Screen.SetResolution(1920, 1080, true);
+            Debug.Log("FHD");
+        }
+    }
+
+    public void ChangeResolutionHD(bool isOn)
+    {
+        if (isOn)
+        {
+            Screen.SetResolution(1280, 720, true);
+            Debug.Log("HD");
+        }
+    }
+    public void ChangeBGMVolume(float volume)
+    {
+        Managers.Sound.ChangeBGMVolume(volume);
     }
 }

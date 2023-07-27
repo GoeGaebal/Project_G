@@ -122,4 +122,14 @@ public class SoundManager
 
 		return audioClip;
     }
+
+    public void ChangeBGMVolume(float volume)
+    {
+        AudioSource audioSource = _audioSources[(int)Define.Sound.Bgm];
+        float tempTime = audioSource.time;
+        audioSource.Stop();
+        audioSource.volume = volume;
+        audioSource.time = tempTime;
+        audioSource.Play();
+    }
 }
