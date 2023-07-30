@@ -22,12 +22,20 @@ public class UI_Status : UI_Scene
         OptionButton,
         ResumeButton
     }
-    enum Sliders { VolumeSlider }
+    enum Sliders 
+    { 
+        BgmVolumeSlider,
+        EffectVolumeSlider
+    }
     enum Toggles
     {
         QHD,
         FHD,
-        HD
+        HD,
+        ExclusiveFullscreen,
+        //FullscreenWindow,
+        //MaximizedWindow,
+        Windowed
     }
 
     private Image hpBar;
@@ -68,12 +76,20 @@ public class UI_Status : UI_Scene
         _optionPanel = Get<GameObject>((int)GameObjects.OptionPanel);
         _optionPanel.SetActive(false);
 
+        CheckFullScreenMode();
+        CheckResolution();
+
         GetButton((int)Buttons.OptionButton).gameObject.BindEvent(OpenOption);
         GetButton((int)Buttons.ResumeButton).gameObject.BindEvent(CloseOption);
         Get<Toggle>((int)Toggles.QHD).onValueChanged.AddListener(ChangeResolutionQHD);
         Get<Toggle>((int)Toggles.FHD).onValueChanged.AddListener(ChangeResolutionFHD);
         Get<Toggle>((int)Toggles.HD).onValueChanged.AddListener(ChangeResolutionHD);
-        Get<Slider>((int)Sliders.VolumeSlider).onValueChanged.AddListener(ChangeBGMVolume);
+        Get<Slider>((int)Sliders.BgmVolumeSlider).onValueChanged.AddListener(ChangeBgmVolume);
+        Get<Slider>((int)Sliders.EffectVolumeSlider).onValueChanged.AddListener(ChangeEffectVolume);
+        Get<Toggle>((int)Toggles.ExclusiveFullscreen).onValueChanged.AddListener(ChangeExclusiveFullscreen);
+        //Get<Toggle>((int)Toggles.FullscreenWindow).onValueChanged.AddListener(ChangeFullscreenWindow);
+        //Get<Toggle>((int)Toggles.MaximizedWindow).onValueChanged.AddListener(ChangeMaximizedWindow);
+        Get<Toggle>((int)Toggles.Windowed).onValueChanged.AddListener(ChangeWindowed);
     }
     
     private void Update()
@@ -137,12 +153,40 @@ public class UI_Status : UI_Scene
         _optionPanel.SetActive(false);
     }
 
+    public void CheckResolution()//모니터 해상도 체크해서 설정 적용
+    {
+        int width = Screen.currentResolution.width;
+        int height = Screen.currentResolution.height;
+
+        if (width == 2560 && height == 1440)
+        {
+            //Debug.Log("Resolution is QHD");
+            Get<Toggle>((int)Toggles.QHD).isOn = true;
+        }
+        else if (width == 1920 && height == 1080)
+        {
+            //Debug.Log("Resolution is FHD");
+            Get<Toggle>((int)Toggles.FHD).isOn = true;
+        }
+        else if (width == 1280 && height == 720)
+        {
+            //Debug.Log("Resolution is HD");
+            Get<Toggle>((int)Toggles.HD).isOn = true;
+        }
+        else
+        {
+            Debug.Log("Resolution is not QHD, FHD or HD");
+            Get<Toggle>((int)Toggles.HD).isOn = true;
+            ChangeResolutionHD(Get<Toggle>((int)Toggles.HD).isOn);
+        }
+    }
+
     public void ChangeResolutionQHD(bool isOn)
     {
         if (isOn)
         {
             Screen.SetResolution(2560, 1440, true);
-            Debug.Log("QHD");
+            //Debug.Log("QHD");
         }
     }
 
@@ -151,7 +195,7 @@ public class UI_Status : UI_Scene
         if (isOn)
         {
             Screen.SetResolution(1920, 1080, true);
-            Debug.Log("FHD");
+            //Debug.Log("FHD");
         }
     }
 
@@ -160,11 +204,66 @@ public class UI_Status : UI_Scene
         if (isOn)
         {
             Screen.SetResolution(1280, 720, true);
-            Debug.Log("HD");
+            //Debug.Log("HD");
         }
     }
-    public void ChangeBGMVolume(float volume)
+
+    public void CheckFullScreenMode()//초기 화면 모드 체크
+    {
+        if (Screen.fullScreenMode == FullScreenMode.Windowed)
+        {
+            Get<Toggle>((int)Toggles.Windowed).isOn = true;
+        }
+        else
+        {
+            Get<Toggle>((int)Toggles.ExclusiveFullscreen).isOn = true;
+        }
+    }
+
+    public void ChangeExclusiveFullscreen(bool isOn)//전체화면
+    {
+        if (isOn)
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        }
+    }
+    /*
+    public void ChangeFullscreenWindow(bool isOn)
+    {
+        if (isOn)
+        {
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+        }
+    }
+
+    public void ChangeMaximizedWindow(bool isOn)
+    {
+        if (isOn)
+        {
+            Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
+        }
+    }
+    */
+    public void ChangeWindowed(bool isOn)//창모드
+    {
+        if (isOn)
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+        }
+    }
+
+    public void ChangeBgmVolume(float volume)
     {
         Managers.Sound.ChangeBGMVolume(volume);
+    }
+
+    public void ChangeWeatherVolume(float volume)
+    {
+        Managers.Sound.ChangeWeatherVolume(volume);
+    }
+
+    public void ChangeEffectVolume(float volume)
+    {
+        Managers.Sound.ChangeEffectVolume(volume);
     }
 }
