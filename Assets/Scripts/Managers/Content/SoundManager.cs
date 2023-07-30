@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SoundManager
 {
+    private float _BgmVolume = 0.5f;
+    private float _WeatherVolume = 0.5f;
+    private float _EffectVolume = 0.5f;
+
     AudioSource[] _audioSources = new AudioSource[(int)Define.Sound.MaxCount];
     Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
 
@@ -55,13 +59,13 @@ public class SoundManager
         _audioClips.Clear();
     }
 
-    public void Play(string path, Define.Sound type = Define.Sound.Effect, float volume = 1.0f, float pitch = 1.0f)
+    public void Play(string path, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
     {
         AudioClip audioClip = GetOrAddAudioClip(path, type);
-        Play(audioClip, type, volume, pitch);
+        Play(audioClip, type, pitch);
     }
 
-	public void Play(AudioClip audioClip, Define.Sound type = Define.Sound.Effect, float volume = 1.0f, float pitch = 1.0f)
+	public void Play(AudioClip audioClip, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
 	{
         if (audioClip == null)
             return;
@@ -72,7 +76,7 @@ public class SoundManager
 			if (audioSource.isPlaying)
 				audioSource.Stop();
 
-            audioSource.volume = volume;
+            audioSource.volume = _BgmVolume;
 			audioSource.pitch = pitch;
 			audioSource.clip = audioClip;
 			audioSource.Play();
@@ -83,7 +87,7 @@ public class SoundManager
             if (audioSource.isPlaying)
                 audioSource.Stop();
 
-            audioSource.volume = volume;
+            audioSource.volume = _WeatherVolume;
             audioSource.pitch = pitch;
             audioSource.clip = audioClip;
             audioSource.Play();
@@ -91,7 +95,7 @@ public class SoundManager
 		else
 		{
 			AudioSource audioSource = _audioSources[(int)Define.Sound.Effect];
-            audioSource.volume = volume;
+            audioSource.volume = _EffectVolume;
             audioSource.pitch = pitch;
 			audioSource.PlayOneShot(audioClip);
 		}
@@ -121,5 +125,38 @@ public class SoundManager
 			Debug.Log($"AudioClip Missing ! {path}");
 
 		return audioClip;
+    }
+
+    public void ChangeBGMVolume(float volume)
+    {
+        AudioSource audioSource = _audioSources[(int)Define.Sound.Bgm];
+        float tempTime = audioSource.time;
+        audioSource.Stop();
+        _BgmVolume = volume;
+        audioSource.volume = _BgmVolume;
+        audioSource.time = tempTime;
+        audioSource.Play();
+    }
+
+    public void ChangeWeatherVolume(float volume)
+    {
+        AudioSource audioSource = _audioSources[(int)Define.Sound.Weather];
+        float tempTime = audioSource.time;
+        audioSource.Stop();
+        _WeatherVolume = volume;
+        audioSource.volume = _WeatherVolume;
+        audioSource.time = tempTime;
+        audioSource.Play();
+    }
+
+    public void ChangeEffectVolume(float volume)
+    {
+        AudioSource audioSource = _audioSources[(int)Define.Sound.Effect];
+        float tempTime = audioSource.time;
+        audioSource.Stop();
+        _EffectVolume = volume;
+        audioSource.volume = _EffectVolume;
+        audioSource.time = tempTime;
+        audioSource.Play();
     }
 }
