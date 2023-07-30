@@ -247,6 +247,21 @@ public class UI_Worldmap : UI_Scene
             && _ship.transform.position.y <= Managers.Data.WorldmapDict[i].maxY)
         {
             _weatherText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[i].name + " " + Managers.Data.WorldmapDict[i].weather);
+
+            string weather = Managers.Data.WorldmapDict[i].weather;
+
+            if(weather == "sunny")
+            {
+                Managers.Weather.UpdateWeather(EnumWeather.Sun);
+            }
+            else if(weather =="hot")
+            {
+                Managers.Weather.UpdateWeather(EnumWeather.Desert);
+            }
+            else if(weather =="rainy")
+            {
+                Managers.Weather.UpdateWeather(EnumWeather.Rain);
+            }
             return true;
         }
         else

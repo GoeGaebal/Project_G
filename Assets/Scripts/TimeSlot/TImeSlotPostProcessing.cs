@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class TimeSlotChangeListenerTest : MonoBehaviour, ITimeSlotChangeEventListener
+public class TImeSlotPostProcessing : MonoBehaviour, ITimeSlotChangeEventListener
 {
     private ColorGrading colorGrading;
     [SerializeField]private PostProcessProfile profile;

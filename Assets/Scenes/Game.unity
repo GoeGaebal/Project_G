@@ -755,7 +755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: dcc710912d5259f4ca93937b2752371e, type: 2}
   dayTimeColor: {r: 1, g: 1, b: 1, a: 0}
-  nightTimeColor: {r: 0.23495907, g: 0.24667458, b: 0.3018868, a: 0}
+  nightTimeColor: {r: 0.28893736, g: 0.32298946, b: 0.4056604, a: 0}
 --- !u!1001 &1849371453
 PrefabInstance:
   m_ObjectHideFlags: 0

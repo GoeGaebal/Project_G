@@ -22,6 +22,7 @@ public class Managers : MonoBehaviourPun
     private UIManager _ui = new();
     private InputManager _input = new();
     private SoundManager _sound = new();
+    private WeatherManager _weather = new();
 
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
@@ -31,6 +32,8 @@ public class Managers : MonoBehaviourPun
     public static UIManager UI { get { return Instance._ui; } }
     public static InputManager Input { get { return Instance._input;} }
     public static SoundManager Sound { get { return Instance._sound; } }
+    public static WeatherManager Weather { get { return Instance._weather; } }
+
     #endregion
 
     #region Core
@@ -76,6 +79,7 @@ public class Managers : MonoBehaviourPun
             _instance._network.Init(ManagersPhotonView);
             _instance._timeSlot.Init();
             _instance._sound.Init();
+            _instance._weather.Init();
         }
     }
     
