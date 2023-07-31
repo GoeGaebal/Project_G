@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class WeatherChangeEventListener : MonoBehaviour, IWeatherChangeEventListener
+public class WeatherPostProcessing : MonoBehaviour, IWeatherChangeEventListener
 {
     private ColorGrading colorGrading;
     [SerializeField]private PostProcessProfile profile;

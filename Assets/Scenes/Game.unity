@@ -750,12 +750,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1068472571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1359cf9d1b2001b4ca50dd105e3da4c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e8c7d1ae37fa394eadcffa64e5a8ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: dcc710912d5259f4ca93937b2752371e, type: 2}
-  dayTimeColor: {r: 1, g: 1, b: 1, a: 0}
-  nightTimeColor: {r: 0.28893736, g: 0.32298946, b: 0.4056604, a: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 0}
+  sunDayColor: {r: 1, g: 1, b: 1, a: 0}
+  sunNightColor: {r: 0.534054, g: 0.52064794, b: 0.5660378, a: 0}
+  desertDayColor: {r: 0.9245283, g: 0.8805836, b: 0.70211816, a: 0}
+  desertNightColor: {r: 0.3773585, g: 0.3638683, b: 0.30793878, a: 0}
+  rainDayColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 0}
+  rainNightColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
 --- !u!1001 &1849371453
 PrefabInstance:
   m_ObjectHideFlags: 0

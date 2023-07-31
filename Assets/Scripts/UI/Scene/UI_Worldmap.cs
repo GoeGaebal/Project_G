@@ -266,6 +266,7 @@ public class UI_Worldmap : UI_Scene
         }
         else
         {
+            Managers.Weather.UpdateWeather(EnumWeather.Sun);
             return false;
         }
     }
