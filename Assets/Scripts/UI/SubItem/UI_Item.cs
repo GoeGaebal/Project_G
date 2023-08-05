@@ -85,25 +85,21 @@ public class UI_Item : UI_Base
             currentItem.item == item &&
             count < ((CountableItem)item).MaxCount)
         {
-            if (count + currentItem.count > ((CountableItem)item).MaxCount) 
+            if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
             {
-                Debug.Log("아이템 한 쪽에 덜어줌");
                 currentItem.count -= ((CountableItem)item).MaxCount - count;
                 currentItem.RefreshCount();
                 count = ((CountableItem)item).MaxCount;
-                RefreshCount();
             }
-            else
+            else//아이템 합침
             {
-                Debug.Log("아이템 하나로 합침");
                 count += currentItem.count;
-                RefreshCount();
                 currentItem.RemoveItem();
             }
+            RefreshCount();
         }
-        else
+        else//아이템 스왑
         {
-            Debug.Log("아이템 스왑함");
             var parentTransform = transform.parent.transform;
 
             parentBeforeDrag = currentItem.parentBeforeDrag;

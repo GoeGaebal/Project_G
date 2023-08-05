@@ -95,6 +95,8 @@ public class UI_Inven : UI_Scene
 
     public bool AddItem(Item item)//아이템 추가
     {
+        bool empty = false;
+        int idx = 0;
         for(int i = 0; i < slots.Length; i++)//모든 슬롯을 돌면서
         {
             UI_Slot slot = slots[i];
@@ -110,11 +112,17 @@ public class UI_Inven : UI_Scene
                 return true;//추가 완료함
             }
             
-            else if (itemInSlot == null)//위의 모든 조건을 제외하고 빈칸을 만났을 때
-            {
-                SpawnNewItem(item, slot);//그냥 해당 슬롯에 아이템 추가
-                return true;//생성 완료함
+            else if (itemInSlot == null && !empty)//위의 모든 조건을 제외하고 빈칸을 만났을 때
+            {//가장 앞에 있는 빈칸 위치 저장해둠
+                empty = true;
+                idx = i;
             }
+        }
+
+        if (empty)
+        {
+            SpawnNewItem(item, slots[idx]);//그냥 해당 슬롯에 아이템 추가
+            return true;//생성 완료함
         }
 
         return false;//인벤토리 빈 공간 없음
