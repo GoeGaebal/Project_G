@@ -1554,9 +1554,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8121398708948064442}
+      - m_Target: {fileID: 3058447965143961724}
         m_TargetAssemblyTypeName: Test, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: SortItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

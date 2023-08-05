@@ -137,9 +137,49 @@ public class UI_Inven : UI_Scene
 
     public void SortItem()//아이템 정렬
     {
-
+        bool swapped = true;
+        while (swapped)
+        {
+            swapped = false;
+            for (int i = 0; i < slots.Length - 1; i++)
+            {
+                UI_Slot a = slots[i];
+                UI_Slot b = slots[i + 1];
+                if (a.transform.childCount > 0 && b.transform.childCount > 0)
+                {
+                    int result1 = a.transform.GetChild(0).GetComponent<UI_Item>().item.ID
+                        .CompareTo(b.transform.GetChild(0).GetComponent<UI_Item>().item.ID);
+                    if (result1 > 0)
+                    {
+                        var tempTransform = a.transform;
+                        a.transform.GetChild(0).SetParent(b.transform);
+                        b.transform.GetChild(0).SetParent(tempTransform);
+                        swapped = true;
+                    }
+                    else if(result1 == 0 && a.transform.GetChild(0).GetComponent<UI_Item>().item is CountableItem)
+                    {
+                        int result2 = a.transform.GetChild(0).GetComponent<UI_Item>().count
+                        .CompareTo(b.transform.GetChild(0).GetComponent<UI_Item>().count);
+                        if(result2 < 0)
+                        {
+                            var tempCount = a.transform.GetChild(0).GetComponent<UI_Item>().count;
+                            a.transform.GetChild(0).GetComponent<UI_Item>().count = b.transform.GetChild(0).GetComponent<UI_Item>().count;
+                            b.transform.GetChild(0).GetComponent<UI_Item>().count = tempCount;
+                            a.transform.GetChild(0).GetComponent<UI_Item>().RefreshCount();
+                            b.transform.GetChild(0).GetComponent<UI_Item>().RefreshCount();
+                            swapped = true;
+                        }
+                    }
+                }
+                else if (a.transform.childCount == 0 && b.transform.childCount > 0)
+                {
+                    b.transform.GetChild(0).SetParent(a.transform);
+                    swapped = true;
+                }
+            }
+        }
     }
-    
+
     public void ClickInventoryButton(PointerEventData evt)//가방 버튼 클릭했을 때
     {
         if (_inventory_activeself)//인벤토리가 켜져 있으면 
