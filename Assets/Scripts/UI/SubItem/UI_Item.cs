@@ -17,7 +17,7 @@ public class UI_Item : UI_Base
 
     [HideInInspector] public Item item;//아이템
     [HideInInspector] public int count = 1;//아이템 개수
-    [HideInInspector] public Transform parentAfterDrag;
+    [HideInInspector] public Transform parentBeforeDrag;
 
     public override void Init()
     {
@@ -25,11 +25,11 @@ public class UI_Item : UI_Base
         
         _icon = GetComponent<Image>();
         countText = GetText((int)Texts.Count);
-        
-        AddUIEvent(gameObject,OnBeginDrag,Define.UIEvent.BeginDrag);
-        AddUIEvent(gameObject,OnDrag, Define.UIEvent.Drag);
-        AddUIEvent(gameObject,OnDrop, Define.UIEvent.Drop);
-        AddUIEvent(gameObject,OnEndDrag, Define.UIEvent.EndDrag);
+
+        AddUIEvent(gameObject, OnBeginDrag, Define.UIEvent.BeginDrag);
+        AddUIEvent(gameObject, OnDrag, Define.UIEvent.Drag);
+        AddUIEvent(gameObject, OnDrop, Define.UIEvent.Drop);
+        AddUIEvent(gameObject, OnEndDrag, Define.UIEvent.EndDrag);
         
         players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
         foreach (GameObject p in players)
@@ -66,7 +66,7 @@ public class UI_Item : UI_Base
     public void OnBeginDrag(PointerEventData eventData)//클릭했을 때
     {
         _icon.raycastTarget = false;
-        parentAfterDrag = transform.parent;
+        parentBeforeDrag = transform.parent;
         transform.SetParent(GetComponentInParent<Canvas>().transform);
     }
 
@@ -77,20 +77,44 @@ public class UI_Item : UI_Base
     
     // TODO: Slot과 Item이 거의 비슷한 동작을 하는데 이는 EventHandler가 둘다 OnDrop을 받기 때문에 어느 것이 반응하더라도 동작하게끔 설계되어 있음
     // 중복된 코드이므로 정리가 필요함
-    public void OnDrop(PointerEventData eventData)// 슬롯 안에 아이템이 존재하여 먼저 반응할 때
+    public void OnDrop(PointerEventData eventData)//아이템을 이미 다른 아이템이 들어 있는 슬롯에 놓았을 때
     {
-        UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();
-        if (transform.parent.GetComponent<UI_Slot>() != null) //슬롯을 부모로 가질 시에 서로 바꾼다.
-        {
-            var parentTransform = transform.parent.transform;
-            parentAfterDrag = item.parentAfterDrag;
-            transform.SetParent(item.parentAfterDrag);
-            
-            item.parentAfterDrag = parentTransform;
-            item.transform.SetParent(parentTransform);
-        }
-    }
+        UI_Item currentItem = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
 
+        if (currentItem.item is CountableItem &&
+            currentItem.item == item &&
+            count < ((CountableItem)item).MaxCount)
+        {
+            if (count + currentItem.count > ((CountableItem)item).MaxCount) 
+            {
+                Debug.Log("아이템 한 쪽에 덜어줌");
+                currentItem.count -= ((CountableItem)item).MaxCount - count;
+                currentItem.RefreshCount();
+                count = ((CountableItem)item).MaxCount;
+                RefreshCount();
+            }
+            else
+            {
+                Debug.Log("아이템 하나로 합침");
+                count += currentItem.count;
+                RefreshCount();
+                currentItem.RemoveItem();
+            }
+        }
+        else
+        {
+            Debug.Log("아이템 스왑함");
+            var parentTransform = transform.parent.transform;
+
+            parentBeforeDrag = currentItem.parentBeforeDrag;
+            transform.SetParent(currentItem.parentBeforeDrag);
+
+            currentItem.parentBeforeDrag = parentTransform;
+            currentItem.transform.SetParent(parentTransform);
+        }
+        //}
+    }
+    
     public void OnEndDrag(PointerEventData eventData) // 마우스를 뗄 때
     {
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
@@ -101,9 +125,9 @@ public class UI_Item : UI_Base
                 Managers.Object.SpawnLootingItems(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
                 RemoveItem();//인벤토리에서 삭제
             }
-            
+
         }
         _icon.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);//해당 위치의 슬롯에 아이템 저장}
+        transform.SetParent(parentBeforeDrag);//원래 위치로 아이템 복귀
     }
 }
