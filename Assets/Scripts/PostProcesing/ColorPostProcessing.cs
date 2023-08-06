@@ -55,12 +55,14 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                     this.colorGrading.colorFilter.value = this.desertNightColor;
                 break;
             default:
+                this.colorGrading.colorFilter.value = this.sunDayColor;
                 break;
         }
     }
 
        public void TimeSlotChangeEventHandler(EnumTimeSlot timeSlot)
     {
+        Debug.Log("timeSlotChangeEventHandler");
         switch(timeSlot)
         {
             case EnumTimeSlot.Day:

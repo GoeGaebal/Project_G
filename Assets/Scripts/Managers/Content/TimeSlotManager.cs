@@ -108,7 +108,7 @@ public class TimeSlotManager : IOnEventCallback
                         TimeSlotChangeEvent(TimeSlot);
                     break;
                 case EnumTimeSlot.Night:
-                    Debug.Log("to day night time manager changed");
+                    Debug.Log("to day time manager changed");
                     TimeSlot = EnumTimeSlot.Night;
                     if(TimeSlotChangeEvent!= null)
                         TimeSlotChangeEvent(TimeSlot);
