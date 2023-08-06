@@ -10,9 +10,9 @@ public class UI_Inven : UI_Scene
 {
     enum GameObjects
     {
-        //QuickSlot,
         Inventory,
         Contents,
+        Equips
     }
 
     enum Buttons
@@ -21,13 +21,28 @@ public class UI_Inven : UI_Scene
         CloseButton
     }
 
+    enum EquipSlots
+    {
+        Weapon,
+        Tool,
+        Hat,
+        Upper,
+        Lower,
+        Shoes,
+        Gloves,
+        Potion_1,
+        //Potion_2
+    }
+
     private GameObject _inventory;
-    public UI_Slot[] slots;//전체 슬롯(퀵슬롯 포함)
-    public int InventorySlotCount = 16;
+    public UI_Slot[] slots;//전체 슬롯
+    private int _InventorySlotCount = 24;
+
+    public UI_Slot[] equips;//장비창
+    //private int _equipSlotCount = 8;
 
     private bool _inventory_activeself;
     
-
     private void Start()
     {
         Init();
@@ -39,6 +54,7 @@ public class UI_Inven : UI_Scene
 
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
+        Bind<UI_Slot>(typeof(EquipSlots));
 
         _inventory = GetObject((int)GameObjects.Inventory);
         GameObject contents = GetObject((int)GameObjects.Contents);
@@ -50,13 +66,25 @@ public class UI_Inven : UI_Scene
                 Managers.Resource.Destroy(child.gameObject);
         }
 
-        slots = new UI_Slot[InventorySlotCount];
+        slots = new UI_Slot[_InventorySlotCount];
 
         // 실제 인벤토리 내부 contents 오브젝트 산하에 슬롯들 추가
-        for (int i = 0; i < InventorySlotCount; i++)
+        for (int i = 0; i < _InventorySlotCount; i++)
         {
             slots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent : contents.transform);
             slots[i].transform.localScale = Vector3.one;
+        }
+
+        //장비창 슬롯 생성
+        //0: 무기, 1: 도구, 2: 모자, 3: 상의, 4: 하의, 5: 신발, 6: 장갑, 7: 포션
+        equips = new UI_Slot[Enum.GetValues(typeof(EquipSlots)).Length];
+        int idex = 0;
+        foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
+        {
+            equips[idex] = Get<UI_Slot>((int)slot);
+            Debug.Log(idex + " " + equips[idex]);
+            equips[idex].isEquip = true;
+            idex++;
         }
 
         GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
@@ -124,7 +152,7 @@ public class UI_Inven : UI_Scene
             SpawnNewItem(item, slots[idx]);//그냥 해당 슬롯에 아이템 추가
             return true;//생성 완료함
         }
-
+        Debug.Log("인벤토리에 자리 없음");
         return false;//인벤토리 빈 공간 없음
     }
 

@@ -81,34 +81,53 @@ public class UI_Item : UI_Base
     {
         UI_Item currentItem = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
 
-        if (currentItem.item is CountableItem &&
+        if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
+        {
+            if (currentItem.item is CountableItem)
+            {
+                return;
+            }
+            else
+            {
+                var parentTransform = transform.parent.transform;
+
+                parentBeforeDrag = currentItem.parentBeforeDrag;
+                transform.SetParent(currentItem.parentBeforeDrag);
+
+                currentItem.parentBeforeDrag = parentTransform;
+                currentItem.transform.SetParent(parentTransform);
+            }
+        }
+        else//슬롯이 인벤토리일 때
+        {
+            if (currentItem.item is CountableItem &&
             currentItem.item == item &&
             count < ((CountableItem)item).MaxCount)
-        {
-            if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
             {
-                currentItem.count -= ((CountableItem)item).MaxCount - count;
-                currentItem.RefreshCount();
-                count = ((CountableItem)item).MaxCount;
+                if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
+                {
+                    currentItem.count -= ((CountableItem)item).MaxCount - count;
+                    currentItem.RefreshCount();
+                    count = ((CountableItem)item).MaxCount;
+                }
+                else//아이템 합침
+                {
+                    count += currentItem.count;
+                    currentItem.RemoveItem();
+                }
+                RefreshCount();
             }
-            else//아이템 합침
+            else//아이템 스왑
             {
-                count += currentItem.count;
-                currentItem.RemoveItem();
+                var parentTransform = transform.parent.transform;
+
+                parentBeforeDrag = currentItem.parentBeforeDrag;
+                transform.SetParent(currentItem.parentBeforeDrag);
+
+                currentItem.parentBeforeDrag = parentTransform;
+                currentItem.transform.SetParent(parentTransform);
             }
-            RefreshCount();
         }
-        else//아이템 스왑
-        {
-            var parentTransform = transform.parent.transform;
-
-            parentBeforeDrag = currentItem.parentBeforeDrag;
-            transform.SetParent(currentItem.parentBeforeDrag);
-
-            currentItem.parentBeforeDrag = parentTransform;
-            currentItem.transform.SetParent(parentTransform);
-        }
-        //}
     }
     
     public void OnEndDrag(PointerEventData eventData) // 마우스를 뗄 때
