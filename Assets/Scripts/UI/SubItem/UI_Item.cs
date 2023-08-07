@@ -83,11 +83,7 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            if (currentItem.item is CountableItem)
-            {
-                return;
-            }
-            else
+            if (currentItem.item is EquipableItem || currentItem.item is UsableItem)
             {
                 var parentTransform = transform.parent.transform;
 
@@ -96,6 +92,10 @@ public class UI_Item : UI_Base
 
                 currentItem.parentBeforeDrag = parentTransform;
                 currentItem.transform.SetParent(parentTransform);
+            }
+            else
+            {
+                return;
             }
         }
         else//슬롯이 인벤토리일 때

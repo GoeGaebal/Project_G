@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57a310b1443d70438d69a5100205125, type: 3}
   m_Name: Apple
   m_EditorClassIdentifier: 
-  _id: 3001
+  _id: 5101
   _name: "\uC0AC\uACFC"
   _tooltip: "\uB9DB\uC788\uB294 \uC0AC\uACFC, \uBC30\uAC00 \uACE0\uD50C \uB54C \uBA39\uC73C\uBA74
     \uC88B\uC744 \uAC83 \uAC19\uB2E4."

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 387a1275cf852ae40b7651dc9e6cda55, type: 3}
-  m_Name: IronIngot
+  m_Script: {fileID: 11500000, guid: a14239bf6ae4cc641ae34a9d84f037b4, type: 3}
+  m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  _id: 5201
-  _name: "\uCCA0\uAD34"
-  _tooltip: "\uCCA0\uAD34, \uB2E4\uC591\uD55C \uAC78 \uB9CC\uB4E4 \uC218 \uC788\uC744
-    \uAC83 \uAC19\uB2E4."
-  _icon: {fileID: 21300000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
+  _id: 4001
+  _name: "\uCCB4\uB825\uD3EC\uC158"
+  _tooltip: 
+  _icon: {fileID: 21300000, guid: e52ea25af699fd445b7046374f81a5b9, type: 3}
   _droppedItemPrefab: {fileID: 0}
   _maxCount: 3
+  recoveryAmount: 0

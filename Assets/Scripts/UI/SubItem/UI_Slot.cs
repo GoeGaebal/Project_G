@@ -20,13 +20,13 @@ public class UI_Slot : UI_Base
         UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
         if (isEquip)//슬롯이 장비창일 때
         {
-            if(item.item is CountableItem)
+            if(item.item is EquipableItem || item.item is UsableItem)
             {
-                return;
+                item.parentBeforeDrag = transform;
             }
             else
             {
-                item.parentBeforeDrag = transform;
+                return;
             }
         }
         else//슬롯이 인벤토리일 때
