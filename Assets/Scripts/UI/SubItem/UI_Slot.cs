@@ -5,6 +5,9 @@ using UnityEngine.UI;
 public class UI_Slot : UI_Base
 {
     public bool isEquip = false;
+    public int equipIndex = -1;
+    public int[] itemIndex = { 10, 20, 30, 31, 32, 33, 34, 40 };
+
     private void Start()
     {
         Init();
@@ -20,10 +23,13 @@ public class UI_Slot : UI_Base
         UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
         if (isEquip)//슬롯이 장비창일 때
         {
-            if(item.item is EquipableItem || item.item is UsableItem)
-            {
-                item.parentBeforeDrag = transform;
-            }
+            //if(item.item is EquipableItem || item.item is UsableItem)
+            //{
+                if(itemIndex[equipIndex] == item.item.ID / 100)
+                {
+                    item.parentBeforeDrag = transform;
+                }
+            //}
             else
             {
                 return;

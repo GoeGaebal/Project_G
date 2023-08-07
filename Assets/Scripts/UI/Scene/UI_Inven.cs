@@ -84,6 +84,7 @@ public class UI_Inven : UI_Scene
             equips[idex] = Get<UI_Slot>((int)slot);
             Debug.Log(idex + " " + equips[idex]);
             equips[idex].isEquip = true;
+            equips[idex].equipIndex = idex;
             idex++;
         }
 

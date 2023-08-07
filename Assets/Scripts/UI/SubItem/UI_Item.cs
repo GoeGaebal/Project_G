@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -83,7 +84,7 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            if (currentItem.item is EquipableItem || currentItem.item is UsableItem)
+            if (currentItem.item.ID/100 == item.ID/100)
             {
                 var parentTransform = transform.parent.transform;
 
