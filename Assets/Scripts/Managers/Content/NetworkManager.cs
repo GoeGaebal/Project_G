@@ -335,6 +335,11 @@ public class NetworkManager : IOnEventCallback
         }
     }
 
+    public void DespawnLocalplayer()
+    {
+        
+    }
+
     public void SynchronizeTime()
     {
         if(Managers.TimeSlot == null) return;

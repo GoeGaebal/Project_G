@@ -20,15 +20,8 @@ public class LobbyScene : BaseScene
     private UI_Lobby _lobbyScreen;
     private UI_CreateRoomSetting _createRoomSettingPopup;
     private UI_Room _roomScreen;
-
-    // 게임 실행과 동시에 마스터 서버 접속 시도
+    
     private void Start() {
-        // 룸 접속 버튼을 잠시 비활성화
-        foreach(Button btn in roomButtons)
-            btn.interactable = false;
-        joinButton.interactable = false;
-        // 접속을 시도 중임을 텍스트로 표시
-        connectionInfoText.text = "마스터 서버에 접속중...";
     }
 
     public void ConnectToMaster()
@@ -91,11 +84,6 @@ public class LobbyScene : BaseScene
     
     // 룸 접속 시도
     public void Connect() {
-        // // 중복 접속 시도를 막기 위해, 접속 버튼 잠시 비활성화
-        // foreach (Button btn in roomButtons)
-        //     btn.interactable = false;
-        // joinButton.interactable = false;
-
         // 마스터 서버에 접속중이라면
         if (PhotonNetwork.IsConnected)
         {
@@ -113,8 +101,11 @@ public class LobbyScene : BaseScene
 
     public override void OnJoinedLobby()
     {
-        _lobbyScreen = Managers.UI.ShowPopupUI<UI_Lobby>();
-        InitLobbyScreen();
+        if (_lobbyScreen == null)
+        {
+            _lobbyScreen = Managers.UI.ShowPopupUI<UI_Lobby>();
+            InitLobbyScreen();
+        }
         _startScreen.SetInteractableButtons(true);
         _startScreen._loadingText.text  = "";
         _startScreen.LoadingIcon.SetActive(false);
@@ -216,10 +207,17 @@ public class LobbyScene : BaseScene
         {
             PhotonNetwork.LocalPlayer.NickName = "Guest";
         }
-        _roomScreen = Managers.UI.ShowPopupUI<UI_Room>();
-        InitRoomScreen();
+        // _roomScreen = Managers.UI.ShowPopupUI<UI_Room>();
+        Managers.Network.SpawnLocalPlayer();
+        Managers.Map.LoadMap(5);
+        // InitRoomScreen();
         // // 모든 룸 참가자들이 Game 씬을 로드하게 함
         // Managers.Scene.LoadLevel(Define.Scene.Ship);
+    }
+
+    public override void OnLeftRoom()
+    {
+        Managers.Map.DestoryMap();
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
