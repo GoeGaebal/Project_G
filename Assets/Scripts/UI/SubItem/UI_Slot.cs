@@ -29,15 +29,15 @@ public class UI_Slot : UI_Base
                 item.parentBeforeDrag = transform;
                 if (checkIndex == 10)
                 {
-                    UI_Inven.ChangeQuickImage(0, item.item.Icon);
+                    UI_Inven.ChangeQuickImage(0, item);
                 }
                 else if (checkIndex == 20)
                 {
-                    UI_Inven.ChangeQuickImage(1, item.item.Icon);
+                    UI_Inven.ChangeQuickImage(1, item);
                 }
                 else if (checkIndex == 40)
                 {
-                    UI_Inven.ChangeQuickImage(2, item.item.Icon);
+                    UI_Inven.ChangeQuickImage(2, item);
                 }
                 else
                 {

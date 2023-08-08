@@ -41,6 +41,11 @@ public class UI_Inven : UI_Scene
         PotionImage
     }
 
+    enum Texts
+    {
+        PotionAmountText
+    }
+
     private GameObject _inventory;
     public UI_Slot[] slots;//전체 슬롯
     private int _InventorySlotCount = 24;
@@ -49,6 +54,8 @@ public class UI_Inven : UI_Scene
     //private int _equipSlotCount = 8;
 
     private static Image[] _qSlots = new Image[3];
+    private static Text _potion1Text;
+    private bool _canUsePotion = true;
 
     private bool _inventory_activeself;
     
@@ -65,6 +72,7 @@ public class UI_Inven : UI_Scene
         Bind<Button>(typeof(Buttons));
         Bind<UI_Slot>(typeof(EquipSlots));
         Bind<Image>(typeof(Images));
+        Bind<Text>(typeof(Texts));
 
         _inventory = GetObject((int)GameObjects.Inventory);
         GameObject contents = GetObject((int)GameObjects.Contents);
@@ -101,6 +109,7 @@ public class UI_Inven : UI_Scene
         _qSlots[0] = Get<Image>((int)Images.WeaponImage);
         _qSlots[1] = Get<Image>((int)Images.ToolImage);
         _qSlots[2] = Get<Image>((int) Images.PotionImage);
+        _potion1Text = Get<Text>((int)Texts.PotionAmountText);
         GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
         GetButton((int)Buttons.CloseButton).gameObject.BindEvent(ClickInventoryButton);
         Managers.Input.PlayerActions.Inventory.AddEvent(OnOffInventory);
@@ -120,19 +129,33 @@ public class UI_Inven : UI_Scene
     {//키입력에 따른 퀵슬롯 선택 변화(추후 New Input System으로 변경)
         if (Managers.Input.PlayerActions.QuickSlot1.IsPressed())//무기 들게
         {
-
-        } else if (Managers.Input.PlayerActions.QuickSlot2.IsPressed())//도구 들게
+            PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+        }
+        else if (Managers.Input.PlayerActions.QuickSlot2.IsPressed())//도구 들게
         {
-
+            PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
         }
         else if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
         {
-
-        }
+            if (_canUsePotion)
+            {
+                _canUsePotion = false;
+                StartCoroutine(PotionUse());
+            }
+        }/*
         else if (Managers.Input.PlayerActions.QuickSlot4.IsPressed())//포션 2 먹게
         {
 
-        }
+        }*/
+    }
+
+    private IEnumerator PotionUse()
+    {
+        var potion = equips[7].transform.GetChild(0).GetComponent<UI_Item>();
+        ((HealthPotionItem)potion.item).UsePotion(potion);
+        _potion1Text.text = potion.count.ToString();
+        yield return new WaitForSeconds(0.5f);
+        _canUsePotion = true;
     }
 
     public bool AddItem(Item item)//아이템 추가
@@ -222,10 +245,13 @@ public class UI_Inven : UI_Scene
         }
     }
 
-    public static void ChangeQuickImage(int index, Sprite item)
+    public static void ChangeQuickImage(int index, UI_Item item)
     {
-        _qSlots[index].sprite = item;
-        Debug.Log(_qSlots[index].name + " 이미지 바뀜");
+        _qSlots[index].sprite = item.item.Icon;
+        if (index == 2)
+        {
+            _potion1Text.text = item.count.ToString();
+        }
     }
 
     public void ClickInventoryButton(PointerEventData evt)//가방 버튼 클릭했을 때
