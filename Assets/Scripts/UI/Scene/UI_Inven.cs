@@ -34,12 +34,21 @@ public class UI_Inven : UI_Scene
         //Potion_2
     }
 
+    enum Images
+    {
+        WeaponImage,
+        ToolImage,
+        PotionImage
+    }
+
     private GameObject _inventory;
     public UI_Slot[] slots;//전체 슬롯
     private int _InventorySlotCount = 24;
 
     public UI_Slot[] equips;//장비창
     //private int _equipSlotCount = 8;
+
+    private static Image[] _qSlots = new Image[3];
 
     private bool _inventory_activeself;
     
@@ -55,6 +64,7 @@ public class UI_Inven : UI_Scene
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
         Bind<UI_Slot>(typeof(EquipSlots));
+        Bind<Image>(typeof(Images));
 
         _inventory = GetObject((int)GameObjects.Inventory);
         GameObject contents = GetObject((int)GameObjects.Contents);
@@ -88,6 +98,9 @@ public class UI_Inven : UI_Scene
             idex++;
         }
 
+        _qSlots[0] = Get<Image>((int)Images.WeaponImage);
+        _qSlots[1] = Get<Image>((int)Images.ToolImage);
+        _qSlots[2] = Get<Image>((int) Images.PotionImage);
         GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
         GetButton((int)Buttons.CloseButton).gameObject.BindEvent(ClickInventoryButton);
         Managers.Input.PlayerActions.Inventory.AddEvent(OnOffInventory);
@@ -207,6 +220,12 @@ public class UI_Inven : UI_Scene
                 }
             }
         }
+    }
+
+    public static void ChangeQuickImage(int index, Sprite item)
+    {
+        _qSlots[index].sprite = item;
+        Debug.Log(_qSlots[index].name + " 이미지 바뀜");
     }
 
     public void ClickInventoryButton(PointerEventData evt)//가방 버튼 클릭했을 때

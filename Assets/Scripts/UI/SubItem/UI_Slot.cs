@@ -12,7 +12,7 @@ public class UI_Slot : UI_Base
     {
         Init();
     }
-    
+
     public override void Init()
     {
         AddUIEvent(gameObject, OnDrop, Define.UIEvent.Drop);
@@ -23,16 +23,26 @@ public class UI_Slot : UI_Base
         UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
         if (isEquip)//슬롯이 장비창일 때
         {
-            //if(item.item is EquipableItem || item.item is UsableItem)
-            //{
-                if(itemIndex[equipIndex] == item.item.ID / 100)
-                {
-                    item.parentBeforeDrag = transform;
-                }
-            //}
-            else
+            int checkIndex = item.item.ID / 100;
+            if (itemIndex[equipIndex] == checkIndex)
             {
-                return;
+                item.parentBeforeDrag = transform;
+                if (checkIndex == 10)
+                {
+                    UI_Inven.ChangeQuickImage(0, item.item.Icon);
+                }
+                else if (checkIndex == 20)
+                {
+                    UI_Inven.ChangeQuickImage(1, item.item.Icon);
+                }
+                else if (checkIndex == 40)
+                {
+                    UI_Inven.ChangeQuickImage(2, item.item.Icon);
+                }
+                else
+                {
+                    return;
+                }
             }
         }
         else//슬롯이 인벤토리일 때
