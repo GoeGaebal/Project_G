@@ -72,7 +72,7 @@ using Photon.Pun;
 
         Collider2D[] playerColliders = Physics2D.OverlapCircleAll(gameObject.transform.position, detectRadius,chaseTargetLayerMask);
  
-        if(playerColliders == null)
+        if(playerColliders.Length == 0)
         {
             hasTarget = false;  
             if( !(AnimState is  AttackState) || !(AnimState is  HitState ))
@@ -87,9 +87,10 @@ using Photon.Pun;
         {
             foreach(var playerCollider in playerColliders)
             {
-                if(playerCollider.GetComponent<DamageableEntity>().isDead) continue;
+                if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
                 hasTarget = true;
                 target = playerCollider.gameObject;
+                break;
             }
         }
 
@@ -99,13 +100,14 @@ using Photon.Pun;
             
             //target check
             if(target == null) return;
-            if(target.GetComponent<DamageableEntity>().isDead) 
+            //타겟 잃어버림
+            if(target.GetComponent<DamageableEntity>() == null ||target.GetComponent<DamageableEntity>().isDead) 
             {
                 target = null;
                 hasTarget = false;
-                return;
             }
-            AnimState.UpdateInState();
+            else
+                AnimState.UpdateInState();
             
             
         }
@@ -135,7 +137,7 @@ using Photon.Pun;
         Destroy(gameObject);
     }
         protected float GetDistance()
-    {
+    { 
         return (target.transform.position - transform.position).magnitude;
     }
 
@@ -178,17 +180,19 @@ using Photon.Pun;
 
         public override void UpdateInState()
         {
+            if(basicMonster.hasTarget == false || basicMonster.target == null) return;
             basicMonster.FlipXSprite();
 
+
             if(basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
-                    {
-                        basicMonster.ChangeState(basicMonster.runState);
-                    }
-                    else if(Time.time - basicMonster.lastAttackTime >=basicMonster. attackCooldown)  
-                    {
-                        basicMonster.lastAttackTime = Time.time;
-                        basicMonster.ChangeState(basicMonster.attackState);
-                    }
+            {
+                basicMonster.ChangeState(basicMonster.runState);
+            }
+            else if(Time.time - basicMonster.lastAttackTime >=basicMonster. attackCooldown)  
+            {
+                basicMonster.lastAttackTime = Time.time;
+                basicMonster.ChangeState(basicMonster.attackState);
+            }
             float distance = basicMonster.GetDistance();
             basicMonster.animator.SetFloat("distance", distance);
         }
@@ -227,15 +231,22 @@ using Photon.Pun;
         public override void UpdateInState()
         {
             basicMonster.FlipXSprite();
-            if (basicMonster.GetDistance()<= basicMonster.minDisFromPlayer)
-                    {
-                        basicMonster.ChangeState(basicMonster.idleState);
-                    }
-                    else
-                        basicMonster.transform.position = Vector2.MoveTowards(basicMonster.transform.position, basicMonster.target.transform.position, basicMonster.speed * Time.deltaTime);
+            if(basicMonster.hasTarget == false )
+            {
+                basicMonster.ChangeState(basicMonster.idleState);
+            }
+            else if (basicMonster.GetDistance()<= basicMonster.minDisFromPlayer)
+            {
+                basicMonster.ChangeState(basicMonster.idleState);
+            }
+            else
+            {
+                basicMonster.transform.position = Vector2.MoveTowards(basicMonster.transform.position, basicMonster.target.transform.position, basicMonster.speed * Time.deltaTime);
         
-        float distance = basicMonster.GetDistance();
+            float distance = basicMonster.GetDistance();
             basicMonster.animator.SetFloat("distance", distance);
+            }
+                
         }
     }
 
@@ -255,6 +266,9 @@ using Photon.Pun;
 
         }
     }
+
+
+
 
     protected void ChangeState(State newState) {
 
