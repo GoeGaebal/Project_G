@@ -9,7 +9,7 @@ public class UIManager
     private int _order = 10;
     
     private Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
-    private UI_Scene _sceneUI = null;
+    private List<UI_Scene> _sceneUIs = new List<UI_Scene>();
 
     public GameObject Root
     {
@@ -83,7 +83,7 @@ public class UIManager
         
         GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}", Vector3.zero, Quaternion.identity);
         T sceneUI = Util.GetOrAddComponent<T>(go);
-        _sceneUI = sceneUI;
+        _sceneUIs.Add(sceneUI);
 
         go.transform.SetParent(Root.transform);
         
@@ -156,6 +156,8 @@ public class UIManager
     public void Clear()
     {
         CloseAllPopupUI();
-        _sceneUI = null;
+        foreach (var ui in _sceneUIs)
+            Managers.Resource.Destroy(ui.gameObject);
+        _sceneUIs.Clear();
     }
 }

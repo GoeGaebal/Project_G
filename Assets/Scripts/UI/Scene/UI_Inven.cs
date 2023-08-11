@@ -81,17 +81,25 @@ public class UI_Inven : UI_Scene, IDataPersistence
             slots[i].transform.localScale = Vector3.one;
         }
 
-        GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
-        GetButton((int)Buttons.CloseButton).gameObject.BindEvent(ClickInventoryButton);
+        GetButton((int)Buttons.InventoryButton).onClick.AddListener(ClickInventoryButton);
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(ClickInventoryButton);
         Managers.Input.PlayerActions.ScrollQuickSlot.AddEvent(OnQuickSlot_Mouse);
         Managers.Input.PlayerActions.Inventory.AddEvent(OnOffInventory);
         
         _inventory.SetActive(false);
         _inventory_activeself = _inventory.activeSelf;
 
+        Managers.Network.ReceiveAddItemHandler -= AddItem;
         Managers.Network.ReceiveAddItemHandler += AddItem;
 
         LoadData();
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Input.PlayerActions.ScrollQuickSlot.RemoveEvent(OnQuickSlot_Mouse);
+        Managers.Input.PlayerActions.Inventory.RemoveEvent(OnOffInventory);
+        Managers.Network.ReceiveAddItemHandler -= AddItem;
     }
 
     public void AddItem(int guid)
@@ -189,7 +197,7 @@ public class UI_Inven : UI_Scene, IDataPersistence
         itemInSlot.InitializeItem(item);
     }
     
-    public void ClickInventoryButton(PointerEventData evt)//가방 버튼 클릭했을 때
+    public void ClickInventoryButton()//가방 버튼 클릭했을 때
     {
         if (_inventory_activeself)//인벤토리가 켜져 있으면 
         {

@@ -41,7 +41,7 @@ public class UI_Start : UI_Scene
         Bind<GameObject>(typeof(GameObjects));
         _lobbyScene = FindObjectOfType<LobbyScene>();
         GetButton((int)Buttons.StartBtn).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.StartBtn).onClick.AddListener(() => { _lobbyScene.ConnectToMaster();});
+        GetButton((int)Buttons.StartBtn).onClick.AddListener(() => { _lobbyScene.ConnectToMasterServer();});
         GetButton((int)Buttons.ExitBtn).gameObject.BindEvent((evt) => { Application.Quit(); });
         _loadingText = GetTextMeshPro((int)Texts.LoadingText);
         LoadingIcon = GetObject((int)GameObjects.LoadingIcon);

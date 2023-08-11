@@ -16,7 +16,12 @@ public class Portal : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("enter감지!");
-        if(Managers.Network.PlayerDict[other.gameObject.GetPhotonView().ViewID] == Managers.Network.LocalPlayer)
-            Managers.Scene.LoadScene(Define.Scene.Game);
+        if (Managers.Network.PlayerDict[other.gameObject.GetPhotonView().OwnerActorNr] == Managers.Network.LocalPlayer)
+        {
+            Managers.Network.PlayerDict.Remove(PhotonNetwork.LocalPlayer.ActorNumber);
+            Managers.Resource.Destroy(Managers.Network.LocalPlayer.gameObject);
+            PhotonNetwork.LeaveRoom();
+        }
+            // Managers.Scene.LoadScene(Define.Scene.Ship);
     }
 }

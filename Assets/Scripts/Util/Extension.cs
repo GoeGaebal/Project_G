@@ -16,12 +16,17 @@ public static class Extension
 	{
 	 	UI_Base.AddUIEvent(go, action, type);
 	}
-
-	public static void AddEvent(this InputAction ia, Action<InputAction.CallbackContext> action)
+	
+	public static void RemoveEvent(this InputAction ia, Action<InputAction.CallbackContext> action)
 	{
 		ia.started -= action;
 		ia.performed -= action;
 		ia.canceled -= action;
+	}
+
+	public static void AddEvent(this InputAction ia, Action<InputAction.CallbackContext> action)
+	{
+		ia.RemoveEvent(action);
 		ia.started += action;
 		ia.performed += action;
 		ia.canceled += action;

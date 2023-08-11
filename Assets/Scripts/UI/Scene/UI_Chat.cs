@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,6 +40,12 @@ public class UI_Chat : UI_Scene
         Managers.Network.ReceiveChatHandler += UpdateChat;
         Get<TMP_InputField>((int)InputFields.InputField).onSubmit.AddListener(delegate { SendChat(); } );
         // Get<TMP_InputField>((int)InputFields.InputField).onEndEdit.AddListener(OnEndEditEventMethod);
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Network.ReceiveChatHandler -= UpdateChat;
+        Managers.Input.UIActions.Submit.RemoveEvent(FocusInputField);
     }
 
     public void FocusInputField(InputAction.CallbackContext context)

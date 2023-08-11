@@ -90,9 +90,17 @@ public class ResourceManager
             return;
         }
 
-        if (t > 0)
-            Object.Destroy(go,t);
+        PhotonView pv = go.GetComponent<PhotonView>();
+        if (pv != null && pv.IsMine)
+        {
+            PhotonNetwork.Destroy(go);
+        }
         else
-            Object.Destroy(go);
+        {
+            if (t > 0)
+                Object.Destroy(go,t);
+            else
+                Object.Destroy(go);
+        }
     }
 }

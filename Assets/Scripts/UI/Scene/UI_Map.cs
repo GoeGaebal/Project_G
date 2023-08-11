@@ -42,10 +42,16 @@ public class UI_Map : UI_Scene
         Bind<Button>(typeof(Buttons));
         Bind<Camera>(typeof(Cameras));
         
-        GetButton((int)Buttons.MapButton).gameObject.BindEvent(ClickBtn);
+        GetButton((int)Buttons.MapButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.MapButton).onClick.AddListener(ClickBtn);
         Managers.Input.PlayerActions.MiniMap.AddEvent(PushShortKey);
         
         GetObject((int)GameObjects.MapPanel).SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Input.PlayerActions.MiniMap.RemoveEvent(PushShortKey);
     }
 
     private void FixedUpdate()
@@ -53,7 +59,7 @@ public class UI_Map : UI_Scene
         Get<Camera>((int)Cameras.MinimapCam).transform.position = Camera.main.transform.position;
     }
 
-    private void ClickBtn(PointerEventData evt)
+    private void ClickBtn()
     {
         OnOffMinimap();
     }

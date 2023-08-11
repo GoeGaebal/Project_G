@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Xml.Serialization;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 [System.Serializable]
 public struct Packet
@@ -46,6 +48,7 @@ public struct LootingItemInfo
     public float destX;
 }
 
+[Serializable]
 struct PlayerInfo
 {
     public int playerId, weaponPivotId, weaponId;
@@ -54,10 +57,10 @@ struct PlayerInfo
 // TODO : 리팩토링 
 // 1. 패킷을 큐 형태로 모아 보내기
 // 2. Player들을 미리 찾아놓기
-public class NetworkManager : IOnEventCallback
+public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbacks, IPunObservable
 {
-    public PhotonView View { get; private set; }
     public Player LocalPlayer { get; private set; }
+    public List<Player> PlayerList;
     private PlayerInfo _playerInfo;
     public Dictionary<int, Player> PlayerDict { get; private set; }
     
@@ -80,6 +83,7 @@ public class NetworkManager : IOnEventCallback
         ReceiveAddItem,
         ReceiveSpawnLootings,
         CustomInstantiate,
+        InitializeRoom,
 
         SynchronizeTime,
         RequestSynchronizeTime,
@@ -95,18 +99,18 @@ public class NetworkManager : IOnEventCallback
         PhotonNetwork.RemoveCallbackTarget(this);
     }
     
-    public void Init(PhotonView inPhotonView)
+    public void Init()
     {
         OnEnable();
         PlayerDict = new Dictionary<int, Player>();
-        View = inPhotonView;
+        PlayerList = new();
         _playerInfo = new PlayerInfo();
     }
 
     public void AllocateViewId()
     {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
-            PhotonNetwork.AllocateViewID(View);
+            PhotonNetwork.AllocateViewID(photonView);
         else
             PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.RequestViewID, null, SendMasterOptions, SendOptions.SendReliable);
     }
@@ -129,7 +133,7 @@ public class NetworkManager : IOnEventCallback
             }
             case (byte)CustomRaiseEventCode.RequestViewID:
             {
-                BroadCastClients(Serialize(View.ViewID), (byte)CustomRaiseEventCode.ReceiveViewID);
+                BroadCastClients(Serialize(photonView.ViewID), (byte)CustomRaiseEventCode.ReceiveViewID);
                 break;
             }
             case (byte)CustomRaiseEventCode.ReceiveViewID:
@@ -138,8 +142,8 @@ public class NetworkManager : IOnEventCallback
                 if (data != null)
                 {
                     var viewId = Deserialize<int>(data);
-                    if (View.ViewID != viewId)
-                        View.ViewID = viewId;
+                    if (photonView.ViewID != viewId)
+                        photonView.ViewID = viewId;
                 }
                 break;
             }
@@ -194,14 +198,31 @@ public class NetworkManager : IOnEventCallback
             case (byte)CustomRaiseEventCode.CustomInstantiate:
             {
                 object[] data = (object[]) photonEvent.CustomData;
-                GameObject player = Managers.Resource.Instantiate("Player", (Vector3) data[0], (Quaternion) data[1]);
-                PhotonView photonView = player.GetComponent<PhotonView>();
-                PhotonView weaponPivotView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
-                PhotonView weaponView = player.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
+                int actorNumber = (int)data[5];
+                GameObject newPlayer = Managers.Resource.Instantiate("Player", (Vector3) data[0], (Quaternion) data[1]);
+                PhotonView photonView = newPlayer.GetComponent<PhotonView>();
+                PhotonView weaponPivotView = newPlayer.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+                PhotonView weaponView = newPlayer.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
                 photonView.ViewID = (int) data[2];
                 weaponPivotView.ViewID = (int) data[3];
                 weaponView.ViewID = (int) data[4];
-                PlayerDict.Add(photonView.ViewID, player.GetComponent<Player>());
+                PlayerDict.Add(actorNumber, newPlayer.GetComponent<Player>());
+                PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).TagObject = newPlayer;
+                break;
+            }
+            case (byte)CustomRaiseEventCode.InitializeRoom:
+            {
+                var data = (byte[])photonEvent.CustomData;
+                List<int> newViews = Deserialize<List<int>>(data);
+                int idx = -1;
+                foreach (var player in PlayerDict.Values)
+                {
+                    PhotonView[] views = player.gameObject.GetPhotonViewsInChildren();
+                    foreach(var view in views)
+                    {
+                        view.ViewID = newViews[++idx];
+                    }
+                }
                 break;
             }
         }
@@ -217,7 +238,6 @@ public class NetworkManager : IOnEventCallback
     public void BroadCastGatheringDamaged(int guid, float damage)
     {
         BroadCastClients(Serialize(new Packet() { state = 0, damage = damage, guid = guid }), (byte)CustomRaiseEventCode.ReceiveGatheringPacket);
-        
     }
     
     public void BroadCastObjectDestroy(int guid)
@@ -282,17 +302,21 @@ public class NetworkManager : IOnEventCallback
 
     private static IEnumerable<byte> Serialize<T>(T data)
     {
-        BinaryFormatter bf = new();
-        MemoryStream ms = new();
-        bf.Serialize(ms, data);
-        return ms.ToArray();
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        using (MemoryStream ms = new MemoryStream())
+        {
+            serializer.Serialize(ms, data);
+            return ms.ToArray();
+        }
     }
 
     private static T Deserialize<T>(byte[] data)
     {
-        BinaryFormatter bf = new();
-        MemoryStream ms = new(data);
-        return (T)bf.Deserialize(ms);
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        using (MemoryStream ms = new MemoryStream(data))
+        {
+            return (T)serializer.Deserialize(ms);
+        }
     }
     #endregion
     
@@ -300,6 +324,7 @@ public class NetworkManager : IOnEventCallback
     {
         // LocalPlayer = PhotonNetwork.Instantiate("Prefabs/Player", spawnPos, Quaternion.identity).GetComponent<Player>();
         GameObject player = Managers.Resource.Instantiate("Player", spawnPos, Quaternion.identity);
+
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView weaponPivotView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
         PhotonView weaponView = player.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
@@ -311,33 +336,57 @@ public class NetworkManager : IOnEventCallback
         }
         else if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView) && PhotonNetwork.AllocateViewID(weaponPivotView))
         {
-            object[] data = new object[]
-            {
-                player.transform.position, player.transform.rotation, photonView.ViewID, weaponPivotView.ViewID ,weaponView.ViewID
-            };
-
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions
-            {
-                Receivers = ReceiverGroup.Others,
-                CachingOption = EventCaching.AddToRoomCache
-            };
-
-            SendOptions sendOptions = new SendOptions
-            {
-                Reliability = true
-            };
-            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.CustomInstantiate, data, raiseEventOptions, sendOptions);
+            InstantiatePlayer(player.transform.position, player.transform.rotation, photonView.ViewID, weaponView.ViewID, weaponPivotView.ViewID);
             LocalPlayer = player.GetComponent<Player>();
-             _playerInfo.playerId = photonView.ViewID ;
+            _playerInfo.playerId = photonView.ViewID ;
             _playerInfo.weaponPivotId = weaponPivotView.ViewID;
             _playerInfo.weaponId = weaponView.ViewID;
-            PlayerDict.Add(photonView.ViewID,LocalPlayer); 
+            PlayerDict.Add(PhotonNetwork.LocalPlayer.ActorNumber, LocalPlayer); 
+        }
+        PhotonNetwork.LocalPlayer.TagObject = player;
+    }
+
+    private void InstantiatePlayer(Vector3 position, Quaternion rotation, int playerView, int pivotView, int weaponView)
+    {
+        object[] data = new object[]
+        {
+            position, rotation, playerView, pivotView, weaponView, PhotonNetwork.LocalPlayer.ActorNumber
+        };
+        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.CustomInstantiate, data, SendClientOptions, new SendOptions { Reliability = true });
+    }
+
+    public void InitRoom()
+    {
+        GameObject[] players = new []{Managers.Resource.Instantiate("Player"),Managers.Resource.Instantiate("Player"),Managers.Resource.Instantiate("Player")};
+        foreach (var player in players)
+        {
+            PhotonView[] views = player.GetPhotonViewsInChildren();
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
+            {
+                foreach (var view in views)
+                {
+                    PhotonNetwork.AllocateViewID(view);
+                }
+                PlayerDict.Add(views[0].ViewID, player.GetComponent<Player>());
+            }
+            PlayerList.Add(player.GetComponent<Player>());
+            player.SetActive(false);
         }
     }
 
-    public void DespawnLocalplayer()
+    public void DespawnLocalPlayer()
     {
+        if (LocalPlayer == null)
+            return;
         
+        PhotonView photonView = LocalPlayer.GetComponent<PhotonView>();
+        PhotonView weaponPivotView = LocalPlayer.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
+        PhotonView weaponView = LocalPlayer.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
+        
+        // Managers.Resource.Destroy(LocalPlayer.gameObject);
+        _playerInfo.playerId = 0;
+        Managers.Input.PlayerActions.Move.Reset();
+        Managers.Input.PlayerActions.Attack.Reset();
     }
 
     public void SynchronizeTime()
@@ -354,13 +403,54 @@ public class NetworkManager : IOnEventCallback
     public void RequestSynchronizeTime()
     {
         if(Managers.TimeSlot == null) return;
-
+        
         if(PhotonNetwork.IsMasterClient) return;
-
+        
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.MasterClient};  
         PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.RequestSynchronizeTime, null, raiseEventOptions, SendOptions.SendReliable);
-   
     }
-    
-    
+
+    public void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        List<int> viewIds = new();
+        foreach (var player in PlayerDict.Values)
+        {
+            PhotonView[] views = player.gameObject.GetPhotonViewsInChildren();
+            foreach (var view in views)
+            {
+                viewIds.Add(view.ViewID);
+            }
+        }
+        if(PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
+            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.InitializeRoom, Serialize(viewIds), SendClientOptions, new SendOptions { Reliability = true });
+        // if(newPlayer.UserId != PhotonNetwork.LocalPlayer.UserId)
+        //     InstantiatePlayer(LocalPlayer.transform.position, LocalPlayer.transform.rotation, _playerInfo.playerId, _playerInfo.weaponPivotId, _playerInfo.weaponId);
+    }
+
+    public void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        // Managers.Resource.Destroy(PlayerDict[otherPlayer.ActorNumber].gameObject);
+        PlayerDict.Remove(otherPlayer.ActorNumber);
+        // throw new NotImplementedException();
+    }
+
+    public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        // throw new NotImplementedException();
+    }
+
+    public void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
+    {
+        // throw new NotImplementedException();
+    }
+
+    public void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    {
+        // throw new NotImplementedException();
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // throw new NotImplementedException();
+    }
 }

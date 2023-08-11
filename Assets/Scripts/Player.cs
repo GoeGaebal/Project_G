@@ -71,7 +71,8 @@ public class Player : DamageableEntity
 
         animator = GetComponent<Animator>();
 
-        Binding();
+        if(photonView.IsMine)
+            Binding();
 
         dieAction += () => {
             animator.SetTrigger("die");
@@ -114,7 +115,6 @@ public class Player : DamageableEntity
             if(Managers.Map.CheckCanGo(dest))
                 rb.MovePosition(dest);
         }
-            
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -228,6 +228,15 @@ public class Player : DamageableEntity
         else 
         {
             State = EnumPlayerStates.Idle;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (photonView.IsMine)
+        {
+            Managers.Input.PlayerActions.Move.RemoveEvent(OnMove);
+            Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
         }
     }
 }
