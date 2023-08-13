@@ -86,13 +86,35 @@ public class UI_Item : UI_Base
         {
             if (currentItem.item.ID/100 == item.ID/100)
             {
-                var parentTransform = transform.parent.transform;
+                if(currentItem.item.ID/100 == 40 &&
+                currentItem.item == item &&
+                count < ((CountableItem)item).MaxCount)//포션 슬롯의 경우
+                {
+                    if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
+                    {
+                        currentItem.count -= ((CountableItem)item).MaxCount - count;
+                        currentItem.RefreshCount();
+                        count = ((CountableItem)item).MaxCount;
+                        UI_Inven.potion1Text.text = count.ToString();
+                    }
+                    else//아이템 합침
+                    {
+                        count += currentItem.count;
+                        currentItem.RemoveItem();
+                        UI_Inven.potion1Text.text = count.ToString();
+                    }
+                    RefreshCount();
+                }
+                else
+                {
+                    var parentTransform = transform.parent.transform;
 
-                parentBeforeDrag = currentItem.parentBeforeDrag;
-                transform.SetParent(currentItem.parentBeforeDrag);
+                    parentBeforeDrag = currentItem.parentBeforeDrag;
+                    transform.SetParent(currentItem.parentBeforeDrag);
 
-                currentItem.parentBeforeDrag = parentTransform;
-                currentItem.transform.SetParent(parentTransform);
+                    currentItem.parentBeforeDrag = parentTransform;
+                    currentItem.transform.SetParent(parentTransform);
+                }
             }
             else
             {

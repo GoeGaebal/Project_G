@@ -53,8 +53,8 @@ public class UI_Inven : UI_Scene
     public UI_Slot[] equips;//장비창
     //private int _equipSlotCount = 8;
 
-    private static Image[] _qSlots = new Image[3];
-    private static Text _potion1Text;
+    public static Image[] qSlots = new Image[3];
+    public static Text potion1Text;
     private bool _canUsePotion = true;
 
     private bool _inventory_activeself;
@@ -106,10 +106,11 @@ public class UI_Inven : UI_Scene
             idex++;
         }
 
-        _qSlots[0] = Get<Image>((int)Images.WeaponImage);
-        _qSlots[1] = Get<Image>((int)Images.ToolImage);
-        _qSlots[2] = Get<Image>((int) Images.PotionImage);
-        _potion1Text = Get<Text>((int)Texts.PotionAmountText);
+        qSlots[0] = Get<Image>((int)Images.WeaponImage);
+        qSlots[1] = Get<Image>((int)Images.ToolImage);
+        qSlots[2] = Get<Image>((int) Images.PotionImage);
+        potion1Text = Get<Text>((int)Texts.PotionAmountText);
+        potion1Text.gameObject.SetActive(false);
         GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
         GetButton((int)Buttons.CloseButton).gameObject.BindEvent(ClickInventoryButton);
         Managers.Input.PlayerActions.Inventory.AddEvent(OnOffInventory);
@@ -152,8 +153,18 @@ public class UI_Inven : UI_Scene
     private IEnumerator PotionUse()
     {
         var potion = equips[7].transform.GetChild(0).GetComponent<UI_Item>();
-        ((HealthPotionItem)potion.item).UsePotion(potion);
-        _potion1Text.text = potion.count.ToString();
+        if(potion.count <= 1)
+        {
+            ((HealthPotionItem)potion.item).UsePotion(potion);
+            qSlots[2].sprite = null;
+            potion1Text.text = "0";
+            potion1Text.gameObject.SetActive(false);
+        }
+        else
+        {
+            ((HealthPotionItem)potion.item).UsePotion(potion);
+            potion1Text.text = potion.count.ToString();
+        }
         yield return new WaitForSeconds(0.5f);
         _canUsePotion = true;
     }
@@ -247,10 +258,11 @@ public class UI_Inven : UI_Scene
 
     public static void ChangeQuickImage(int index, UI_Item item)
     {
-        _qSlots[index].sprite = item.item.Icon;
+        qSlots[index].sprite = item.item.Icon;
         if (index == 2)
         {
-            _potion1Text.text = item.count.ToString();
+            potion1Text.gameObject.SetActive(true);
+            potion1Text.text = item.count.ToString();
         }
     }
 
