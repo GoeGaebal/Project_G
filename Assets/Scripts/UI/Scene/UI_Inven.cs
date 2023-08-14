@@ -23,21 +23,21 @@ public class UI_Inven : UI_Scene
 
     enum EquipSlots
     {
-        Weapon,
-        Tool,
+        Weapon1,
+        //Weapon2,
         Hat,
         Upper,
         Lower,
         Shoes,
-        Gloves,
+        //Gloves,
         Potion_1,
         //Potion_2
     }
 
     enum Images
     {
+        //Weapon1Image,
         WeaponImage,
-        ToolImage,
         PotionImage
     }
 
@@ -51,9 +51,9 @@ public class UI_Inven : UI_Scene
     private int _InventorySlotCount = 24;
 
     public UI_Slot[] equips;//장비창
-    //private int _equipSlotCount = 8;
+    //private int _equipSlotCount = 6;
 
-    public static Image[] qSlots = new Image[3];
+    public static Image[] qSlots = new Image[2];
     public static Text potion1Text;
     private bool _canUsePotion = true;
 
@@ -94,7 +94,7 @@ public class UI_Inven : UI_Scene
         }
 
         //장비창 슬롯 생성
-        //0: 무기, 1: 도구, 2: 모자, 3: 상의, 4: 하의, 5: 신발, 6: 장갑, 7: 포션
+        //0: 무기, 1: 모자, 2: 상의, 3: 하의, 4: 신발, 5: 포션
         equips = new UI_Slot[Enum.GetValues(typeof(EquipSlots)).Length];
         int idex = 0;
         foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
@@ -106,9 +106,9 @@ public class UI_Inven : UI_Scene
             idex++;
         }
 
+        //qSlots[0] = Get<Image>((int)Images.Weapon1Image);
         qSlots[0] = Get<Image>((int)Images.WeaponImage);
-        qSlots[1] = Get<Image>((int)Images.ToolImage);
-        qSlots[2] = Get<Image>((int) Images.PotionImage);
+        qSlots[1] = Get<Image>((int) Images.PotionImage);
         potion1Text = Get<Text>((int)Texts.PotionAmountText);
         potion1Text.gameObject.SetActive(false);
         GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
@@ -128,15 +128,31 @@ public class UI_Inven : UI_Scene
     
     private void Update()
     {//키입력에 따른 퀵슬롯 선택 변화(추후 New Input System으로 변경)
+        /*
         if (Managers.Input.PlayerActions.QuickSlot1.IsPressed())//무기 들게
         {
-            PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+            if(equips[0].transform.GetChild(0).GetComponent<UI_Item>().item.ID == 1001)
+            {
+                PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+            }
+            else
+            {
+                PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+            }
         }
         else if (Managers.Input.PlayerActions.QuickSlot2.IsPressed())//도구 들게
         {
-            PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+            if (equips[1].transform.GetChild(0).GetComponent<UI_Item>().item.ID == 1001)
+            {
+                PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+            }
+            else
+            {
+                PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+            }
         }
-        else if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
+        */
+        /*else */if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
         {
             if (_canUsePotion)
             {
@@ -152,13 +168,13 @@ public class UI_Inven : UI_Scene
 
     private IEnumerator PotionUse()
     {
-        var potion = equips[7].transform.GetChild(0).GetComponent<UI_Item>();
+        var potion = equips[5].transform.GetChild(0).GetComponent<UI_Item>();
         if(potion.count <= 1)
         {
             ((HealthPotionItem)potion.item).UsePotion(potion);
-            qSlots[2].sprite = null;
-            potion1Text.text = "0";
+            qSlots[1].sprite = null;
             potion1Text.gameObject.SetActive(false);
+            potion1Text.text = "0";
         }
         else
         {
@@ -259,7 +275,7 @@ public class UI_Inven : UI_Scene
     public static void ChangeQuickImage(int index, UI_Item item)
     {
         qSlots[index].sprite = item.item.Icon;
-        if (index == 2)
+        if (index == 1)//포션의 경우
         {
             potion1Text.gameObject.SetActive(true);
             potion1Text.text = item.count.ToString();

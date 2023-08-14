@@ -209,7 +209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -289, y: 0}
+  m_AnchoredPosition: {x: -218.6001, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8001556171805170214
@@ -419,7 +419,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -569.49994, y: 0}
+  m_AnchoredPosition: {x: -499.10004, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &173565486682403247
@@ -553,7 +553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 420.8001, y: 0}
+  m_AnchoredPosition: {x: 350.39996, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7600453671444591304
@@ -645,7 +645,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 8
+          m_IntArgument: 7
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -822,7 +822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 136.90009, y: 0}
+  m_AnchoredPosition: {x: 207.29999, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &733807368813264843
@@ -956,7 +956,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -429.3999, y: 0}
+  m_AnchoredPosition: {x: -359, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &537617992706471432
@@ -1090,7 +1090,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 563.80005, y: 0}
+  m_AnchoredPosition: {x: 493.3999, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1292116410428667068
@@ -1182,7 +1182,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 9
+          m_IntArgument: 8
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1199,7 +1199,7 @@ GameObject:
   - component: {fileID: 8990255256302099027}
   - component: {fileID: 1752232935102761628}
   m_Layer: 5
-  m_Name: ToolBackground
+  m_Name: WeaponBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1417,7 +1417,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4327829951194530342
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1436,7 +1436,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 278, y: 0}
+  m_AnchoredPosition: {x: 348.3999, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6559099475726369728
@@ -1705,7 +1705,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.0999146, y: 0}
+  m_AnchoredPosition: {x: 65.29999, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2371435452609176379
@@ -1949,7 +1949,7 @@ GameObject:
   - component: {fileID: 6130581367390513225}
   - component: {fileID: 8095185638895755199}
   m_Layer: 5
-  m_Name: ToolImage
+  m_Name: WeaponImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2522,7 +2522,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -147.3999, y: 0}
+  m_AnchoredPosition: {x: -77, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &629268549251286373
@@ -3331,7 +3331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -709.49994, y: 0}
+  m_AnchoredPosition: {x: -639.10004, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7933027397596889910
@@ -3440,12 +3440,12 @@ GameObject:
   - component: {fileID: 6612480391168760541}
   - component: {fileID: 6218592921047134295}
   m_Layer: 5
-  m_Name: WeaponBackground
+  m_Name: Weapon1Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2088162531833905655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3552,8 +3552,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 812.87177, y: -108.15344}
-  m_SizeDelta: {x: 1579.5311, y: 153.1298}
+  m_AnchoredPosition: {x: 742.2256, y: -108.15344}
+  m_SizeDelta: {x: 1438.2389, y: 153.1298}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1600945383130580652
 CanvasRenderer:
@@ -3609,13 +3609,12 @@ MonoBehaviour:
   itemsToPickUp:
   - {fileID: 11400000, guid: 936143f86c75b104ea79a024dde492a9, type: 2}
   - {fileID: 11400000, guid: 4313e2a68858b274e9200727bbd16507, type: 2}
-  - {fileID: 11400000, guid: c133e599971f7ee469d758839f0739dd, type: 2}
+  - {fileID: 11400000, guid: 08ea4c78b0c8e3e4d9e2f51a74712633, type: 2}
   - {fileID: 11400000, guid: 2fd5caa1ee8d1fa429d6546098228270, type: 2}
   - {fileID: 11400000, guid: ca5794cd80082f144955418ec8f7b25b, type: 2}
   - {fileID: 11400000, guid: 63f82aa181644a64492f5d28fc9deece, type: 2}
   - {fileID: 11400000, guid: 73bb65a386ccc384382510be2b7ca511, type: 2}
   - {fileID: 11400000, guid: ef2daea83c6530244a828e3d8a5b80d1, type: 2}
-  - {fileID: 11400000, guid: e16960559bd21a64d82dc0b366a00efb, type: 2}
   - {fileID: 11400000, guid: 16b38c28445b86548a501a958e127d73, type: 2}
 --- !u!1 &8517452879207703818
 GameObject:
@@ -3789,7 +3788,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 706.7, y: 0}
+  m_AnchoredPosition: {x: 636.29987, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8083380136869836230
@@ -4622,6 +4621,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gloves
+      objectReference: {fileID: 0}
+    - target: {fileID: 1524012079322203256, guid: f2d4d1130ee13f843a13df4237a9978c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2333484574000129185, guid: f2d4d1130ee13f843a13df4237a9978c,
         type: 3}
@@ -6267,7 +6271,7 @@ PrefabInstance:
     - target: {fileID: 1524012079322203256, guid: f2d4d1130ee13f843a13df4237a9978c,
         type: 3}
       propertyPath: m_Name
-      value: Weapon
+      value: Weapon1
       objectReference: {fileID: 0}
     - target: {fileID: 2333484574000129185, guid: f2d4d1130ee13f843a13df4237a9978c,
         type: 3}
@@ -6885,7 +6889,12 @@ PrefabInstance:
     - target: {fileID: 1524012079322203256, guid: f2d4d1130ee13f843a13df4237a9978c,
         type: 3}
       propertyPath: m_Name
-      value: Tool
+      value: Weapon2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1524012079322203256, guid: f2d4d1130ee13f843a13df4237a9978c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2333484574000129185, guid: f2d4d1130ee13f843a13df4237a9978c,
         type: 3}

@@ -6,7 +6,7 @@ public class UI_Slot : UI_Base
 {
     public bool isEquip = false;
     public int equipIndex = -1;
-    public int[] itemIndex = { 10, 20, 30, 31, 32, 33, 34, 40 };
+    private int[] _itemIndex = { 10, 30, 31, 32, 33, 40 };
 
     private void Start()
     {
@@ -24,20 +24,28 @@ public class UI_Slot : UI_Base
         if (isEquip)//슬롯이 장비창일 때
         {
             int checkIndex = item.item.ID / 100;
-            if (itemIndex[equipIndex] == checkIndex)
+            if (_itemIndex[equipIndex] == checkIndex)
             {
                 item.parentBeforeDrag = transform;
-                if (checkIndex == 10)
+                if (checkIndex == 10)//무기
                 {
                     UI_Inven.ChangeQuickImage(0, item);
+                    if (GetComponent<UI_Item>().item.ID == 1001)
+                    {
+                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+                    }
+                    else if(GetComponent<UI_Item>().item.ID == 1002)
+                    {
+                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+                    }
                 }
-                else if (checkIndex == 20)
+                /*else if (checkIndex == 20)
                 {
                     UI_Inven.ChangeQuickImage(1, item);
-                }
-                else if (checkIndex == 40)
+                }*/
+                else if (checkIndex == 40)//포션
                 {
-                    UI_Inven.ChangeQuickImage(2, item);
+                    UI_Inven.ChangeQuickImage(1, item);
                 }
                 else
                 {

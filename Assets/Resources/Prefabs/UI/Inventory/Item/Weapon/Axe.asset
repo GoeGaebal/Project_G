@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c019a50e25038e4a937e58e17451479, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f01f5a94ee7037498e9156553d227dc, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
-  _id: 2001
+  _id: 1002
   _name: "\uB3C4\uB07C"
   _tooltip: "\uB098\uBB34\uB97C \uC790\uB97C \uC218 \uC788\uC744 \uAC83 \uAC19\uB2E4."
   _icon: {fileID: 21300000, guid: 172774604c1bee84185a69041576525b, type: 3}
   _droppedItemPrefab: {fileID: 0}
-  _efficiency: 1
+  _attackDamage: 1
+  _attackSpeed: 1
