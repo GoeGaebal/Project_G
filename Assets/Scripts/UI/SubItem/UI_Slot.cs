@@ -4,47 +4,58 @@ using UnityEngine.UI;
 
 public class UI_Slot : UI_Base
 {
-    public Image icon;//아이템의 이미지
-    public Color selectedColor, notSelectedColor;//선택된 슬롯의 색깔 변경을 위한 변수
-    private UI_Item originalItem;//Swap에 사용
+    public bool isEquip = false;
+    public int equipIndex = -1;
+    private int[] _itemIndex = { 10, 30, 31, 32, 33, 40 };
 
     private void Start()
     {
         Init();
     }
-    
+
     public override void Init()
     {
-        icon = GetComponent<Image>();
-        AddUIEvent(gameObject,OnDrop,Define.UIEvent.Drop);
-        Deselect();
+        AddUIEvent(gameObject, OnDrop, Define.UIEvent.Drop);
     }
 
-    public void Select()//선택된 슬롯 색깔 변경
+    public void OnDrop(PointerEventData eventData) //아이템을 빈 슬롯에 놓았을 때
     {
-        icon.color = selectedColor;
-    }
-
-    public void Deselect()//선택되지 않게 된 슬롯 색깔 변경
-    {
-        icon.color = notSelectedColor;
-    }
-    
-    public void OnDrop(PointerEventData eventData) //아이템을 슬롯에 놓았을 때
-    {
-        UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();
-        if (transform.childCount == 0) //빈 슬롯일 때
+        UI_Item currentItem = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
+        if (isEquip)//슬롯이 장비창일 때
         {
-            item.parentAfterDrag = transform;
+            int checkIndex = currentItem.item.ID / 100;
+            if (_itemIndex[equipIndex] == checkIndex)
+            {
+                currentItem.parentBeforeDrag = transform;
+                if (checkIndex == 10)//무기
+                {
+                    UI_Inven.ChangeQuickImage(0, currentItem);
+                    if (currentItem.item.ID == 1001)
+                    {
+                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+                    }
+                    else if(currentItem.item.ID == 1002)
+                    {
+                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+                    }
+                }
+                /*else if (checkIndex == 20)
+                {
+                    UI_Inven.ChangeQuickImage(1, item);
+                }*/
+                else if (checkIndex == 40)//포션
+                {
+                    UI_Inven.ChangeQuickImage(1, currentItem);
+                }
+                else
+                {
+                    return;
+                }
+            }
         }
-        else //빈 슬롯이 아닐 경우 Swap
+        else//슬롯이 인벤토리일 때
         {
-            originalItem = transform.GetChild(0).GetComponent<UI_Item>();
-            originalItem.parentAfterDrag = item.parentAfterDrag;
-            originalItem.transform.SetParent(item.parentAfterDrag);
-
-            item.parentAfterDrag = transform;
-            item.transform.SetParent(transform);
+            currentItem.parentBeforeDrag = transform;
         }
     }
 }

@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c019a50e25038e4a937e58e17451479, type: 3}
-  m_Name: Axe
+  m_Script: {fileID: 11500000, guid: 248982576d4109e4fa19e6da063f4273, type: 3}
+  m_Name: Helmet
   m_EditorClassIdentifier: 
-  _id: 2
-  _name: "\uB3C4\uB07C"
-  _tooltip: "\uB098\uBB34\uB97C \uC790\uB97C \uC218 \uC788\uC744 \uAC83 \uAC19\uB2E4."
-  _icon: {fileID: 21300000, guid: 172774604c1bee84185a69041576525b, type: 3}
+  _id: 3001
+  _name: "\uBAA8\uC790"
+  _tooltip: 
+  _icon: {fileID: 21300000, guid: fd6e4fc32c78509458fc45ea4a478ba8, type: 3}
   _droppedItemPrefab: {fileID: 0}
-  _efficiency: 1
+  _damage: 0
+  _hp: 0
