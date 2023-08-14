@@ -387,6 +387,7 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
     public void InitRoom()
     {
         _playerList = new []{Managers.Resource.Instantiate("Player"), Managers.Resource.Instantiate("Player"), Managers.Resource.Instantiate("Player")};
+        int manualViewId = 1002;
         foreach (var player in _playerList)
         {
             PhotonView[] views = player.GetComponent<Player>().PhotonViews;
@@ -394,6 +395,7 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
             {
                 view.OwnershipTransfer = OwnershipOption.Request;
                 if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected) PhotonNetwork.AllocateViewID(view);
+                else view.ViewID = manualViewId++;
             }
             _playerQueue.Enqueue(player.GetComponent<Player>());
             player.SetActive(false);
@@ -407,18 +409,7 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
             LocalPlayer.BindingAction();
         }
     }
-
-    public void DespawnLocalPlayer()
-    {
-        if (LocalPlayer == null)
-            return;
-        
-        // Managers.Resource.Destroy(LocalPlayer.gameObject);
-        _playerInfo.playerId = 0;
-        Managers.Input.PlayerActions.Move.Reset();
-        Managers.Input.PlayerActions.Attack.Reset();
-    }
-
+    
     public void SynchronizeTime()
     {
         if(Managers.TimeSlot == null) return;
@@ -445,17 +436,9 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
         {
             List<int> stream = new();
-            foreach (var player in PlayerDict.Values)
+            foreach (var player in _playerList)
             {
-                PhotonView[] views = player.PhotonViews;
-                foreach (var view in views)
-                {
-                    stream.Add(view.ViewID);
-                }
-            }
-            foreach (var player in _playerQueue.ToArray())
-            {
-                PhotonView[] views = player.PhotonViews;
+                PhotonView[] views = player.GetPhotonViewsInChildren();
                 foreach (var view in views)
                 {
                     stream.Add(view.ViewID);
@@ -539,10 +522,7 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
 
     public void OnOwnershipRequest(PhotonView targetView, Photon.Realtime.Player requestingPlayer)
     {
-        if (targetView.Owner.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
-        {
-            targetView.TransferOwnership(requestingPlayer);
-        }
+        targetView.TransferOwnership(requestingPlayer);
     }
 
     public void OnOwnershipTransfered(PhotonView targetView, Photon.Realtime.Player previousOwner)
@@ -557,6 +537,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
 
     public void OnOwnershipTransferFailed(PhotonView targetView, Photon.Realtime.Player senderOfFailedRequest)
     {
-        Debug.Log($"Success to Transfer previousOwner {senderOfFailedRequest} to {targetView.Owner}");
+        Debug.Log($"Failed to Transfer previousOwner {senderOfFailedRequest} to {targetView.Owner}");
     }
 }
