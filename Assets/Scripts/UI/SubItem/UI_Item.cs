@@ -107,11 +107,11 @@ public class UI_Item : UI_Base
                 }
                 else
                 {
-                    if (item.ID == 1001)
+                    if (currentItem.item.ID == 1001)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
-                    else if (item.ID == 1002)
+                    else if (currentItem.item.ID == 1002)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
                     }

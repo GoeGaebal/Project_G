@@ -20,21 +20,21 @@ public class UI_Slot : UI_Base
 
     public void OnDrop(PointerEventData eventData) //아이템을 빈 슬롯에 놓았을 때
     {
-        UI_Item item = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
+        UI_Item currentItem = eventData.pointerDrag.GetComponent<UI_Item>();//현재 드래그하고 있는 아이템
         if (isEquip)//슬롯이 장비창일 때
         {
-            int checkIndex = item.item.ID / 100;
+            int checkIndex = currentItem.item.ID / 100;
             if (_itemIndex[equipIndex] == checkIndex)
             {
-                item.parentBeforeDrag = transform;
+                currentItem.parentBeforeDrag = transform;
                 if (checkIndex == 10)//무기
                 {
-                    UI_Inven.ChangeQuickImage(0, item);
-                    if (GetComponent<UI_Item>().item.ID == 1001)
+                    UI_Inven.ChangeQuickImage(0, currentItem);
+                    if (currentItem.item.ID == 1001)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
-                    else if(GetComponent<UI_Item>().item.ID == 1002)
+                    else if(currentItem.item.ID == 1002)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
                     }
@@ -45,7 +45,7 @@ public class UI_Slot : UI_Base
                 }*/
                 else if (checkIndex == 40)//포션
                 {
-                    UI_Inven.ChangeQuickImage(1, item);
+                    UI_Inven.ChangeQuickImage(1, currentItem);
                 }
                 else
                 {
@@ -55,7 +55,7 @@ public class UI_Slot : UI_Base
         }
         else//슬롯이 인벤토리일 때
         {
-            item.parentBeforeDrag = transform;
+            currentItem.parentBeforeDrag = transform;
         }
     }
 }
