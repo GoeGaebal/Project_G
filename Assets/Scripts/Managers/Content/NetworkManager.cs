@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Xml.Serialization;
+using Photon.Pun.Demo.Cockpit;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -57,12 +56,15 @@ struct PlayerInfo
 // TODO : 리팩토링 
 // 1. 패킷을 큐 형태로 모아 보내기
 // 2. Player들을 미리 찾아놓기
-public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbacks, IPunObservable
+public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbacks , IPunOwnershipCallbacks , IPunObservable
 {
+    public const int MaxPlayer = 3;
     public Player LocalPlayer { get; private set; }
-    public List<Player> PlayerList;
-    private PlayerInfo _playerInfo;
     public Dictionary<int, Player> PlayerDict { get; private set; }
+    
+    private PlayerInfo _playerInfo;
+    private Queue<Player> _playerQueue;
+    private GameObject[] _playerList;
     
     public Action<string> ReceiveChatHandler;
     public Action<int> ReceiveAddItemHandler;
@@ -83,7 +85,7 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
         ReceiveAddItem,
         ReceiveSpawnLootings,
         CustomInstantiate,
-        InitializeRoom,
+        EnterRoom,
 
         SynchronizeTime,
         RequestSynchronizeTime,
@@ -103,7 +105,9 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
     {
         OnEnable();
         PlayerDict = new Dictionary<int, Player>();
-        PlayerList = new();
+        photonView.ObservedComponents ??= new List<Component>();
+        photonView.ObservedComponents.Add(this);
+        _playerQueue = new();
         _playerInfo = new PlayerInfo();
     }
 
@@ -210,18 +214,43 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
                 PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).TagObject = newPlayer;
                 break;
             }
-            case (byte)CustomRaiseEventCode.InitializeRoom:
+            case (byte)CustomRaiseEventCode.EnterRoom:
             {
                 var data = (byte[])photonEvent.CustomData;
-                List<int> newViews = Deserialize<List<int>>(data);
-                int idx = -1;
-                foreach (var player in PlayerDict.Values)
+                List<int> stream = Deserialize<List<int>>(data);
+                int enteredActor = stream[^2];
+                int allocatedView = stream[^1];
+
+                if (enteredActor == PhotonNetwork.LocalPlayer.ActorNumber)
                 {
-                    PhotonView[] views = player.gameObject.GetPhotonViewsInChildren();
-                    foreach(var view in views)
+                    int idx = 0;
+                    foreach (var player in _playerQueue.ToArray())
                     {
-                        view.ViewID = newViews[++idx];
+                        PhotonView[] views = player.PhotonViews;
+                        foreach(var view in views)
+                        {
+                            view.ViewID = stream[idx++];
+                        }
                     }
+                    int count =  stream[idx];
+                    for (int i = 0; i < count; i++)
+                    {
+                        int actorNr = stream[idx + 2 * i + 1];
+                        int viewId = stream[idx + 2 * i + 2];
+                        Player onlinePlayer = TakeoutPlayerQueue(viewId);
+                        PlayerDict.Add(actorNr, onlinePlayer);
+                        onlinePlayer.gameObject.SetActive(true);
+                    }
+                }
+                PlayerDict.Add(enteredActor,TakeoutPlayerQueue(allocatedView));
+                PlayerDict[enteredActor].gameObject.SetActive(true);
+                PlayerDict[enteredActor].transform.position = Vector3.zero;
+                if (enteredActor == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    LocalPlayer = PlayerDict[enteredActor];
+                    PhotonView[] views = LocalPlayer.PhotonViews;
+                    foreach(var view in views)
+                        view.RequestOwnership();
                 }
                 break;
             }
@@ -357,20 +386,25 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
 
     public void InitRoom()
     {
-        GameObject[] players = new []{Managers.Resource.Instantiate("Player"),Managers.Resource.Instantiate("Player"),Managers.Resource.Instantiate("Player")};
-        foreach (var player in players)
+        _playerList = new []{Managers.Resource.Instantiate("Player"), Managers.Resource.Instantiate("Player"), Managers.Resource.Instantiate("Player")};
+        foreach (var player in _playerList)
         {
-            PhotonView[] views = player.GetPhotonViewsInChildren();
-            if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
+            PhotonView[] views = player.GetComponent<Player>().PhotonViews;
+            foreach (var view in views)
             {
-                foreach (var view in views)
-                {
-                    PhotonNetwork.AllocateViewID(view);
-                }
-                PlayerDict.Add(views[0].ViewID, player.GetComponent<Player>());
+                view.OwnershipTransfer = OwnershipOption.Request;
+                if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected) PhotonNetwork.AllocateViewID(view);
             }
-            PlayerList.Add(player.GetComponent<Player>());
+            _playerQueue.Enqueue(player.GetComponent<Player>());
             player.SetActive(false);
+        }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            var player = TakeoutPlayerQueue();
+            player.gameObject.SetActive(true);
+            LocalPlayer = player;
+            PlayerDict.Add(PhotonNetwork.LocalPlayer.ActorNumber, player);
+            LocalPlayer.BindingAction();
         }
     }
 
@@ -378,10 +412,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
     {
         if (LocalPlayer == null)
             return;
-        
-        PhotonView photonView = LocalPlayer.GetComponent<PhotonView>();
-        PhotonView weaponPivotView = LocalPlayer.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
-        PhotonView weaponView = LocalPlayer.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
         
         // Managers.Resource.Destroy(LocalPlayer.gameObject);
         _playerInfo.playerId = 0;
@@ -412,26 +442,73 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
 
     public void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        List<int> viewIds = new();
-        foreach (var player in PlayerDict.Values)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
         {
-            PhotonView[] views = player.gameObject.GetPhotonViewsInChildren();
-            foreach (var view in views)
+            List<int> stream = new();
+            foreach (var player in PlayerDict.Values)
             {
-                viewIds.Add(view.ViewID);
+                PhotonView[] views = player.PhotonViews;
+                foreach (var view in views)
+                {
+                    stream.Add(view.ViewID);
+                }
+            }
+            foreach (var player in _playerQueue.ToArray())
+            {
+                PhotonView[] views = player.PhotonViews;
+                foreach (var view in views)
+                {
+                    stream.Add(view.ViewID);
+                }
+            }
+            stream.Add(PlayerDict.Count);
+            foreach (var onlinePlayer in PlayerDict)
+            {
+                stream.Add(onlinePlayer.Key);
+                stream.Add(onlinePlayer.Value.photonView.ViewID);
+            }
+            stream.Add(newPlayer.ActorNumber);
+            stream.Add(_playerQueue.Peek().photonView.ViewID);
+            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.EnterRoom, Serialize(stream), new RaiseEventOptions { Receivers = ReceiverGroup.All }, new SendOptions { Reliability = true });
+        }
+    }
+
+    private Player TakeoutPlayerQueue(int viewId = 0)
+    {
+        if (viewId == 0) return _playerQueue.Dequeue();
+
+            for (int i = 0; i < _playerQueue.Count; i++)
+        {
+            if (_playerQueue.Peek().photonView.ViewID == viewId)
+            {
+                return _playerQueue.Dequeue();
+            }
+            else
+            {
+                _playerQueue.Enqueue(_playerQueue.Dequeue());
             }
         }
-        if(PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
-            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.InitializeRoom, Serialize(viewIds), SendClientOptions, new SendOptions { Reliability = true });
-        // if(newPlayer.UserId != PhotonNetwork.LocalPlayer.UserId)
-        //     InstantiatePlayer(LocalPlayer.transform.position, LocalPlayer.transform.rotation, _playerInfo.playerId, _playerInfo.weaponPivotId, _playerInfo.weaponId);
+        
+        return null;
+    }
+
+    public void LeftRoom()
+    {
+        PlayerDict.Clear();
+        _playerQueue.Clear();
+        foreach (var player in _playerList)
+        {
+            Managers.Resource.Destroy(player);
+        }
+        photonView.ViewID = 0;
     }
 
     public void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         // Managers.Resource.Destroy(PlayerDict[otherPlayer.ActorNumber].gameObject);
+        _playerQueue.Enqueue(PlayerDict[otherPlayer.ActorNumber]);
+        PlayerDict[otherPlayer.ActorNumber].gameObject.SetActive(false);
         PlayerDict.Remove(otherPlayer.ActorNumber);
-        // throw new NotImplementedException();
     }
 
     public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
@@ -451,6 +528,35 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        // throw new NotImplementedException();
+        if (stream.IsWriting)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //stream.SendNext();
+            }
+        }
+    }
+
+    public void OnOwnershipRequest(PhotonView targetView, Photon.Realtime.Player requestingPlayer)
+    {
+        if (targetView.Owner.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            targetView.TransferOwnership(requestingPlayer);
+        }
+    }
+
+    public void OnOwnershipTransfered(PhotonView targetView, Photon.Realtime.Player previousOwner)
+    {
+        Debug.Log($"Success to Transfer previousOwner {previousOwner} to {targetView.Owner}");
+        if (targetView.Owner.ActorNumber != PhotonNetwork.LocalPlayer.ActorNumber) return;
+        
+        var player = targetView.gameObject.GetComponent<Player>();
+        if(player != null)
+            player.BindingAction();
+    }
+
+    public void OnOwnershipTransferFailed(PhotonView targetView, Photon.Realtime.Player senderOfFailedRequest)
+    {
+        Debug.Log($"Success to Transfer previousOwner {senderOfFailedRequest} to {targetView.Owner}");
     }
 }

@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using Photon.Pun; // 유니티용 포톤 컴포넌트들
 using Photon.Realtime;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using WebSocketSharp;
 using Button = UnityEngine.UI.Button;
 
 public class LobbyScene : BaseScene
@@ -156,7 +154,7 @@ public class LobbyScene : BaseScene
         }
         else if (_roomList.Count < _lobbyScreen.RoomList.Count)
         {
-            int count = _lobbyScreen.RoomList.Count - _lobbyScreen.RoomList.Count;
+            int count = _lobbyScreen.RoomList.Count - _roomList.Count;
             for(int i = 0; i < count; i++)
                 _lobbyScreen.RemoveRoom();
         }
@@ -214,11 +212,8 @@ public class LobbyScene : BaseScene
 
     public override void OnLeftRoom()
     {
-        Managers.Network.DespawnLocalPlayer();
-        foreach (var player in FindObjectsOfType<Player>())
-        {
-            Managers.Resource.Destroy(player.gameObject);
-        }
+        Managers.Network.LeftRoom();
+        
         Managers.Map.DestoryMap();
         Managers.UI.Clear();
     }

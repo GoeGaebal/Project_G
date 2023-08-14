@@ -18,8 +18,6 @@ public class Portal : MonoBehaviour
         Debug.Log("enter감지!");
         if (Managers.Network.PlayerDict[other.gameObject.GetPhotonView().OwnerActorNr] == Managers.Network.LocalPlayer)
         {
-            Managers.Network.PlayerDict.Remove(PhotonNetwork.LocalPlayer.ActorNumber);
-            Managers.Resource.Destroy(Managers.Network.LocalPlayer.gameObject);
             PhotonNetwork.LeaveRoom();
         }
             // Managers.Scene.LoadScene(Define.Scene.Ship);

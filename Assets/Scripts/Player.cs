@@ -23,7 +23,16 @@ public class Player : DamageableEntity
     private Coroutine resetAttackCountCoroutine;
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
-   
+
+    private PhotonView[] _photonViews;
+    public PhotonView[] PhotonViews {
+        get
+        {
+            _photonViews ??= gameObject.GetPhotonViewsInChildren();
+            return _photonViews;
+        }
+    }
+
     public EnumPlayerStates State
     {
         get{
@@ -71,18 +80,18 @@ public class Player : DamageableEntity
 
         animator = GetComponent<Animator>();
 
-        if(photonView.IsMine)
-            Binding();
-
         dieAction += () => {
             animator.SetTrigger("die");
         };
     }
 
-    private void Binding()
+    public void BindingAction()
     {
-        Managers.Input.PlayerActions.Move.AddEvent(OnMove);
-        Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        if (photonView.IsMine)
+        {
+            Managers.Input.PlayerActions.Move.AddEvent(OnMove);
+            Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        }
     }
 
     private void FixedUpdate()
