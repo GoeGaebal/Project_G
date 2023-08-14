@@ -146,11 +146,13 @@ public class UI_Status : UI_Scene
     private void OpenOption(PointerEventData evt)
     {
         _optionPanel.SetActive(true);
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     private void CloseOption(PointerEventData evt)
     {
         _optionPanel.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
     }
 
     public void CheckResolution()//모니터 해상도 체크해서 설정 적용
