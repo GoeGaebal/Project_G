@@ -90,10 +90,11 @@ public class ObjectManager
         LocalObjectsDict.Add(lc.guid, go);
         return lc;
     }
-    
+
     /// <summary>
     /// 아이템을 뿌려주는 메소드
     /// </summary>
+    /// <param name="objectId">아이템 번호</param>
     /// <param name="count">아이템을 촘 몇개 뿌릴 것인지</param>
     /// <param name="spawnPos">뿌려지는 시작 장소</param>
     /// <param name="maxRadious">최대 거리</param>
@@ -118,8 +119,6 @@ public class ObjectManager
             Managers.Network.RequestSpawnLootingItems(objectId,count, spawnPos, maxRadious, minRadious);
         }
     }
-    
-    public void SpawnLootingItems(){}
 
     public void ApplySpawnLootingItems(List<LootingItemInfo> infos)
     {

@@ -6,7 +6,6 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Xml.Serialization;
-using Photon.Pun.Demo.Cockpit;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -62,7 +61,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
     public Player LocalPlayer { get; private set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
     
-    private PlayerInfo _playerInfo;
     private Queue<Player> _playerQueue;
     private GameObject[] _playerList;
     
@@ -84,7 +82,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
         ReceiveLootings,
         ReceiveAddItem,
         ReceiveSpawnLootings,
-        CustomInstantiate,
         EnterRoom,
 
         SynchronizeTime,
@@ -108,7 +105,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
         photonView.ObservedComponents ??= new List<Component>();
         photonView.ObservedComponents.Add(this);
         _playerQueue = new();
-        _playerInfo = new PlayerInfo();
     }
 
     public void AllocateViewId()
@@ -197,21 +193,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
                         packet.maxRadious,
                         packet.minRadious);
                 }
-                break;
-            }
-            case (byte)CustomRaiseEventCode.CustomInstantiate:
-            {
-                object[] data = (object[]) photonEvent.CustomData;
-                int actorNumber = (int)data[5];
-                GameObject newPlayer = Managers.Resource.Instantiate("Player", (Vector3) data[0], (Quaternion) data[1]);
-                PhotonView photonView = newPlayer.GetComponent<PhotonView>();
-                PhotonView weaponPivotView = newPlayer.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
-                PhotonView weaponView = newPlayer.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
-                photonView.ViewID = (int) data[2];
-                weaponPivotView.ViewID = (int) data[3];
-                weaponView.ViewID = (int) data[4];
-                PlayerDict.Add(actorNumber, newPlayer.GetComponent<Player>());
-                PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).TagObject = newPlayer;
                 break;
             }
             case (byte)CustomRaiseEventCode.EnterRoom:
@@ -348,41 +329,6 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
         }
     }
     #endregion
-    
-    public void SpawnLocalPlayer(Vector3 spawnPos = default(Vector3))
-    {
-        // LocalPlayer = PhotonNetwork.Instantiate("Prefabs/Player", spawnPos, Quaternion.identity).GetComponent<Player>();
-        GameObject player = Managers.Resource.Instantiate("Player", spawnPos, Quaternion.identity);
-
-        PhotonView photonView = player.GetComponent<PhotonView>();
-        PhotonView weaponPivotView = player.GetComponentInChildren<WeaponPivotController>().gameObject.GetComponent<PhotonView>();
-        PhotonView weaponView = player.GetComponentInChildren<PlayerAttackController>().gameObject.GetComponent<PhotonView>();
-        if (_playerInfo.playerId != 0)
-        {
-            photonView.ViewID = _playerInfo.playerId;
-            weaponPivotView.ViewID = _playerInfo.weaponPivotId;
-            weaponView.ViewID = _playerInfo.weaponId;
-        }
-        else if (PhotonNetwork.AllocateViewID(photonView) && PhotonNetwork.AllocateViewID(weaponView) && PhotonNetwork.AllocateViewID(weaponPivotView))
-        {
-            InstantiatePlayer(player.transform.position, player.transform.rotation, photonView.ViewID, weaponView.ViewID, weaponPivotView.ViewID);
-            LocalPlayer = player.GetComponent<Player>();
-            _playerInfo.playerId = photonView.ViewID ;
-            _playerInfo.weaponPivotId = weaponPivotView.ViewID;
-            _playerInfo.weaponId = weaponView.ViewID;
-            PlayerDict.Add(PhotonNetwork.LocalPlayer.ActorNumber, LocalPlayer); 
-        }
-        PhotonNetwork.LocalPlayer.TagObject = player;
-    }
-
-    private void InstantiatePlayer(Vector3 position, Quaternion rotation, int playerView, int pivotView, int weaponView)
-    {
-        object[] data = new object[]
-        {
-            position, rotation, playerView, pivotView, weaponView, PhotonNetwork.LocalPlayer.ActorNumber
-        };
-        PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.CustomInstantiate, data, SendClientOptions, new SendOptions { Reliability = true });
-    }
 
     public void InitRoom()
     {
@@ -462,18 +408,11 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
     {
         if (viewId == 0) return _playerQueue.Dequeue();
 
-            for (int i = 0; i < _playerQueue.Count; i++)
+        for (int i = 0; i < _playerQueue.Count; i++)
         {
-            if (_playerQueue.Peek().photonView.ViewID == viewId)
-            {
-                return _playerQueue.Dequeue();
-            }
-            else
-            {
-                _playerQueue.Enqueue(_playerQueue.Dequeue());
-            }
+            if (_playerQueue.Peek().photonView.ViewID == viewId) return _playerQueue.Dequeue();
+            _playerQueue.Enqueue(_playerQueue.Dequeue());
         }
-        
         return null;
     }
 

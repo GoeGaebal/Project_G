@@ -92,7 +92,7 @@ public class LobbyScene : BaseScene
                     }
                 }
                 
-                PhotonNetwork.CreateRoom(roomNameText, new RoomOptions(){ MaxPlayers = 4});
+                PhotonNetwork.CreateRoom(roomNameText, new RoomOptions(){ MaxPlayers = 3});
                 _createRoomSettingPopup.LoadingSet.SetActive(true);
             }
         }
@@ -162,7 +162,7 @@ public class LobbyScene : BaseScene
         for (int i = 0; i < _roomList.Count; i++)
         {
             _lobbyScreen.RoomList[i].Name.text = _roomList[i].Name;
-            _lobbyScreen.RoomList[i].NoP.text = $"{_roomList[i].PlayerCount}/4";
+            _lobbyScreen.RoomList[i].NoP.text = $"{_roomList[i].PlayerCount}/{_roomList[i].MaxPlayers}";
         }
         _lobbyScreen.LoadingPane.SetActive(false);
     }
@@ -182,7 +182,7 @@ public class LobbyScene : BaseScene
         // 접속 상태 표시
         connectionInfoText.text = "빈 방이 없음, 새로운 방 생성...";
         // 최대 4명을 수용 가능한 빈 방을 생성
-        PhotonNetwork.CreateRoom(null, new RoomOptions {MaxPlayers = 4});
+        PhotonNetwork.CreateRoom(null, new RoomOptions {MaxPlayers = 3});
     }
 
     // 룸에 참가 완료된 경우 자동 실행
@@ -205,6 +205,9 @@ public class LobbyScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
+        // TODO: 제대로 다시 만들어야함
+        var scene = Managers.UI.ShowSceneUI<UI_NameText>();
+        scene.AddName(PhotonNetwork.LocalPlayer.ActorNumber);
         // InitRoomScreen();
         // // 모든 룸 참가자들이 Game 씬을 로드하게 함
         // Managers.Scene.LoadLevel(Define.Scene.Ship);
@@ -243,40 +246,6 @@ public class LobbyScene : BaseScene
             Managers.UI.ClosePopupUI(_lobbyScreen);
         });
     }
-
-    private void InitRoom()
-    {
-        Managers.Resource.Instantiate("Player");
-        Managers.Resource.Instantiate("Player");
-        Managers.Resource.Instantiate("Player");
-        
-        Managers.Map.LoadMap(5);
-    }
-
-    // private void InitRoomScreen()
-    // {
-    //     if (_roomScreen == null)
-    //     {
-    //         Debug.Log("방 화면 오류");
-    //         return;
-    //     }
-    //     _roomScreen.Init();
-    //     _roomScreen.MyName.text = PhotonNetwork.LocalPlayer.NickName;
-    //     _roomScreen.StartBtn.onClick.RemoveAllListeners();
-    //     _roomScreen.ExitBtn.onClick.RemoveAllListeners();
-    //     _roomScreen.StartBtn.onClick.AddListener(() =>
-    //     {
-    //         Managers.Scene.LoadScene(Define.Scene.Ship);
-    //     });
-    //     _roomScreen.ExitBtn.onClick.AddListener(() =>
-    //     {
-    //         PhotonNetwork.LeaveRoom();
-    //         Managers.UI.ClosePopupUI(_roomScreen);
-    //     });
-    //     
-    //     for (int i = 0; i < PhotonNetwork.PlayerListOthers.Length; i++)
-    //         _roomScreen.Friends[i].Name.text = PhotonNetwork.PlayerListOthers[i].NickName;
-    // }
 
     protected override void Init()
     {

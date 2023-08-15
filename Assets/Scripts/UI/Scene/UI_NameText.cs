@@ -19,6 +19,7 @@ public class UI_NameText : UI_Scene
     public void AddName(int actorNumber)
     {
         PhotonNetwork.CurrentRoom.GetPlayer(actorNumber);
-        Managers.UI.MakeSubItem<UI_Name>();
+        UI_Name name = Managers.UI.MakeSubItem<UI_Name>();
+        name.target = Managers.Network.PlayerDict[actorNumber];
     }
 }
