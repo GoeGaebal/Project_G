@@ -13,15 +13,7 @@ public class ShipScene : BaseScene
 
     private void Start()
     {
-        Managers.Network.SpawnLocalPlayer(Vector3.zero);
-        // Managers.Object.SpawnGatherings(1,5);
-
         Managers.UI.SetEventSystem();
-        Managers.UI.ShowSceneUI<UI_Inven>();
-        Managers.UI.ShowSceneUI<UI_Map>();
-        Managers.UI.ShowSceneUI<UI_Status>();
-        Managers.UI.ShowSceneUI<UI_Chat>();
-        
     }
 
     public override void Clear()

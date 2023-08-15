@@ -6,20 +6,26 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    public bool isExitPortal;
+    public int players;
+    private int incomingObjectCount = 0;
     // Update is called once per frame
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("enter감지!");
-        if (Managers.Network.PlayerDict[other.gameObject.GetPhotonView().OwnerActorNr] == Managers.Network.LocalPlayer)
+        incomingObjectCount++;
+        if (isExitPortal && Managers.Network.PlayerDict[other.gameObject.GetPhotonView().OwnerActorNr] == Managers.Network.LocalPlayer)
         {
             PhotonNetwork.LeaveRoom();
         }
-            // Managers.Scene.LoadScene(Define.Scene.Ship);
+        else
+        {
+            if (players == incomingObjectCount)
+                Managers.Scene.LoadScene(Define.Scene.Ship);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        incomingObjectCount--;
     }
 }
