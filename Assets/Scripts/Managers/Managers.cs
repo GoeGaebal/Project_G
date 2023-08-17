@@ -22,6 +22,7 @@ public class Managers : MonoBehaviourPun
     private UIManager _ui = new();
     private InputManager _input = new();
     private SoundManager _sound = new();
+    private ArtifactManager _artifact = new();
 
     public static MapManager Map { get { return Instance._map; } }
     public static DataManager Data { get { return Instance._data; } }
@@ -31,6 +32,7 @@ public class Managers : MonoBehaviourPun
     public static UIManager UI { get { return Instance._ui; } }
     public static InputManager Input { get { return Instance._input;} }
     public static SoundManager Sound { get { return Instance._sound; } }
+    public static ArtifactManager Artifact { get { return Instance._artifact; } }
     #endregion
 
     #region Core
@@ -76,6 +78,7 @@ public class Managers : MonoBehaviourPun
             _instance._network.Init(ManagersPhotonView);
             _instance._timeSlot.Init();
             _instance._sound.Init();
+            _instance._artifact.Init();
         }
     }
     
