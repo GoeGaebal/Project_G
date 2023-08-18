@@ -259,4 +259,17 @@ public class Player : DamageableEntity
         }
         
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (Managers.Input.PlayerActions.Interact.IsPressed())
+        {
+            IInteractable interactable = collision.GetComponent<IInteractable>();
+            if(interactable != null)
+            {
+                interactable.Interact();
+                Managers.Input.PlayerActionMap.Disable();
+            }
+        }
+    }
 }
