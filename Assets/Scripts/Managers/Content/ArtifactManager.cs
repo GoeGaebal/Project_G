@@ -6,8 +6,9 @@ using UnityEngine;
 public class ArtifactManager
 {
     [HideInInspector] public Artifact[] artifacts = new Artifact[3];//실제 착용 중인 유물
-    [HideInInspector] public Artifact[] artifactScrolls;//현재 보유 중인 유물 목록
-     
+    [HideInInspector] public Artifact[] artifactScrolls = new Artifact[0];//현재 보유 중인 유물 목록
+    private int currentIndex = -1;
+
     public void Init()
     {
         GameObject root = GameObject.Find("@Artifact");
@@ -17,7 +18,13 @@ public class ArtifactManager
             UnityEngine.Object.DontDestroyOnLoad(root);
         }
 
-        artifactScrolls = new Artifact[0];
+        for(int i = 0; i < 3; i++)
+        {
+            if(artifacts[i] != null)
+            {
+                ArtifactTileSet.setImage(i, artifacts[i].Image);
+            }
+        }
     }
 
     public void AddScroll(string path)//새로운 유물 획득
@@ -41,8 +48,21 @@ public class ArtifactManager
         return Util.GetOrAddComponent<UI_ArtifactSlot>(go); ;
     }
     
-    public void SelectArtifact(int idx, Artifact artifact)
+    public void SetCurrentIndex(int idx)
+    {
+        currentIndex = idx;
+        Debug.Log(idx);
+    }
+
+    public void SelectArtifact(Artifact artifact)
     {//유물 목록 중 한 가지를 idx번째 슬롯에 장착
-        artifacts[idx] = artifact;
+        artifacts[currentIndex] = artifact;
+        ArtifactTileSet.setImage(currentIndex, artifact.Image);
+    }
+
+    public void DeselectArtifact()
+    {
+        artifacts[currentIndex] = null;
+        ArtifactTileSet.resetImage(currentIndex);
     }
 }

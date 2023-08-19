@@ -51,6 +51,7 @@ public class UI_Artifact : UI_Scene
         _ui.SetActive(false);
         _content = Get<GameObject>((int)GameObjects.Content);
 
+        Managers.Artifact.AddScroll("Artifact_Deselect");
         Managers.Artifact.AddScroll("Artifact_1");
         Managers.Artifact.AddScroll("Artifact_2");
 
@@ -66,15 +67,18 @@ public class UI_Artifact : UI_Scene
     public void OpenArtifact()
     {
         _ui.SetActive(true);
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     public void CloseArtifact()
     {
         _ui.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
     }
 
     public void CloseButton(PointerEventData evt)
     {
         _ui.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
     }
 }

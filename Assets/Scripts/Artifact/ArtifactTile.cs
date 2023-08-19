@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ArtifactTile : MonoBehaviour, IInteractable
 {
-    private Sprite image;
+    public SpriteRenderer image;
 
     void Start()
     {
-        image = GetComponent<SpriteRenderer>().sprite;
+        image = GetComponent<SpriteRenderer>();
     }
 
     public void Interact()
     {
-        Debug.Log("유물" + name + "상호작용됨");
+        Managers.Artifact.SetCurrentIndex(transform.parent.name[8] - 48);
         UI_Artifact.open();
     }
 }

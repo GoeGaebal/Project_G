@@ -268,7 +268,6 @@ public class Player : DamageableEntity
             if(interactable != null)
             {
                 interactable.Interact();
-                Managers.Input.PlayerActionMap.Disable();
             }
         }
     }
