@@ -106,7 +106,7 @@ public class UI_Item : UI_Base
                     RefreshCount();
                 }
                 else
-                {
+                {//TODO: 무기 이미지 제대로 안 바뀜
                     if (currentItem.item.ID == 1001)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
