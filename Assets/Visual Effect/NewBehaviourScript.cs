@@ -7,8 +7,6 @@ public class NewBehaviourScript : MonoBehaviour
      [SerializeField]
     private Material m_pPPMaterial = null;
 
-    [SerializeField, Range(0, 1)]
-    float _Gray = 1;
 
 
     void OnRenderImage(RenderTexture src, RenderTexture dest)

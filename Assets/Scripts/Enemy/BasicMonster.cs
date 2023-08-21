@@ -25,6 +25,9 @@ using Photon.Pun;
     protected AttackState attackState;
 
     protected bool hasTarget;
+    public bool HasTarget{
+        get{return hasTarget;}
+    }
     protected GameObject target;
     public GameObject Target
     {
