@@ -59,6 +59,14 @@ public class UI_Artifact : UI_Scene
         {
             var slot = Managers.Artifact.MakeArtifactSlot(_content.transform);
             slot.artifact = Managers.Artifact.artifactScrolls[i];
+            for(int j = 0; j < 3; j++)
+            {
+                if(Managers.Artifact.artifacts[j] == slot.artifact)
+                {
+                    Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex] = slot;
+                    slot.SetEquipped(true);
+                }
+            }
         }
 
         GetButton((int)Buttons.CloseButton).gameObject.BindEvent(CloseButton);

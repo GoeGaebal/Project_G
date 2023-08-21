@@ -5,6 +5,7 @@ using UnityEngine;
 public class ArtifactTileSet : MonoBehaviour
 {
     public ArtifactTile[] tiles = new ArtifactTile[3];
+    public static int[] equippedArray = { -1, -1, -1};
     public static System.Action<int, Sprite> setImage;
     public static System.Action<int> resetImage;
 

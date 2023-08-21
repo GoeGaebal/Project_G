@@ -7,7 +7,8 @@ public class ArtifactManager
 {
     [HideInInspector] public Artifact[] artifacts = new Artifact[3];//실제 착용 중인 유물
     [HideInInspector] public Artifact[] artifactScrolls = new Artifact[0];//현재 보유 중인 유물 목록
-    private int currentIndex = -1;
+    [HideInInspector] public UI_ArtifactSlot[] equippedArtifactSlots = new UI_ArtifactSlot[3];
+    [HideInInspector] public int currentIndex = -1;
 
     public void Init()
     {
@@ -51,7 +52,7 @@ public class ArtifactManager
     public void SetCurrentIndex(int idx)
     {
         currentIndex = idx;
-        Debug.Log(idx);
+        //Debug.Log(idx);
     }
 
     public void SelectArtifact(Artifact artifact)
