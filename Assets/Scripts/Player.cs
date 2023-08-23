@@ -24,7 +24,10 @@ public class Player : DamageableEntity
     private Coroutine resetAttackCountCoroutine;
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
-   
+
+    IInteractable interactable;
+    string interactableName;
+
     public EnumPlayerStates State
     {
         get{
@@ -76,7 +79,6 @@ public class Player : DamageableEntity
         }
     }
 
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -95,6 +97,7 @@ public class Player : DamageableEntity
     {
         Managers.Input.PlayerActions.Move.AddEvent(OnMove);
         Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        Managers.Input.PlayerActions.Interact.AddEvent(OnInteract);
     }
 
     private void FixedUpdate()
@@ -260,16 +263,41 @@ public class Player : DamageableEntity
         
     }
 
-    //TODO: 한 번 상호작용 하고 나서 다시 상호작용 하려면 움직여줘야 함
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(interactable == null)
+        {
+            interactable = collision.GetComponent<IInteractable>();
+            interactableName = collision.gameObject.name;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (interactableName == collision.gameObject.name)
+        {
+            interactable = null;
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (Managers.Input.PlayerActions.Interact.IsPressed())
+        if(interactable == null)
         {
-            IInteractable interactable = collision.GetComponent<IInteractable>();
-            if(interactable != null)
-            {
-                interactable.Interact();
-            }
+            interactable = collision.GetComponent<IInteractable>();
+            interactableName = collision.gameObject.name;
+        }
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (interactable != null)
+        {
+            interactable.Interact();
         }
     }
 }
