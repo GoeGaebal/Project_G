@@ -7,13 +7,13 @@ public struct PlayerActions
     public InputAction Move;
     public InputAction Attack;
     public InputAction Inventory;
-    public InputAction QuickSlot1;
-    public InputAction QuickSlot2;
+    //public InputAction QuickSlot1;
+    //public InputAction QuickSlot2;
     public InputAction QuickSlot3;
-    public InputAction QuickSlot4;
+    //public InputAction QuickSlot4;
     public InputAction MiniMap;
-    public InputAction ScrollQuickSlot;
-    public InputAction  PlayerStatus;
+    //public InputAction ScrollQuickSlot;
+    public InputAction Interact;
 }
 
 public struct UIActions
@@ -25,7 +25,7 @@ public struct UIActions
     public InputAction Click;
     public InputAction MiddleClick;
     public InputAction RightClick;
-    public InputAction ScrollWheel;
+    //public InputAction ScrollWheel;
 }
 
 
@@ -61,19 +61,19 @@ public class InputManager
         PlayerActions.Move = PlayerActionMap.AddAction("Move", type: InputActionType.Value);
         PlayerActions.Attack = PlayerActionMap.AddAction("Attack", type: InputActionType.Button);
         PlayerActions.Inventory = PlayerActionMap.AddAction("Inventory", type: InputActionType.Button);
-        PlayerActions.QuickSlot1 = PlayerActionMap.AddAction("QuickSlot1", type: InputActionType.Button);
-        PlayerActions.QuickSlot2 = PlayerActionMap.AddAction("QuickSlot2", type: InputActionType.Button);
+        //PlayerActions.QuickSlot1 = PlayerActionMap.AddAction("QuickSlot1", type: InputActionType.Button);
+        //PlayerActions.QuickSlot2 = PlayerActionMap.AddAction("QuickSlot2", type: InputActionType.Button);
         PlayerActions.QuickSlot3 = PlayerActionMap.AddAction("QuickSlot3", type: InputActionType.Button);
-        PlayerActions.QuickSlot4 = PlayerActionMap.AddAction("QuickSlot4", type: InputActionType.Button);
+        //PlayerActions.QuickSlot4 = PlayerActionMap.AddAction("QuickSlot4", type: InputActionType.Button);
         PlayerActions.MiniMap = PlayerActionMap.AddAction("Minimap", type: InputActionType.Button);
-        PlayerActions.ScrollQuickSlot = PlayerActionMap.AddAction("ScrollQuickSlot", type: InputActionType.Value);
-        PlayerActions.PlayerStatus = PlayerActionMap.AddAction("PlayerStatus", type: InputActionType.Button);
+        //PlayerActions.ScrollQuickSlot = PlayerActionMap.AddAction("ScrollQuickSlot", type: InputActionType.Value);
+        PlayerActions.Interact = PlayerActionMap.AddAction("Interact", type: InputActionType.Button);
 
         UIActions.Navigate = _uiActionMap.AddAction("Navigate", type: InputActionType.PassThrough);
         UIActions.Submit = _uiActionMap.AddAction("Submit", type: InputActionType.Button);
         UIActions.Cancel = _uiActionMap.AddAction("Cancel", type: InputActionType.Button);
         UIActions.Point = _uiActionMap.AddAction("Point", type: InputActionType.PassThrough);
-        UIActions.ScrollWheel = _uiActionMap.AddAction("ScrollWheel", type: InputActionType.PassThrough);
+        //UIActions.ScrollWheel = _uiActionMap.AddAction("ScrollWheel", type: InputActionType.PassThrough);
         UIActions.Click = _uiActionMap.AddAction("Click", type: InputActionType.PassThrough);
         UIActions.MiddleClick = _uiActionMap.AddAction("MiddleClick", type: InputActionType.PassThrough);
         UIActions.RightClick = _uiActionMap.AddAction("RightClick", type: InputActionType.PassThrough);
@@ -90,14 +90,14 @@ public class InputManager
             .With("Right", "<Keyboard>/d", groups: PCBindingGroup);
         PlayerActions.Attack.AddBinding("<Mouse>/rightButton", groups: PCBindingGroup);
         PlayerActions.Inventory.AddBinding("<Keyboard>/i", groups: PCBindingGroup);
-        PlayerActions.QuickSlot1.AddBinding("<Keyboard>/1", groups: PCBindingGroup);
-        PlayerActions.QuickSlot2.AddBinding("<Keyboard>/2", groups: PCBindingGroup);
+        //PlayerActions.QuickSlot1.AddBinding("<Keyboard>/1", groups: PCBindingGroup);
+        //PlayerActions.QuickSlot2.AddBinding("<Keyboard>/2", groups: PCBindingGroup);
         PlayerActions.QuickSlot3.AddBinding("<Keyboard>/3", groups: PCBindingGroup);
-        PlayerActions.QuickSlot4.AddBinding("<Keyboard>/4", groups: PCBindingGroup);
+        //PlayerActions.QuickSlot4.AddBinding("<Keyboard>/4", groups: PCBindingGroup);
         PlayerActions.MiniMap.AddBinding("<Keyboard>/m", groups: PCBindingGroup);
-        PlayerActions.ScrollQuickSlot.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
-        PlayerActions.PlayerStatus.AddBinding("<Keyboard>/c", groups: PCBindingGroup);
-        
+        //PlayerActions.ScrollQuickSlot.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
+        PlayerActions.Interact.AddBinding("<Keyboard>/e", groups: PCBindingGroup);
+
         UIActions.Navigate.AddCompositeBinding("2DVector(mode=1)")
             .With("Up", "<Keyboard>/w",groups: PCBindingGroup)
             .With("Down", "<Keyboard>/s",groups: PCBindingGroup)
@@ -106,7 +106,7 @@ public class InputManager
         UIActions.Submit.AddBinding("*/{Submit}", groups: PCBindingGroup);
         UIActions.Cancel.AddBinding("*/{Cancel}", groups: PCBindingGroup);
         UIActions.Point.AddBinding("<Mouse>/position", groups: PCBindingGroup);
-        UIActions.ScrollWheel.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
+        //UIActions.ScrollWheel.AddBinding("<Mouse>/scroll", groups: PCBindingGroup);
         UIActions.Click.AddBinding("<Mouse>/leftButton", groups: PCBindingGroup);
         UIActions.MiddleClick.AddBinding("<Mouse>/middleButton", groups: PCBindingGroup);
         UIActions.RightClick.AddBinding("<Mouse>/rightButton", groups: PCBindingGroup);

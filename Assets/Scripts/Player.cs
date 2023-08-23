@@ -33,6 +33,8 @@ public class Player : DamageableEntity
             return _photonViews;
         }
     }
+    IInteractable interactable;
+    string interactableName;
 
     public EnumPlayerStates State
     {
@@ -86,7 +88,6 @@ public class Player : DamageableEntity
         }
     }
 
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -103,11 +104,9 @@ public class Player : DamageableEntity
 
     public void BindingAction()
     {
-        if (photonView.IsMine)
-        {
-            Managers.Input.PlayerActions.Move.AddEvent(OnMove);
-            Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
-        }
+        Managers.Input.PlayerActions.Move.AddEvent(OnMove);
+        Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        Managers.Input.PlayerActions.Interact.AddEvent(OnInteract);
     }
 
     private void FixedUpdate()
@@ -277,6 +276,44 @@ public class Player : DamageableEntity
         {
             Managers.Input.PlayerActions.Move.RemoveEvent(OnMove);
             Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(interactable == null)
+        {
+            interactable = collision.GetComponent<IInteractable>();
+            interactableName = collision.gameObject.name;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (interactableName == collision.gameObject.name)
+        {
+            interactable = null;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(interactable == null)
+        {
+            interactable = collision.GetComponent<IInteractable>();
+            interactableName = collision.gameObject.name;
+        }
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (interactable != null)
+        {
+            interactable.Interact();
         }
     }
 }

@@ -55,3 +55,9 @@ TagManager:
   - name: Minimap
     uniqueID: 3740670929
     locked: 0
+  - name: Weather
+    uniqueID: 3006628309
+    locked: 0
+  - name: BattleUI
+    uniqueID: 1110293753
+    locked: 0

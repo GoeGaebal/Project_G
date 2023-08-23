@@ -28,7 +28,7 @@ public class Define
         Drag,
         BeginDrag,
         EndDrag,
-        Drop,
+        Drop
     }
 
     public enum RaiseEventCode
