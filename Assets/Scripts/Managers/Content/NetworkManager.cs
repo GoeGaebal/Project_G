@@ -55,17 +55,20 @@ struct PlayerInfo
 // TODO : 리팩토링 
 // 1. 패킷을 큐 형태로 모아 보내기
 // 2. Player들을 미리 찾아놓기
-public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbacks , IPunOwnershipCallbacks , IPunObservable
+public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallbacks , IPunOwnershipCallbacks , IPunObservable
 {
     public const int MaxPlayer = 3;
     public Player LocalPlayer { get; private set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
     
     private Queue<Player> _playerQueue;
+    public GameObject[] PlayerList => _playerList;
     private GameObject[] _playerList;
     
     public Action<string> ReceiveChatHandler;
     public Action<int> ReceiveAddItemHandler;
+    public Action AfterPlayerEnteredRoom;
+    public Action<int> OnPlayerLeftRoomAction;
 
     private static readonly RaiseEventOptions SendMasterOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
     private static readonly RaiseEventOptions SendClientOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
@@ -233,6 +236,7 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
                     foreach(var view in views)
                         view.RequestOwnership();
                 }
+                AfterPlayerEnteredRoom?.Invoke();
                 break;
             }
         }
@@ -430,9 +434,11 @@ public class NetworkManager : MonoBehaviourPun, IOnEventCallback, IInRoomCallbac
     public void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         // Managers.Resource.Destroy(PlayerDict[otherPlayer.ActorNumber].gameObject);
+        OnPlayerLeftRoomAction?.Invoke(otherPlayer.ActorNumber);
         _playerQueue.Enqueue(PlayerDict[otherPlayer.ActorNumber]);
         PlayerDict[otherPlayer.ActorNumber].gameObject.SetActive(false);
         PlayerDict.Remove(otherPlayer.ActorNumber);
+        
     }
 
     public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)

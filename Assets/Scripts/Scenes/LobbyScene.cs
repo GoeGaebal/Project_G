@@ -149,7 +149,11 @@ public class LobbyScene : BaseScene
                 var room = _lobbyScreen.AddRoom();
                 room.Init();
                 room.RoomBtn.onClick.RemoveAllListeners();
-                room.RoomBtn.onClick.AddListener(() => { PhotonNetwork.JoinRoom(room.Name.text);});
+                room.RoomBtn.onClick.AddListener(() =>
+                {
+                    PhotonNetwork.LocalPlayer.NickName = "Guest";
+                    PhotonNetwork.JoinRoom(room.Name.text);
+                });
             }
         }
         else if (_roomList.Count < _lobbyScreen.RoomList.Count)
@@ -164,6 +168,7 @@ public class LobbyScene : BaseScene
             _lobbyScreen.RoomList[i].Name.text = _roomList[i].Name;
             _lobbyScreen.RoomList[i].NoP.text = $"{_roomList[i].PlayerCount}/{_roomList[i].MaxPlayers}";
         }
+        
         _lobbyScreen.LoadingPane.SetActive(false);
     }
 
@@ -188,14 +193,11 @@ public class LobbyScene : BaseScene
     // 룸에 참가 완료된 경우 자동 실행
     public override void OnJoinedRoom() {
         Managers.Network.AllocateViewId();
+        
         if (_createRoomSettingPopup != null)
         {
             PhotonNetwork.LocalPlayer.NickName = _createRoomSettingPopup.UserName.text;
             Managers.UI.ClosePopupUI(_createRoomSettingPopup);
-        }
-        else
-        {
-            PhotonNetwork.LocalPlayer.NickName = "Guest";
         }
         Managers.UI.Clear();
         Managers.Network.InitRoom();
@@ -206,8 +208,11 @@ public class LobbyScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
         // TODO: 제대로 다시 만들어야함
-        var scene = Managers.UI.ShowSceneUI<UI_NameText>();
-        scene.AddName(PhotonNetwork.LocalPlayer.ActorNumber);
+        var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
+        scene.Init();
+        if(PhotonNetwork.IsMasterClient)
+            scene.AddName(PhotonNetwork.LocalPlayer.ActorNumber);
+
         // InitRoomScreen();
         // // 모든 룸 참가자들이 Game 씬을 로드하게 함
         // Managers.Scene.LoadLevel(Define.Scene.Ship);

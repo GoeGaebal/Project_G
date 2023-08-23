@@ -86,7 +86,6 @@ public class UIManager
         _sceneUIs.Add(sceneUI);
 
         go.transform.SetParent(Root.transform);
-        
         return sceneUI;
     }
 
