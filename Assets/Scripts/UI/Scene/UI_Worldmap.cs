@@ -25,7 +25,7 @@ public class UI_Worldmap : UI_Scene
     }
     enum Buttons
     {
-        Worldmap_Button,
+        //Worldmap_Button,
         Worldmap_Button_Close,
         Map_001,
         Map_002,
@@ -56,6 +56,13 @@ public class UI_Worldmap : UI_Scene
     private bool _arriveFlag = false;//도착
 
     private string _mapName;
+
+    public static System.Action open;
+
+    private void Awake()
+    {
+        open = () => { OpenWorldmapUI(); };
+    }
 
     void Start()
     {
@@ -120,7 +127,7 @@ public class UI_Worldmap : UI_Scene
         _distanceText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_DistanceText);
         _distanceText.SetActive(false);
 
-        GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
+        //GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
         GetButton((int)Buttons.Map_001).gameObject.BindEvent(OnWorldmapButtonClick);
         GetButton((int)Buttons.Map_002).gameObject.BindEvent(OnWorldmapButtonClick);
@@ -202,7 +209,7 @@ public class UI_Worldmap : UI_Scene
         _arrow.SetActive(false);
     }
 
-    public void OpenWorldmapUI(PointerEventData evt)
+    public void OpenWorldmapUI(/*PointerEventData evt*/)
     {
         _worldmap.SetActive(true);
     }

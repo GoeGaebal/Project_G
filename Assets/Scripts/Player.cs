@@ -259,4 +259,17 @@ public class Player : DamageableEntity
         }
         
     }
+
+    //TODO: 한 번 상호작용 하고 나서 다시 상호작용 하려면 움직여줘야 함
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (Managers.Input.PlayerActions.Interact.IsPressed())
+        {
+            IInteractable interactable = collision.GetComponent<IInteractable>();
+            if(interactable != null)
+            {
+                interactable.Interact();
+            }
+        }
+    }
 }

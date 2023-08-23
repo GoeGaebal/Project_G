@@ -100,7 +100,7 @@ public class UI_Inven : UI_Scene
         foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
         {
             equips[idex] = Get<UI_Slot>((int)slot);
-            Debug.Log(idex + " " + equips[idex]);
+            //Debug.Log(idex + " " + equips[idex]);
             equips[idex].isEquip = true;
             equips[idex].equipIndex = idex;
             idex++;

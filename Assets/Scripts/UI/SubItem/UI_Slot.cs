@@ -28,7 +28,7 @@ public class UI_Slot : UI_Base
             {
                 currentItem.parentBeforeDrag = transform;
                 if (checkIndex == 10)//무기
-                {
+                {//TODO: 무기 이미지 제대로 안 바뀜
                     UI_Inven.ChangeQuickImage(0, currentItem);
                     if (currentItem.item.ID == 1001)
                     {
