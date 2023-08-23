@@ -31,8 +31,6 @@ public class DataManager
         ItemDict.Add(item.ID,item);
         item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Resource/IronIngot");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Tool/Axe");
-        ItemDict.Add(item.ID,item);
         item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Weapon/Sword");
         ItemDict.Add(item.ID,item);
         WorldmapDict = LoadJson<WorldmapData, int, Worldmap>("WorldmapData").MakeDict();

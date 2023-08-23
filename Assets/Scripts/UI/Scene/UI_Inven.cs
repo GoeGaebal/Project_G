@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -121,12 +122,11 @@ public class UI_Inven : UI_Scene, IDataPersistence
         Managers.Network.ReceiveAddItemHandler -= AddItem;
         Managers.Network.ReceiveAddItemHandler += AddItem;
 
-        LoadData();
+        // LoadData();
     }
 
     private void OnDestroy()
     {
-        Managers.Input.PlayerActions.ScrollQuickSlot.RemoveEvent(OnQuickSlot_Mouse);
         Managers.Input.PlayerActions.Inventory.RemoveEvent(OnOffInventory);
         Managers.Network.ReceiveAddItemHandler -= AddItem;
     }
@@ -293,7 +293,7 @@ public class UI_Inven : UI_Scene, IDataPersistence
         }
     }
 
-    public void ClickInventoryButton(PointerEventData evt)//가방 버튼 클릭했을 때
+    public void ClickInventoryButton()//가방 버튼 클릭했을 때
     {
         if (_inventory_activeself)//인벤토리가 켜져 있으면 
         {
@@ -307,7 +307,7 @@ public class UI_Inven : UI_Scene, IDataPersistence
         _inventory_activeself = _inventory.activeSelf;
     }
 
-    public void OnOffInventory(InputAction.CallbackContext context)
+    public void OnOffInventory(InputAction.CallbackContext evt)
     {
         if (_inventory_activeself)//인벤토리가 켜져 있으면 
         {
