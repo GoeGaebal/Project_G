@@ -1,15 +1,14 @@
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class ShipScene : BaseScene,IPunObservable
+public class ShipScene : BaseScene
 {
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.Scene.Game;
+        SceneType = Define.Scene.Ship;
         Managers.Map.LoadMap(4);
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
@@ -48,12 +47,16 @@ public class ShipScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
-        // 테스트용 강제 설정
-        PhotonView view = player.GetComponent<PhotonView>();
-        PhotonView[] weaponView = player.GetPhotonViewsInChildren();
-        PhotonNetwork.AllocateViewID(view);
-        PhotonNetwork.AllocateViewID(weaponView[1]);
+        if (!PhotonNetwork.IsConnected)
+        {
+            Managers.UI.SetEventSystem();
+            GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
+            // 테스트용 강제 설정
+            PhotonView view = player.GetComponent<PhotonView>();
+            PhotonView[] weaponView = player.GetPhotonViewsInChildren();
+            PhotonNetwork.AllocateViewID(view);
+            PhotonNetwork.AllocateViewID(weaponView[1]);
+        }
         
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
@@ -62,15 +65,14 @@ public class ShipScene : BaseScene,IPunObservable
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_Artifact>();
+     
+        var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
+        scene.Init();
+        scene.AddNames();
     }
 
     public override void Clear()
     {
-        
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        throw new System.NotImplementedException();
+        // throw new System.NotImplementedException();
     }
 }

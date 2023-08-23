@@ -25,6 +25,14 @@ public class Player : DamageableEntity
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
 
+    private PhotonView[] _photonViews;
+    public PhotonView[] PhotonViews {
+        get
+        {
+            _photonViews ??= gameObject.GetPhotonViewsInChildren();
+            return _photonViews;
+        }
+    }
     IInteractable interactable;
     string interactableName;
 
@@ -45,6 +53,7 @@ public class Player : DamageableEntity
         //카메라 이동 제한
         if(photonView.IsMine)
         {
+            playerCameraController ??= Camera.main.gameObject.GetComponent<PlayerCameraController>();
             playerCameraController.SetPosition(transform.position);
             if(playerCameraController.enabled)
                 playerCameraController.enabled = false;
@@ -86,14 +95,14 @@ public class Player : DamageableEntity
         animator = GetComponent<Animator>();
         playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
-        Binding();
+        BindingAction();
 
         dieAction += () => {
             animator.SetTrigger("die");
         };
     }
 
-    private void Binding()
+    public void BindingAction()
     {
         Managers.Input.PlayerActions.Move.AddEvent(OnMove);
         Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
@@ -132,7 +141,6 @@ public class Player : DamageableEntity
                 rb.MovePosition(dest);
             }
         }
-            
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -254,13 +262,21 @@ public class Player : DamageableEntity
 
         gameObject.SetActive(false);
 
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
-            if(!playerCameraController.enabled)
+            if (!playerCameraController.enabled)
                 playerCameraController.enabled = true;
             playerCameraController.SetPosition(transform.position);
         }
-        
+    }
+
+    private void OnDestroy()
+    {
+        if (photonView.IsMine)
+        {
+            Managers.Input.PlayerActions.Move.RemoveEvent(OnMove);
+            Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 
 #region Stat
@@ -52,34 +49,6 @@ public class GatheringData : ILoader<int,Gathering>
 }
 #endregion
 
-#region Lootings
-[Serializable]
-public class Looting
-{
-    public int id;
-    public string name;
-    public float cof;
-    public int bounceCount;
-    public float threshold;
-    public float Sn;
-}
-
-[Serializable]
-public class LootingData : ILoader<int,Looting>
-{
-    public List<Looting> lootings = new List<Looting>();
-    public Dictionary<int, Looting> MakeDict()
-    {
-        var dict = new Dictionary<int, Looting>();
-        foreach (var looting in lootings)
-        {
-            dict.Add(looting.id, looting);
-        }
-        return dict;
-    }
-}
-#endregion
-
 #region Map
 [Serializable]
 public class MapData
@@ -121,6 +90,7 @@ public class Worldmap
 public class WorldmapData : ILoader<int, Worldmap>
 {
     public List<Worldmap> worldmaps = new();
+
     public Dictionary<int, Worldmap> MakeDict()
     {
         Dictionary<int, Worldmap> dict = new();
@@ -128,5 +98,13 @@ public class WorldmapData : ILoader<int, Worldmap>
             dict.Add(worldmap.id, worldmap);
         return dict;
     }
+}
+#endregion
+
+#region SaveData
+[Serializable]
+public class SaveData
+{
+    public List<ulong> InventoryList;
 }
 #endregion

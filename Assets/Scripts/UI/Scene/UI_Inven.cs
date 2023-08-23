@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UI_Inven : UI_Scene
+public class UI_Inven : UI_Scene, IDataPersistence
 {
     enum GameObjects
     {
@@ -111,19 +111,31 @@ public class UI_Inven : UI_Scene
         qSlots[1] = Get<Image>((int) Images.PotionImage);
         potion1Text = Get<Text>((int)Texts.PotionAmountText);
         potion1Text.gameObject.SetActive(false);
-        GetButton((int)Buttons.InventoryButton).gameObject.BindEvent(ClickInventoryButton);
-        GetButton((int)Buttons.CloseButton).gameObject.BindEvent(ClickInventoryButton);
+        GetButton((int)Buttons.InventoryButton).onClick.AddListener(ClickInventoryButton);
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(ClickInventoryButton);
         Managers.Input.PlayerActions.Inventory.AddEvent(OnOffInventory);
         
         _inventory.SetActive(false);
         _inventory_activeself = _inventory.activeSelf;
 
+        Managers.Network.ReceiveAddItemHandler -= AddItem;
         Managers.Network.ReceiveAddItemHandler += AddItem;
+
+        LoadData();
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Input.PlayerActions.ScrollQuickSlot.RemoveEvent(OnQuickSlot_Mouse);
+        Managers.Input.PlayerActions.Inventory.RemoveEvent(OnOffInventory);
+        Managers.Network.ReceiveAddItemHandler -= AddItem;
     }
 
     public void AddItem(int guid)
     {
-        AddItem(Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().GetItem);
+        var item = Managers.Data.ItemDict[
+            Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().Item.ID];
+        AddItem(item);
     }
     
     private void Update()
@@ -203,7 +215,6 @@ public class UI_Inven : UI_Scene
                 itemInSlot.RefreshCount();//텍스트 변경
                 return true;//추가 완료함
             }
-            
             else if (itemInSlot == null && !empty)//위의 모든 조건을 제외하고 빈칸을 만났을 때
             {//가장 앞에 있는 빈칸 위치 저장해둠
                 empty = true;
@@ -308,5 +319,50 @@ public class UI_Inven : UI_Scene
         }
 
         _inventory_activeself = _inventory.activeSelf;
+    }
+
+    public void SaveData()
+    {
+        List<ulong> list = new();
+        foreach (var slot in slots)
+        {
+            UI_Item item = null;
+            if (slot.transform.childCount > 0)
+                item = slot.transform.GetChild(0)?.GetComponent<UI_Item>();
+            if (item != null)
+                list.Add(Util.Vector2ulong(new Vector3(item.count, item.item.ID)));
+            else
+                list.Add(Util.Vector2ulong(new Vector3(0, -1)));
+        }
+        SaveData data = new();
+        data.InventoryList = list;
+        Managers.Data.Save(JsonUtility.ToJson(data), "Save.json");
+    }
+
+    public void LoadData()
+    {
+        SaveData loadDataList = JsonUtility.FromJson<SaveData>(Managers.Data.Load("Save.json"));
+        if (loadDataList == null)
+            return;
+        for (int i = 0; i < loadDataList.InventoryList.Count; i++)
+        {
+            Vector2 info = Util.Ulong2Vector(loadDataList.InventoryList[i]);
+            int count = (int)info.x;
+            int id = (int)info.y;
+
+            if (id > -1)
+            {
+                //TODO: GetComponentInChildren 너무 많이 쓰는 듯 + 사과만 생성된다.
+                Item loadItem = Managers.Data.ItemDict[id];
+                SpawnNewItem(loadItem, slots[i]);
+                slots[i].GetComponentInChildren<UI_Item>().count = count;
+                slots[i].GetComponentInChildren<UI_Item>().RefreshCount();
+            }
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveData();
     }
 }

@@ -45,7 +45,7 @@ public class ResourceManager
     /// <param name="rotation">생성할 프리팹의 rotation을 의미한다</param>
     /// <param name="parent">만일 어떤 객체의 자식을 할당할 것이라면 그 부모가 될 객체이다.</param>
     /// <returns></returns>
-    public GameObject Instantiate(string path, Vector3 position, Quaternion rotation ,Transform parent = null)
+    public GameObject Instantiate(string path, Vector3 position = default, Quaternion rotation = default ,Transform parent = null)
     {
         GameObject original = Load<GameObject>($"Prefabs/{path}");
         if (original == null)
@@ -90,9 +90,17 @@ public class ResourceManager
             return;
         }
 
-        if (t > 0)
-            Object.Destroy(go,t);
+        PhotonView pv = go.GetComponent<PhotonView>();
+        if (pv != null && pv.IsMine)
+        {
+            PhotonNetwork.Destroy(go);
+        }
         else
-            Object.Destroy(go);
+        {
+            if (t > 0)
+                Object.Destroy(go,t);
+            else
+                Object.Destroy(go);
+        }
     }
 }

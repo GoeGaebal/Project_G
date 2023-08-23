@@ -75,22 +75,26 @@ public class ObjectManager
     // TODO: 생성시에 최종적으로 등장하는 랜덤한 위치를 서로 공유해야함
     private LootingItemController SpawnLootingItem(int objectId, Vector3 pos, int guid = 0)
     {
-        var name = Managers.Data.LootingDict[objectId].name;
-        GameObject go =  Managers.Resource.Instantiate($"Lootings/{name}", pos, Quaternion.identity);
+        
+        GameObject go =  Managers.Resource.Instantiate($"Lootings/apple", pos, Quaternion.identity);
         LootingItemController lc = go.GetOrAddComponent<LootingItemController>();
+        
         if (guid == 0)
             lc.guid = go.GetInstanceID();
         else
             lc.guid = guid;
-        lc.id = objectId;
+        
+        var item = Managers.Data.ItemDict[objectId];
+        lc.Item = item;
         ObjectInfos.Add(lc.guid, new ObjectInfo(){objectID=objectId,guid=lc.guid,y = pos.y,x = pos.x});
         LocalObjectsDict.Add(lc.guid, go);
         return lc;
     }
-    
+
     /// <summary>
     /// 아이템을 뿌려주는 메소드
     /// </summary>
+    /// <param name="objectId">아이템 번호</param>
     /// <param name="count">아이템을 촘 몇개 뿌릴 것인지</param>
     /// <param name="spawnPos">뿌려지는 시작 장소</param>
     /// <param name="maxRadious">최대 거리</param>
@@ -115,8 +119,6 @@ public class ObjectManager
             Managers.Network.RequestSpawnLootingItems(objectId,count, spawnPos, maxRadious, minRadious);
         }
     }
-    
-    public void SpawnLootingItems(){}
 
     public void ApplySpawnLootingItems(List<LootingItemInfo> infos)
     {

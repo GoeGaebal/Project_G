@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,7 +41,6 @@ public class Indicator : MonoBehaviourPun
 
     void Update()
     {
-
         SetIndicator();
     }
  
@@ -149,7 +149,10 @@ public class Indicator : MonoBehaviourPun
             return true;
         }
     }
- 
- 
+
+    private void OnDestroy()
+    {
+        Managers.Resource.Destroy(indicatorUIInstance);
+    }
 }
 

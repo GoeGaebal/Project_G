@@ -63,16 +63,6 @@ public class PoolManager
 
             return poolable;
         }
-
-        public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Destroy(GameObject gameObject)
-        {
-            throw new System.NotImplementedException();
-        }
     }
     #endregion
     
