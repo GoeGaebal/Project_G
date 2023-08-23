@@ -22,6 +22,7 @@ public class Managers : MonoBehaviourPun
     private UIManager _ui = new();
     private InputManager _input = new();
     private SoundManager _sound = new();
+    private WorldMapManager _worldMap = new();
     private WeatherManager _weather = new();
 
     public static MapManager Map { get { return Instance._map; } }
@@ -34,6 +35,7 @@ public class Managers : MonoBehaviourPun
     public static SoundManager Sound { get { return Instance._sound; } }
     public static WeatherManager Weather { get { return Instance._weather; } }
 
+    public static WorldMapManager WorldMap { get { return Instance._worldMap;}}
     #endregion
 
     #region Core
@@ -54,6 +56,7 @@ public class Managers : MonoBehaviourPun
     void Update()
     {
        if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
+       WorldMap.UpdateWorldMap(Time.deltaTime);
     }
     
     static void Init()

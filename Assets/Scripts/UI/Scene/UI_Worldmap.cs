@@ -21,7 +21,8 @@ public class UI_Worldmap : UI_Scene
         Worldmap_Minimap_Ship,
         Worldmap_Minimap_MovingText,
         Worldmap_Minimap_TimeText,
-        Worldmap_Minimap_DistanceText
+        Worldmap_Minimap_DistanceText,
+        Worldmap_FinalBoss
     }
     enum Buttons
     {
@@ -51,6 +52,7 @@ public class UI_Worldmap : UI_Scene
     private GameObject _movingText;
     private GameObject _timeText;
     private GameObject _distanceText;
+    private GameObject _finalBoss;
 
     private bool _moveFlag = false;//이동 중
     private bool _arriveFlag = false;//도착
@@ -64,16 +66,14 @@ public class UI_Worldmap : UI_Scene
 
     private void Update()
     {
+        UpdateWeatherUI();
+
         if (_moveFlag)
         {
-            if (Vector2.Distance(_ship.transform.position, _target.transform.position) >= 1f)
+            if (Vector2.Distance(_ship.transform.localPosition, _target.transform.localPosition) >= 1f)
             {
                 MoveToTarget();
                 _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_target.name[6] - '0'].name + "로 이동 중");
-                if (!CheckWeather())
-                {
-                    _weatherText.GetComponent<TMP_Text>().SetText("Nothing Detected!");
-                }
             }
             else
             {
@@ -119,6 +119,7 @@ public class UI_Worldmap : UI_Scene
         _timeText.SetActive(false);
         _distanceText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_DistanceText);
         _distanceText.SetActive(false);
+        _finalBoss = Get<GameObject>((int)GameObjects.Worldmap_FinalBoss);
 
         GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
@@ -126,6 +127,10 @@ public class UI_Worldmap : UI_Scene
         GetButton((int)Buttons.Map_002).gameObject.BindEvent(OnWorldmapButtonClick);
         GetButton((int)Buttons.Map_003).gameObject.BindEvent(OnWorldmapButtonClick);
         GetButton((int)Buttons.Worldmap_Button_Stop).gameObject.BindEvent(PauseMove);
+
+        //set the ship position on world map manager
+        Managers.WorldMap.Ship = _ship;
+        Managers.WorldMap.FinalBoss = _finalBoss;
     }
 
     public void SetTarget(GameObject t)//목표 지정
@@ -133,14 +138,13 @@ public class UI_Worldmap : UI_Scene
         _target = t;
         _mapName = t.name;
     }
-
     private void MoveToTarget()//목표 방향으로 이동
     {
         _elapsedTime += Time.deltaTime;
-        Vector2 direction = _target.transform.position - _ship.transform.position;
+        Vector2 direction = _target.transform.localPosition - _ship.transform.localPosition;
         if (_elapsedTime >= _timePerMeter)
         {
-            _ship.transform.position += ((Vector3)(direction.normalized) * (_elapsedTime / _timePerMeter));
+            _ship.transform.localPosition = _ship.transform.localPosition + ((Vector3)(direction.normalized) * (_elapsedTime / _timePerMeter));
             _elapsedTime %= _timePerMeter;
         }
         SetLine();
@@ -163,7 +167,7 @@ public class UI_Worldmap : UI_Scene
     {
         _timeText.SetActive(true);
         _distanceText.SetActive(true);
-        _timeText.GetComponent<TMP_Text>().SetText("남은 시간: " + (int)(direction.magnitude / _speed) + "sec");
+        _timeText.GetComponent<TMP_Text>().SetText("남은 시간: " + ((int)(direction.magnitude / _speed) + 1) + "sec");
         _distanceText.GetComponent<TMP_Text>().SetText("남은 거리: " + (int)(direction.magnitude) + "m");
     }
 
@@ -227,47 +231,26 @@ public class UI_Worldmap : UI_Scene
     }
     */
     
-    public bool CheckWeather()//날씨 체크
+
+    private void UpdateWeatherUI()
     {
-        for (int i = 1; i <= Managers.Data.WorldmapDict.Count; i++)
-        {
-            if (CheckPosition(i))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+        EnumWeather weather = Managers.Weather.Weather;
 
-    public bool CheckPosition(int i)//특정 좌표에 들어왔는지 확인
-    {
-        if (_ship.transform.position.x >= Managers.Data.WorldmapDict[i].minX
-            && _ship.transform.position.x <= Managers.Data.WorldmapDict[i].maxX
-            && _ship.transform.position.y >= Managers.Data.WorldmapDict[i].minY
-            && _ship.transform.position.y <= Managers.Data.WorldmapDict[i].maxY)
+        switch (weather)
         {
-            _weatherText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[i].name + " " + Managers.Data.WorldmapDict[i].weather);
-
-            string weather = Managers.Data.WorldmapDict[i].weather;
-
-            if(weather == "sunny")
-            {
-                Managers.Weather.UpdateWeather(EnumWeather.Sun);
-            }
-            else if(weather =="hot")
-            {
-                Managers.Weather.UpdateWeather(EnumWeather.Desert);
-            }
-            else if(weather =="rainy")
-            {
-                Managers.Weather.UpdateWeather(EnumWeather.Rain);
-            }
-            return true;
+            case EnumWeather.Sun:
+                _weatherText.GetComponent<TMP_Text>().SetText("Sunny");
+                break;
+            case EnumWeather.Rain:
+                _weatherText.GetComponent<TMP_Text>().SetText("Rain");
+                break;
+            case EnumWeather.Desert:
+                _weatherText.GetComponent<TMP_Text>().SetText("Hot");
+                break;
+            default:
+                _weatherText.GetComponent<TMP_Text>().SetText("Sunny");
+                break;
         }
-        else
-        {
-            Managers.Weather.UpdateWeather(EnumWeather.Sun);
-            return false;
-        }
+        
     }
 }
