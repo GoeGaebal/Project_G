@@ -80,7 +80,7 @@ public class UI_PopupText : UI_Scene
         }
     }
     
-    private void AddNames()
+    public void AddNames()
     {
         foreach (var player in PhotonNetwork.CurrentRoom.Players)
         {

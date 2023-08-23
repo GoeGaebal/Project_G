@@ -90,6 +90,7 @@ public class Worldmap
 public class WorldmapData : ILoader<int, Worldmap>
 {
     public List<Worldmap> worldmaps = new();
+
     public Dictionary<int, Worldmap> MakeDict()
     {
         Dictionary<int, Worldmap> dict = new();
@@ -97,6 +98,9 @@ public class WorldmapData : ILoader<int, Worldmap>
             dict.Add(worldmap.id, worldmap);
         return dict;
     }
+}
+#endregion
+
 #region SaveData
 [Serializable]
 public class SaveData

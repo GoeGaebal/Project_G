@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class ShipScene : BaseScene
@@ -46,13 +47,16 @@ public class ShipScene : BaseScene
 
     private void Start()
     {
-        Managers.UI.SetEventSystem();
-        GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
-        // 테스트용 강제 설정
-        PhotonView view = player.GetComponent<PhotonView>();
-        PhotonView[] weaponView = player.GetPhotonViewsInChildren();
-        PhotonNetwork.AllocateViewID(view);
-        PhotonNetwork.AllocateViewID(weaponView[1]);
+        if (!PhotonNetwork.IsConnected)
+        {
+            Managers.UI.SetEventSystem();
+            GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
+            // 테스트용 강제 설정
+            PhotonView view = player.GetComponent<PhotonView>();
+            PhotonView[] weaponView = player.GetPhotonViewsInChildren();
+            PhotonNetwork.AllocateViewID(view);
+            PhotonNetwork.AllocateViewID(weaponView[1]);
+        }
         
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
@@ -60,6 +64,9 @@ public class ShipScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Worldmap>();
+        var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
+        scene.Init();
+        scene.AddNames();
     }
 
     public override void Clear()
