@@ -15,6 +15,8 @@ using Photon.Pun;
     [SerializeField] private LayerMask chaseTargetLayerMask;
     [SerializeField] protected float speed;
     [SerializeField] private float minDisFromPlayer;
+    internal Vector3 _spawnPosition;
+
 
     internal Animator animator;
     protected SpriteRenderer spriteRenderer;
@@ -66,7 +68,7 @@ using Photon.Pun;
         hitState = new(this);
 
         ChangeState(idleState);
-        
+        _spawnPosition = transform.position;
     }
 
     protected virtual void Update() {
@@ -75,6 +77,16 @@ using Photon.Pun;
 
         Collider2D[] playerColliders = Physics2D.OverlapCircleAll(gameObject.transform.position, detectRadius,chaseTargetLayerMask);
  
+
+        if(!hasTarget)
+        {
+             if((transform.position - _spawnPosition).magnitude > 1.0f)
+            {
+                ChangeState(runState);
+                AnimState.UpdateInState();
+            }
+        }
+
         if(playerColliders.Length == 0)
         {
             hasTarget = false;  
@@ -93,8 +105,9 @@ using Photon.Pun;
                 if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
                 hasTarget = true;
                 target = playerCollider.gameObject;
-                break;
+                return;
             }
+
         }
 
         
@@ -183,15 +196,20 @@ using Photon.Pun;
 
         public override void UpdateInState()
         {
-            if(basicMonster.hasTarget == false || basicMonster.target == null) return;
-            basicMonster.FlipXSprite();
+            if(basicMonster.hasTarget) basicMonster.FlipXSprite();
 
 
-            if(basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
+            if(basicMonster.hasTarget ==false && (basicMonster.transform.position - basicMonster._spawnPosition).magnitude > 1.0f)
+            {
+                basicMonster.ChangeState(basicMonster.runState);
+                return;
+            }
+
+            if(basicMonster.hasTarget == true && basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
             {
                 basicMonster.ChangeState(basicMonster.runState);
             }
-            else if(Time.time - basicMonster.lastAttackTime >=basicMonster. attackCooldown)  
+            else if(basicMonster.hasTarget == true && Time.time - basicMonster.lastAttackTime >=basicMonster. attackCooldown)  
             {
                 basicMonster.lastAttackTime = Time.time;
                 basicMonster.ChangeState(basicMonster.attackState);
@@ -233,10 +251,15 @@ using Photon.Pun;
 
         public override void UpdateInState()
         {
-            basicMonster.FlipXSprite();
+            if(basicMonster.hasTarget) basicMonster.FlipXSprite();
             if(basicMonster.hasTarget == false )
             {
-                basicMonster.ChangeState(basicMonster.idleState);
+                Debug.Log((basicMonster.transform.position - basicMonster._spawnPosition).magnitude );
+                if( (basicMonster.transform.position - basicMonster._spawnPosition).magnitude > 1.0f)
+                {
+                    basicMonster.transform.position = Vector2.MoveTowards(basicMonster.transform.position, basicMonster._spawnPosition, basicMonster.speed * Time.deltaTime);
+                }
+                else basicMonster.ChangeState(basicMonster.idleState);
             }
             else if (basicMonster.GetDistance()<= basicMonster.minDisFromPlayer)
             {
