@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 using System;
 using Photon.Pun;
 using UnityEditor;
-using Photon.Pun;
 
 public class GatheringController : DamageableEntity
 {

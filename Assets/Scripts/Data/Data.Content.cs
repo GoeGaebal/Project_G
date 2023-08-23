@@ -73,6 +73,30 @@ public class MapDataLoader : ILoader<ulong,bool>
 }
 #endregion
 
+#region Worldmap
+[Serializable]
+public class Worldmap
+{
+    public int id;
+    public string name;
+    public float minX;
+    public float minY;
+    public float maxX;
+    public float maxY;
+    public string weather;
+}
+
+[Serializable]
+public class WorldmapData : ILoader<int, Worldmap>
+{
+    public List<Worldmap> worldmaps = new();
+    public Dictionary<int, Worldmap> MakeDict()
+    {
+        Dictionary<int, Worldmap> dict = new();
+        foreach (Worldmap worldmap in worldmaps)
+            dict.Add(worldmap.id, worldmap);
+        return dict;
+    }
 #region SaveData
 [Serializable]
 public class SaveData

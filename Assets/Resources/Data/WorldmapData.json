@@ -1,0 +1,31 @@
+{
+  "worldmaps": [
+    {
+      "id": "1",
+      "name": "plane",
+      "minX": "1371.6",
+      "minY": "560.1",
+      "maxX": "1771.6",
+      "maxY": "960.1",
+      "weather": "sunny"
+    },
+    {
+      "id": "2",
+      "name": "desert",
+      "minX": "313.0",
+      "minY": "572.6",
+      "maxX": "713.0",
+      "maxY": "972.6",
+      "weather": "hot"
+    },
+    {
+      "id": "3",
+      "name": "beach",
+      "minX": "825.9",
+      "minY": "319.1",
+      "maxX": "1225.9",
+      "maxY": "719.1",
+      "weather": "rainy"
+    }
+  ]
+}

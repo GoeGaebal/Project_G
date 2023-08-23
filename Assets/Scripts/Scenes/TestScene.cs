@@ -61,6 +61,7 @@ public class TestScene : BaseScene,IPunObservable
         Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
+        //Managers.UI.ShowSceneUI<UI_Worldmap>();
     }
 
     public override void Clear()

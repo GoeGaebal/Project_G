@@ -13,6 +13,7 @@ public class Player : DamageableEntity
 {
     [SerializeField] private float moveSpeed = 5.0f;
     
+    private PlayerCameraController playerCameraController;
     private Vector2 moveInput;
 
     private Rigidbody2D rb;
@@ -44,9 +45,24 @@ public class Player : DamageableEntity
         }
     }
     
+    protected override void OnEnable() {
+        base.OnEnable();
+        State = EnumPlayerStates.Idle;
+        //카메라 이동 제한
+        if(photonView.IsMine)
+        {
+            playerCameraController.SetPosition(transform.position);
+            if(playerCameraController.enabled)
+                playerCameraController.enabled = false;
+        }
+        
+        
+        
+    }
+
     private void UpdateState()
     {
-        if(isDead) return;
+        if(isDead || animator == null) return;
         switch (State)
         {
             
@@ -69,16 +85,15 @@ public class Player : DamageableEntity
         }
     }
 
-    private void Awake()
-    {
-        
-    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
+        playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+        playerCameraController.enabled = false;
+        Binding();
 
         dieAction += () => {
             animator.SetTrigger("die");
@@ -121,8 +136,10 @@ public class Player : DamageableEntity
         if (State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
         {
             Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
-            if(Managers.Map.CheckCanGo(dest))
+            if (Managers.Map.CheckCanGo(dest))
+            {
                 rb.MovePosition(dest);
+            }
         }
     }
 
@@ -142,7 +159,7 @@ public class Player : DamageableEntity
                     State = EnumPlayerStates.Run;
                     break;
                 case EnumPlayerStates.Run:
-                    if(context.canceled)
+                    if (context.canceled)
                         State = EnumPlayerStates.Idle;
                     break;
                 case EnumPlayerStates.Attack:
@@ -240,6 +257,18 @@ public class Player : DamageableEntity
         }
     }
 
+    public void FinishDieAnimClip()
+    {
+
+        gameObject.SetActive(false);
+
+        if(photonView.IsMine)
+        {
+            if(!playerCameraController.enabled)
+                playerCameraController.enabled = true;
+            playerCameraController.SetPosition(transform.position);
+        }
+        
     private void OnDestroy()
     {
         if (photonView.IsMine)
