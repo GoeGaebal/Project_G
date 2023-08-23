@@ -68,6 +68,7 @@ public class BossMonster : BasicMonster
     }
     protected override void FlipXSprite()
     {
+        if(hasTarget == false || target == null) return;
         if(target.transform.position.x < transform.position.x) spriteRenderer.flipX = false;
         else spriteRenderer.flipX = true;
     }

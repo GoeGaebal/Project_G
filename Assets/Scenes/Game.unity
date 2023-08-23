@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
   - component: {fileID: 519420034}
+  - component: {fileID: 519420035}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -259,7 +260,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -400,6 +401,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+--- !u!114 &519420035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 631d2d9bd876e3d4294c306b6eeea530, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_pPPMaterial: {fileID: 2100000, guid: f44e978401af38e4c855fa2ecf9a828d, type: 2}
+  _Gray: 1
 --- !u!1001 &537426446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -750,12 +765,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1068472571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1359cf9d1b2001b4ca50dd105e3da4c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e8c7d1ae37fa394eadcffa64e5a8ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: dcc710912d5259f4ca93937b2752371e, type: 2}
-  dayTimeColor: {r: 1, g: 1, b: 1, a: 0}
-  nightTimeColor: {r: 0.23495907, g: 0.24667458, b: 0.3018868, a: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 0}
+  sunDayColor: {r: 1, g: 1, b: 1, a: 0}
+  sunNightColor: {r: 0.25209555, g: 0.25111252, b: 0.254717, a: 0}
+  desertDayColor: {r: 0.9245283, g: 0.8805836, b: 0.70211816, a: 0}
+  desertNightColor: {r: 0.3773585, g: 0.3638683, b: 0.30793878, a: 0}
+  rainDayColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 0}
+  rainNightColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
 --- !u!1001 &1849371453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -825,3 +845,141 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 873154119f9fa1c4da9a25d217aa5766, type: 3}
+--- !u!1001 &928189372476894157
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195664, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928189374336195671, guid: cde2cc96f04d2e44b9da1913b4c81122,
+        type: 3}
+      propertyPath: m_Name
+      value: RainRippleParticle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cde2cc96f04d2e44b9da1913b4c81122, type: 3}
+--- !u!1001 &7917026085081877595
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9659259
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.258819
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243168, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917026084547243171, guid: 33311907e715a3847b179ab8bdb3874c,
+        type: 3}
+      propertyPath: m_Name
+      value: RainDropParticle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33311907e715a3847b179ab8bdb3874c, type: 3}

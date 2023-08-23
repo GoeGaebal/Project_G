@@ -11,6 +11,7 @@ public class Define
         Unknown,
         Lobby,
         Game,
+        Ship,
     }
 
     public enum Sound
