@@ -67,7 +67,7 @@ public class WeatherManager : IOnEventCallback
        switch(changeWeather)
             {
                 case EnumWeather.Sun:
-                Debug.Log("Weather changed Sun");
+                    //Debug.Log("Weather changed Sun");
                     Weather = EnumWeather.Sun;
                     if(WeatherChangeEvent!= null)
                         WeatherChangeEvent(changeWeather);
