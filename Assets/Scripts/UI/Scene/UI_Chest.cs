@@ -17,8 +17,8 @@ public class UI_Chest : UI_Scene
         CloseButton,
     }
 
-    private UI_Slot[] chestSlots;
-    private int _slotCount = 49;
+    //private UI_Slot[] chestSlots;
+    //private int _slotCount = 49;
     private GameObject _chest;
     private GameObject contents;
     public static System.Action open;
@@ -35,6 +35,7 @@ public class UI_Chest : UI_Scene
 
     public override void Init()
     {
+        //TODO: UI_Item 드래그할 때 창고 UI 뒤로 숨는 버그 수정 필요
         Managers.UI.SetCanvas(gameObject, true);
 
         Bind<GameObject>(typeof(GameObjects));
@@ -43,11 +44,10 @@ public class UI_Chest : UI_Scene
         _chest = Get<GameObject>((int)GameObjects.Chest);
         contents = Get<GameObject>((int)GameObjects.Contents);
 
-        chestSlots = new UI_Slot[_slotCount];
-        for(int i = 0; i < _slotCount; i++)
+        for(int i = 0; i < Managers.Item.chestSlots.Length; i++)
         {
-            chestSlots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent: contents.transform);
-            chestSlots[i].transform.localScale = Vector3.one;
+            Managers.Item.chestSlots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent: contents.transform);
+            Managers.Item.chestSlots[i].transform.localScale = Vector3.one;
         }
 
         _chest.SetActive(false);
