@@ -272,11 +272,8 @@ public class Player : DamageableEntity
 
     private void OnDestroy()
     {
-        if (photonView.IsMine)
-        {
-            Managers.Input.PlayerActions.Move.RemoveEvent(OnMove);
-            Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
-        }
+        Managers.Input.PlayerActions.Move.RemoveEvent(OnMove);
+        Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
