@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour
 {
     public bool isExitPortal;
     public int players;
     private int incomingObjectCount = 0;
-    // Update is called once per frame
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         incomingObjectCount++;
@@ -19,12 +20,26 @@ public class Portal : MonoBehaviour
         }
         else
         {
-            if (players == incomingObjectCount)
-                Managers.Scene.LoadScene(Define.Scene.Ship);
+            if (players <= incomingObjectCount)
+            {
+                if (SceneManager.GetActiveScene().name == "Lobby")
+                {
+                    Managers.Scene.LoadScene(Define.Scene.Ship);
+                }
+                else if (SceneManager.GetActiveScene().name == "Ship")
+                {
+                    Managers.Scene.LoadScene(Define.Scene.Game);
+                }
+                else if (SceneManager.GetActiveScene().name == "Game")
+                {
+                    Managers.Scene.LoadScene(Define.Scene.Ship);
+                }
+            }
+            
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         incomingObjectCount--;
     }

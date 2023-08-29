@@ -84,7 +84,7 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            if (currentItem.item.ID/100 == item.ID/100)
+            if (currentItem.item.ID/100 == item.ID/100)//장비에 해당하는 장비창일 때
             {
                 if(currentItem.item.ID/100 == 40 &&
                 currentItem.item == item &&
@@ -107,6 +107,7 @@ public class UI_Item : UI_Base
                 }
                 else
                 {//TODO: 무기 이미지 제대로 안 바뀜
+                    UI_Inven.ChangeQuickslotImage(0, currentItem);
                     if (currentItem.item.ID == 1001)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);

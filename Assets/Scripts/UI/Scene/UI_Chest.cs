@@ -17,8 +17,7 @@ public class UI_Chest : UI_Scene
         CloseButton,
     }
 
-    //private UI_Slot[] chestSlots;
-    //private int _slotCount = 49;
+    private UI_Slot[] chestSlots;
     private GameObject _chest;
     private GameObject contents;
     public static System.Action open;
@@ -35,7 +34,6 @@ public class UI_Chest : UI_Scene
 
     public override void Init()
     {
-        //TODO: UI_Item 드래그할 때 창고 UI 뒤로 숨는 버그 수정 필요
         Managers.UI.SetCanvas(gameObject, true);
 
         Bind<GameObject>(typeof(GameObjects));
@@ -44,15 +42,40 @@ public class UI_Chest : UI_Scene
         _chest = Get<GameObject>((int)GameObjects.Chest);
         contents = Get<GameObject>((int)GameObjects.Contents);
 
-        for(int i = 0; i < Managers.Item.chestSlots.Length; i++)
+        chestSlots = new UI_Slot[Managers.Item.chestSlots.Length];
+        for (int i = 0; i < Managers.Item.chestSlots.Length; i++)
         {
-            Managers.Item.chestSlots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent: contents.transform);
-            Managers.Item.chestSlots[i].transform.localScale = Vector3.one;
+            chestSlots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent: contents.transform);
+            chestSlots[i].transform.localScale = Vector3.one;
+            if(Managers.Item.chestSlots[i] != null)
+            {
+                Managers.Item.SpawnNewItem(Managers.Item.chestSlots[i], chestSlots[i]);
+            }
         }
 
         _chest.SetActive(false);
-        
+
         GetButton((int)Buttons.CloseButton).gameObject.BindEvent(CloseChest);
+    }
+
+    private void OnDestroy()
+    {
+        SaveItem();
+    }
+
+    public void SaveItem()
+    {
+        for(int i = 0; i < chestSlots.Length; i++)
+        {//창고 저장
+            if (chestSlots[i].transform.childCount >= 1)
+            {
+                Managers.Item.chestSlots[i] = chestSlots[i].transform.GetChild(0).GetComponent<UI_Item>().item;
+            }
+            else
+            {
+                Managers.Item.chestSlots[i] = null;
+            }
+        }
     }
 
     public void OpenChest()
