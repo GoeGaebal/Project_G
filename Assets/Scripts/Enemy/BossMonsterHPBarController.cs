@@ -22,9 +22,11 @@ public class BossMonsterHPBarController : MonsterHPBarController
         if(_basicMonster.HasTarget == false)
         {
             _hpBarImage.color = _inactiveColor;
+            _hpBarBackgroundImage.color = _inactiveColor;
         }
         else{
             _hpBarImage.color = _activeColor;
+            _hpBarBackgroundImage.color = _activeColor;
             base.Update();
         }
     }
