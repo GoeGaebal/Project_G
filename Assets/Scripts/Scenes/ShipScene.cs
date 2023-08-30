@@ -65,6 +65,7 @@ public class ShipScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_Artifact>();
+        Managers.UI.ShowSceneUI<UI_Leaf>();
      
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
