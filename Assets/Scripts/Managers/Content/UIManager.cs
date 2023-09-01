@@ -11,6 +11,9 @@ public class UIManager
     private Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
     private List<UI_Scene> _sceneUIs = new List<UI_Scene>();
 
+    private Canvas _currentCanvas;
+    private int _originalSortingOrder;
+
     public GameObject Root
     {
         get
@@ -158,5 +161,22 @@ public class UIManager
         foreach (var ui in _sceneUIs)
             Managers.Resource.Destroy(ui.gameObject);
         _sceneUIs.Clear();
+    }
+
+    public void SetCurrentCanvas(Canvas temp)
+    {
+        _currentCanvas = temp;
+        _originalSortingOrder = temp.sortingOrder;
+    }
+
+    public void SetCanvasOrder(int n)
+    {
+        _currentCanvas.sortingOrder = n;
+    }
+    public void ResetCanvasOrder()
+    {
+        _currentCanvas.sortingOrder = _originalSortingOrder;
+        _currentCanvas = null;
+        _originalSortingOrder = 0;
     }
 }

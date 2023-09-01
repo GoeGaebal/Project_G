@@ -66,6 +66,8 @@ public class UI_Item : UI_Base
 
     public void OnBeginDrag(PointerEventData eventData)//클릭했을 때
     {
+        Managers.UI.SetCurrentCanvas(transform.parent.parent.parent.parent.GetComponent<Canvas>());
+        Managers.UI.SetCanvasOrder(20);
         _icon.raycastTarget = false;
         parentBeforeDrag = transform.parent;
         transform.SetParent(GetComponentInParent<Canvas>().transform);
@@ -165,6 +167,7 @@ public class UI_Item : UI_Base
     
     public void OnEndDrag(PointerEventData eventData) // 마우스를 뗄 때
     {
+        Managers.UI.ResetCanvasOrder();
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
         {
             if (player != null)
