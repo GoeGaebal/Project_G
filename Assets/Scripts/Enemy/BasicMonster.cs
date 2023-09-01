@@ -45,7 +45,7 @@ using Photon.Pun;
 
         protected set{ 
             _animState = value; 
-            
+            AnimState.Init();
         }
 
     }
@@ -67,14 +67,14 @@ using Photon.Pun;
         attackState = new(this);
         hitState = new(this);
 
-        ChangeState(idleState);
+        AnimState = idleState;
         _spawnPosition = transform.position;
     }
 
     protected virtual void Update() {
         
         if(isDead) return;
-
+        
         Collider2D[] playerColliders = Physics2D.OverlapCircleAll(gameObject.transform.position, detectRadius,chaseTargetLayerMask);
  
 
@@ -82,34 +82,25 @@ using Photon.Pun;
         {
              if((transform.position - _spawnPosition).magnitude > 1.0f)
             {
-                ChangeState(runState);
-                AnimState.UpdateInState();
+                AnimState = runState;
             }
-        }
 
-        if(playerColliders.Length == 0)
-        {
-            hasTarget = false;  
-            if( !(AnimState is  AttackState) || !(AnimState is  HitState ))
-                ChangeState(idleState);
-            
-            target = null;
-            
-        }
-
-        //set target when collider is detected but no target
-        else if(!hasTarget)
-        {
             foreach(var playerCollider in playerColliders)
             {
                 if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
                 hasTarget = true;
                 target = playerCollider.gameObject;
-                return;
             }
 
         }
 
+        if(playerColliders.Length == 0 || playerColliders == null)
+        {
+            hasTarget = false;          
+            target = null;
+        }
+
+ 
         
         if(hasTarget)
         {
@@ -122,23 +113,18 @@ using Photon.Pun;
                 target = null;
                 hasTarget = false;
             }
-            else
-                AnimState.UpdateInState();
-            
-            
         }
+        AnimState.UpdateInState();
         
     }
 
     [PunRPC]
     override public void OnDamage(float damage) 
     {
-        
         base.OnDamage(damage);
         if(isDead) return;
         if(!(AnimState is IdleState) && !(AnimState is RunState)) return;
-        ChangeState(hitState);
-        
+        AnimState = hitState;
     }
 
 
@@ -159,19 +145,12 @@ using Photon.Pun;
 
     public void FinishAttackState()
     {
-        ChangeState(idleState);
+        AnimState = idleState;
     }
 
     public void FinishHitState()
     {
-        ChangeState(idleState);
-    }
-
-    protected virtual void FlipXSprite()
-    {
-        if(target.transform.position.x < transform.position.x) spriteRenderer.flipX = true;
-        else spriteRenderer.flipX = false;
-
+        AnimState = idleState;
     }
 
     public abstract class State
@@ -196,26 +175,21 @@ using Photon.Pun;
 
         public override void UpdateInState()
         {
-            if(basicMonster.hasTarget) basicMonster.FlipXSprite();
-
-
-            if(basicMonster.hasTarget ==false && (basicMonster.transform.position - basicMonster._spawnPosition).magnitude > 1.0f)
+            if(basicMonster.target != null && basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
             {
-                basicMonster.ChangeState(basicMonster.runState);
-                return;
-            }
-
-            if(basicMonster.hasTarget == true && basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
-            {
-                basicMonster.ChangeState(basicMonster.runState);
+                basicMonster.AnimState = basicMonster.runState;
             }
             else if(basicMonster.hasTarget == true && Time.time - basicMonster.lastAttackTime >=basicMonster. attackCooldown)  
             {
                 basicMonster.lastAttackTime = Time.time;
-                basicMonster.ChangeState(basicMonster.attackState);
+                basicMonster.AnimState = basicMonster.attackState;
             }
-            float distance = basicMonster.GetDistance();
-            basicMonster.animator.SetFloat("distance", distance);
+            if(basicMonster.target != null)
+            {
+                float distance = basicMonster.GetDistance();
+                basicMonster.animator.SetFloat("distance", distance);
+            }
+            
         }
     }
 
@@ -233,8 +207,12 @@ using Photon.Pun;
 
         public override void UpdateInState()
         {
-            float distance = basicMonster.GetDistance();
-            basicMonster.animator.SetFloat("distance", distance);
+            if(basicMonster.target != null)
+            {
+                float distance = basicMonster.GetDistance();
+                basicMonster.animator.SetFloat("distance", distance);
+            }
+           
         }
     }
 
@@ -251,26 +229,35 @@ using Photon.Pun;
 
         public override void UpdateInState()
         {
-            if(basicMonster.hasTarget) basicMonster.FlipXSprite();
+            if(!basicMonster.animator.GetBool("run")) basicMonster.animator.SetBool("run",true);
             if(basicMonster.hasTarget == false )
             {
-                Debug.Log((basicMonster.transform.position - basicMonster._spawnPosition).magnitude );
-                if( (basicMonster.transform.position - basicMonster._spawnPosition).magnitude > 1.0f)
+                Debug.Log((basicMonster.transform.position - basicMonster._spawnPosition).magnitude);
+                if(basicMonster._spawnPosition.x < basicMonster.transform.position.x) basicMonster.spriteRenderer.flipX = true;
+                else basicMonster.spriteRenderer.flipX = false;
+                basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster._spawnPosition, basicMonster.speed * Time.deltaTime);
+                
+                if( (basicMonster.transform.position - basicMonster._spawnPosition).magnitude <= 0.001f)
                 {
-                    basicMonster.transform.position = Vector2.MoveTowards(basicMonster.transform.position, basicMonster._spawnPosition, basicMonster.speed * Time.deltaTime);
+                    basicMonster.AnimState = basicMonster.idleState;
                 }
-                else basicMonster.ChangeState(basicMonster.idleState);
             }
-            else if (basicMonster.GetDistance()<= basicMonster.minDisFromPlayer)
+            else if (basicMonster.target != null && basicMonster.GetDistance()<= basicMonster.minDisFromPlayer)
             {
-                basicMonster.ChangeState(basicMonster.idleState);
+                basicMonster.AnimState = basicMonster.idleState;
             }
-            else
+            else if(basicMonster.target != null && basicMonster.GetDistance()> basicMonster.minDisFromPlayer)
             {
-                basicMonster.transform.position = Vector2.MoveTowards(basicMonster.transform.position, basicMonster.target.transform.position, basicMonster.speed * Time.deltaTime);
-        
-            float distance = basicMonster.GetDistance();
-            basicMonster.animator.SetFloat("distance", distance);
+                if(basicMonster.target.transform.position.x < basicMonster.transform.position.x) basicMonster.spriteRenderer.flipX = true;
+                else basicMonster.spriteRenderer.flipX = false;
+                basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster.target.transform.position, basicMonster.speed * Time.deltaTime);
+
+                if(basicMonster.target != null)
+                {
+                    float distance = basicMonster.GetDistance();
+                    basicMonster.animator.SetFloat("distance", distance);
+                }
+                
             }
                 
         }
@@ -286,30 +273,5 @@ using Photon.Pun;
         {
             basicMonster.animator.SetTrigger("hit");
         }
-
-        public override void UpdateInState()
-        {
-
-        }
-    }
-
-
-
-
-    protected void ChangeState(State newState) {
-
-        if(newState is RunState)
-            StartCoroutine(DelayRun());
-        AnimState = newState;
-        AnimState.Init();
-
-
-        IEnumerator DelayRun()
-        {
-            yield return new WaitForSeconds(0.4f);
-        }
     }
 }
-
-
-

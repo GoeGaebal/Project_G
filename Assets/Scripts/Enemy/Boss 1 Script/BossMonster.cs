@@ -44,7 +44,7 @@ public class BossMonster : BasicMonster
         if(isDead) return;
         if(hasTarget == false || target == null) return;
         
-        if(CanCastingState && (AnimState is RunState || AnimState is IdleState)) ChangeState(castingState);
+        if(CanCastingState && (AnimState is RunState || AnimState is IdleState)) AnimState = castingState;
 
 
         
@@ -64,13 +64,7 @@ public class BossMonster : BasicMonster
     }
     public void FinishCasthingState()
     {
-        ChangeState(this.idleState);
-    }
-    protected override void FlipXSprite()
-    {
-        if(hasTarget == false || target == null) return;
-        if(target.transform.position.x < transform.position.x) spriteRenderer.flipX = false;
-        else spriteRenderer.flipX = true;
+        AnimState = this.idleState;
     }
 
     private IEnumerator CooldownTimeCastingState()
