@@ -93,6 +93,7 @@ public class Managers : MonoBehaviourPun
             _instance._sound.Init();
             _instance._artifact.Init();
             _instance._weather.Init();
+            _instance._worldMap.Init();
         }
     }
     

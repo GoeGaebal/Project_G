@@ -12,6 +12,7 @@ public class Define
         Lobby,
         Game,
         Ship,
+        FinalBoss,
     }
 
     public enum Sound

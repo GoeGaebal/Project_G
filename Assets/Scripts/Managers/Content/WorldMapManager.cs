@@ -9,6 +9,8 @@ public class WorldMapManager : MonoBehaviour
     private float _finalBossMoveSpeed = 30.0f;
     private Vector3 _shipPosition;
 
+    private bool _isBossBattle;
+    private float _minDistacnceBetShipBoss;
     public GameObject Ship
     {
         get { return _ship; }
@@ -23,8 +25,15 @@ public class WorldMapManager : MonoBehaviour
         set{ _finalBoss = value;}
     }
 
+    public void Init()
+    {
+        _isBossBattle = false;
+        _minDistacnceBetShipBoss = 5.0f;
+    }
+
     public void UpdateWorldMap(float deltaTime)
     {
+        if(_isBossBattle) return;
         UpdateShipPosition();
         UpdateFinalBossPosition(deltaTime);
     }
@@ -44,6 +53,13 @@ public class WorldMapManager : MonoBehaviour
         Vector3 direction = (_shipPosition - _finalBoss.transform.localPosition).normalized;
 
         _finalBoss.transform.localPosition = _finalBoss.transform.localPosition + direction * _finalBossMoveSpeed * deltaTime;
+
+        if((_shipPosition - _finalBoss.transform.localPosition).sqrMagnitude < _minDistacnceBetShipBoss)
+        {
+            Debug.Log("final boss");
+            _isBossBattle = true;
+            Managers.Scene.LoadScene(Define.Scene.FinalBoss);
+        }
     }
     
     
