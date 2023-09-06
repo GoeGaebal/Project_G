@@ -1,0 +1,26 @@
+{
+  "worldmaps": [
+    {
+      "id": "1",
+      "target": "Axe",
+      "targetAmount": "1",
+      "source": "Sword",
+      "sourceAmount": "1",
+      "material1": "IronIngot",
+      "material1Amount": "2",
+      "material2": "Apple",
+      "material2Amount": "1"
+    }/*,
+    {
+      "id": "",
+      "target": "",
+      "targetAmount": "",
+      "source": "",
+      "sourceAmount": "",
+      "material1": "",
+      "material1Amount": "",
+      "material2": "",
+      "material2Amount": ""
+    }*/
+  ]
+}

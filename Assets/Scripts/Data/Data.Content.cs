@@ -108,3 +108,33 @@ public class SaveData
     public List<ulong> InventoryList;
 }
 #endregion
+
+#region
+[Serializable]
+public class Craft
+{
+    public int id;
+    public string target;
+    public int targetAmount;
+    public string source;
+    public int sourceAmount;
+    public string material1;
+    public int material1Amount;
+    public string material2;
+    public int material2Amount;
+}
+
+[Serializable]
+public class CraftData: ILoader<int, Craft>
+{
+    public List<Craft> crafts = new();
+
+    public Dictionary<int, Craft> MakeDict()
+    {
+        Dictionary<int, Craft> dict = new();
+        foreach (Craft craft in crafts)
+            dict.Add(craft.id, craft);
+        return dict;
+    }
+}
+#endregion
