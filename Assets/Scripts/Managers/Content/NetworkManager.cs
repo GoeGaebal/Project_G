@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -60,14 +61,15 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     public const int MaxPlayer = 3;
     public Player LocalPlayer { get; private set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
-    
+    public Player[] OtherPlayers { get { return PlayerDict.Values.Where((x) => x.photonView.ViewID != LocalPlayer.photonView.ViewID).ToArray(); } }
+
     private Queue<Player> _playerQueue;
     public GameObject[] PlayerList => _playerList;
     private GameObject[] _playerList;
     
     public Action<string> ReceiveChatHandler;
     public Action<int> ReceiveAddItemHandler;
-    public Action AfterPlayerEnteredRoom;
+    public Action<Player> AfterPlayerEnteredRoom;
     public Action<int> OnPlayerLeftRoomAction;
 
     private static readonly RaiseEventOptions SendMasterOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
@@ -236,7 +238,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
                     foreach(var view in views)
                         view.RequestOwnership();
                 }
-                AfterPlayerEnteredRoom?.Invoke();
+                AfterPlayerEnteredRoom?.Invoke(PlayerDict[enteredActor]);
                 break;
             }
         }
