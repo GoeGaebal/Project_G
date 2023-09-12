@@ -75,6 +75,7 @@ public class TimeSlotManager : IOnEventCallback
 
     public void AddDelataTime(float deltaTime)
     {
+        if(Managers.Scene.IsLoading) return;
         CurrentTime+=Time.deltaTime;
          if(CurrentTime >= timeChangePeriod * countTimeSlotChanged && TimeSlotChangeEvent != null)
         {

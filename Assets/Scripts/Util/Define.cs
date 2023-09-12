@@ -13,6 +13,7 @@ public class Define
         Game,
         Ship,
         FinalBoss,
+        Loading,
     }
 
     public enum Sound

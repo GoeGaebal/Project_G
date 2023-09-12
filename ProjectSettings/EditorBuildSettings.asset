@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FinalBoss.unity
     guid: bda2f18577f672541920d4b654762930
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: 6bccafc84eed1e2419de5edad28b7b44
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: d1f073cbcf5dc3f4489128403befbf05,
       type: 2}
