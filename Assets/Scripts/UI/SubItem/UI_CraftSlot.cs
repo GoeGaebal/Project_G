@@ -33,7 +33,7 @@ public class UI_CraftSlot : UI_Base, IPointerClickHandler
 
     void Start()
     {
-        Init();
+        //Init();
     }
 
     void Update()
@@ -71,6 +71,6 @@ public class UI_CraftSlot : UI_Base, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        UI_Craft.open();
+        UI_Craft.open(_targetID);
     }
 }

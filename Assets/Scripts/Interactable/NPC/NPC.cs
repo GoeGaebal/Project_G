@@ -6,7 +6,7 @@ public class NPC : MonoBehaviour, IInteractable
 {
     public void Interact()
     {
-        throw new System.NotImplementedException();
+        UI_Craft.openUI();
     }
 
     // Start is called before the first frame update

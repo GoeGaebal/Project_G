@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 7204675807985298932}
   - component: {fileID: 470040997093130940}
   - component: {fileID: 7446279328286511435}
+  - component: {fileID: 4209361241638927387}
   m_Layer: 5
   m_Name: UI_CraftMaterial
   m_TagString: Untagged
@@ -212,3 +213,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4209361241638927387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8717213328786246899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c637c0f93bc33489c2e5c7777bf330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

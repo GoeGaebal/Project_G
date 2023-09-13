@@ -43,15 +43,11 @@ public class UI_CraftMaterial : UI_Base
         _countGo.SetActive(false);
     }
 
-    public void SetIcon(Sprite sprite)
+    public void SetSlot(Sprite sprite, int n)
     {
         _icon.sprite = sprite;
-    }
-
-    public void SetCount(int n)
-    {
         _count.text = n.ToString();
-        if(n > 0)
+        if (n > 0)
         {
             _countGo.SetActive(true);
         }

@@ -32,7 +32,7 @@ public class ArtifactManager
     {
         for(int i = 0; i < artifactScrolls.Length; i++)
         {
-            if(artifactScrolls[i].name == path)
+            if(artifactScrolls[i] != null &&artifactScrolls[i].name == path)
             {
                 return;
             }

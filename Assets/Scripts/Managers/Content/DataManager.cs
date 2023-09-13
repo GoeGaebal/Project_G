@@ -28,11 +28,11 @@ public class DataManager
         
         // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
         Item item = null;
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Apple");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Resource/IronIngot");
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/IronIngot");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Weapon/Sword");
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Sword");
         ItemDict.Add(item.ID,item);
 
         WorldmapDict = LoadJson<WorldmapData, int, Worldmap>("WorldmapData").MakeDict();
