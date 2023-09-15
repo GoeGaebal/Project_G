@@ -42,6 +42,8 @@ public class UI_Craft : UI_Scene
     private Item[] SelectedRecipe = new Item[4];
     private int[] SelectedRecipeAmount = new int[4];
 
+    private bool _craftable;
+
     public static System.Action<int> open;
     public static System.Action openUI;
 
@@ -118,6 +120,13 @@ public class UI_Craft : UI_Scene
         SelectedRecipeAmount[2] = recipe.material1Amount;
         SelectedRecipeAmount[3] = recipe.material2Amount;
 
+        CheckRecipe();
+
+        _craft.SetActive(true);
+    }
+
+    public void CheckRecipe()
+    {
         int targetCount = UI_Inven.checkItem(SelectedRecipe[0]);
         int sourceCount = UI_Inven.checkItem(SelectedRecipe[1]);
         int material1Count = UI_Inven.checkItem(SelectedRecipe[2]);
@@ -127,12 +136,23 @@ public class UI_Craft : UI_Scene
         _source.SetSlot(SelectedRecipe[1].Icon, sourceCount, SelectedRecipeAmount[1]);
         _material_1.SetSlot(SelectedRecipe[2].Icon, material1Count, SelectedRecipeAmount[2]);
         _material_2.SetSlot(SelectedRecipe[3].Icon, material2Count, SelectedRecipeAmount[3]);
+    }
 
-        _craft.SetActive(true);
+    public void CloseCraft()
+    {
+        _craft.SetActive(false);
     }
 
     public void Craft()
     {
-
+        for(int i = 1; i <= 3; i++)
+        {
+            UI_Inven.removeItems(SelectedRecipe[i], SelectedRecipeAmount[i]);
+        }
+        for(int i = 0; i < SelectedRecipeAmount[0]; i++)
+        {
+            UI_Inven.additem(SelectedRecipe[0]);
+        }
+        CloseCraft();
     }
 }

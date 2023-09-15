@@ -42,9 +42,10 @@ public class UI_CraftMaterial : UI_Base
         _countGo = Get<GameObject>((int)GameObjects.Count);
     }
 
-    public void SetSlot(Sprite sprite, int n, int target)
+    public void SetSlot(Sprite sprite, int n, int target, bool active = true)
     {
         _icon.sprite = sprite;
         _count.text = n.ToString() + "/" + target.ToString();
+        _countGo.SetActive(active);
     }
 }
