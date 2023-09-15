@@ -118,10 +118,15 @@ public class UI_Craft : UI_Scene
         SelectedRecipeAmount[2] = recipe.material1Amount;
         SelectedRecipeAmount[3] = recipe.material2Amount;
 
-        _target.SetSlot(SelectedRecipe[0].Icon, SelectedRecipeAmount[0]);
-        _source.SetSlot(SelectedRecipe[1].Icon, SelectedRecipeAmount[1]);
-        _material_1.SetSlot(SelectedRecipe[2].Icon, SelectedRecipeAmount[2]);
-        _material_2.SetSlot(SelectedRecipe[3].Icon, SelectedRecipeAmount[3]);
+        int targetCount = UI_Inven.checkItem(SelectedRecipe[0]);
+        int sourceCount = UI_Inven.checkItem(SelectedRecipe[1]);
+        int material1Count = UI_Inven.checkItem(SelectedRecipe[2]);
+        int material2Count = UI_Inven.checkItem(SelectedRecipe[3]);
+
+        _target.SetSlot(SelectedRecipe[0].Icon, targetCount, SelectedRecipeAmount[0]);
+        _source.SetSlot(SelectedRecipe[1].Icon, sourceCount, SelectedRecipeAmount[1]);
+        _material_1.SetSlot(SelectedRecipe[2].Icon, material1Count, SelectedRecipeAmount[2]);
+        _material_2.SetSlot(SelectedRecipe[3].Icon, material2Count, SelectedRecipeAmount[3]);
 
         _craft.SetActive(true);
     }

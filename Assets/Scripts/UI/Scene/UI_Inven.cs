@@ -54,6 +54,13 @@ public class UI_Inven : UI_Scene//, IDataPersistence
 
     private bool _inventory_activeself;
 
+    public static System.Func<Item, int> checkItem;
+
+    private void Awake()
+    {
+        checkItem = CheckItem;
+    }
+
     private void Start()
     {
         Init();
@@ -303,6 +310,29 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         }
 
         _inventory_activeself = _inventory.activeSelf;
+    }
+
+    public int CheckItem(Item target)
+    {
+        int count = 0;
+
+        for(int i = 0; i < slots.Length; i++)
+        {
+            if(slots[i].transform.childCount < 1)
+            {
+                continue;
+            }
+            else
+            {
+                var slotItem = slots[i].transform.GetChild(0).GetComponent<UI_Item>();
+                if (slotItem.item == target)
+                {
+                    count += slotItem.count;
+                }
+            }
+        }
+
+        return count;
     }
 
     public void SaveItem()

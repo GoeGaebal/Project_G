@@ -40,16 +40,11 @@ public class UI_CraftMaterial : UI_Base
         _icon = GetComponent<Image>();
         _count = Get<TMP_Text>((int)Texts.Count);
         _countGo = Get<GameObject>((int)GameObjects.Count);
-        _countGo.SetActive(false);
     }
 
-    public void SetSlot(Sprite sprite, int n)
+    public void SetSlot(Sprite sprite, int n, int target)
     {
         _icon.sprite = sprite;
-        _count.text = n.ToString();
-        if (n > 0)
-        {
-            _countGo.SetActive(true);
-        }
+        _count.text = n.ToString() + "/" + target.ToString();
     }
 }

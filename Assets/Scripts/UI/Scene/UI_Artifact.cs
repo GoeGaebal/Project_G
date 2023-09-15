@@ -58,13 +58,15 @@ public class UI_Artifact : UI_Scene
         for (int i = 0; i < Managers.Artifact.artifactScrolls.Length; i++)
         {
             var slot = Managers.Artifact.MakeArtifactSlot(_content.transform);
-            slot.artifact = Managers.Artifact.artifactScrolls[i];
-            for(int j = 0; j < 3; j++)
-            {
+            slot.Init();
+            slot.SetArtifact(Managers.Artifact.artifactScrolls[i]);
+            for (int j = 0; j < 3; j++)
+            {//착용중인 유물이면
                 if(Managers.Artifact.artifacts[j] == slot.artifact)
                 {
-                    Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex] = slot;
+                    Managers.Artifact.equippedArtifactSlots[j] = slot;
                     slot.SetEquipped(true);
+                    break;
                 }
             }
         }
