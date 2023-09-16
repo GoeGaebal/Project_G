@@ -9,8 +9,9 @@ public class ToolItem : EquipableItem
 
     [SerializeField] private float _efficiency = 1f;
 
-    public override void ChangeEquipableItem()
-    {
-        PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
-    }
+    //도끼가 없어져서 주석 처리
+    // public override void ChangeEquipableItem()
+    // {
+    //     PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+    // }
 }
