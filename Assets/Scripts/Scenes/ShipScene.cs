@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class ShipScene : BaseScene
 {
+    public static bool isStarted = false;
     protected override void Init()
     {
+        if(!isStarted) isStarted = true;
         base.Init();
         SceneType = Define.Scene.Ship;
         Managers.Map.LoadMap(4);
