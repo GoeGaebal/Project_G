@@ -15,7 +15,8 @@ using Photon.Pun;
     [SerializeField] private LayerMask chaseTargetLayerMask;
     [SerializeField] protected float speed;
     [SerializeField] private float minDisFromPlayer;
-    internal Vector3 _spawnPosition;
+    [SerializeField] private bool isSpriteRightSide;
+     internal Vector3 _spawnPosition;
 
 
     internal Animator animator;
@@ -155,7 +156,8 @@ using Photon.Pun;
 
     protected virtual void DoFlip(bool value)
     {
-        spriteRenderer.flipX = value;
+        if(isSpriteRightSide)spriteRenderer.flipX = value;
+        else spriteRenderer.flipX = !value;
     }
 
     public abstract class State
