@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1537170661891307431}
   - component: {fileID: 8978881186169600456}
   - component: {fileID: 7135430765429845007}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: AttackController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,8 +128,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 205.35}
-  m_SizeDelta: {x: 801.26, y: 18.1}
+  m_AnchoredPosition: {x: 0, y: 273.00003}
+  m_SizeDelta: {x: 1166.041, y: 114.8938}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6092647483464458036
 CanvasRenderer:
@@ -205,8 +205,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 205.35}
-  m_SizeDelta: {x: 801.26, y: 18.1}
+  m_AnchoredPosition: {x: 0, y: 273}
+  m_SizeDelta: {x: 1166.041, y: 114.8938}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1716919191814865361
 CanvasRenderer:

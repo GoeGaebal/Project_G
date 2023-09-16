@@ -45,10 +45,13 @@ public class BossMonster : BasicMonster
         if(hasTarget == false || target == null) return;
         
         if(CanCastingState && (AnimState is RunState || AnimState is IdleState)) AnimState = castingState;
-
-
-        
     }
+
+    protected override void DoFlip(bool value)
+    {
+        spriteRenderer.flipX = !value;
+    }
+
     public void FinishSpell()
     {
         foreach(var thunder in thunders)
