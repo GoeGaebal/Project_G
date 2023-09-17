@@ -21,6 +21,8 @@ public class DataManager
     public Dictionary<int, GatheringData> GatheringDict { get; private set; } = new Dictionary<int, GatheringData>();
     public Dictionary<int, WorldmapData> WorldmapDict { get; private set; } = new Dictionary<int, WorldmapData>();
 
+    public Dictionary<int, CraftData> CraftDict { get; private set; } = new Dictionary<int, CraftData>();
+
     public void Init()
     {
         GatheringDict = LoadJson<GatheringDataLoader, int, GatheringData>("GatheringData").MakeDict();
@@ -34,6 +36,7 @@ public class DataManager
         item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Weapon/Sword");
         ItemDict.Add(item.ID,item);
         WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
+        CraftDict = LoadJson<CraftDataLoader, int, CraftData>("CraftData").MakeDict();
     }
 
     Loader LoadJson<Loader, TKey, TValue>(string path) where Loader : ILoader<TKey, TValue>
