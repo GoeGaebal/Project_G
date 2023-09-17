@@ -54,6 +54,17 @@ public class UI_Inven : UI_Scene//, IDataPersistence
 
     private bool _inventory_activeself;
 
+    public static System.Func<Item, int> checkItem;
+    public static System.Action<Item, int> removeItems;
+    public static System.Action<Item> additem;
+
+    private void Awake()
+    {
+        checkItem = CheckItem;
+        removeItems = (itm, n) => { RemoveItems(itm, n); };
+        additem = (itm) => { AddItem(itm); };
+    }
+
     private void Start()
     {
         Init();
@@ -303,6 +314,69 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         }
 
         _inventory_activeself = _inventory.activeSelf;
+    }
+
+    public int CheckItem(Item target)
+    {//인벤토리에 target 아이템이 몇 개 있는지
+        int count = 0;
+
+        for(int i = 0; i < slots.Length; i++)
+        {
+            if(slots[i].transform.childCount < 1)
+            {
+                continue;
+            }
+            else
+            {
+                var slotItem = slots[i].transform.GetChild(0).GetComponent<UI_Item>();
+                if (slotItem.item == target)
+                {
+                    count += slotItem.count;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public void RemoveItems(Item target, int count)
+    {//인벤토리에 있는 아이템 원하는 개수만큼 삭제
+        if(CheckItem(target) < count)
+        {
+            Debug.Log("아이템이 원하는 개수보다 적어서 삭제 불가능");
+            return;
+        }
+
+        for(int i = slots.Length - 1; i >= 0 ; i--)
+        {
+            if (slots[i].transform.childCount < 1)
+            {
+                continue;
+            }
+            else
+            {
+                var slotItem = slots[i].transform.GetChild(0).GetComponent<UI_Item>();
+                if(slotItem.item == target)
+                {
+                    if (count >= slotItem.count)
+                    {
+                        count -= slotItem.count;
+                        slotItem.RemoveItem();
+                        if(count == 0)
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        slotItem.count -= count;
+                        slotItem.RefreshCount();
+                        return;
+                    }
+                }
+                
+            }
+        }
     }
 
     public void SaveItem()

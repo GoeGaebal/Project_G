@@ -24,6 +24,35 @@ public class MapDataLoader : ILoader<ulong,bool>
 }
 #endregion
 
+#region Craft
+[Serializable]
+public class CraftData
+{
+    public int id;
+    public string target;
+    public int targetAmount;
+    public string source;
+    public int sourceAmount;
+    public string material1;
+    public int material1Amount;
+    public string material2;
+    public int material2Amount;
+}
+
+public class CraftDataLoader : ILoader<int, CraftData>
+{
+    public List<CraftData> crafts = new();
+
+    public Dictionary<int, CraftData> MakeDict()
+    {
+        Dictionary<int, CraftData> dict = new();
+        foreach (CraftData craft in crafts)
+            dict.Add(craft.id, craft);
+        return dict;
+    }
+}
+#endregion
+
 #region Gathering
 [Serializable]
 public class GatheringData

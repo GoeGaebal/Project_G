@@ -14,7 +14,7 @@ public enum EnumTimeSlot
 public class TimeSlotManager : IOnEventCallback
 {
 
-    [SerializeField] private float _timeChangePeriod;
+    [SerializeField] private float _timeChangePeriod = 5.0f;
     public float TimeChangePeriod{
         get { return _timeChangePeriod;}
     }

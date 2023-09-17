@@ -32,13 +32,13 @@ public class ArtifactManager
     {
         for(int i = 0; i < artifactScrolls.Length; i++)
         {
-            if(artifactScrolls[i].name == path)
+            if(artifactScrolls[i] != null &&artifactScrolls[i].name == path)
             {
                 return;
             }
         }
         Array.Resize(ref artifactScrolls, artifactScrolls.Length + 1);
-        artifactScrolls[artifactScrolls.Length - 1] = Managers.Resource.Load<Artifact>($"Prefabs/Artifacts/{path}");
+        artifactScrolls[artifactScrolls.Length - 1] = Managers.Resource.Load<Artifact>($"Prefabs/Interactable/Artifacts/{path}");
     }
 
     public UI_ArtifactSlot MakeArtifactSlot(Transform parent = null)
