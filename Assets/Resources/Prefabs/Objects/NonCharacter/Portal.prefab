@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isExitPortal: 0
-  players: 0
+  players: 1
 --- !u!61 &-757361130323492573
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ public class ArtifactManager
             }
         }
         Array.Resize(ref artifactScrolls, artifactScrolls.Length + 1);
-        artifactScrolls[artifactScrolls.Length - 1] = Managers.Resource.Load<Artifact>($"Prefabs/Interactable/Artifacts/{path}");
+        artifactScrolls[artifactScrolls.Length - 1] = Managers.Resource.Load<Artifact>($"Prefabs/Objects/NonCharacter/Interactable/Artifacts/{path}");
     }
 
     public UI_ArtifactSlot MakeArtifactSlot(Transform parent = null)
