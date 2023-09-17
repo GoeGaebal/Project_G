@@ -136,6 +136,17 @@ public class UI_Craft : UI_Scene
         _source.SetSlot(SelectedRecipe[1].Icon, sourceCount, SelectedRecipeAmount[1]);
         _material_1.SetSlot(SelectedRecipe[2].Icon, material1Count, SelectedRecipeAmount[2]);
         _material_2.SetSlot(SelectedRecipe[3].Icon, material2Count, SelectedRecipeAmount[3]);
+
+        if(sourceCount >= SelectedRecipeAmount[1] &&
+            material1Count >= SelectedRecipeAmount[2] &&
+            material2Count >= SelectedRecipeAmount[3])
+        {
+            _craftable = true;
+        }
+        else
+        {
+            _craftable = false;
+        }
     }
 
     public void CloseCraft()
@@ -145,14 +156,21 @@ public class UI_Craft : UI_Scene
 
     public void Craft()
     {
-        for(int i = 1; i <= 3; i++)
+        if (_craftable)
         {
-            UI_Inven.removeItems(SelectedRecipe[i], SelectedRecipeAmount[i]);
+            for (int i = 1; i <= 3; i++)
+            {
+                UI_Inven.removeItems(SelectedRecipe[i], SelectedRecipeAmount[i]);
+            }
+            for (int i = 0; i < SelectedRecipeAmount[0]; i++)
+            {
+                UI_Inven.additem(SelectedRecipe[0]);
+            }
+            CloseCraft();
         }
-        for(int i = 0; i < SelectedRecipeAmount[0]; i++)
+        else
         {
-            UI_Inven.additem(SelectedRecipe[0]);
+            Debug.Log("재료 개수 부족함");
         }
-        CloseCraft();
     }
 }
