@@ -7,7 +7,8 @@ using Photon.Pun;
 
 public enum EnumWeaponList
 {
-    Sword, Axe
+    Sword, 
+    //Axe
 }
 public class PlayerAttackController : AttackController
 {
@@ -15,7 +16,7 @@ public class PlayerAttackController : AttackController
     [SerializeField] Sprite swordSprite;
     [SerializeField] Sprite axeSprite;
     private Weapon meleeWeaponController;
-    private Weapon pickaxWeaponController;
+    //private Weapon pickaxWeaponController;
     private EnumWeaponList currentWeapon;
     private static GameObject localPlayer;
     private SpriteRenderer spriteRenderer;
@@ -27,7 +28,7 @@ public class PlayerAttackController : AttackController
             _ChangeWeapon(changeWeapon);
         };
         meleeWeaponController = new MeleeWeaponController();
-        pickaxWeaponController = new PickaxWeaponController();
+        //pickaxWeaponController = new PickaxWeaponController();
 
 
         base.weaponController = meleeWeaponController;
@@ -53,12 +54,13 @@ public class PlayerAttackController : AttackController
                 weaponController = this.meleeWeaponController;
                 currentWeapon = EnumWeaponList.Sword;
                 break;
-            case EnumWeaponList.Axe:
-                Debug.Log("axe change");
-                spriteRenderer.sprite = axeSprite;
-                weaponController = pickaxWeaponController;
-                currentWeapon = EnumWeaponList.Axe;
-                break;
+            //도끼가 없어져서 주석 처리
+            // case EnumWeaponList.Axe:
+            //     Debug.Log("axe change");
+            //     spriteRenderer.sprite = axeSprite;
+            //     weaponController = pickaxWeaponController;
+            //     currentWeapon = EnumWeaponList.Axe;
+            //     break;
             
         }
         spriteRenderer.sortingOrder = 3;
@@ -76,12 +78,13 @@ public class PlayerAttackController : AttackController
                 weaponController = this.meleeWeaponController;
                 currentWeapon = EnumWeaponList.Sword;
                 break;
-            case EnumWeaponList.Axe:
-                Debug.Log("axe change");
-                spriteRenderer.sprite = axeSprite;
-                weaponController = pickaxWeaponController;
-                currentWeapon = EnumWeaponList.Axe;
-                break;
+            //도끼가 없어져서 주석 처리
+            // case EnumWeaponList.Axe:
+            //     Debug.Log("axe change");
+            //     spriteRenderer.sprite = axeSprite;
+            //     weaponController = pickaxWeaponController;
+            //     currentWeapon = EnumWeaponList.Axe;
+            //     break;
             
         }
         spriteRenderer.sortingOrder = 3;
@@ -99,11 +102,11 @@ class MeleeWeaponController : Weapon
         AddTargetLayer((int)EnumLayerMask.Monster);
    }
 }
-
-class PickaxWeaponController : Weapon
-{
-   public PickaxWeaponController()
-   {
-        AddTargetLayer((int)EnumLayerMask.Mineral);
-   }
-}
+//도끼가 없어져서 주석 처리
+// class PickaxWeaponController : Weapon
+// {
+//    public PickaxWeaponController()
+//    {
+//         AddTargetLayer((int)EnumLayerMask.Mineral);
+//    }
+// }

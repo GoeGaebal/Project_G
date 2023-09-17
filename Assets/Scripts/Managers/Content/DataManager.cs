@@ -18,27 +18,22 @@ public class DataManager
 {
     // public Dictionary<int, Stat> StatDict { get; private set; } = new Dictionary<int, Stat>();
     public Dictionary<int, Item> ItemDict { get; private set; } = new Dictionary<int, Item>();
-    public Dictionary<int, Gathering> GatheringDict { get; private set; } = new Dictionary<int, Gathering>();
-    public Dictionary<int, Worldmap> WorldmapDict { get; private set; } = new Dictionary<int, Worldmap>();
-    public Dictionary<int, Craft> CraftDict { get; private set; } = new Dictionary<int, Craft>();
+    public Dictionary<int, GatheringData> GatheringDict { get; private set; } = new Dictionary<int, GatheringData>();
+    public Dictionary<int, WorldmapData> WorldmapDict { get; private set; } = new Dictionary<int, WorldmapData>();
 
     public void Init()
     {
-        GatheringDict = LoadJson<GatheringData, int, Gathering>("GatheringData").MakeDict();
+        GatheringDict = LoadJson<GatheringDataLoader, int, GatheringData>("GatheringData").MakeDict();
         
         // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
         Item item = null;
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Apple");
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Food/Apple");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/IronIngot");
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Resource/IronIngot");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Sword");
+        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Weapon/Sword");
         ItemDict.Add(item.ID,item);
-
-        WorldmapDict = LoadJson<WorldmapData, int, Worldmap>("WorldmapData").MakeDict();
-
-        CraftDict = LoadJson<CraftData, int, Craft>("CraftData").MakeDict();
-
+        WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
     }
 
     Loader LoadJson<Loader, TKey, TValue>(string path) where Loader : ILoader<TKey, TValue>

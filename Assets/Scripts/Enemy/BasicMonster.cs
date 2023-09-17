@@ -15,7 +15,8 @@ using Photon.Pun;
     [SerializeField] private LayerMask chaseTargetLayerMask;
     [SerializeField] protected float speed;
     [SerializeField] private float minDisFromPlayer;
-    internal Vector3 _spawnPosition;
+    [SerializeField] private bool isSpriteRightSide;
+     internal Vector3 _spawnPosition;
 
 
     internal Animator animator;
@@ -153,6 +154,12 @@ using Photon.Pun;
         AnimState = idleState;
     }
 
+    protected virtual void DoFlip(bool value)
+    {
+        if(isSpriteRightSide)spriteRenderer.flipX = value;
+        else spriteRenderer.flipX = !value;
+    }
+
     public abstract class State
     {
         protected BasicMonster basicMonster;
@@ -233,8 +240,8 @@ using Photon.Pun;
             if(basicMonster.hasTarget == false )
             {
                 Debug.Log((basicMonster.transform.position - basicMonster._spawnPosition).magnitude);
-                if(basicMonster._spawnPosition.x < basicMonster.transform.position.x) basicMonster.spriteRenderer.flipX = true;
-                else basicMonster.spriteRenderer.flipX = false;
+                if(basicMonster._spawnPosition.x < basicMonster.transform.position.x) basicMonster.DoFlip(true);
+                else basicMonster.DoFlip(false);
                 basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster._spawnPosition, basicMonster.speed * Time.deltaTime);
                 
                 if( (basicMonster.transform.position - basicMonster._spawnPosition).magnitude <= 0.001f)
@@ -248,8 +255,8 @@ using Photon.Pun;
             }
             else if(basicMonster.target != null && basicMonster.GetDistance()> basicMonster.minDisFromPlayer)
             {
-                if(basicMonster.target.transform.position.x < basicMonster.transform.position.x) basicMonster.spriteRenderer.flipX = true;
-                else basicMonster.spriteRenderer.flipX = false;
+                if(basicMonster.target.transform.position.x < basicMonster.transform.position.x) basicMonster.DoFlip(true);
+                else basicMonster.DoFlip(false);
                 basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster.target.transform.position, basicMonster.speed * Time.deltaTime);
 
                 if(basicMonster.target != null)

@@ -16,7 +16,9 @@ public class RotateTimer : MonoBehaviour
     {   
         GetTimerAngle = () => { return transform.rotation;};
         SetTimerAngle = (q) => {_SetTimerAngle(q);};
-        ratio = Time.fixedDeltaTime / Managers.TimeSlot.timeChangePeriod;
+        ratio = Time.fixedDeltaTime / Managers.TimeSlot.TimeChangePeriod;
+
+        _SetTimerAngle(Quaternion.Euler(0f,0f,45f + (Managers.TimeSlot.CurrentTime % Managers.TimeSlot.TimeChangePeriod) * ratio));
     }
 
     // Update is called once per frame

@@ -63,6 +63,7 @@ public class Managers : MonoBehaviourPun
     {
        if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
        WorldMap.UpdateWorldMap(Time.deltaTime);
+       Scene.WaitLoading(Time.deltaTime);
     }
     
     static void Init()
@@ -93,6 +94,7 @@ public class Managers : MonoBehaviourPun
             _instance._sound.Init();
             _instance._artifact.Init();
             _instance._weather.Init();
+            _instance._worldMap.Init();
         }
     }
     
