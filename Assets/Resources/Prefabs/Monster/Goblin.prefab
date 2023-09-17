@@ -521,6 +521,7 @@ MonoBehaviour:
     m_Bits: 64
   speed: 1.1
   minDisFromPlayer: 0.6
+  isSpriteRightSide: 1
 --- !u!114 &58692221822477235
 MonoBehaviour:
   m_ObjectHideFlags: 0

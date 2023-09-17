@@ -36,7 +36,8 @@ public class UI_Slot : UI_Base
                     }
                     else if(currentItem.item.ID == 1002)
                     {
-                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+                        //도끼가 없어져서 주석 처리
+                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
                     }
                 }
                 /*else if (checkIndex == 20)

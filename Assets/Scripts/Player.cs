@@ -99,6 +99,11 @@ public class Player : DamageableEntity
 
         dieAction += () => {
             animator.SetTrigger("die");
+
+            if(Managers.Scene.CurrentScene is GameScene)
+            {
+                if(GameScene.PlayerLifeCnt > 0) GameScene.PlayerLifeCnt --;
+            }
         };
     }
 
