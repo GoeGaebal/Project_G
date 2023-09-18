@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UI_Inven : UI_Scene, IDataPersistence
+public class UI_Inven : UI_Scene//, IDataPersistence
 {
     enum GameObjects
     {
@@ -25,19 +25,15 @@ public class UI_Inven : UI_Scene, IDataPersistence
     enum EquipSlots
     {
         Weapon1,
-        //Weapon2,
         Hat,
         Upper,
         Lower,
         Shoes,
-        //Gloves,
         Potion_1,
-        //Potion_2
     }
 
     enum Images
     {
-        //Weapon1Image,
         WeaponImage,
         PotionImage
     }
@@ -49,17 +45,26 @@ public class UI_Inven : UI_Scene, IDataPersistence
 
     private GameObject _inventory;
     public UI_Slot[] slots;//전체 슬롯
-    private int _InventorySlotCount = 24;
 
     public UI_Slot[] equips;//장비창
-    //private int _equipSlotCount = 6;
 
     public static Image[] qSlots = new Image[2];
     public static Text potion1Text;
     private bool _canUsePotion = true;
 
     private bool _inventory_activeself;
-    
+
+    public static System.Func<Item, int> checkItem;
+    public static System.Action<Item, int> removeItems;
+    public static System.Action<Item> additem;
+
+    private void Awake()
+    {
+        checkItem = CheckItem;
+        removeItems = (itm, n) => { RemoveItems(itm, n); };
+        additem = (itm) => { AddItem(itm); };
+    }
+
     private void Start()
     {
         Init();
@@ -85,13 +90,17 @@ public class UI_Inven : UI_Scene, IDataPersistence
                 Managers.Resource.Destroy(child.gameObject);
         }
 
-        slots = new UI_Slot[_InventorySlotCount];
+        slots = new UI_Slot[Managers.Item.inventorySlots.Length];
 
         // 실제 인벤토리 내부 contents 오브젝트 산하에 슬롯들 추가
-        for (int i = 0; i < _InventorySlotCount; i++)
+        for (int i = 0; i < Managers.Item.inventorySlots.Length; i++)
         {
-            slots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent : contents.transform);
+            slots[i] = Managers.UI.MakeSubItem<UI_Slot>(parent: contents.transform);
             slots[i].transform.localScale = Vector3.one;
+            if(Managers.Item.inventorySlots[i] != null)
+            {
+                Managers.Item.SpawnNewItem(Managers.Item.inventorySlots[i], slots[i]);
+            }
         }
 
         //장비창 슬롯 생성
@@ -101,21 +110,33 @@ public class UI_Inven : UI_Scene, IDataPersistence
         foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
         {
             equips[idex] = Get<UI_Slot>((int)slot);
-            //Debug.Log(idex + " " + equips[idex]);
             equips[idex].isEquip = true;
             equips[idex].equipIndex = idex;
+            if(Managers.Item.equipSlots[idex] != null)
+            {
+                Managers.Item.SpawnNewItem(Managers.Item.equipSlots[idex], equips[idex]);
+            }
             idex++;
         }
 
-        //qSlots[0] = Get<Image>((int)Images.Weapon1Image);
         qSlots[0] = Get<Image>((int)Images.WeaponImage);
-        qSlots[1] = Get<Image>((int) Images.PotionImage);
+        qSlots[1] = Get<Image>((int)Images.PotionImage);
         potion1Text = Get<Text>((int)Texts.PotionAmountText);
         potion1Text.gameObject.SetActive(false);
+
+        if (equips[0].transform.childCount >= 1)
+        {
+            ChangeQuickslotImage(0, equips[0].transform.GetChild(0).GetComponent<UI_Item>());
+        }
+        if (equips[5].transform.childCount >= 1)
+        {
+            ChangeQuickslotImage(1, equips[5].transform.GetChild(0).GetComponent<UI_Item>());
+        }
+
         GetButton((int)Buttons.InventoryButton).onClick.AddListener(ClickInventoryButton);
         GetButton((int)Buttons.CloseButton).onClick.AddListener(ClickInventoryButton);
         Managers.Input.PlayerActions.Inventory.AddEvent(OnOffInventory);
-        
+
         _inventory.SetActive(false);
         _inventory_activeself = _inventory.activeSelf;
 
@@ -129,6 +150,7 @@ public class UI_Inven : UI_Scene, IDataPersistence
     {
         Managers.Input.PlayerActions.Inventory.RemoveEvent(OnOffInventory);
         Managers.Network.ReceiveAddItemHandler -= AddItem;
+        SaveItem();
     }
 
     public void AddItem(int guid)
@@ -137,51 +159,24 @@ public class UI_Inven : UI_Scene, IDataPersistence
             Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().Item.ID];
         AddItem(item);
     }
-    
+
     private void Update()
     {//키입력에 따른 퀵슬롯 선택 변화(추후 New Input System으로 변경)
-        /*
-        if (Managers.Input.PlayerActions.QuickSlot1.IsPressed())//무기 들게
-        {
-            if(equips[0].transform.GetChild(0).GetComponent<UI_Item>().item.ID == 1001)
-            {
-                PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
-            }
-            else
-            {
-                PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
-            }
-        }
-        else if (Managers.Input.PlayerActions.QuickSlot2.IsPressed())//도구 들게
-        {
-            if (equips[1].transform.GetChild(0).GetComponent<UI_Item>().item.ID == 1001)
-            {
-                PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
-            }
-            else
-            {
-                PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
-            }
-        }
-        */
-        /*else */if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
+        
+        if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
         {
             if (_canUsePotion)
             {
                 _canUsePotion = false;
                 StartCoroutine(PotionUse());
             }
-        }/*
-        else if (Managers.Input.PlayerActions.QuickSlot4.IsPressed())//포션 2 먹게
-        {
-
-        }*/
+        }
     }
 
     private IEnumerator PotionUse()
     {
         var potion = equips[5].transform.GetChild(0).GetComponent<UI_Item>();
-        if(potion.count <= 1)
+        if (potion.count <= 1)
         {
             ((HealthPotionItem)potion.item).UsePotion(potion);
             qSlots[1].sprite = null;
@@ -201,11 +196,11 @@ public class UI_Inven : UI_Scene, IDataPersistence
     {
         bool empty = false;
         int idx = 0;
-        for(int i = 0; i < slots.Length; i++)//모든 슬롯을 돌면서
+        for (int i = 0; i < slots.Length; i++)//모든 슬롯을 돌면서
         {
             UI_Slot slot = slots[i];
             UI_Item itemInSlot = slot.GetComponentInChildren<UI_Item>();
-            
+
             if (itemInSlot != null &&//빈칸 아님
                 itemInSlot.item == item &&//추가하려는 아이템과 동일한 아이템이 슬롯에 있음
                 itemInSlot.item is CountableItem &&//이미 countable한 아이템이 인벤토리에 들어있을 때
@@ -224,20 +219,20 @@ public class UI_Inven : UI_Scene, IDataPersistence
 
         if (empty)
         {
-            SpawnNewItem(item, slots[idx]);//그냥 해당 슬롯에 아이템 추가
+            Managers.Item.SpawnNewItem(item, slots[idx]);//그냥 해당 슬롯에 아이템 추가
             return true;//생성 완료함
         }
         Debug.Log("인벤토리에 자리 없음");
         return false;//인벤토리 빈 공간 없음
     }
-
+    /*
     public void SpawnNewItem(Item item, UI_Slot slot)//슬롯에 새로운 아이템 추가
     {
-        GameObject newItemGo = Managers.Resource.Instantiate("UI/SubItem/UI_Item",Vector3.zero, Quaternion.identity, parent: slot.transform);//테스트용
+        GameObject newItemGo = Managers.Resource.Instantiate("UI/SubItem/UI_Item", Vector3.zero, Quaternion.identity, parent: slot.transform);//테스트용
         UI_Item itemInSlot = newItemGo.GetComponent<UI_Item>();
         itemInSlot.InitializeItem(item);
     }
-
+    */
     public void SortItem()//아이템 정렬
     {
         bool swapped = true;
@@ -259,11 +254,11 @@ public class UI_Inven : UI_Scene, IDataPersistence
                         b.transform.GetChild(0).SetParent(tempTransform);
                         swapped = true;
                     }
-                    else if(result1 == 0 && a.transform.GetChild(0).GetComponent<UI_Item>().item is CountableItem)
+                    else if (result1 == 0 && a.transform.GetChild(0).GetComponent<UI_Item>().item is CountableItem)
                     {
                         int result2 = a.transform.GetChild(0).GetComponent<UI_Item>().count
                         .CompareTo(b.transform.GetChild(0).GetComponent<UI_Item>().count);
-                        if(result2 < 0)
+                        if (result2 < 0)
                         {
                             var tempCount = a.transform.GetChild(0).GetComponent<UI_Item>().count;
                             a.transform.GetChild(0).GetComponent<UI_Item>().count = b.transform.GetChild(0).GetComponent<UI_Item>().count;
@@ -283,7 +278,7 @@ public class UI_Inven : UI_Scene, IDataPersistence
         }
     }
 
-    public static void ChangeQuickImage(int index, UI_Item item)
+    public static void ChangeQuickslotImage(int index, UI_Item item)
     {
         qSlots[index].sprite = item.item.Icon;
         if (index == 1)//포션의 경우
@@ -321,6 +316,95 @@ public class UI_Inven : UI_Scene, IDataPersistence
         _inventory_activeself = _inventory.activeSelf;
     }
 
+    public int CheckItem(Item target)
+    {//인벤토리에 target 아이템이 몇 개 있는지
+        int count = 0;
+
+        for(int i = 0; i < slots.Length; i++)
+        {
+            if(slots[i].transform.childCount < 1)
+            {
+                continue;
+            }
+            else
+            {
+                var slotItem = slots[i].transform.GetChild(0).GetComponent<UI_Item>();
+                if (slotItem.item == target)
+                {
+                    count += slotItem.count;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public void RemoveItems(Item target, int count)
+    {//인벤토리에 있는 아이템 원하는 개수만큼 삭제
+        if(CheckItem(target) < count)
+        {
+            Debug.Log("아이템이 원하는 개수보다 적어서 삭제 불가능");
+            return;
+        }
+
+        for(int i = slots.Length - 1; i >= 0 ; i--)
+        {
+            if (slots[i].transform.childCount < 1)
+            {
+                continue;
+            }
+            else
+            {
+                var slotItem = slots[i].transform.GetChild(0).GetComponent<UI_Item>();
+                if(slotItem.item == target)
+                {
+                    if (count >= slotItem.count)
+                    {
+                        count -= slotItem.count;
+                        slotItem.RemoveItem();
+                        if(count == 0)
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        slotItem.count -= count;
+                        slotItem.RefreshCount();
+                        return;
+                    }
+                }
+                
+            }
+        }
+    }
+
+    public void SaveItem()
+    {
+        for(int i = 0; i < slots.Length; i++)
+        {//인벤토리 저장
+            if(slots[i].transform.childCount >= 1)
+            {
+                Managers.Item.inventorySlots[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().item; 
+            }
+            else
+            {
+                Managers.Item.inventorySlots[i] = null;
+            }
+        }
+        for(int i = 0; i < equips.Length; i++)
+        {//장비창 저장
+            if (equips[i].transform.childCount >= 1)
+            {
+                Managers.Item.equipSlots[i] = equips[i].transform.GetChild(0).GetComponent<UI_Item>().item;
+            }
+            else
+            {
+                Managers.Item.equipSlots[i] = null;
+            }
+        }
+    }
+    /*
     public void SaveData()
     {
         List<ulong> list = new();
@@ -365,4 +449,5 @@ public class UI_Inven : UI_Scene, IDataPersistence
     {
         SaveData();
     }
+    */
 }

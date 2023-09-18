@@ -338,7 +338,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
 
     public void InitRoom()
     {
-        _playerList = new []{Managers.Resource.Instantiate("Player"), Managers.Resource.Instantiate("Player"), Managers.Resource.Instantiate("Player")};
+        _playerList = new []{Managers.Resource.Instantiate("Objects/Character/Player"), Managers.Resource.Instantiate("Objects/Character/Player"), Managers.Resource.Instantiate("Objects/Character/Player")};
         // TODO: 현재 나머지 ViewId는 직접 만들어서 쓰나, 맨 처음 ActorNumber가 1이고 1001은 Managers에 넘어가므로 나머지를 자동 할당한다는 느낌으로 만들고 있음.
         int manualViewId = 1002;
         foreach (var player in _playerList)

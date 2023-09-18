@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class ShipScene : BaseScene
 {
+    public static bool isStarted = false;
     protected override void Init()
     {
+        if(!isStarted) isStarted = true;
         base.Init();
         SceneType = Define.Scene.Ship;
         Managers.Map.LoadMap(4);
@@ -64,7 +66,10 @@ public class ShipScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Worldmap>();
+        Managers.UI.ShowSceneUI<UI_Chest>();
         Managers.UI.ShowSceneUI<UI_Artifact>();
+        Managers.UI.ShowSceneUI<UI_Craft>();
+        Managers.UI.ShowSceneUI<UI_Leaf>();
      
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();

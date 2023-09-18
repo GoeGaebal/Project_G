@@ -29,7 +29,7 @@ public class ObjectManager
     private void SpawnGathering(int objectId, Vector3 pos, int guid = 0)
     {
         var name = Managers.Data.GatheringDict[objectId].name;
-        GameObject go = Managers.Resource.Instantiate($"Gathering/{name}", pos, Quaternion.identity);
+        GameObject go = Managers.Resource.Instantiate($"Objects/NonCharacter/Gathering/{name}", pos, Quaternion.identity);
         GatheringController ga =  go.GetOrAddComponent<GatheringController>();
         if (guid == 0)
             ga.guid = go.GetInstanceID();
@@ -76,7 +76,7 @@ public class ObjectManager
     private LootingItemController SpawnLootingItem(int objectId, Vector3 pos, int guid = 0)
     {
         
-        GameObject go =  Managers.Resource.Instantiate($"Lootings/apple", pos, Quaternion.identity);
+        GameObject go =  Managers.Resource.Instantiate($"Objects/NonCharacter/Lootings/apple", pos, Quaternion.identity);
         LootingItemController lc = go.GetOrAddComponent<LootingItemController>();
         
         if (guid == 0)

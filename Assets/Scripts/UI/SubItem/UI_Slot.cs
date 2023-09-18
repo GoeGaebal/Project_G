@@ -29,14 +29,15 @@ public class UI_Slot : UI_Base
                 currentItem.parentBeforeDrag = transform;
                 if (checkIndex == 10)//무기
                 {//TODO: 무기 이미지 제대로 안 바뀜
-                    UI_Inven.ChangeQuickImage(0, currentItem);
+                    UI_Inven.ChangeQuickslotImage(0, currentItem);
                     if (currentItem.item.ID == 1001)
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
                     else if(currentItem.item.ID == 1002)
                     {
-                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
+                        //도끼가 없어져서 주석 처리
+                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
                     }
                 }
                 /*else if (checkIndex == 20)
@@ -45,7 +46,7 @@ public class UI_Slot : UI_Base
                 }*/
                 else if (checkIndex == 40)//포션
                 {
-                    UI_Inven.ChangeQuickImage(1, currentItem);
+                    UI_Inven.ChangeQuickslotImage(1, currentItem);
                 }
                 else
                 {

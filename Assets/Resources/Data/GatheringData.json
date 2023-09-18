@@ -1,8 +1,8 @@
 {
   "gatherings": [
     {
-      "id" : "1",
-      "name" : "rock",
+      "id": "1",
+      "name": "rock",
       "maxHp": "30",
       "lootingId": "1"
     },
@@ -13,8 +13,8 @@
       "lootingId": "2"
     },
     {
-      "id" : "3",
-      "name" : "bush",
+      "id": "3",
+      "name": "bush",
       "maxHp": "20",
       "lootingId": "3"
     }

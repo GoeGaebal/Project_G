@@ -24,8 +24,7 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        Init();
-        isEquipped = false;
+        //Init();
     }
 
     // Update is called once per frame
@@ -40,10 +39,18 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
         Bind<GameObject>(typeof(GameObjects));
 
         _image = Get<Image>((int)Images.ArtifactImage);
-        _image.sprite = artifact.Image;
+        //_image.sprite = artifact.Image;
 
         _equippedImage = Get<GameObject>((int)GameObjects.Equipped);
         _equippedImage.SetActive(false);
+
+        isEquipped = false;
+    }
+
+    public void SetArtifact(Artifact a)
+    {
+        artifact = a;
+        _image.sprite = artifact.Image;
     }
 
     public void OnPointerClick(PointerEventData eventData)
