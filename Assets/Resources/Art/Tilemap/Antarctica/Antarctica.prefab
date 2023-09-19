@@ -952,6 +952,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: -2, y: 9, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 26
+      m_TileSpriteIndex: 80
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 27
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741826
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 0
@@ -1006,8 +1016,8 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: fc2bcf0fffe3b9643aac203830a7e4ec, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 337a050b7de7a2d469f97ac25496c3e1, type: 2}
   - m_RefCount: 1
@@ -1351,7 +1361,7 @@ Tilemap:
     m_Data: {fileID: 1033929626, guid: c040fca29e708824c8f11c689e7ee6c2, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -586618471, guid: c040fca29e708824c8f11c689e7ee6c2, type: 3}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: 1943204425, guid: c040fca29e708824c8f11c689e7ee6c2, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1671434856, guid: c040fca29e708824c8f11c689e7ee6c2, type: 3}
@@ -1428,7 +1438,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 307020603, guid: c040fca29e708824c8f11c689e7ee6c2, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 91
+  - m_RefCount: 92
     m_Data:
       e00: 1
       e01: 0
@@ -1501,7 +1511,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   - m_RefCount: 0
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
-  - m_RefCount: 91
+  - m_RefCount: 92
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -1621,7 +1631,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &3007138337766891991
+--- !u!114 &2195993917081326764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

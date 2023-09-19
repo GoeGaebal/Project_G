@@ -8,9 +8,8 @@ using UnityEngine.SceneManagement;
 public class Portal : MonoBehaviour
 {
     public bool isExitPortal;
-    public int players;
     private int incomingObjectCount = 0;
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         incomingObjectCount++;
@@ -20,7 +19,7 @@ public class Portal : MonoBehaviour
         }
         else
         {
-            if (players <= incomingObjectCount)
+            if (PhotonNetwork.CurrentRoom.PlayerCount <= incomingObjectCount)
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
@@ -35,7 +34,6 @@ public class Portal : MonoBehaviour
                     Managers.Scene.LoadScene(Define.Scene.Ship);
                 }
             }
-            
         }
     }
 
