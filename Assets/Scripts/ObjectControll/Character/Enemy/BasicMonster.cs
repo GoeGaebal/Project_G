@@ -239,7 +239,6 @@ using Photon.Pun;
             if(!basicMonster.animator.GetBool("run")) basicMonster.animator.SetBool("run",true);
             if(basicMonster.hasTarget == false )
             {
-                Debug.Log((basicMonster.transform.position - basicMonster._spawnPosition).magnitude);
                 if(basicMonster._spawnPosition.x < basicMonster.transform.position.x) basicMonster.DoFlip(true);
                 else basicMonster.DoFlip(false);
                 basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster._spawnPosition, basicMonster.speed * Time.deltaTime);
