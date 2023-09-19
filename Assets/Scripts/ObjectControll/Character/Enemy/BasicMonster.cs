@@ -14,7 +14,7 @@ using Photon.Pun;
     [SerializeField] private float detectRadius;
     [SerializeField] private LayerMask chaseTargetLayerMask;
     [SerializeField] protected float speed;
-    [SerializeField] private float minDisFromPlayer;
+    [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
      internal Vector3 _spawnPosition;
 

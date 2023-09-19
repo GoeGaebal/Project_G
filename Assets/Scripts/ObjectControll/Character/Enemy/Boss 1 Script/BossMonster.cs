@@ -8,7 +8,8 @@ using UnityEngine;
 public class BossMonster : BasicMonster
 {   
     public static Action FinishSpellAction;
-
+    [SerializeField] private Vector2 BossroomLeftDownWorldPos;
+    [SerializeField] private Vector2 BossroomRightUpWorldPos;
     private CastingState castingState;
     private List<CastingSpell> spells = new();
     private List<Transform> thunders = new();
@@ -20,6 +21,8 @@ public class BossMonster : BasicMonster
      protected override void Start() {
         base.Start();
         
+        runState = new BossRunState(this);
+
         FinishSpellAction = () =>{FinishSpell();}; 
 
         castingState = new CastingState(this);
@@ -45,6 +48,11 @@ public class BossMonster : BasicMonster
         if(hasTarget == false || target == null) return;
         
         if(CanCastingState && (AnimState is RunState || AnimState is IdleState)) AnimState = castingState;
+    }
+
+    protected override void DoFlip(bool value)
+    {
+        base.DoFlip(value);
     }
 
     public void FinishSpell()
@@ -128,6 +136,27 @@ public class BossMonster : BasicMonster
             }
             bs.Target.transform.position = (Vector2)bs.transform.position + Vector2.right*0.5f;
            
+        }
+    }
+
+    protected class BossRunState:RunState
+    {
+        BossMonster _bossMonster;
+        internal BossRunState(BossMonster bm) : base(bm)
+        {
+            _bossMonster = bm;
+        }
+        public override void Init()
+        {
+            base.Init();
+        }
+        public override void UpdateInState()
+        {
+            base.UpdateInState();
+            float xpos = Mathf.Clamp(basicMonster.transform.position.x, _bossMonster.BossroomLeftDownWorldPos.x, _bossMonster.BossroomRightUpWorldPos.x);
+            float ypos = Mathf.Clamp(basicMonster.transform.position.y, _bossMonster.BossroomLeftDownWorldPos.y, _bossMonster.BossroomRightUpWorldPos.y);
+
+            basicMonster.transform.position = new Vector3(xpos,ypos,basicMonster.transform.position.z);
         }
     }
 }

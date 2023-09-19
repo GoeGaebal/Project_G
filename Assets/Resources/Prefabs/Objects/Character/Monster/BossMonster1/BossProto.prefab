@@ -44,7 +44,7 @@ BoxCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 3.51
 --- !u!1 &7131388650829709961
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,13 +392,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 50
   attackPoint: 10
-  attackCooldown: 0.5
+  attackCooldown: 3.99
   detectRadius: 3
   chaseTargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
   speed: 1.1
   minDisFromPlayer: 0.6
+  isSpriteRightSide: 0
+  BossroomLeftDownWorldPos: {x: 0, y: 0}
+  BossroomRightUpWorldPos: {x: 0, y: 0}
   cooltimeCasting: 5
 --- !u!61 &4417218321329297627
 BoxCollider2D:
@@ -410,7 +413,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.01495216, y: -0.18421382}

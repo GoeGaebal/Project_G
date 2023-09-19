@@ -27,7 +27,8 @@ public class BossMonsterHPBarController : MonsterHPBarController
         else{
             _hpBarImage.color = _activeColor;
             _hpBarBackgroundImage.color = _activeColor;
-            base.Update();
+            
         }
+        base.Update();
     }
 }
