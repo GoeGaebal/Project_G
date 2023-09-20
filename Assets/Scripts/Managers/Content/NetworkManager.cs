@@ -251,7 +251,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
     
-    public void BroadCastGatheringDamaged(int guid, float damage)
+    public void BroadCastGatheringDamaged(int guid, float damage = 0.0f)
     {
         BroadCastClients(Serialize(new Packet() { state = 0, damage = damage, guid = guid }), (byte)CustomRaiseEventCode.ReceiveGatheringPacket);
     }

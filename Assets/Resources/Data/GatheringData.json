@@ -2,9 +2,9 @@
   "gatherings": [
     {
       "id": "1",
-      "name": "rock",
+      "name": "scrap",
       "maxHp": "30",
-      "lootingId": "1"
+      "lootingId": "5001"
     },
     {
       "id": "2",
