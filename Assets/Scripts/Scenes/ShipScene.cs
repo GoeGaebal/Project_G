@@ -13,6 +13,15 @@ public class ShipScene : BaseScene
         SceneType = Define.Scene.Ship;
         Managers.Map.LoadMap(4);
 
+        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Network.PlayerDict.Values; 
+        foreach(Player playerComponent in playerComponents)
+        {   
+            playerComponent.gameObject.SetActive(true);
+            playerComponent.Revive(5f);
+        }
+
+        GameObject ui_LeafObj = GameObject.Find("UI_Leaf");
+        if(ui_LeafObj != null) ui_LeafObj.GetComponent<UI_Leaf>().HealPlayers();
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";
         // Managers.Object.Add(player);

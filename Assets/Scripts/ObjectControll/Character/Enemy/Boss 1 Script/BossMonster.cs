@@ -8,9 +8,10 @@ using UnityEngine;
 public class BossMonster : BasicMonster
 {   
     public static Action FinishSpellAction;
-
+    [SerializeField] private Vector2 BossroomLeftDownWorldPos;
+    [SerializeField] private Vector2 BossroomRightUpWorldPos;
     private CastingState castingState;
-    private List<CastingSpell> spells = new();
+    private List<ICastingSpell> spells = new();
     private List<Transform> thunders = new();
     public List<Transform> Thunders
     {
@@ -20,11 +21,13 @@ public class BossMonster : BasicMonster
      protected override void Start() {
         base.Start();
         
+        runState = new BossRunState(this);
+
         FinishSpellAction = () =>{FinishSpell();}; 
 
         castingState = new CastingState(this);
-        spells.Add(new NEWSSpell());
-        spells.Add(new TeleportTargetSpell());
+        spells.Add(new NEWSSpell(this));
+        spells.Add(new TeleportTargetSpell(this));
 
         for(int i = 0;i< 4;i++)
         {
@@ -47,6 +50,11 @@ public class BossMonster : BasicMonster
         if(CanCastingState && (AnimState is RunState || AnimState is IdleState)) AnimState = castingState;
     }
 
+    protected override void DoFlip(bool value)
+    {
+        base.DoFlip(value);
+    }
+
     public void FinishSpell()
     {
         foreach(var thunder in thunders)
@@ -58,7 +66,7 @@ public class BossMonster : BasicMonster
 
     public void DoSpell()
     {
-        spells[UnityEngine.Random.Range(0,spells.Count)].Spell(this);
+        spells[UnityEngine.Random.Range(0,spells.Count)].Spell();
     }
     public void FinishCasthingState()
     {
@@ -89,17 +97,19 @@ public class BossMonster : BasicMonster
         }
     }
 
-    interface CastingSpell
-    {
-        void Spell(BossMonster bm);
-    }
 
-    class NEWSSpell: CastingSpell
+
+    class NEWSSpell: ICastingSpell
     {
-        public void Spell(BossMonster bm)
+        BossMonster _bossMonster;
+        public NEWSSpell(BossMonster bm)
+        {
+            _bossMonster = bm;
+        }
+        public void Spell()
         {
             Debug.Log("do spell");
-            List<Transform> tfs = bm.Thunders;
+            List<Transform> tfs = _bossMonster.Thunders;
             foreach(Transform tf in tfs)
             {
                 tf.gameObject.SetActive(true);
@@ -114,20 +124,45 @@ public class BossMonster : BasicMonster
                 tf.SetParent(null);
             }
             
-            
         }
     }
 
-    class TeleportTargetSpell:CastingSpell
+    class TeleportTargetSpell:ICastingSpell
     {
-        public void Spell(BossMonster bs)
+        BossMonster _bossMonster;
+        public TeleportTargetSpell(BossMonster bm)
         {
-            if (bs.Target == null)
+            _bossMonster = bm;
+        }
+        public void Spell()
+        {
+            if (_bossMonster.Target == null)
             {
                 return;
             }
-            bs.Target.transform.position = (Vector2)bs.transform.position + Vector2.right*0.5f;
-           
+            _bossMonster.Target.transform.position = (Vector2)_bossMonster.transform.position + Vector2.right*0.5f;
+        }
+
+    }
+
+    protected class BossRunState:RunState
+    {
+        BossMonster _bossMonster;
+        internal BossRunState(BossMonster bm) : base(bm)
+        {
+            _bossMonster = bm;
+        }
+        public override void Init()
+        {
+            base.Init();
+        }
+        public override void UpdateInState()
+        {
+            base.UpdateInState();
+            float xpos = Mathf.Clamp(basicMonster.transform.position.x, _bossMonster.BossroomLeftDownWorldPos.x, _bossMonster.BossroomRightUpWorldPos.x);
+            float ypos = Mathf.Clamp(basicMonster.transform.position.y, _bossMonster.BossroomLeftDownWorldPos.y, _bossMonster.BossroomRightUpWorldPos.y);
+
+            basicMonster.transform.position = new Vector3(xpos,ypos,basicMonster.transform.position.z);
         }
     }
 }
