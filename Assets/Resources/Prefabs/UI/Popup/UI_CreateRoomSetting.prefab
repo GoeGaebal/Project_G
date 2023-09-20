@@ -285,12 +285,12 @@ GameObject:
   - component: {fileID: 9030805439832887840}
   - component: {fileID: 3539323308980994596}
   m_Layer: 5
-  m_Name: UserNameAreaEx
+  m_Name: UserNameArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3124222141690703348
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2101,12 +2101,12 @@ GameObject:
   - component: {fileID: 8568675048542416208}
   - component: {fileID: 8568675048542416211}
   m_Layer: 5
-  m_Name: RoomNameAreaEx
+  m_Name: RoomNameArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8568675048542416210
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2546,7 +2546,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 188174, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
       propertyPath: m_Name
-      value: UserNameArea
+      value: UserNameAreaNext
+      objectReference: {fileID: 0}
+    - target: {fileID: 188174, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11492918, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
       propertyPath: m_Text
@@ -3005,7 +3009,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 188174, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
       propertyPath: m_Name
-      value: RoomNameArea
+      value: RoomNameAreaNext
+      objectReference: {fileID: 0}
+    - target: {fileID: 188174, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11468188, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
       propertyPath: m_TextComponent
