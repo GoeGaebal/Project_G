@@ -176,8 +176,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -62.773315, y: -44.363205}
-  m_SizeDelta: {x: 525.0155, y: 100}
+  m_AnchoredPosition: {x: -8.5, y: -44.363205}
+  m_SizeDelta: {x: 743.6449, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8666507866654266832
 CanvasRenderer:
@@ -209,8 +209,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 32eabeb1f32c384468bbd7282e4148be, type: 2}
-  m_sharedMaterial: {fileID: -1482212723388508714, guid: 32eabeb1f32c384468bbd7282e4148be,
+  m_fontAsset: {fileID: 11400000, guid: c3e4f7b3bd1cae24099a9979547ed5a7, type: 2}
+  m_sharedMaterial: {fileID: 523095442514849817, guid: c3e4f7b3bd1cae24099a9979547ed5a7,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1774,6 +1774,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268599829201566807, guid: 843657db4ac3bf0479bd5e5f1a521b1f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268599829201566807, guid: 843657db4ac3bf0479bd5e5f1a521b1f,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268599829201566807, guid: 843657db4ac3bf0479bd5e5f1a521b1f,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3268599829201566807, guid: 843657db4ac3bf0479bd5e5f1a521b1f,
         type: 3}
