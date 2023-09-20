@@ -744,8 +744,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Now Loading....
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 32eabeb1f32c384468bbd7282e4148be, type: 2}
-  m_sharedMaterial: {fileID: -1482212723388508714, guid: 32eabeb1f32c384468bbd7282e4148be,
+  m_fontAsset: {fileID: 11400000, guid: c3e4f7b3bd1cae24099a9979547ed5a7, type: 2}
+  m_sharedMaterial: {fileID: 523095442514849817, guid: c3e4f7b3bd1cae24099a9979547ed5a7,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -878,10 +878,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uADF8\uAC70 \uC544\uC2DC\uB098\uC694?"
+  m_text: "\uADF8\uAC70 \uC544\uC2DC\uB098\uC694? \\n\uC9C0\uAD6C \uC628\uB09C\uD654\uB85C
+    \uC778\uD574 \uC9C0\uAD6C\uC758 \uC628\uB3C4\uAC00 \uC0C1\uC2B9\uD558\uC5EC \uADF9\uC9C0\uBC29\uC5D0\uC11C\uB3C4
+    \uBC8C\uB808\uAC00 \uAD00\uCE21\uB418\uAE30 \uC2DC\uC791\uD588\uC2B5\uB2C8\uB2E4."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 25e70e0038618f44dade721f31ea53a8, type: 2}
-  m_sharedMaterial: {fileID: -599062680500819054, guid: 25e70e0038618f44dade721f31ea53a8,
+  m_fontAsset: {fileID: 11400000, guid: e2c8e7b13e234414ba20cd3f73a9aebb, type: 2}
+  m_sharedMaterial: {fileID: -3712812817567690646, guid: e2c8e7b13e234414ba20cd3f73a9aebb,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -942,7 +944,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -551.8323, y: 0, z: -478.02075, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

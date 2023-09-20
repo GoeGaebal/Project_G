@@ -25,7 +25,6 @@ public class AttackController : MonoBehaviourPun
         
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable == null) return;
-        Debug.Log(weaponController == null);
         if(weaponController.CheckAttackLayer((int)other.gameObject.layer))
         {
             damageable.OnDamage(10.0f);

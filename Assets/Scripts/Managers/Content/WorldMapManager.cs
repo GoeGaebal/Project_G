@@ -6,7 +6,7 @@ public class WorldMapManager : MonoBehaviour
 {
     private GameObject _ship;
     private GameObject _finalBoss;
-    private float _finalBossMoveSpeed = 30.0f;
+    private float _finalBossMoveSpeed = 10.0f;
     private Vector3 _shipPosition;
 
     private bool _isBossBattle;

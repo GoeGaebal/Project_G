@@ -10,6 +10,7 @@ public class FinalBossScene : BaseScene
         base.Init();
         SceneType = Define.Scene.Ship;
         Managers.Map.LoadMap(4);
+        Managers.Input.PlayerActionMap.Enable();
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";
@@ -63,7 +64,6 @@ public class FinalBossScene : BaseScene
         //Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
-        Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_Leaf>();
      
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();

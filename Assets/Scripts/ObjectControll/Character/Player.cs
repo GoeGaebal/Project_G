@@ -53,14 +53,11 @@ public class Player : DamageableEntity
         //카메라 이동 제한
         if(photonView.IsMine)
         {
-            playerCameraController ??= Camera.main.gameObject.GetComponent<PlayerCameraController>();
+            playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
             playerCameraController.SetPosition(transform.position);
             if(playerCameraController.enabled)
                 playerCameraController.enabled = false;
         }
-        
-        
-        
     }
 
     private void UpdateState()
@@ -269,6 +266,7 @@ public class Player : DamageableEntity
 
         if (photonView.IsMine)
         {
+            playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
             if (!playerCameraController.enabled)
                 playerCameraController.enabled = true;
             playerCameraController.SetPosition(transform.position);

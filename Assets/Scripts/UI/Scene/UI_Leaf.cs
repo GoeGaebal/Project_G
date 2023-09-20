@@ -17,6 +17,13 @@ public class UI_Leaf : UI_Scene
     [SerializeField] float _healPercentage;
 
     static private int _availableCount = 2;
+    static public int AvailableCount{
+        get{return _availableCount;}
+        set{
+            _availableCount = value;
+            if(_availableCount <=0) _availableCount = 0;
+        }
+    }
 
     [SerializeField] List<GameObject> _imageList;
 
@@ -38,14 +45,16 @@ public class UI_Leaf : UI_Scene
         {
             _imageList[i].GetComponent<Image>().color = _colorUnavailable;
         }
-
-        // foreach(var playerObj in Managers.Network.PlayerList)
-        // {
-        //     Player playerComponent = playerObj.GetComponent<Player>();
-        //     Debug.Log(playerComponent.maxHP * (_healPercentage)/100 * _availableCount + "healed");
-        //     playerComponent.RestoreHP(playerComponent.maxHP * (_healPercentage)/100 * _availableCount);
-        // }
     }
 
-
+    public void HealPlayers()
+    {
+        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Network.PlayerDict.Values; 
+        foreach(Player playerComponent in playerComponents)
+        {
+            if(playerComponent == null) continue;
+            Debug.Log(playerComponent.maxHP * (_healPercentage)/100 * _availableCount + "healed");
+            playerComponent.RestoreHP(playerComponent.maxHP * (_healPercentage)/100 * _availableCount);
+        }
+    }
 }

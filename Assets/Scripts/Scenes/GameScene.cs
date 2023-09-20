@@ -50,9 +50,8 @@ public class GameScene : BaseScene
     {
         //게임 종료 UI 띄우고 배로 복귀 2초 기다린 다음에 복귀
         //Managers.UI.ShowSceneUI<>();
-        Debug.Log("all player is dead");
         yield return new WaitForSeconds(3.0f);
-
+        UI_Leaf.AvailableCount--;
         Managers.Scene.LoadScene(Define.Scene.Ship);
     }
 }
