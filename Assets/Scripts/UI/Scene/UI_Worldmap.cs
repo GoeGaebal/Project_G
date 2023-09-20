@@ -57,6 +57,8 @@ public class UI_Worldmap : UI_Scene
     private bool _moveFlag = false;//이동 중
     private bool _arriveFlag = false;//도착
 
+    private Portal _portal;
+
     private string _mapName;
 
     public static System.Action open;
@@ -96,6 +98,14 @@ public class UI_Worldmap : UI_Scene
             _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_target.name[6] - '0'].name + "에 정박 중");
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
+
+            _portal.SetColor(Color.blue);
+            _portal.SetPortal(true);
+        }
+        else
+        {
+            _portal.SetColor(Color.gray);
+            _portal.SetPortal(false);
         }
     }
 
@@ -127,6 +137,8 @@ public class UI_Worldmap : UI_Scene
         _distanceText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_DistanceText);
         _distanceText.SetActive(false);
         _finalBoss = Get<GameObject>((int)GameObjects.Worldmap_FinalBoss);
+
+        _portal = GameObject.Find("Portal").GetComponent<Portal>();
 
         //GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
@@ -216,13 +228,13 @@ public class UI_Worldmap : UI_Scene
     public void OpenWorldmapUI(/*PointerEventData evt*/)
     {
         _worldmap.SetActive(true);
-        Managers.Input.PlayerActionMap.Enable();
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     public void CloseWorldmapUI(PointerEventData evt)
     {
         _worldmap.SetActive(false);
-        Managers.Input.PlayerActionMap.Disable();
+        Managers.Input.PlayerActionMap.Enable();
     }
 
     /*
