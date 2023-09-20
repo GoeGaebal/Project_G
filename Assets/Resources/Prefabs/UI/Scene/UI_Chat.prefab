@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.5}
+  m_AnchoredPosition: {x: 0, y: -0.5000019}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2207301471458383278
@@ -268,8 +268,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 560, y: -300}
-  m_SizeDelta: {x: 800, y: 400}
+  m_AnchoredPosition: {x: 510, y: -413.97772}
+  m_SizeDelta: {x: 700, y: 151.1639}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4904537210922150441
 CanvasRenderer:
@@ -747,8 +747,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 910, y: -500}
-  m_SizeDelta: {x: 100, y: 30}
+  m_AnchoredPosition: {x: 810, y: -497.3899}
+  m_SizeDelta: {x: 100, y: 35.2202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1052498400224163272
 CanvasRenderer:
@@ -927,8 +927,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1026,8 +1026,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 510, y: -500}
-  m_SizeDelta: {x: 700, y: 30}
+  m_AnchoredPosition: {x: 459.99997, y: -497.38992}
+  m_SizeDelta: {x: 600, y: 35.2202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1486816464386769368
 CanvasRenderer:
@@ -1259,8 +1259,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1394,7 +1394,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.85
+  m_fontSize: 31.5
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1456,12 +1456,12 @@ PrefabInstance:
     - target: {fileID: 1964378280762626112, guid: 15a9fee3a1c14134eb6ee6e0d5621f47,
         type: 3}
       propertyPath: m_fontSize
-      value: 14
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1964378280762626112, guid: 15a9fee3a1c14134eb6ee6e0d5621f47,
         type: 3}
       propertyPath: m_fontSizeBase
-      value: 14
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1964378280762626112, guid: 15a9fee3a1c14134eb6ee6e0d5621f47,
         type: 3}

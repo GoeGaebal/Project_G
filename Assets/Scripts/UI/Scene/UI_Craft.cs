@@ -100,11 +100,13 @@ public class UI_Craft : UI_Scene
     {
         _craftList.SetActive(true);
         _craft.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
     }
 
     public void CloseCraftList()
     {
         _craftList.SetActive(false);
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     public void OpenCraft(int id)

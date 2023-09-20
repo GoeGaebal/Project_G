@@ -216,11 +216,13 @@ public class UI_Worldmap : UI_Scene
     public void OpenWorldmapUI(/*PointerEventData evt*/)
     {
         _worldmap.SetActive(true);
+        Managers.Input.PlayerActionMap.Enable();
     }
 
     public void CloseWorldmapUI(PointerEventData evt)
     {
         _worldmap.SetActive(false);
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     /*
