@@ -81,6 +81,17 @@ public class BossMonster : BasicMonster
         CanCastingState = true;
     }
 
+    protected override IEnumerator DieCoroutine()
+
+    {
+        animator.ResetTrigger("hit");   
+        animator.SetTrigger("die");
+        yield return new WaitForSeconds(1.0f);
+
+        //여기에 아티팩트 드랍 코드 넣으면 됨
+        Destroy(gameObject);
+    }
+
     protected class CastingState:State{
         internal CastingState(BasicMonster bm){
             basicMonster = bm;

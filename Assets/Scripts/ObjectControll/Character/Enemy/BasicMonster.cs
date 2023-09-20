@@ -129,14 +129,14 @@ using Photon.Pun;
     }
 
 
-     private IEnumerator DieCoroutine()
+     protected virtual IEnumerator DieCoroutine()
 
     {
         animator.ResetTrigger("hit");   
         animator.SetTrigger("die");
-        
-        
         yield return new WaitForSeconds(1.0f);
+
+        //여기에 아이템 드랍 코드 넣으면 됨
         Destroy(gameObject);
     }
         protected float GetDistance()
