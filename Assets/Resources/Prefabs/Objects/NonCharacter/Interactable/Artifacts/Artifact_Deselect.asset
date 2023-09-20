@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Artifact_Deselect
   m_EditorClassIdentifier: 
   _id: 0
-  _Image: {fileID: 0}
+  _Image: {fileID: 21300000, guid: e02e871331885044781233f7c587a7c6, type: 3}
   _hpIncrease: 0
   _damageIncrease: 0
   _shipSpeedIncrease: 0
