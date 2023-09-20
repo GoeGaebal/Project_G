@@ -23,8 +23,13 @@ public class UI_PopupNameItem : UI_Base
         }
     }
 
+    public void SetColor(Color newColor)
+    {
+        Name.color = newColor;
+    }
+
     private void LateUpdate()
     {
-        if (target != null) Name.transform.position = Camera.main.WorldToScreenPoint(target.transform.position + new Vector3(0f,0.5f,0f));
+        if (target != null) Name.transform.position = Camera.main.WorldToScreenPoint(target.transform.position + new Vector3(0f,1.0f,0f));
     }
 }

@@ -58,6 +58,7 @@ public class MapGenerator
                 sb.Append("  ]\n}");
                 writer.WriteLine(sb.ToString());
             }
+            Debug.Log($"{go.name} 변환 완료!");
         }
     }
 #endif

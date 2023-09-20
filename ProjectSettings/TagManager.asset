@@ -43,13 +43,13 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Layer 1
+  - name: Background
     uniqueID: 2425651459
     locked: 0
-  - name: Layer 2
+  - name: Player
     uniqueID: 4250941897
     locked: 0
-  - name: Layer 3
+  - name: Foreground
     uniqueID: 4189426099
     locked: 0
   - name: Minimap
@@ -60,4 +60,7 @@ TagManager:
     locked: 0
   - name: BattleUI
     uniqueID: 1110293753
+    locked: 0
+  - name: Collision
+    uniqueID: 1849724613
     locked: 0

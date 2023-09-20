@@ -13,7 +13,8 @@ public class UI_Status : UI_Scene
     enum GameObjects
     {
         Timer,
-        OptionPanel
+        OptionPanel,
+        OtherStatus
     }
     enum Images { HPBar }
     enum Texts { HPText }
@@ -50,6 +51,8 @@ public class UI_Status : UI_Scene
 
     private GameObject _optionPanel;
 
+    private UI_OtherHP[] uiOtherHps;
+
     private void Start()
     {
         Init();
@@ -71,7 +74,7 @@ public class UI_Status : UI_Scene
 
         rotatingTimer = GetObject((int)GameObjects.Timer);
 
-        player = FindPlayer(); //players 배열을 검색해오지 못하는 버그
+        player = Managers.Network.LocalPlayer;
 
         _optionPanel = Get<GameObject>((int)GameObjects.OptionPanel);
         _optionPanel.SetActive(false);
@@ -90,12 +93,23 @@ public class UI_Status : UI_Scene
         //Get<Toggle>((int)Toggles.FullscreenWindow).onValueChanged.AddListener(ChangeFullscreenWindow);
         //Get<Toggle>((int)Toggles.MaximizedWindow).onValueChanged.AddListener(ChangeMaximizedWindow);
         Get<Toggle>((int)Toggles.Windowed).onValueChanged.AddListener(ChangeWindowed);
+
+        uiOtherHps = new[]
+        {
+            Managers.UI.MakeSubItem<UI_OtherHP>(parent: GetObject((int)GameObjects.OtherStatus).transform),
+            Managers.UI.MakeSubItem<UI_OtherHP>(parent: GetObject((int)GameObjects.OtherStatus).transform)
+        };
+        foreach(var ui in uiOtherHps)
+            ui.Init();
     }
     
     private void Update()
     {
         UpdateHPBar();
         UpdateHPText();
+        int cnt = Managers.Network.OtherPlayers.Length;
+        for(int i = 0; i < cnt; i++)
+            uiOtherHps[i].SetStatus(Managers.Network.OtherPlayers[i]);
     }
 
     void FixedUpdate()
@@ -126,7 +140,6 @@ public class UI_Status : UI_Scene
             float temp = player.HP / player.maxHP;
             hpBar.fillAmount = temp;
         }
-        
     }
 
     private void UpdateHPText()
@@ -135,7 +148,6 @@ public class UI_Status : UI_Scene
         {
             hpText.SetText(player.HP + " / " + player.maxHP);
         }
-        
     }
     
     private void AddTime()

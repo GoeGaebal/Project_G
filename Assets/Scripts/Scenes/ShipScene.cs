@@ -82,7 +82,7 @@ public class ShipScene : BaseScene
      
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
-        scene.AddNames();
+        scene.AddNames(null);
     }
 
     public override void Clear()

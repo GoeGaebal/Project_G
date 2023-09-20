@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 public class Portal : MonoBehaviour
 {
     public bool isExitPortal;
-    public int players;
     private int incomingObjectCount = 0;
 
     private SpriteRenderer _sprite;
@@ -28,7 +27,7 @@ public class Portal : MonoBehaviour
         }
         else
         {
-            if (_movable && players <= incomingObjectCount)
+            if (_movable && PhotonNetwork.CurrentRoom.PlayerCount <= incomingObjectCount)
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
@@ -43,7 +42,6 @@ public class Portal : MonoBehaviour
                     Managers.Scene.LoadScene(Define.Scene.Ship);
                 }
             }
-            
         }
     }
 

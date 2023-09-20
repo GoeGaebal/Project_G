@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public struct PlayerActions
@@ -115,5 +116,7 @@ public class InputManager
         UIActions.Click.wantsInitialStateCheck = true;
 
         Asset.Enable();
+        
+        PlayerActions.Move.Reset();
     }
 }

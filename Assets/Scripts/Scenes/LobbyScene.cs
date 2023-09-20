@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Photon.Pun; // 유니티용 포톤 컴포넌트들
 using Photon.Realtime;
@@ -151,8 +152,21 @@ public class LobbyScene : BaseScene
                 room.RoomBtn.onClick.RemoveAllListeners();
                 room.RoomBtn.onClick.AddListener(() =>
                 {
-                    PhotonNetwork.LocalPlayer.NickName = "Guest";
-                    PhotonNetwork.JoinRoom(room.Name.text);
+                    var popup = Managers.UI.ShowPopupUI<UI_InputNamePopup>();
+                    popup.Init();
+                    popup.EnterBtn.onClick.AddListener(() =>
+                    {
+                        if (popup.UserName.text.Length >= 2)
+                        {
+                            popup.LoadingPane.SetActive(true);
+                            PhotonNetwork.LocalPlayer.NickName = popup.UserName.text;
+                            PhotonNetwork.JoinRoom(room.Name.text);
+                        }
+                        else
+                        {
+                            popup.WarningText.SetText("이름은 최소 1글자 이상입니다.");
+                        }
+                    });
                 });
             }
         }

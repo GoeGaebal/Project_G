@@ -7,8 +7,6 @@ public class NewBehaviourScript : MonoBehaviour
      [SerializeField]
     private Material m_pPPMaterial = null;
 
-
-
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
         if (m_pPPMaterial == null) return;
