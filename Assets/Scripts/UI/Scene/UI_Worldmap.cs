@@ -15,7 +15,7 @@ public class UI_Worldmap : UI_Scene
         Worldmap_Background,
         Worldmap_Ship,
         Worldmap_Line,
-        WeatherText,
+        //WeatherText,
         Worldmap_Minimap_Background,
         Worldmap_Minimap_Arrow,
         Worldmap_Minimap_Ship,
@@ -46,7 +46,7 @@ public class UI_Worldmap : UI_Scene
     private GameObject _lrGO;
     private GameObject _worldmap;
     private UILineRenderer _lr;
-    private GameObject _weatherText;
+    //private GameObject _weatherText;
     private GameObject _arrow;
     private GameObject _minimapShip;
     private GameObject _movingText;
@@ -73,7 +73,7 @@ public class UI_Worldmap : UI_Scene
 
     private void Update()
     {
-        UpdateWeatherUI();
+        //UpdateWeatherUI();
 
         if (_moveFlag)
         {
@@ -120,7 +120,7 @@ public class UI_Worldmap : UI_Scene
         _arrow = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Arrow);
         _arrow.SetActive(false);
         _minimapShip = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Ship);
-        _weatherText = Get<GameObject>((int)GameObjects.WeatherText);
+        //_weatherText = Get<GameObject>((int)GameObjects.WeatherText);
         _movingText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_MovingText);
         _timeText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_TimeText);
         _timeText.SetActive(false);
@@ -240,7 +240,7 @@ public class UI_Worldmap : UI_Scene
     }
     */
     
-
+    /*
     private void UpdateWeatherUI()
     {
         EnumWeather weather = Managers.Weather.Weather;
@@ -262,4 +262,5 @@ public class UI_Worldmap : UI_Scene
         }
         
     }
+    */
 }
