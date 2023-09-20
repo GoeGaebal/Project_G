@@ -19,8 +19,11 @@ public abstract class BaseScene : MonoBehaviourPunCallbacks
     {
         Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
         if (obj == null)
-	        Debug.Log("UI/EventSystem 이 존재하지 않습니다.");
-            // Managers.Resource.Instantiate("UI/EventSystem").name = "@EventSystem";
+        {
+            Debug.Log("UI/EventSystem 이 존재하지 않습니다.");
+        }
+        // Managers.Resource.Instantiate("UI/EventSystem").name = "@EventSystem";
+        Managers.Sound.Clear();
     }
 
     public abstract void Clear();

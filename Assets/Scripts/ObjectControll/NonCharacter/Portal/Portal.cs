@@ -11,6 +11,14 @@ public class Portal : MonoBehaviour
     public int players;
     private int incomingObjectCount = 0;
 
+    private SpriteRenderer _sprite;
+    [SerializeField] private bool _movable = true;
+
+    private void Start()
+    {
+        _sprite = GetComponent<SpriteRenderer>();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         incomingObjectCount++;
@@ -20,7 +28,7 @@ public class Portal : MonoBehaviour
         }
         else
         {
-            if (players <= incomingObjectCount)
+            if (_movable && players <= incomingObjectCount)
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
@@ -37,6 +45,16 @@ public class Portal : MonoBehaviour
             }
             
         }
+    }
+
+    public void SetColor(Color color)
+    {
+        _sprite.color = color;
+    }
+
+    public void SetPortal(bool move)
+    {
+        _movable = move;
     }
 
     private void OnTriggerExit2D(Collider2D other)

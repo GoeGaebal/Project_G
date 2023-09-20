@@ -15,7 +15,7 @@ public class UI_Worldmap : UI_Scene
         Worldmap_Background,
         Worldmap_Ship,
         Worldmap_Line,
-        WeatherText,
+        //WeatherText,
         Worldmap_Minimap_Background,
         Worldmap_Minimap_Arrow,
         Worldmap_Minimap_Ship,
@@ -46,7 +46,7 @@ public class UI_Worldmap : UI_Scene
     private GameObject _lrGO;
     private GameObject _worldmap;
     private UILineRenderer _lr;
-    private GameObject _weatherText;
+    //private GameObject _weatherText;
     private GameObject _arrow;
     private GameObject _minimapShip;
     private GameObject _movingText;
@@ -56,6 +56,8 @@ public class UI_Worldmap : UI_Scene
 
     private bool _moveFlag = false;//이동 중
     private bool _arriveFlag = false;//도착
+
+    private Portal _portal;
 
     private string _mapName;
 
@@ -73,7 +75,7 @@ public class UI_Worldmap : UI_Scene
 
     private void Update()
     {
-        UpdateWeatherUI();
+        //UpdateWeatherUI();
 
         if (_moveFlag)
         {
@@ -96,6 +98,14 @@ public class UI_Worldmap : UI_Scene
             _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_target.name[6] - '0'].name + "에 정박 중");
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
+
+            _portal.SetColor(Color.blue);
+            _portal.SetPortal(true);
+        }
+        else
+        {
+            _portal.SetColor(Color.gray);
+            _portal.SetPortal(false);
         }
     }
 
@@ -120,13 +130,15 @@ public class UI_Worldmap : UI_Scene
         _arrow = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Arrow);
         _arrow.SetActive(false);
         _minimapShip = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Ship);
-        _weatherText = Get<GameObject>((int)GameObjects.WeatherText);
+        //_weatherText = Get<GameObject>((int)GameObjects.WeatherText);
         _movingText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_MovingText);
         _timeText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_TimeText);
         _timeText.SetActive(false);
         _distanceText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_DistanceText);
         _distanceText.SetActive(false);
         _finalBoss = Get<GameObject>((int)GameObjects.Worldmap_FinalBoss);
+
+        _portal = GameObject.Find("Portal").GetComponent<Portal>();
 
         //GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
@@ -216,11 +228,13 @@ public class UI_Worldmap : UI_Scene
     public void OpenWorldmapUI(/*PointerEventData evt*/)
     {
         _worldmap.SetActive(true);
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     public void CloseWorldmapUI(PointerEventData evt)
     {
         _worldmap.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
     }
 
     /*
@@ -238,7 +252,7 @@ public class UI_Worldmap : UI_Scene
     }
     */
     
-
+    /*
     private void UpdateWeatherUI()
     {
         EnumWeather weather = Managers.Weather.Weather;
@@ -260,4 +274,5 @@ public class UI_Worldmap : UI_Scene
         }
         
     }
+    */
 }

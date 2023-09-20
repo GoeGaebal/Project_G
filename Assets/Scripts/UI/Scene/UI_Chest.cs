@@ -81,10 +81,12 @@ public class UI_Chest : UI_Scene
     public void OpenChest()
     {
         _chest.SetActive(true);
+        Managers.Input.PlayerActionMap.Disable();
     }
 
     public void CloseChest(PointerEventData evt)
     {
         _chest.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
     }
 }
