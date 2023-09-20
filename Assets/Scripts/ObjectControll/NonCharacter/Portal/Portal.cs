@@ -27,7 +27,7 @@ public class Portal : MonoBehaviour
         }
         else
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount <= incomingObjectCount)
+            if (_movable && PhotonNetwork.CurrentRoom.PlayerCount <= incomingObjectCount)
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
