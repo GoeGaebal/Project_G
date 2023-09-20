@@ -14,6 +14,7 @@ public class Define
         Ship,
         FinalBoss,
         Loading,
+        Credit,
     }
 
     public enum Sound

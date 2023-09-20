@@ -15,11 +15,13 @@ public partial class FinalBossMonster : DamageableEntity
     {
         fromLastAttackTime = 0f;
         spells.Add(new ThunderSpell(this));
+        dieAction += () => StartCoroutine(Diecoroutine());
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(isDead) return;
         fromLastAttackTime+=Time.deltaTime;
         if(fromLastAttackTime>attackPeriod)
         {
@@ -27,5 +29,13 @@ public partial class FinalBossMonster : DamageableEntity
             int idx = Random.Range(0,spells.Count);
             spells[idx].Spell();
         }
+    }
+
+    IEnumerator Diecoroutine()
+    {
+        yield return new WaitForSeconds(3.0f);
+
+        Destroy(gameObject);
+        Managers.Scene.LoadScene(Define.Scene.Credit);
     }
 }

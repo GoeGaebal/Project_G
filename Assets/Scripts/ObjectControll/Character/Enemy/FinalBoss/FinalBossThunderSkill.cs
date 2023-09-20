@@ -14,10 +14,8 @@ public partial class FinalBossMonster
 
         public void Spell()
         {
-            Debug.Log("final boss spell");
             
             List<KeyValuePair<int, Player>> playerList =  Managers.Network.PlayerDict.ToList();
-            Debug.Log(playerList.Count);
             for(int i =0;i<playerList.Count;i++)
             {
                 _finalBossMonster.thunders[i].SetActive(true);
