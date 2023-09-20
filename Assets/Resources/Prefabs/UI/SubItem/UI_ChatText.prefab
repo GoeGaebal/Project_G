@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC548\uB155\uD558\uC138\uC694..............................."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 997302537473cde4cb7d45c2eb850962, type: 2}
-  m_sharedMaterial: {fileID: -6760963012243953526, guid: 997302537473cde4cb7d45c2eb850962,
+  m_fontAsset: {fileID: 11400000, guid: e2c8e7b13e234414ba20cd3f73a9aebb, type: 2}
+  m_sharedMaterial: {fileID: -3712812817567690646, guid: e2c8e7b13e234414ba20cd3f73a9aebb,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -94,8 +94,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 14

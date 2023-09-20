@@ -341,11 +341,11 @@ public class UI_Inven : UI_Scene//, IDataPersistence
 
     public void RemoveItems(Item target, int count)
     {//인벤토리에 있는 아이템 원하는 개수만큼 삭제
-        if(CheckItem(target) < count)
+        /*if(CheckItem(target) < count)
         {
             Debug.Log("아이템이 원하는 개수보다 적어서 삭제 불가능");
             return;
-        }
+        }*/
 
         for(int i = slots.Length - 1; i >= 0 ; i--)
         {

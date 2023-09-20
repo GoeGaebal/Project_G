@@ -10,6 +10,7 @@ public class FinalBossScene : BaseScene
         base.Init();
         SceneType = Define.Scene.Ship;
         Managers.Map.LoadMap(4);
+        Managers.Input.PlayerActionMap.Enable();
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";
