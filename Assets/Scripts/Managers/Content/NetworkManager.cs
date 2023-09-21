@@ -312,15 +312,12 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         // died
         else if (packet.state == 1)
         {
-            GatheringController gc = Managers.Object.LocalObjectsDict[packet.guid].GetComponent<GatheringController>();
-            if (gc != null)
-                gc.ApplyDie();
-            else
-            {
-                LootingItemController lc = Managers.Object.LocalObjectsDict[packet.guid].GetComponent<LootingItemController>();
-                if (lc != null)
-                    lc.ApplyDie();
-            }
+            GameObject go = null;
+            GatheringController gc = null;
+            LootingItemController lc = null;
+            go = Managers.Object.LocalObjectsDict[packet.guid];
+            if (go.TryGetComponent<GatheringController>(out gc)) gc.ApplyDie();
+            if (go.TryGetComponent<LootingItemController>(out lc)) lc.ApplyDie();
         }
     }
 
