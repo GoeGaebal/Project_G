@@ -136,7 +136,7 @@ using Photon.Pun;
         animator.SetTrigger("die");
         yield return new WaitForSeconds(1.0f);
 
-        //여기에 아이템 드랍 코드 넣으면 됨
+        Managers.Network.RequestSpawnLootingItems(5001, 5, transform.position, 2.0f, 1.0f);
         Destroy(gameObject);
     }
         protected float GetDistance()
