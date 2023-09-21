@@ -9,6 +9,7 @@ using Photon.Realtime;
 using System.Xml.Serialization;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Object = System.Object;
 
 [System.Serializable]
 public struct Packet
@@ -82,6 +83,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         ReceiveObjectInfos,
         RequestViewID,
         ReceiveViewID,
+        ReceiveViewIDs,
         ReceiveChat,
         ReceiveGatheringPacket,
         ReceiveLootings,
@@ -149,6 +151,21 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
                     var viewId = Deserialize<int>(data);
                     if (photonView.ViewID != viewId)
                         photonView.ViewID = viewId;
+                }
+                break;
+            }
+            case (byte)CustomRaiseEventCode.ReceiveViewIDs:
+            {
+                var data = (byte[])photonEvent.CustomData;
+                if (data != null)
+                {
+                    var viewIds = Deserialize<List<int>>(data);
+                    var map = GameObject.FindWithTag("Map");
+                    PhotonView[] views = map.GetPhotonViewsInChildren();
+                    if (views != null)
+                    {
+                        for (var i = 0; i < views.Length; i++ ) views[i].ViewID = viewIds[i];
+                    }
                 }
                 break;
             }
@@ -264,6 +281,11 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     public void BroadCastLootingInfos(List<LootingItemInfo> infos)
     {
         BroadCastClients(Serialize(infos), (byte)CustomRaiseEventCode.ReceiveLootings);
+    }
+    
+    public void BroadCastViewIds(List<int> viewIds)
+    {
+        BroadCastClients(Serialize(viewIds), (byte)CustomRaiseEventCode.ReceiveViewIDs);
     }
 
     public void SendLootingAddItem(int viewId,int guid)

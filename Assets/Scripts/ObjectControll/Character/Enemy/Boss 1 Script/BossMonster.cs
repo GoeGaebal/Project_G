@@ -151,7 +151,7 @@ public class BossMonster : BasicMonster
             {
                 return;
             }
-            _bossMonster.Target.transform.position = (Vector2)_bossMonster.transform.position + Vector2.right*0.5f;
+            _bossMonster.Target.transform.position = (Vector2)_bossMonster.transform.position + Vector2.right * 0.5f;
         }
 
     }

@@ -25,6 +25,8 @@ public class GatheringController : DamageableEntity
 
     private void Init()
     {
+        if (HPBar == null) HPBar = Util.FindChild(gameObject,"HP", true).GetComponent<Image>();
+        if (HPText == null) HPText = Util.FindChild(gameObject,"HPText", true).GetComponent<TextMeshProUGUI>();
         maxHP =  Managers.Data.GatheringDict[id].maxHp;
         HP = maxHP;
         lootingId = Managers.Data.GatheringDict[id].lootingId;

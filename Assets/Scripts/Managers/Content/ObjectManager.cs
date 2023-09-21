@@ -43,9 +43,18 @@ public class ObjectManager
 
     public void SpawnGatherings(int objectId, int count, Vector3[] spawnPoses = null)
     {
+        
         if (PhotonNetwork.IsMasterClient)
         {
-            if (spawnPoses == null)
+            if (Managers.Map.currentMapId == 1)
+            {
+                SpawnGathering(objectId, new Vector3(16.1329117f, 16.933033f, 0));
+                SpawnGathering(objectId, new Vector3(1.83291054f, 33.3330345f, 0));
+                SpawnGathering(objectId, new Vector3(29.0429115f, -2.95696831f, 0));
+                SpawnGathering(objectId, new Vector3(41.2329102f, 45.5330353f, 0));
+                SpawnGathering(objectId, new Vector3(67.7329102f, 39.433033f, 0));
+            }
+            else if (spawnPoses == null)
             {
                 for (int i = 0; i != count; i++)
                 {

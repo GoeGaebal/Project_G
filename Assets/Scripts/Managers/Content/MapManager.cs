@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -42,12 +43,24 @@ public class MapManager
         DestoryMap();
         // 1인 경우 000 중 마지막 0만 1로 바꿈
         string mapName = "Map_" + mapId.ToString("000");
+        currentMapId = mapId;
         GameObject go = Managers.Resource.Instantiate($"Map/{mapName}", Vector3.zero, Quaternion.identity);
         go.name = "Map";
         Tilemap tmBase = Util.FindChild<Tilemap>(go, "Grass_Tilemap", true);
         var cellBounds = tmBase.cellBounds;
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
+        List<int> idList = new();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonView[] views = go.GetPhotonViewsInChildren();
+            foreach (var view in views)
+            {
+                if (view.ViewID == 0) PhotonNetwork.AllocateViewID(view);
+                idList.Add(view.ViewID);
+            }
+            Managers.Network.BroadCastViewIds(idList);
+        }
     }
 
     // TODO : 충돌 지점이 정중앙이기 때문에 원하는 느낌이 나오지 못함

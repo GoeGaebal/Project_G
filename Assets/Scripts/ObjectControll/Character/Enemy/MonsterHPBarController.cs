@@ -9,9 +9,7 @@ public class MonsterHPBarController : MonoBehaviour
      protected BasicMonster _basicMonster;
     protected virtual void Start()
     {
-
-     
-        _basicMonster = transform.root.GetComponent<BasicMonster>();
+        _basicMonster = transform.parent.parent.GetComponent<BasicMonster>();
         _hpBarImage = GetComponent<Image>();
         _hpBarImage.fillAmount = 1f;
     }
@@ -19,6 +17,8 @@ public class MonsterHPBarController : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        if(_basicMonster == null) _basicMonster = transform.parent.parent.GetComponent<BasicMonster>();
+        if(_hpBarImage == null) _hpBarImage = GetComponent<Image>();
        _hpBarImage.fillAmount = (_basicMonster.HP/_basicMonster.maxHP);
     }
 }

@@ -33,6 +33,7 @@ public class GameScene : BaseScene
     {
         // Managers.Network.SpawnLocalPlayer(Vector3.zero);
         Managers.Object.SpawnGatherings(1,5);
+        
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
         Managers.UI.ShowSceneUI<UI_Map>();
@@ -40,6 +41,10 @@ public class GameScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chat>();
         
         _playerLifeCnt = Managers.Network.PlayerDict.Count;
+        foreach (var player in Managers.Network.PlayerDict.Values)
+        {
+            player.transform.position = Vector3.zero;
+        }
     }
 
     public override void Clear()

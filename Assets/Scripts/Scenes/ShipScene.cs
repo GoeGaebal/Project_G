@@ -83,6 +83,10 @@ public class ShipScene : BaseScene
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
         scene.AddNames(null);
+        foreach (var player in Managers.Network.PlayerDict.Values)
+        {
+            player.transform.position = Vector3.zero;
+        }
     }
 
     public override void Clear()
