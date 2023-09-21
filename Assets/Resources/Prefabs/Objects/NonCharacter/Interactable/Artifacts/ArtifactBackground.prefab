@@ -74,9 +74,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
-    type: 3}
-  m_Color: {r: 1, g: 0.5722816, b: 0.3537736, a: 1}
+  m_Sprite: {fileID: 21300130, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -111,7 +110,7 @@ PrefabInstance:
     - target: {fileID: 493451325144675690, guid: 8dc5e0a00b9ee814db75ec8426df9f4c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 493451325144675690, guid: 8dc5e0a00b9ee814db75ec8426df9f4c,
         type: 3}
@@ -166,6 +165,11 @@ PrefabInstance:
     - target: {fileID: 493451325144675693, guid: 8dc5e0a00b9ee814db75ec8426df9f4c,
         type: 3}
       propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8922193836746003896, guid: 8dc5e0a00b9ee814db75ec8426df9f4c,
+        type: 3}
+      propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

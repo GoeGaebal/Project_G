@@ -22,6 +22,7 @@ public class ItemManager
         inventorySlots = new Item[_inventoryCount];
         equipSlots = new Item[_equipCount];
         chestSlots = new Item[_chestCount];
+        inventorySlots[0] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/Sword");
     }
 
     public void PrintSlots()
