@@ -27,7 +27,30 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
 
         profile.TryGetSettings(out colorGrading);
 
-        this.colorGrading.colorFilter.value = this.defaultColor;
+       switch(Managers.Weather.Weather)
+        {
+            case EnumWeather.Sun:
+                if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
+                    this.colorGrading.colorFilter.value = this.sunDayColor;
+                else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
+                    this.colorGrading.colorFilter.value = this.sunNightColor;
+                break;
+            case EnumWeather.Rain:
+                if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
+                    this.colorGrading.colorFilter.value = this.rainDayColor;
+                else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
+                    this.colorGrading.colorFilter.value = this.rainNightColor;
+                break;
+            case EnumWeather.Desert:
+                if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
+                    this.colorGrading.colorFilter.value = this.desertDayColor;
+                else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
+                    this.colorGrading.colorFilter.value = this.desertNightColor;
+                break;
+            default:
+                this.colorGrading.colorFilter.value = this.sunDayColor;
+                break;
+        }
     }   
 
 
