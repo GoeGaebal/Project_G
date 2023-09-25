@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, ITimeSlotChangeEventListener
 {
-    private ColorGrading colorGrading;
-    [SerializeField]private PostProcessProfile profile;
+    [SerializeField]private Volume volume;
+    [SerializeField]private GameObject rainSystem;
+    
 
-    [SerializeField]private Color defaultColor;
-    [SerializeField]private Color sunDayColor;
-    [SerializeField]private Color sunNightColor;
-    [SerializeField]private Color desertDayColor;
-    [SerializeField]private Color desertNightColor;
-    [SerializeField]private Color rainDayColor;
-    [SerializeField]private Color rainNightColor;
+    [SerializeField]private VolumeParameter<Color> defaultColor;
+    [SerializeField]private VolumeParameter<Color> sunDayColor;
+    [SerializeField]private VolumeParameter<Color> sunNightColor;
+    [SerializeField]private VolumeParameter<Color> desertDayColor;
+    [SerializeField]private VolumeParameter<Color> desertNightColor;
+    [SerializeField]private VolumeParameter<Color> rainDayColor;
+    [SerializeField]private VolumeParameter<Color> rainNightColor;
     // Start is called before the first frame update
 
+    private ColorAdjustments colorAdjustments;
  
     void Start()
     {
@@ -25,30 +28,33 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
         Managers.TimeSlot.AddListener(this);
       
 
-        profile.TryGetSettings(out colorGrading);
+        volume.profile.TryGet<ColorAdjustments>(out colorAdjustments);
 
        switch(Managers.Weather.Weather)
         {
             case EnumWeather.Sun:
+                rainSystem.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
-                    this.colorGrading.colorFilter.value = this.sunDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
-                    this.colorGrading.colorFilter.value = this.sunNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 break;
             case EnumWeather.Rain:
+                rainSystem.SetActive(true);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
-                    this.colorGrading.colorFilter.value = this.rainDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
-                    this.colorGrading.colorFilter.value = this.rainNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.rainNightColor);
                 break;
             case EnumWeather.Desert:
+                rainSystem.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
-                    this.colorGrading.colorFilter.value = this.desertDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
-                    this.colorGrading.colorFilter.value = this.desertNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.desertNightColor);
                 break;
             default:
-                this.colorGrading.colorFilter.value = this.sunDayColor;
+                this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 break;
         }
     }   
@@ -61,24 +67,24 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
         {
             case EnumWeather.Sun:
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
-                    this.colorGrading.colorFilter.value = this.sunDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
-                    this.colorGrading.colorFilter.value = this.sunNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 break;
             case EnumWeather.Rain:
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
-                    this.colorGrading.colorFilter.value = this.rainDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
-                    this.colorGrading.colorFilter.value = this.rainNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.rainNightColor);
                 break;
             case EnumWeather.Desert:
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
-                    this.colorGrading.colorFilter.value = this.desertDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
-                    this.colorGrading.colorFilter.value = this.desertNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.desertNightColor);
                 break;
             default:
-                this.colorGrading.colorFilter.value = this.sunDayColor;
+                this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 break;
         }
     }
@@ -90,19 +96,19 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
         {
             case EnumTimeSlot.Day:
                 if(Managers.Weather.Weather == EnumWeather.Sun)
-                    this.colorGrading.colorFilter.value = this.sunDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 else if(Managers.Weather.Weather == EnumWeather.Rain)
-                    this.colorGrading.colorFilter.value = this.rainDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);
                 else if(Managers.Weather.Weather == EnumWeather.Desert)
-                    this.colorGrading.colorFilter.value = this.desertDayColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);
                 break;
             case EnumTimeSlot.Night:
                 if(Managers.Weather.Weather == EnumWeather.Sun)
-                    this.colorGrading.colorFilter.value = this.sunNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 else if(Managers.Weather.Weather == EnumWeather.Rain)
-                    this.colorGrading.colorFilter.value = this.rainNightColor;
+                    this.colorAdjustments.colorFilter.SetValue(this.rainNightColor);
                 else if(Managers.Weather.Weather == EnumWeather.Desert)
-                    this.colorGrading.colorFilter.value = this.desertNightColor;
+                   this.colorAdjustments.colorFilter.SetValue(this.desertNightColor);
                 break;
         }
     }

@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6243799457686021754}
-  - component: {fileID: 6243799457686021755}
-  - component: {fileID: 6243799457686021753}
+  - component: {fileID: 5122611434740401785}
   m_Layer: 7
   m_Name: post processing volume
   m_TagString: Untagged
@@ -33,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6243799457686021755
+--- !u!114 &5122611434740401785
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,31 +41,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6243799457686021756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: dcc710912d5259f4ca93937b2752371e, type: 2}
-  isGlobal: 1
+  m_IsGlobal: 1
+  priority: 0
   blendDistance: 0
   weight: 1
-  priority: 0
---- !u!114 &6243799457686021753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6243799457686021756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8c7d1ae37fa394eadcffa64e5a8ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: dcc710912d5259f4ca93937b2752371e, type: 2}
-  defaultColor: {r: 1, g: 1, b: 1, a: 0}
-  sunDayColor: {r: 1, g: 1, b: 1, a: 0}
-  sunNightColor: {r: 0.25209555, g: 0.25111252, b: 0.254717, a: 0}
-  desertDayColor: {r: 0.9245283, g: 0.8805836, b: 0.70211816, a: 0}
-  desertNightColor: {r: 0.3773585, g: 0.3638683, b: 0.30793878, a: 0}
-  rainDayColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 0}
-  rainNightColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
+  sharedProfile: {fileID: 11400000, guid: 78bae66225ab8ae4f959c8ceb23c0187, type: 2}
