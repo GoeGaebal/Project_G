@@ -14,7 +14,7 @@ public enum EnumTimeSlot
 public class TimeSlotManager : IOnEventCallback
 {
 
-    [SerializeField] private float _timeChangePeriod = 10.0f;
+    [SerializeField] private float _timeChangePeriod = 3.0f;
     public float TimeChangePeriod{
         get { return _timeChangePeriod;}
     }
@@ -80,6 +80,7 @@ public class TimeSlotManager : IOnEventCallback
         if(!ShipScene.isStarted) return;
         if(Managers.Scene.IsLoading) return;
         CurrentTime+=Time.deltaTime;
+        Debug.Log(CurrentTime);
          if(CurrentTime >= _timeChangePeriod * countTimeSlotChanged && TimeSlotChangeEvent != null)
         {
             countTimeSlotChanged++;
@@ -87,6 +88,7 @@ public class TimeSlotManager : IOnEventCallback
 
             switch (TimeSlot)
             {
+                
                 case EnumTimeSlot.Day:
                     UpdateTimeSlot(EnumTimeSlot.Night);
                     break;
@@ -102,7 +104,6 @@ public class TimeSlotManager : IOnEventCallback
 
     private void UpdateTimeSlot(EnumTimeSlot changeTimeSlot)
     {
-        
        switch(changeTimeSlot)
             {
                 case EnumTimeSlot.Day:
