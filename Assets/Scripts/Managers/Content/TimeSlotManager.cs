@@ -80,7 +80,6 @@ public class TimeSlotManager : IOnEventCallback
         if(!ShipScene.isStarted) return;
         if(Managers.Scene.IsLoading) return;
         CurrentTime+=Time.deltaTime;
-        Debug.Log(CurrentTime);
          if(CurrentTime >= _timeChangePeriod * countTimeSlotChanged && TimeSlotChangeEvent != null)
         {
             countTimeSlotChanged++;
