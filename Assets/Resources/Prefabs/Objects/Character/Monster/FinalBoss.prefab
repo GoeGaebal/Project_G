@@ -691,7 +691,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 543d3866da966bc4ebe215434a819ffc, type: 2}
+  - {fileID: 2100000, guid: 8ca209e2992ed2d40bce4e87dade4860, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -741,7 +741,6 @@ MonoBehaviour:
   - {fileID: 5203163882686133752}
   - {fileID: 3445869603344593840}
   - {fileID: 2834910633870091706}
-  dissolveMat: {fileID: 2100000, guid: 543d3866da966bc4ebe215434a819ffc, type: 2}
 --- !u!50 &1492861313168388278
 Rigidbody2D:
   serializedVersion: 4
