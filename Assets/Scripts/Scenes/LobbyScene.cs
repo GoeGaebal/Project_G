@@ -221,6 +221,7 @@ public class LobbyScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
+
         // TODO: 제대로 다시 만들어야함
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
