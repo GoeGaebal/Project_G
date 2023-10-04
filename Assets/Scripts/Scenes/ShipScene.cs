@@ -79,7 +79,8 @@ public class ShipScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Artifact>();
         Managers.UI.ShowSceneUI<UI_Craft>();
         Managers.UI.ShowSceneUI<UI_Leaf>();
-     
+        Managers.UI.ShowSceneUI<UI_Crosshair>();
+
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
         scene.AddNames(null);
