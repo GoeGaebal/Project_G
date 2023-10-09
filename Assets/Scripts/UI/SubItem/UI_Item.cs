@@ -12,13 +12,15 @@ public class UI_Item : UI_Base
     }
     
     [SerializeField] private Image _icon; //아이템의 이미지
-    GameObject[] players;
-    GameObject player;
+    //GameObject[] players;
+    //GameObject player;
     public Text countText;//개수 텍스트
 
     [HideInInspector] public Item item;//아이템
     [HideInInspector] public int count = 1;//아이템 개수
     [HideInInspector] public Transform parentBeforeDrag;
+
+    private Player _player;
 
     public override void Init()
     {
@@ -31,7 +33,7 @@ public class UI_Item : UI_Base
         AddUIEvent(gameObject, OnDrag, Define.UIEvent.Drag);
         AddUIEvent(gameObject, OnDrop, Define.UIEvent.Drop);
         AddUIEvent(gameObject, OnEndDrag, Define.UIEvent.EndDrag);
-        
+        /*
         players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
         foreach (GameObject p in players)
         {
@@ -41,6 +43,8 @@ public class UI_Item : UI_Base
                 player = p;
             }
         }
+        */
+        _player = Managers.Network.LocalPlayer;
     }
 
     public void InitializeItem(Item newItem)//슬롯의 아이콘을 해당 아이템의 것으로 변경
@@ -86,9 +90,10 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            if (currentItem.item.ID/100 == item.ID/100)//장비에 해당하는 장비창일 때
+            int idex = currentItem.item.ID / 100;
+            if (idex == item.ID/100)//장비에 해당하는 장비창일 때
             {
-                if(currentItem.item.ID/100 == 40 &&
+                if(idex == 40 &&
                 currentItem.item == item &&
                 count < ((CountableItem)item).MaxCount)//포션 슬롯의 경우
                 {
@@ -127,6 +132,25 @@ public class UI_Item : UI_Base
 
                     currentItem.parentBeforeDrag = parentTransform;
                     currentItem.transform.SetParent(parentTransform);
+                    
+                    /*switch (idex)//플레이어 스탯 연동
+                    {
+                        case 30:
+                            _player.equipDamage[0] = ((EquipableItem)(currentItem.item)).AttackDamge;
+                            break;
+                        case 31:
+                            _player.equipDamage[1] = ((EquipableItem)(currentItem.item)).AttackDamge;
+                            break;
+                        case 32:
+                            _player.equipDamage[2] = ((EquipableItem)(currentItem.item)).AttackDamge;
+                            break;
+                        case 33:
+                            _player.equipDamage[3] = ((EquipableItem)(currentItem.item)).AttackDamge;
+                            break;
+                        case 34:
+                            _player.equipDamage[4] = ((EquipableItem)(currentItem.item)).AttackDamge;
+                            break;
+                    }*/
                 }
             }
             else
@@ -171,13 +195,14 @@ public class UI_Item : UI_Base
         Managers.UI.ResetCanvasOrder();
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
         {
-            if (player != null)
+            if (_player != null)
             {
                 //사과 개수만큼 드랍
-                Managers.Object.SpawnLootingItems(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
+                Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
                 RemoveItem();//인벤토리에서 삭제
-            }
 
+
+            }
         }
         _icon.raycastTarget = true;
         transform.SetParent(parentBeforeDrag);//원래 위치로 아이템 복귀
