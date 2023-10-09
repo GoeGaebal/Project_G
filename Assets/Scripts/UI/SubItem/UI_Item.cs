@@ -18,7 +18,8 @@ public class UI_Item : UI_Base
 
     [HideInInspector] public Item item;//아이템
     [HideInInspector] public int count = 1;//아이템 개수
-    [HideInInspector] public Transform parentBeforeDrag;
+    [HideInInspector] public Transform parentBeforeDrag;//복귀용
+    private UI_Slot parentSlot;
 
     private Player _player;
 
@@ -45,13 +46,17 @@ public class UI_Item : UI_Base
         }
         */
         _player = Managers.Network.LocalPlayer;
+
+        parentSlot = transform.parent.GetComponent<UI_Slot>();//스탯 동기화를 위한 코드
+        parentSlot.ItemInThisSlot = GetComponent<UI_Item>();
     }
 
-    public void InitializeItem(Item newItem)//슬롯의 아이콘을 해당 아이템의 것으로 변경
+    public void InitializeItem(Item newItem, int c)//슬롯의 아이콘을 해당 아이템의 것으로 변경
     {
         Init();
         item = newItem;
         _icon.sprite = item.Icon;
+        count = c;
         RefreshCount();
     }
     
@@ -119,11 +124,6 @@ public class UI_Item : UI_Base
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
-                    else if (currentItem.item.ID == 1002)
-                    {
-                        //도끼가 없어져서 주석 처리
-                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
-                    }
 
                     var parentTransform = transform.parent.transform;
 
@@ -132,25 +132,6 @@ public class UI_Item : UI_Base
 
                     currentItem.parentBeforeDrag = parentTransform;
                     currentItem.transform.SetParent(parentTransform);
-                    
-                    /*switch (idex)//플레이어 스탯 연동
-                    {
-                        case 30:
-                            _player.equipDamage[0] = ((EquipableItem)(currentItem.item)).AttackDamge;
-                            break;
-                        case 31:
-                            _player.equipDamage[1] = ((EquipableItem)(currentItem.item)).AttackDamge;
-                            break;
-                        case 32:
-                            _player.equipDamage[2] = ((EquipableItem)(currentItem.item)).AttackDamge;
-                            break;
-                        case 33:
-                            _player.equipDamage[3] = ((EquipableItem)(currentItem.item)).AttackDamge;
-                            break;
-                        case 34:
-                            _player.equipDamage[4] = ((EquipableItem)(currentItem.item)).AttackDamge;
-                            break;
-                    }*/
                 }
             }
             else
@@ -158,6 +139,7 @@ public class UI_Item : UI_Base
                 return;
             }
         }
+
         else//슬롯이 인벤토리일 때
         {
             if (currentItem.item is CountableItem &&
@@ -188,6 +170,9 @@ public class UI_Item : UI_Base
                 currentItem.transform.SetParent(parentTransform);
             }
         }
+
+        parentSlot = transform.parent.GetComponent<UI_Slot>();//스탯 동기화를 위한 코드
+        parentSlot.ItemInThisSlot = GetComponent<UI_Item>();
     }
     
     public void OnEndDrag(PointerEventData eventData) // 마우스를 뗄 때
@@ -200,8 +185,6 @@ public class UI_Item : UI_Base
                 //사과 개수만큼 드랍
                 Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
                 RemoveItem();//인벤토리에서 삭제
-
-
             }
         }
         _icon.raycastTarget = true;

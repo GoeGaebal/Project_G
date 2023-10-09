@@ -52,7 +52,6 @@ public class UI_Inven : UI_Scene//, IDataPersistence
 
     private GameObject _inventory;
     public UI_Slot[] slots;//전체 슬롯
-
     public UI_Slot[] equips;//장비창
 
     public static Image[] qSlots = new Image[2];
@@ -148,10 +147,6 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             {
                 Managers.Item.SpawnNewItem(Managers.Item.equipSlots[idex], equips[idex]);
             }
-            for(int i = 0; i < 5; i++)
-            {
-                //_player.equipDamage[idex] = ((EquipableItem)(Managers.Item.equipSlots[idex])).AttackDamge;
-            }
             idex++;
         }
 
@@ -242,7 +237,7 @@ public class UI_Inven : UI_Scene//, IDataPersistence
 
         if (empty)
         {
-            Managers.Item.SpawnNewItem(item, slots[idx]);//그냥 해당 슬롯에 아이템 추가
+            Managers.Item.SpawnNewItemInEmptySlot(item, slots[idx]);//그냥 해당 슬롯에 아이템 추가
             return true;//생성 완료함
         }
         Debug.Log("인벤토리에 자리 없음");
@@ -418,11 +413,13 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         {//인벤토리 저장
             if(slots[i].transform.childCount >= 1)
             {
-                Managers.Item.inventorySlots[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().item; 
+                Managers.Item.inventorySlots[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().item;
+                Managers.Item.inventoryCount[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().count;
             }
             else
             {
                 Managers.Item.inventorySlots[i] = null;
+                Managers.Item.inventoryCount[i] = 0;
             }
         }
         for(int i = 0; i < equips.Length; i++)
@@ -430,10 +427,12 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             if (equips[i].transform.childCount >= 1)
             {
                 Managers.Item.equipSlots[i] = equips[i].transform.GetChild(0).GetComponent<UI_Item>().item;
+                Managers.Item.equipCount[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().count;
             }
             else
             {
                 Managers.Item.equipSlots[i] = null;
+                Managers.Item.equipCount[i] = 0;
             }
         }
     }

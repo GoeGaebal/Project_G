@@ -6,8 +6,31 @@ public class UI_Slot : UI_Base
 {
     public int invIndex = -1;
 
+    public bool isChest = false;
     public bool isEquip = false;
     private int[] _itemIndex = { 10, 30, 31, 32, 33, 40 };
+    private UI_Item itemInThisSlot;
+    public UI_Item ItemInThisSlot
+    {
+        get { return itemInThisSlot; }
+        set
+        {
+            if (itemInThisSlot != value)
+            {//스탯 동기화를 위해 슬롯에 들어 있는 아이템이 바뀌면 아이템 매니저에 연동시켜줌
+                itemInThisSlot = value;
+                if (isEquip)
+                {
+                    //Managers.Item.equipSlots[invIndex] = value.item;
+                }
+                else
+                {
+                    //Managers.Item.inventorySlots[invIndex] = value.item;
+                }
+                Debug.Log("MyVariable changed to: " + itemInThisSlot);
+            }
+        }
+    }
+
 
     private void Start()
     {
@@ -35,11 +58,6 @@ public class UI_Slot : UI_Base
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
-                    else if(currentItem.item.ID == 1002)
-                    {
-                        //도끼가 없어져서 주석 처리
-                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
-                    }
                 }
                 /*else if (checkIndex == 20)
                 {
@@ -59,5 +77,7 @@ public class UI_Slot : UI_Base
         {
             currentItem.parentBeforeDrag = transform;
         }
+
+        ItemInThisSlot = currentItem;
     }
 }
