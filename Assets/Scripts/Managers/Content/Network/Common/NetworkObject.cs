@@ -14,9 +14,11 @@ public class NetworkObject : MonoBehaviourPun
     public PositionInfo PosInfo { get; private set; } = new PositionInfo();
     public GameRoom Room { get; set; }
 
-    public void SyncPos()
+    public virtual void SyncPos()
     {
         if (Info.PosInfo != null) PosInfo = Info.PosInfo;
-        transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY);
+        var t = transform;
+        t.position = new Vector3(PosInfo.PosX, PosInfo.PosY);
+        t.localScale = new Vector3(PosInfo.Dir,1, 1);
     }
 }

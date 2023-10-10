@@ -15,9 +15,9 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 
-class {1}PacketManager
+public class {1}PacketManager
 {{
-	{1}PacketManager()
+	public {1}PacketManager()
 	{{
 		Register();
 	}}

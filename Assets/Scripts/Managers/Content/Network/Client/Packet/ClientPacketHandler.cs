@@ -41,7 +41,7 @@ partial class PacketHandler
 	{
 		S_Move movePacket = packet as S_Move;
 		
-		Debug.Log($"Receive: (id: {movePacket.ObjectId} {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY})");
+		// Debug.Log($"Receive: (id: {movePacket.ObjectId} {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY})");
 		
 		GameObject go = Managers.Object.FindById(movePacket.ObjectId);
 		if (go == null)

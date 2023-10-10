@@ -7,6 +7,7 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Xml.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = System.Object;
@@ -64,6 +65,8 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
 
     public bool isHost = false;
     
+    
+    
     public void Init()
     {
         OnEnable();
@@ -71,6 +74,36 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         photonView.ObservedComponents ??= new List<Component>();
         photonView.ObservedComponents.Add(this);
         _playerQueue = new();
+    }
+    
+    public void CreateRoom()
+    {
+        Managers.Network.Server.Init();
+        Managers.Network.Client.Init();
+        InitWaitinRoom();
+    }
+    
+    public void FindRoom()
+    {
+        Managers.Network.Client.Init();
+        InitWaitinRoom();
+    }
+
+    private void InitWaitinRoom()
+    {
+        Managers.UI.Clear();
+        Managers.UI.SetEventSystem();
+        Managers.UI.ShowSceneUI<UI_Inven>();
+        //Managers.UI.ShowSceneUI<UI_Map>();
+        Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Chat>();
+        Managers.UI.ShowSceneUI<UI_Leaf>();
+        Managers.Map.LoadMap(5);
+    }
+
+    public void LeaveRoom()
+    {
+        
     }
 
     #region Pun
@@ -324,31 +357,6 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     }
     #endregion
 
-    public void CreateRoom()
-    {
-        Managers.Network.Server.Init();
-        Managers.Network.Client.Init();
-        InitWaitinRoom();
-    }
-    
-    public void FindRoom()
-    {
-        Managers.Network.Client.Init();
-        InitWaitinRoom();
-    }
-
-    private void InitWaitinRoom()
-    {
-        Managers.UI.Clear();
-        Managers.UI.SetEventSystem();
-        Managers.UI.ShowSceneUI<UI_Inven>();
-        //Managers.UI.ShowSceneUI<UI_Map>();
-        Managers.UI.ShowSceneUI<UI_Status>();
-        Managers.UI.ShowSceneUI<UI_Chat>();
-        Managers.UI.ShowSceneUI<UI_Leaf>();
-        Managers.Map.LoadMap(5);
-    }
-    
     public void SynchronizeTime()
     {
         if(Managers.TimeSlot == null) return;

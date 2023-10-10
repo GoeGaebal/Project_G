@@ -4,9 +4,9 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 
-class ClientPacketManager
+public class ClientPacketManager
 {
-	ClientPacketManager()
+	public ClientPacketManager()
 	{
 		Register();
 	}
