@@ -225,43 +225,6 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
             }
             case (byte)CustomRaiseEventCode.EnterRoom:
             {
-                var data = (byte[])photonEvent.CustomData;
-                List<int> stream = Deserialize<List<int>>(data);
-                int enteredActor = stream[^2];
-                int allocatedView = stream[^1];
-
-                if (enteredActor == PhotonNetwork.LocalPlayer.ActorNumber)
-                {
-                    int idx = 0;
-                    foreach (var player in _playerQueue.ToArray())
-                    {
-                        PhotonView[] views = player.PhotonViews;
-                        foreach(var view in views)
-                        {
-                            view.ViewID = stream[idx++];
-                        }
-                    }
-                    int count =  stream[idx];
-                    for (int i = 0; i < count; i++)
-                    {
-                        int actorNr = stream[idx + 2 * i + 1];
-                        int viewId = stream[idx + 2 * i + 2];
-                        Player onlinePlayer = TakeoutPlayerQueue(viewId);
-                        PlayerDict.Add(actorNr, onlinePlayer);
-                        onlinePlayer.gameObject.SetActive(true);
-                    }
-                }
-                PlayerDict.Add(enteredActor,TakeoutPlayerQueue(allocatedView));
-                PlayerDict[enteredActor].gameObject.SetActive(true);
-                PlayerDict[enteredActor].transform.position = Vector3.zero;
-                if (enteredActor == PhotonNetwork.LocalPlayer.ActorNumber)
-                {
-                    LocalPlayer = PlayerDict[enteredActor];
-                    PhotonView[] views = LocalPlayer.PhotonViews;
-                    foreach(var view in views)
-                        view.RequestOwnership();
-                }
-                AfterPlayerEnteredRoom?.Invoke(PlayerDict[enteredActor]);
                 break;
             }
         }
@@ -361,32 +324,29 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     }
     #endregion
 
-    public void InitRoom()
+    public void CreateRoom()
     {
-        _playerList = new []{Managers.Resource.Instantiate("Objects/Character/Player"), Managers.Resource.Instantiate("Objects/Character/Player"), Managers.Resource.Instantiate("Objects/Character/Player")};
-        // TODO: 현재 나머지 ViewId는 직접 만들어서 쓰나, 맨 처음 ActorNumber가 1이고 1001은 Managers에 넘어가므로 나머지를 자동 할당한다는 느낌으로 만들고 있음.
-        int manualViewId = 1002;
-        foreach (var player in _playerList)
-        {
-            PhotonView[] views = player.GetComponent<Player>().PhotonViews;
-            foreach (var view in views)
-            {
-                view.OwnershipTransfer = OwnershipOption.Request;
-                if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected) PhotonNetwork.AllocateViewID(view);
-                else view.ViewID = manualViewId++;
-            }
-            _playerQueue.Enqueue(player.GetComponent<Player>());
-            player.SetActive(false);
-            DontDestroyOnLoad(player);
-        }
-        if (PhotonNetwork.IsMasterClient)
-        {
-            var player = TakeoutPlayerQueue();
-            player.gameObject.SetActive(true);
-            LocalPlayer = player;
-            PlayerDict.Add(PhotonNetwork.LocalPlayer.ActorNumber, player);
-            LocalPlayer.BindingAction();
-        }
+        Managers.Network.Server.Init();
+        Managers.Network.Client.Init();
+        InitWaitinRoom();
+    }
+    
+    public void FindRoom()
+    {
+        Managers.Network.Client.Init();
+        InitWaitinRoom();
+    }
+
+    private void InitWaitinRoom()
+    {
+        Managers.UI.Clear();
+        Managers.UI.SetEventSystem();
+        Managers.UI.ShowSceneUI<UI_Inven>();
+        //Managers.UI.ShowSceneUI<UI_Map>();
+        Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Chat>();
+        Managers.UI.ShowSceneUI<UI_Leaf>();
+        Managers.Map.LoadMap(5);
     }
     
     public void SynchronizeTime()

@@ -58,32 +58,30 @@ public class ObjectManager
                 }
                 
                 _objects.Add(info.ObjectId, LocalPlayer.gameObject);
-                LocalPlayer.gameObject.name = info.Name;
-                LocalPlayer.Id = info.ObjectId;
-                // LocalPlayer.PosInfo = info.PosInfo;
                 LocalPlayer.BindingAction();
                 
-
-                
+                LocalPlayer.gameObject.name = info.Name;
+                LocalPlayer.Id = info.ObjectId;
+                LocalPlayer.Info.PosInfo = info.PosInfo;
+                LocalPlayer.SyncPos();
                 // LocalPlayer.Stat = info.StatInfo;
-                // LocalPlayer.SyncPos();
             }
             else
             {
-                GameObject go = null;
-                if (Players.ContainsKey(info.ObjectId)) go = Players[info.ObjectId].gameObject;
+                Player p = null;
+                if (Players.ContainsKey(info.ObjectId)) p = Players[info.ObjectId];
                 else
                 {
-                    go = Managers.Resource.Instantiate("Objects/Character/Player");
-                    Players.Add(info.ObjectId, go.GetComponent<Player>());
+                    p = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
+                    Players.Add(info.ObjectId, p);
                 }
-                go.name = info.Name;
-                _objects.Add(info.ObjectId, go);
+                p.gameObject.name = info.Name;
+                _objects.Add(info.ObjectId, p.gameObject);
 
-                // pc.Id = info.ObjectId;
-                // pc.PosInfo = info.PosInfo;
+                p.Id = info.ObjectId;
+                p.Info.PosInfo = info.PosInfo;
                 // pc.Stat = info.StatInfo;
-                // pc.SyncPos();
+                p.SyncPos();
             }
         }
     }

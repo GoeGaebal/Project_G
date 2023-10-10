@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Photon.Pun;
 using Server;
-using Unity.VisualScripting;
 
 public enum EnumPlayerStates
 {
@@ -27,15 +26,6 @@ public class Player : DamageableEntity
     private Coroutine resetAttackCountCoroutine;
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
-
-    private PhotonView[] _photonViews;
-    public PhotonView[] PhotonViews {
-        get
-        {
-            _photonViews ??= gameObject.GetPhotonViewsInChildren();
-            return _photonViews;
-        }
-    }
 
     public ClientSession Session { get; set; }
 
@@ -65,7 +55,7 @@ public class Player : DamageableEntity
         //카메라 이동 제한
         if(photonView.IsMine)
         {
-            playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+            playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             playerCameraController.SetPosition(transform.position);
             if(playerCameraController.enabled)
                 playerCameraController.enabled = false;
@@ -102,7 +92,7 @@ public class Player : DamageableEntity
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
-        playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+        playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
 
         dieAction += () => {
@@ -151,13 +141,15 @@ public class Player : DamageableEntity
             Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
             if (Managers.Map.CheckCanGo(dest))
             {
+                // 움직이면 패킷을 보낸다.
                 rb.MovePosition(dest);
-                
-                C_Move packet = new C_Move();
-                packet.PosInfo = new PositionInfo();
                 var position = transform.position;
-                packet.PosInfo.PosX = position.x;
-                packet.PosInfo.PosY = position.y;
+                PosInfo.PosX = position.x;
+                PosInfo.PosY = position.y;
+                Info.PosInfo = PosInfo;
+
+                C_Move packet = new C_Move();
+                packet.PosInfo = PosInfo;
                 Managers.Network.Client.Send(packet);
             }
         }

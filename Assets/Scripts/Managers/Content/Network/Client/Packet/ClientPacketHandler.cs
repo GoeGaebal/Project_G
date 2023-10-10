@@ -50,8 +50,12 @@ partial class PacketHandler
 		// BaseController bc = go.GetComponent<BaseController>();
 		// if (bc == null)
 		// 	return;
-		if(movePacket.ObjectId != Managers.Object.LocalPlayer.Id)
-			go.GetComponent<Player>().SyncPos(new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY));
+		if (movePacket.ObjectId != Managers.Object.LocalPlayer.Id)
+		{
+			var p = go.GetComponent<Player>();
+			p.Info.PosInfo = movePacket.PosInfo;
+			p.SyncPos();
+		}
 		//go.PosInfo = movePacket.PosInfo;
 	}
 

@@ -14,8 +14,9 @@ public class NetworkObject : MonoBehaviourPun
     public PositionInfo PosInfo { get; private set; } = new PositionInfo();
     public GameRoom Room { get; set; }
 
-    public void SyncPos(Vector3 vec)
+    public void SyncPos()
     {
-        transform.position = vec;
+        if (Info.PosInfo != null) PosInfo = Info.PosInfo;
+        transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY);
     }
 }

@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Intro.unity
     guid: 6c93b19726fdd6345aee2724a3a64d64
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 4d40e42dd55fa47bdb8e4cbcf024209b
   - enabled: 0
     path: Assets/Scenes/Game.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Ship.unity
     guid: 6882f7c4fcf2313469fb0f2755016c3d
   - enabled: 0
@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Credit.unity
     guid: 741fb97d301bdbe4c848adfd6b141f05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/NetworkTest.unity
     guid: 81ce56e19a348f14486d9199253974a5
   m_configObjects:
