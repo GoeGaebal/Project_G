@@ -69,6 +69,8 @@ MonoBehaviour:
   rainNightColor:
     m_OverrideState: 0
     m_Value: {r: 0.2540495, g: 0.25794128, b: 0.31132078, a: 0}
+  _universalRenderfeature: {fileID: 2491696103660070196, guid: c40be3174f62c4acf8c1216858c64956,
+    type: 2}
 --- !u!1 &2151752640665570592
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +86,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5619834783794955623
 Transform:
   m_ObjectHideFlags: 0

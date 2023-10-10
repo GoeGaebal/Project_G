@@ -6,7 +6,7 @@ public class WorldMapManager : MonoBehaviour
 {
     private GameObject _ship;
     private GameObject _finalBoss;
-    private float _finalBossMoveSpeed = 90.0f;
+    private float _finalBossMoveSpeed = 10.0f;
     private Vector3 _shipPosition;
 
     private bool _isBossBattle;
@@ -75,26 +75,21 @@ public class WorldMapManager : MonoBehaviour
 
                 string weather = Managers.Data.WorldmapDict[i].weather;
 
-                if(weather == "sunny")
+
+                if(weather == "sunny" && Managers.Weather.Weather != EnumWeather.Sun)
                 {
                     Managers.Weather.UpdateWeather(EnumWeather.Sun);
                 }
-                else if(weather =="hot")
+                else if(weather =="hot" && Managers.Weather.Weather != EnumWeather.Desert)
                 {
                     Managers.Weather.UpdateWeather(EnumWeather.Desert);
                 }
-                else if(weather =="rainy")
+                else if(weather =="rainy" && Managers.Weather.Weather != EnumWeather.Rain)
                 {
                     Managers.Weather.UpdateWeather(EnumWeather.Rain);
                 }
             }
 
-            else
-            {
-                Managers.Weather.UpdateWeather(EnumWeather.Sun);
-
-            }
- 
         }   
     }
 }

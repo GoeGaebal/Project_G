@@ -17,8 +17,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
     [SerializeField]private VolumeParameter<Color> desertNightColor;
     [SerializeField]private VolumeParameter<Color> rainDayColor;
     [SerializeField]private VolumeParameter<Color> rainNightColor;
-    // Start is called before the first frame update
-
+    [SerializeField]private ScriptableRendererFeature _universalRenderfeature;
     private ColorAdjustments colorAdjustments;
  
     void Start()
@@ -34,6 +33,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
         {
             case EnumWeather.Sun:
                 rainSystem.SetActive(false);
+                _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
@@ -41,6 +41,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                 break;
             case EnumWeather.Rain:
                 rainSystem.SetActive(true);
+                 _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
@@ -48,6 +49,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                 break;
             case EnumWeather.Desert:
                 rainSystem.SetActive(false);
+                _universalRenderfeature.SetActive(true);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
@@ -66,18 +68,24 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
         switch(weather)
         {
             case EnumWeather.Sun:
+                rainSystem.SetActive(false);
+                _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
                     this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 break;
             case EnumWeather.Rain:
+                rainSystem.SetActive(true);
+                _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
                     this.colorAdjustments.colorFilter.SetValue(this.rainNightColor);
                 break;
             case EnumWeather.Desert:
+                rainSystem.SetActive(false);
+                _universalRenderfeature.SetActive(true);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);
                 else if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Night)
