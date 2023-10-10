@@ -59,6 +59,21 @@ struct PlayerInfo
 // 2. Player들을 미리 찾아놓기
 public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallbacks , IPunOwnershipCallbacks , IPunObservable
 {
+    public ServerManager Server = new ServerManager();
+    public ClientManager Client = new ClientManager();
+
+    public bool isHost = false;
+    
+    public void Init()
+    {
+        OnEnable();
+        PlayerDict = new Dictionary<int, Player>();
+        photonView.ObservedComponents ??= new List<Component>();
+        photonView.ObservedComponents.Add(this);
+        _playerQueue = new();
+    }
+
+    #region Pun
     public const int MaxPlayer = 3;
     public Player LocalPlayer { get; private set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
@@ -103,15 +118,6 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     private void OnDisable()
     {
         PhotonNetwork.RemoveCallbackTarget(this);
-    }
-    
-    public void Init()
-    {
-        OnEnable();
-        PlayerDict = new Dictionary<int, Player>();
-        photonView.ObservedComponents ??= new List<Component>();
-        photonView.ObservedComponents.Add(this);
-        _playerQueue = new();
     }
 
     public void AllocateViewId()
@@ -507,4 +513,5 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     {
         Debug.Log($"Failed to Transfer previousOwner {senderOfFailedRequest} to {targetView.Owner}");
     }
+    #endregion
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -15,6 +16,90 @@ public class ObjectInfo
 
 public class ObjectManager
 {
+    public Player LocalPlayer;
+    Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
+    public Dictionary<int, Player> Players = new Dictionary<int, Player>();
+    public static GameObjectType GetObjectTypeById(int id)
+    {
+        int type = (id >> 24) & 0x7F;
+        return (GameObjectType)type;
+    }
+
+    private int _counter = 0;
+    
+    public int GenerateId(GameObjectType type)
+    {
+        return ((int)type << 24) | (_counter++);
+    }
+    
+    public GameObject FindById(int id)
+    {
+        GameObject go = null;
+        _objects.TryGetValue(id, out go);
+        return go;
+    }
+
+    public void Add(Google.Protobuf.Protocol.ObjectInfo info, bool myPlayer = false)
+    {
+        GameObjectType objectType = GetObjectTypeById(info.ObjectId);
+        if (objectType == GameObjectType.Player)
+        {
+            
+            if (myPlayer)
+            {
+                // TODO : 만일 호스트이면 이미 추가했을 것이기에 체크하는 것, 호스트 모드를 따로 만들 것인지 아니면 아예 서버랑 분리시킬 것인지 고려해야 함
+                Player p = null;
+                if (Players.TryGetValue(info.ObjectId, out p)) LocalPlayer = p;
+                else
+                {
+                    GameObject go = Managers.Resource.Instantiate("Objects/Character/Player");
+                    LocalPlayer = go.GetComponent<Player>();
+                    Players.Add(info.ObjectId, LocalPlayer);
+                }
+                
+                _objects.Add(info.ObjectId, LocalPlayer.gameObject);
+                LocalPlayer.gameObject.name = info.Name;
+                LocalPlayer.Id = info.ObjectId;
+                // LocalPlayer.PosInfo = info.PosInfo;
+                LocalPlayer.BindingAction();
+                
+
+                
+                // LocalPlayer.Stat = info.StatInfo;
+                // LocalPlayer.SyncPos();
+            }
+            else
+            {
+                GameObject go = null;
+                if (Players.ContainsKey(info.ObjectId)) go = Players[info.ObjectId].gameObject;
+                else
+                {
+                    go = Managers.Resource.Instantiate("Objects/Character/Player");
+                    Players.Add(info.ObjectId, go.GetComponent<Player>());
+                }
+                go.name = info.Name;
+                _objects.Add(info.ObjectId, go);
+
+                // pc.Id = info.ObjectId;
+                // pc.PosInfo = info.PosInfo;
+                // pc.Stat = info.StatInfo;
+                // pc.SyncPos();
+            }
+        }
+    }
+
+    public bool Remove(int objectId)
+    {
+        GameObjectType objectType = GetObjectTypeById(objectId);
+
+        if (objectType == GameObjectType.Player)
+            return Players.Remove(objectId);
+
+        return false;
+    }
+
+
+    #region PUN
     public Dictionary<int, ObjectInfo> ObjectInfos { get; private set; }
     public Dictionary<int, GameObject> LocalObjectsDict { get; private set; }
 
@@ -172,4 +257,5 @@ public class ObjectManager
             SpawnGathering(infos[toInstantiateKey].objectID, new Vector3(infos[toInstantiateKey].x,infos[toInstantiateKey].y),toInstantiateKey );
         }
     }
+    #endregion
 }

@@ -61,7 +61,13 @@ public class Managers : MonoBehaviourPun
     
     void Update()
     {
-       if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
+        Network.Server.Update();
+        while (Network.Server.JobQueue.Count > 0)
+        {
+            StartCoroutine(Network.Server.JobQueue.Dequeue());
+        }
+        Network.Client.Update();
+        if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
        WorldMap.UpdateWorldMap(Time.deltaTime);
        Scene.WaitLoading(Time.deltaTime);
     }
@@ -95,6 +101,9 @@ public class Managers : MonoBehaviourPun
             _instance._artifact.Init();
             _instance._weather.Init();
             _instance._worldMap.Init();
+
+            // _network.Server.Init();
+            //_network.Client.Init();
         }
     }
     

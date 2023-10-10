@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Photon.Pun;
+using Server;
+using Unity.VisualScripting;
 
 public enum EnumPlayerStates
 {
@@ -33,6 +36,9 @@ public class Player : DamageableEntity
             return _photonViews;
         }
     }
+
+    public ClientSession Session { get; set; }
+
     IInteractable interactable;
     string interactableName;
 
@@ -46,9 +52,15 @@ public class Player : DamageableEntity
                 UpdateState();
         }
     }
-    
+
+    private void Awake()
+    {
+        ObjectType = GameObjectType.Player;
+    }
+
     protected override void OnEnable() {
         base.OnEnable();
+
         State = EnumPlayerStates.Idle;
         //카메라 이동 제한
         if(photonView.IsMine)
@@ -92,7 +104,6 @@ public class Player : DamageableEntity
         animator = GetComponent<Animator>();
         playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
-        BindingAction();
 
         dieAction += () => {
             animator.SetTrigger("die");
@@ -113,7 +124,7 @@ public class Player : DamageableEntity
 
     private void FixedUpdate()
     {
-        if(!photonView.IsMine) return;
+        // if(!photonView.IsMine) return;
         if(isDead) return;
 
         // Vector3 mousePos = Mouse.current.position.value;
@@ -141,13 +152,22 @@ public class Player : DamageableEntity
             if (Managers.Map.CheckCanGo(dest))
             {
                 rb.MovePosition(dest);
+                
+                C_Move packet = new C_Move();
+                packet.PosInfo = new PositionInfo();
+                var position = transform.position;
+                packet.PosInfo.PosX = position.x;
+                packet.PosInfo.PosY = position.y;
+                Managers.Network.Client.Send(packet);
             }
         }
+
+        
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine || !PhotonNetwork.IsConnected)
         {
              if(isDead) return;
              moveInput = context.ReadValue<Vector2>();
@@ -190,7 +210,7 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
 
-        if (photonView.IsMine)
+        if (Managers.Object.LocalPlayer == this)
         {
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
         }
@@ -264,9 +284,9 @@ public class Player : DamageableEntity
 
         gameObject.SetActive(false);
 
-        if (photonView.IsMine)
+        if (Managers.Object.LocalPlayer == this)
         {
-            playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+            if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             if (!playerCameraController.enabled)
                 playerCameraController.enabled = true;
             playerCameraController.SetPosition(transform.position);

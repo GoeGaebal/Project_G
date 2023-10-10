@@ -4,12 +4,12 @@ using UnityEngine;
 using Photon.Pun;
 using System;
 
-public class DamageableEntity : MonoBehaviourPun, IDamageable
+public class DamageableEntity : NetworkObject, IDamageable
 {
     public float maxHP;
     public float HP{get;protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.
 
-    public bool isDead {get;set;}
+    public bool isDead {get; set;}
 
     // event는 Action이 이 클래스 외부에서 실행되는 것을 방지한다.
     // 그리고 Ondeath가 호출되어야 하는 시점에 어떤 행동을 해야 하는지 런타임 단계에서 정할 수 있다.
