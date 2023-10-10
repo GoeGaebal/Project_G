@@ -18,7 +18,7 @@ public class WeaponPivotController : NetworkObject
     // Update is called once per frame
     void Update()
     {
-        if(playerComponent != Managers.Object.LocalPlayer) return;
+        if(playerComponent != Managers.Network.LocalPlayer) return;
         if (playerComponent.isDead) return;
           //Get the Screen positions of the object
          Vector3 positionOnScreen = playerGameObject.transform.position;

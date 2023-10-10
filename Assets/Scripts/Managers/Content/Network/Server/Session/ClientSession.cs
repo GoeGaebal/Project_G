@@ -57,8 +57,7 @@ namespace Server
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
-			// GameRoom room = RoomManager.Instance.Find(1);
-			// room.Push(room.LeaveGame, MyPlayer.Info.ObjectId);
+			MyPlayer.Room.LeaveGame(MyPlayer.Info.ObjectId);
 
 			Managers.Network.Server.SessionManager.Remove(this);
 

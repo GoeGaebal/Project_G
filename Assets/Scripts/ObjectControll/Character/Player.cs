@@ -112,7 +112,7 @@ public class Player : DamageableEntity
 
     private void FixedUpdate()
     {
-        if(Managers.Object.LocalPlayer != this) return;
+        if(Managers.Network.LocalPlayer != this) return;
         if(isDead) return;
 
         // Vector3 mousePos = Mouse.current.position.value;
@@ -204,7 +204,7 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
 
-        if (Managers.Object.LocalPlayer == this)
+        if (Managers.Network.LocalPlayer == this)
         {
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
         }
@@ -241,7 +241,7 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
         if(!context.started) return;
-        if(Managers.Object.LocalPlayer != this) return;
+        if(Managers.Network.LocalPlayer != this) return;
         if(State != CreatureState.Idle && State != CreatureState.Attack && State != CreatureState.Run) return;
         
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
@@ -278,7 +278,7 @@ public class Player : DamageableEntity
 
         gameObject.SetActive(false);
 
-        if (Managers.Object.LocalPlayer == this)
+        if (Managers.Network.LocalPlayer == this)
         {
             if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             if (!playerCameraController.enabled)

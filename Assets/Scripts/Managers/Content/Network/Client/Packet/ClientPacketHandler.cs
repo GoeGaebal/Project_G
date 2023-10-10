@@ -15,8 +15,15 @@ partial class PacketHandler
 
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
 	{
-		S_LeaveGame leaveGameHandler = packet as S_LeaveGame;
-		// Managers.Object.Clear();
+		S_LeaveGame leaveGame = packet as S_LeaveGame;
+		if (Managers.Network.LocalPlayer.Info.ObjectId != leaveGame.Player.ObjectId)
+			Managers.Object.Remove(leaveGame.Player.ObjectId);
+		else
+		{
+			Managers.Object.Clear();
+			Managers.Scene.LoadScene(Define.Scene.Lobby);
+		}
+		// 
 	}
 
 	public static void S_SpawnHandler(PacketSession session, IMessage packet)
@@ -50,7 +57,7 @@ partial class PacketHandler
 		// BaseController bc = go.GetComponent<BaseController>();
 		// if (bc == null)
 		// 	return;
-		if (movePacket.ObjectId != Managers.Object.LocalPlayer.Id)
+		if (movePacket.ObjectId != Managers.Network.LocalPlayer.Id)
 		{
 			var p = go.GetComponent<Player>();
 			p.Info.PosInfo = movePacket.PosInfo;

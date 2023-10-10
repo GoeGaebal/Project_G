@@ -15,6 +15,7 @@ enum MsgId {
   S_SKILL = 7;
   S_CHANGE_HP = 8;
   S_DIE = 9;
+  C_LEAVE_ROOM = 10;
 }
 
 enum CreatureState {
@@ -43,6 +44,11 @@ message S_EnterGame {
 }
 
 message S_LeaveGame {
+  ObjectInfo player = 1;
+}
+
+message C_LeaveGame {
+  ObjectInfo player = 1;
 }
 
 message S_Spawn {

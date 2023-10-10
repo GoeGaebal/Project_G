@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Protocol;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
+using Object = System.Object;
 using Random = UnityEngine.Random;
 
 [System.Serializable]
@@ -16,9 +18,7 @@ public class ObjectInfo
 
 public class ObjectManager
 {
-    public Player LocalPlayer;
     Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
-    public Dictionary<int, Player> Players = new Dictionary<int, Player>();
     public static GameObjectType GetObjectTypeById(int id)
     {
         int type = (id >> 24) & 0x7F;
@@ -44,56 +44,53 @@ public class ObjectManager
         GameObjectType objectType = GetObjectTypeById(info.ObjectId);
         if (objectType == GameObjectType.Player)
         {
-            
             if (myPlayer)
             {
-                // TODO : 만일 호스트이면 이미 추가했을 것이기에 체크하는 것, 호스트 모드를 따로 만들 것인지 아니면 아예 서버랑 분리시킬 것인지 고려해야 함
-                Player p = null;
-                if (Players.TryGetValue(info.ObjectId, out p)) LocalPlayer = p;
-                else
-                {
-                    GameObject go = Managers.Resource.Instantiate("Objects/Character/Player");
-                    LocalPlayer = go.GetComponent<Player>();
-                    Players.Add(info.ObjectId, LocalPlayer);
-                }
+                GameObject go = null;
+                if (!Managers.Network.isHost) go = Managers.Resource.Instantiate("Objects/Character/Player");
+                else go = Managers.Network.Server.Room.FindPlayerById(info.ObjectId).gameObject;
+                Managers.Network.LocalPlayer = go.GetComponent<Player>();
                 
-                _objects.Add(info.ObjectId, LocalPlayer.gameObject);
-                LocalPlayer.BindingAction();
+                _objects.Add(info.ObjectId, Managers.Network.LocalPlayer.gameObject);
+                Managers.Network.LocalPlayer.BindingAction();
                 
-                LocalPlayer.gameObject.name = info.Name;
-                LocalPlayer.Id = info.ObjectId;
-                LocalPlayer.Info.PosInfo = info.PosInfo;
-                LocalPlayer.SyncPos();
+                Managers.Network.LocalPlayer.gameObject.name = info.Name;
+                Managers.Network.LocalPlayer.Id = info.ObjectId;
+                Managers.Network.LocalPlayer.Info.PosInfo = info.PosInfo;
+                Managers.Network.LocalPlayer.SyncPos();
                 // LocalPlayer.Stat = info.StatInfo;
             }
             else
             {
                 Player p = null;
-                if (Players.ContainsKey(info.ObjectId)) p = Players[info.ObjectId];
-                else
-                {
-                    p = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
-                    Players.Add(info.ObjectId, p);
-                }
+                if (!Managers.Network.isHost) p = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
+                else p = Managers.Network.Server.Room.FindPlayerById(info.ObjectId);
                 p.gameObject.name = info.Name;
                 _objects.Add(info.ObjectId, p.gameObject);
 
                 p.Id = info.ObjectId;
                 p.Info.PosInfo = info.PosInfo;
-                // pc.Stat = info.StatInfo;
                 p.SyncPos();
             }
         }
     }
 
-    public bool Remove(int objectId)
+    public void Remove(int id)
     {
-        GameObjectType objectType = GetObjectTypeById(objectId);
+        GameObject go = FindById(id);
+        if (go == null)
+            return;
+		
+        _objects.Remove(id);	// 딕셔너리에서 삭제
+        // 실질적으로 게임화면에서 삭제
+        Managers.Resource.Destroy(go);
+    }
 
-        if (objectType == GameObjectType.Player)
-            return Players.Remove(objectId);
-
-        return false;
+    public void Clear()
+    {
+        var objects = _objects.Values.ToArray();
+        foreach(var obj in objects) Managers.Resource.Destroy(obj);
+        _objects.Clear();
     }
 
 

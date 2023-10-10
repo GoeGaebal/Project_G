@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,14 +21,16 @@ public class Portal : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!Managers.Network.isHost) return;
+        
         incomingObjectCount++;
-        if (isExitPortal && Managers.Network.PlayerDict[other.gameObject.GetPhotonView().OwnerActorNr] == Managers.Network.LocalPlayer)
+        if (isExitPortal && other.gameObject.GetComponent<Player>() == Managers.Network.LocalPlayer)
         {
-            PhotonNetwork.LeaveRoom();
+            Managers.Network.LeaveRoom();
         }
         else
         {
-            if (_movable && PhotonNetwork.CurrentRoom.PlayerCount <= incomingObjectCount)
+            if (_movable && Managers.Network.Server.Room.PlayersCount <= incomingObjectCount)
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {

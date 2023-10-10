@@ -31072,6 +31072,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5976556288755945178, guid: d13da8c84152f884cadb5048423210a8,
+        type: 3}
+      propertyPath: isExitPortal
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6843920580590945153, guid: d13da8c84152f884cadb5048423210a8,
         type: 3}
       propertyPath: m_Color.a

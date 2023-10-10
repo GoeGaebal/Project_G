@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameRoom
 {
     public int RoomId { get; set; }
-    private static Dictionary<int, Player> Players => Managers.Object.Players;
+    private static Dictionary<int, Player> _players = new Dictionary<int, Player>();
+    public int PlayersCount => _players.Count;
 
     public void EnterGame(NetworkObject gameObject)
     {
@@ -18,7 +20,7 @@ public class GameRoom
         if (type == GameObjectType.Player)
         {
             Player player = gameObject.GetComponent<Player>();
-            Players.Add(gameObject.Id, player);
+            _players.Add(gameObject.Id, player);
             player.Room = this;
     
             // Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y));
@@ -30,7 +32,7 @@ public class GameRoom
                 player.Session.Send(enterPacket);
     
                 S_Spawn spawnPacket = new S_Spawn();
-                foreach (Player p in  Managers.Object.Players.Values)
+                foreach (Player p in  _players.Values)
                 {
                     if (player.Id != p.Id)  spawnPacket.Objects.Add(p.Info);
                 }
@@ -63,7 +65,7 @@ public class GameRoom
         {
             S_Spawn spawnPacket = new S_Spawn();
             spawnPacket.Objects.Add(gameObject.Info);
-            foreach (Player p in Players.Values)
+            foreach (Player p in _players.Values)
             {
                 if (p.Id != gameObject.Id)
                     p.Session.Send(spawnPacket);
@@ -99,9 +101,77 @@ public class GameRoom
         Broadcast(resMovePacket);
     }
     
+    public void LeaveGame(int objectId)
+    {
+        GameObjectType type = ObjectManager.GetObjectTypeById(objectId);
+
+        if (type == GameObjectType.Player)
+        {
+            Player player = null;
+            if (_players.Remove(objectId, out player) == false)
+                return;
+
+            // Map.ApplyLeave(player);
+            player.Room = null;
+
+            // 본인한테 정보 전송
+            {
+                S_LeaveGame leavePacket = new S_LeaveGame();
+                player.Session.Send(leavePacket);
+            }
+        }
+        // else if (type == GameObjectType.Monster)
+        // {
+        //     Monster monster = null;
+        //     if (_monsters.Remove(objectId, out monster) == false)
+        //         return;
+        //
+        //     monster.Room = null;
+        //     Map.ApplyLeave(monster);
+        // }
+        // else if (type == GameObjectType.Projectile)
+        // {
+        //     Projectile projectile = null;
+        //     if (_projectiles.Remove(objectId, out projectile) == false)
+        //         return;
+        //
+        //     projectile.Room = null;
+        // }
+
+        // 타인한테 정보 전송
+        {
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjectIds.Add(objectId);
+            foreach (Player p in _players.Values)
+            {
+                if (p.Id != objectId)
+                    p.Session.Send(despawnPacket);
+            }
+        }
+    }
+    
+    public void HandleLeave(Player player, C_LeaveGame movePacket)
+    {
+        if (player == null)
+            return;
+
+        // Managers.Object.Remove(player.Info.ObjectId);
+        
+        S_LeaveGame resLeavePacket = new S_LeaveGame();
+        resLeavePacket.Player = player.Info;
+
+        Broadcast(resLeavePacket);
+    }
+
+    public Player FindPlayerById(int objectId)
+    {
+        _players.TryGetValue(objectId, out var ret);
+        return ret;
+    }
+    
     public void Broadcast(IMessage packet)
     {
-        foreach (Player p in Players.Values)
+        foreach (Player p in _players.Values)
         {
             p.Session.Send(packet);
         }

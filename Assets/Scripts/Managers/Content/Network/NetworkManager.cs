@@ -7,8 +7,10 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Xml.Serialization;
+using Google.Protobuf.Protocol;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = System.Object;
 
@@ -78,6 +80,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     
     public void CreateRoom()
     {
+        isHost = true;
         Managers.Network.Server.Init();
         Managers.Network.Client.Init();
         InitWaitinRoom();
@@ -85,6 +88,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     
     public void FindRoom()
     {
+        isHost = false;
         Managers.Network.Client.Init();
         InitWaitinRoom();
     }
@@ -103,12 +107,14 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
 
     public void LeaveRoom()
     {
-        
+        C_LeaveGame packet = new C_LeaveGame();
+        packet.Player = Managers.Network.LocalPlayer.Info;
+        Managers.Network.Client.Send(packet);
     }
 
     #region Pun
     public const int MaxPlayer = 3;
-    public Player LocalPlayer { get; private set; }
+    public Player LocalPlayer { get; set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
     public Player[] OtherPlayers { get { return PlayerDict.Values.Where((x) => x.photonView.ViewID != LocalPlayer.photonView.ViewID).ToArray(); } }
 
