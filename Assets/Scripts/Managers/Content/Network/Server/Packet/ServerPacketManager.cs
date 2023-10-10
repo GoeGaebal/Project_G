@@ -22,8 +22,6 @@ public class ServerPacketManager
 		_handler.Add((ushort)MsgId.CMove, PacketHandler.C_MoveHandler);		
 		_onRecv.Add((ushort)MsgId.CSkill, MakePacket<C_Skill>);
 		_handler.Add((ushort)MsgId.CSkill, PacketHandler.C_SkillHandler);		
-		_onRecv.Add((ushort)MsgId.CLeaveRoom, MakePacket<C_LeaveGame>);
-		_handler.Add((ushort)MsgId.CLeaveRoom, PacketHandler.C_LeaveGameHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

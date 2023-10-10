@@ -58,15 +58,9 @@ public class ShipScene : BaseScene
 
     private void Start()
     {
-        if (!PhotonNetwork.IsConnected)
+        if (Managers.Network.isHost)
         {
-            Managers.UI.SetEventSystem();
-            GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
-            // 테스트용 강제 설정
-            PhotonView view = player.GetComponent<PhotonView>();
-            PhotonView[] weaponView = player.GetPhotonViewsInChildren();
-            PhotonNetwork.AllocateViewID(view);
-            PhotonNetwork.AllocateViewID(weaponView[1]);
+            Managers.Network.Server.Room.LoadScene();
         }
         
         Managers.UI.SetEventSystem();
@@ -79,14 +73,14 @@ public class ShipScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Artifact>();
         Managers.UI.ShowSceneUI<UI_Craft>();
         Managers.UI.ShowSceneUI<UI_Leaf>();
-     
+
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
-        scene.AddNames(null);
-        foreach (var player in Managers.Network.PlayerDict.Values)
-        {
-            player.transform.position = Vector3.zero;
-        }
+        // scene.AddNames(null);
+        // foreach (var player in Managers.Network.PlayerDict.Values)
+        // {
+        //     player.transform.position = Vector3.zero;
+        // }
     }
 
     public override void Clear()

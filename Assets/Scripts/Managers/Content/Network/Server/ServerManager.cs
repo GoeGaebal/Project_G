@@ -6,6 +6,7 @@ using System.Threading;
 using Google.Protobuf;
 using Server;
 using ServerCore;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ServerManager
@@ -29,27 +30,34 @@ public class ServerManager
     //     _timers.Add(timer);
     // }
 
+    private string _host;
+    private IPHostEntry _ipHost;
+    private IPAddress _ipAddr;
+    private IPEndPoint _endPoint;
+    private bool _isListening = false;
+
     public void Init()
     {
         // DNS (Domain Name System)
-        string host = Dns.GetHostName();
-        IPHostEntry ipHost = Dns.GetHostEntry(host);
-        IPAddress ipAddr = ipHost.AddressList[0];
-        IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+        _host = Dns.GetHostName();
+        _ipHost = Dns.GetHostEntry(_host);
+        _ipAddr = _ipHost.AddressList[0];
         
         SPM.CustomHandler += (s,m,i) => Managers.Network.Server.PQ.Push(s, i, m);
+    }
 
-        _listener.Init(endPoint, () => { return SessionManager.Generate(); });
+    public void Listen(int port = 7777)
+    {
+        if (_isListening) return;
+        _endPoint = new IPEndPoint(_ipAddr, port);
+        _listener = new Listener();
+        _listener.Init(_endPoint, () => { return SessionManager.Generate(); });
         Debug.Log("Listening...");
+        _isListening = true;
     }
 
     public void Update()
     {
         SessionManager.Update();
-    }
-
-    public void End()
-    {
-        _listener.Close();
     }
 }

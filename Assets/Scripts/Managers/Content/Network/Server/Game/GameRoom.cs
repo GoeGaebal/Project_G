@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server;
+using ServerCore;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,7 +12,7 @@ public class GameRoom
     private static Dictionary<int, Player> _players = new Dictionary<int, Player>();
     public int PlayersCount => _players.Count;
 
-    public void EnterGame(NetworkObject gameObject)
+    public void EnterGame(ClientSession session, NetworkObject gameObject)
     {
         if (gameObject == null)
             return;
@@ -29,7 +31,7 @@ public class GameRoom
             {
                 S_EnterGame enterPacket = new S_EnterGame();
                 enterPacket.Player = player.Info;
-                player.Session.Send(enterPacket);
+                session.Send(enterPacket);
     
                 S_Spawn spawnPacket = new S_Spawn();
                 foreach (Player p in  _players.Values)
@@ -70,6 +72,16 @@ public class GameRoom
                 if (p.Id != gameObject.Id)
                     p.Session.Send(spawnPacket);
             }
+        }
+    }
+
+    public void LoadScene()
+    {
+        foreach (Player p in  _players.Values)
+        {
+            S_EnterGame enterPacket = new S_EnterGame();
+            enterPacket.Player = p.Info;
+            p.Session.Send(enterPacket);
         }
     }
     
@@ -148,19 +160,6 @@ public class GameRoom
                     p.Session.Send(despawnPacket);
             }
         }
-    }
-    
-    public void HandleLeave(Player player, C_LeaveGame movePacket)
-    {
-        if (player == null)
-            return;
-
-        // Managers.Object.Remove(player.Info.ObjectId);
-        
-        S_LeaveGame resLeavePacket = new S_LeaveGame();
-        resLeavePacket.Player = player.Info;
-
-        Broadcast(resLeavePacket);
     }
 
     public Player FindPlayerById(int objectId)

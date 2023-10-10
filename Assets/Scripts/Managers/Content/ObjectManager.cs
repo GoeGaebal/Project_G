@@ -85,6 +85,16 @@ public class ObjectManager
         // 실질적으로 게임화면에서 삭제
         Managers.Resource.Destroy(go);
     }
+    
+    public void RemoveMyPlayer()
+    {
+        GameObject go = Managers.Network.LocalPlayer.gameObject;
+        if (go == null)
+            return;
+
+        _objects.Remove(go.GetComponent<Player>().Id);
+        Managers.Resource.Destroy(go);
+    }
 
     public void Clear()
     {

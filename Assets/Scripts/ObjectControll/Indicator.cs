@@ -41,7 +41,7 @@ public class Indicator : MonoBehaviourPun
 
     void Update()
     {
-        SetIndicator();
+        // SetIndicator();
     }
  
  

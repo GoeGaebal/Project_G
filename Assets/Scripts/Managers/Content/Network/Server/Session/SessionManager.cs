@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Google.Protobuf;
 using ServerCore;
@@ -51,6 +52,8 @@ namespace Server
 		{
 			lock (_lock)
 			{
+				var sessions = _sessions.Values.ToArray();
+				foreach(var s in sessions) s.Disconnect();
 				_sessions.Clear();
 			}
 		}

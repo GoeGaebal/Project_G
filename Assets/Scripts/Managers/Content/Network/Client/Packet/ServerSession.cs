@@ -22,16 +22,13 @@ public class ServerSession : PacketSession
 	public override void OnConnected(EndPoint endPoint)
 	{
 		Debug.Log($"OnConnected : {endPoint}");
-
-		Managers.Network.Client.CPM.CustomHandler = (s, m, i) =>
-		{
-			Managers.Network.Client.PQ.Push(s, i, m);
-		};
 	}
 
 	public override void OnDisconnected(EndPoint endPoint)
 	{
 		Debug.Log($"OnDisconnected : {endPoint}");
+		Managers.Scene.LoadScene(Define.Scene.Lobby);
+		Managers.Object.Clear();
 	}
 
 	public override void OnRecvPacket(ArraySegment<byte> buffer)

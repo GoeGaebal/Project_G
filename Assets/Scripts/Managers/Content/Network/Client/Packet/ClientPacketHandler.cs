@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using ServerCore;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 partial class PacketHandler
@@ -15,15 +16,10 @@ partial class PacketHandler
 
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
 	{
-		S_LeaveGame leaveGame = packet as S_LeaveGame;
-		if (Managers.Network.LocalPlayer.Info.ObjectId != leaveGame.Player.ObjectId)
-			Managers.Object.Remove(leaveGame.Player.ObjectId);
-		else
-		{
-			Managers.Object.Clear();
-			Managers.Scene.LoadScene(Define.Scene.Lobby);
-		}
-		// 
+		S_LeaveGame leaveGamePacket = packet as S_LeaveGame;
+		Managers.Object.RemoveMyPlayer();
+		Managers.Network.Client.DisConnect();
+		// if(Managers.Network.isHost) Managers.Network.Server.Close();
 	}
 
 	public static void S_SpawnHandler(PacketSession session, IMessage packet)

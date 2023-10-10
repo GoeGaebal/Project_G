@@ -13,8 +13,7 @@ namespace Server
 	public class ClientSession : PacketSession
 	{
 		public Player MyPlayer { get; set; }
-		public PacketQueue pq = new PacketQueue();
-		
+
 		public int SessionId { get; set; }
 
 		IEnumerator OnConnectedCoroutine()
@@ -28,7 +27,7 @@ namespace Server
 			// MyPlayer.Info.PosInfo.PosX = 0;
 			// MyPlayer.Info.PosInfo.PosY = 0;
 			MyPlayer.Session = this;
-			Managers.Network.Server.Room.EnterGame(MyPlayer);
+			Managers.Network.Server.Room.EnterGame(this, MyPlayer);
 			yield break;
 		}
 
@@ -58,9 +57,7 @@ namespace Server
 		public override void OnDisconnected(EndPoint endPoint)
 		{
 			MyPlayer.Room.LeaveGame(MyPlayer.Info.ObjectId);
-
 			Managers.Network.Server.SessionManager.Remove(this);
-
 			Debug.Log($"OnDisconnected : {endPoint}");
 		}
 

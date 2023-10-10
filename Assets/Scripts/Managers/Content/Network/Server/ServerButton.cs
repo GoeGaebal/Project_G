@@ -10,9 +10,4 @@ public class ServerButton : MonoBehaviour
         Managers.Network.Server.Init();
         Managers.Network.isHost = true;
     }
-
-    public void Close()
-    {
-        Managers.Network.Server.End();
-    }
 }

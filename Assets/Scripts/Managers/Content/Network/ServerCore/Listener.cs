@@ -64,11 +64,13 @@ namespace ServerCore
 			RegisterAccept(args);
 		}
 
-		public void Close()
+		public void ShutDown()
 		{
-			Managers.Network.Server.SessionManager.Close();
-			if (_listenSocket.Connected) _listenSocket.Disconnect(false);
 			_listenSocket.Close();
+			_listenSocket.Dispose();
+			// _listenSocket.Shutdown(SocketShutdown.Both);
+			_sessionFactory = null;
+			
 		}
 	}
 }

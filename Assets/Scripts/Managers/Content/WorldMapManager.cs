@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldMapManager : MonoBehaviour
+public class WorldMapManager
 {
     private GameObject _ship;
     private GameObject _finalBoss;

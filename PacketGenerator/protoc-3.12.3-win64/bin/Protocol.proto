@@ -15,7 +15,8 @@ enum MsgId {
   S_SKILL = 7;
   S_CHANGE_HP = 8;
   S_DIE = 9;
-  C_LEAVE_ROOM = 10;
+  S_CHAT = 10;
+  C_CHAT = 11;
 }
 
 enum CreatureState {
@@ -44,11 +45,6 @@ message S_EnterGame {
 }
 
 message S_LeaveGame {
-  ObjectInfo player = 1;
-}
-
-message C_LeaveGame {
-  ObjectInfo player = 1;
 }
 
 message S_Spawn {
@@ -101,9 +97,7 @@ message PositionInfo {
   float posY = 4;
   float wposX = 5;
   float wposY = 6;
-  float wrotX = 7;
-  float wrotY = 8;
-  float wrotZ = 9;
+  float wrotZ = 7;
 }
 
 message StatInfo {
@@ -117,4 +111,12 @@ message StatInfo {
 
 message SkillInfo {
   int32 skillId = 1;
+}
+
+message S_Chat {
+  string msg = 1;
+}
+
+message C_Chat {
+  string msg = 1;
 }

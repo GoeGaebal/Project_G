@@ -76,20 +76,22 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         photonView.ObservedComponents ??= new List<Component>();
         photonView.ObservedComponents.Add(this);
         _playerQueue = new();
+        Client.Init();
+        Server.Init();
     }
     
     public void CreateRoom()
     {
         isHost = true;
-        Managers.Network.Server.Init();
-        Managers.Network.Client.Init();
+        Managers.Network.Server.Listen();
+        Managers.Network.Client.Connect();
         InitWaitinRoom();
     }
     
     public void FindRoom()
     {
         isHost = false;
-        Managers.Network.Client.Init();
+        Managers.Network.Client.Connect();
         InitWaitinRoom();
     }
 
@@ -103,13 +105,6 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Leaf>();
         Managers.Map.LoadMap(5);
-    }
-
-    public void LeaveRoom()
-    {
-        C_LeaveGame packet = new C_LeaveGame();
-        packet.Player = Managers.Network.LocalPlayer.Info;
-        Managers.Network.Client.Send(packet);
     }
 
     #region Pun

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,11 +23,15 @@ public class Portal : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!Managers.Network.isHost) return;
+        Player player = null;
+        if (!other.TryGetComponent<Player>(out player)) return;
         
         incomingObjectCount++;
-        if (isExitPortal && other.gameObject.GetComponent<Player>() == Managers.Network.LocalPlayer)
+        if (isExitPortal)
         {
-            Managers.Network.LeaveRoom();
+            S_LeaveGame packet = new S_LeaveGame();
+            player.Session.Send(packet);
+            //Managers.Network.Server.Room.LeaveGame(player.Info.ObjectId);
         }
         else
         {
