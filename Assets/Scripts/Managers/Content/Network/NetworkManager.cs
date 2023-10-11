@@ -319,7 +319,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
             GatheringController gc = null;
             LootingItemController lc = null;
             go = Managers.Object.LocalObjectsDict[packet.guid];
-            if (go.TryGetComponent<GatheringController>(out gc)) gc.ApplyDie();
+            // if (go.TryGetComponent<GatheringController>(out gc)) gc.ApplyDie();
             if (go.TryGetComponent<LootingItemController>(out lc)) lc.ApplyDie();
         }
     }

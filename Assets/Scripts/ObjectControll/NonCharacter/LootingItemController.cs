@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class LootingItemController : MonoBehaviourPun
+public class LootingItemController : NetworkObject
 {
-    public int guid = 1;
     private Item _item;
     public Item Item
     {
@@ -57,7 +58,7 @@ public class LootingItemController : MonoBehaviourPun
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
     }
 
-    public void Bounce(Vector3 endPosition,float duration, float maxHeight = 1.0f)
+    public void Bounce(Vector3 endPosition,float duration = 1.0f, float maxHeight = 1.0f)
     {
         Invoke("EnableCollider", 0.7f);
         StartCoroutine(CoCalcBouncePos(endPosition, duration, maxHeight));
@@ -110,35 +111,44 @@ public class LootingItemController : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (!Managers.Network.isHost) return;
+        
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            var player = collision.GetComponent<Player>();
+            if (player == null) return;
+            if (player == Managers.Network.LocalPlayer)
             {
-                if (collision.gameObject.GetPhotonView().IsMine)
+                if (ui_inven.AddItem(Item))
                 {
-                    if (ui_inven.AddItem(Item))
-                    {
-                        Debug.Log("아이템 획득 성공");
-                        Managers.Network.BroadCastObjectDestroy(guid);
-                    }
-                    else
-                    {
-                        Debug.Log("아이템 획득 실패");
-                    }
+                    Debug.Log("아이템 획득 성공");
+                    S_Despawn packet = new S_Despawn();
+                    packet.ObjectIds.Add(Id);
+                    Managers.Network.Server.Room.Broadcast(packet);
                 }
                 else
                 {
-                    Managers.Network.SendLootingAddItem(collision.gameObject.GetPhotonView().ViewID,guid);
-                    Managers.Network.BroadCastObjectDestroy(guid);
+                    Debug.Log("아이템 획득 실패");
                 }
+            }
+            else
+            {
+                // TODO : 이후에 각 클라이언트가 먼저 먹겠다고 패킷을 날리고 서버측에서 가장 빨리 온 녀석에게 주는 방식으로 바꿔야 할듯
+                S_AddItem itemPacket = new S_AddItem();
+                itemPacket.ObjectId = Id;
+                itemPacket.ItemId = Item.ID;
+                player.Session.Send(itemPacket);
+                S_Despawn packet = new S_Despawn();
+                packet.ObjectIds.Add(Id);
+                Managers.Network.Server.Room.Broadcast(player.Id, packet);
             }
         }
     }
 
     public void ApplyDie()
     {
-        Managers.Object.LocalObjectsDict.Remove(guid);
-        Managers.Object.ObjectInfos.Remove(guid);
+        // Managers.Object.LocalObjectsDict.Remove(guid);
+        // Managers.Object.ObjectInfos.Remove(guid);
         Managers.Resource.Destroy(gameObject);
     }
 }

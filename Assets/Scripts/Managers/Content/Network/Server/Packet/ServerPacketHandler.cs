@@ -10,6 +10,7 @@ partial class PacketHandler
 	{
 		C_Move movePacket = packet as C_Move;
 		ClientSession clientSession = session as ClientSession;
+		if (movePacket == null || clientSession == null) return;
 		
 		Player player = clientSession.MyPlayer;
 		if (player == null)  return;

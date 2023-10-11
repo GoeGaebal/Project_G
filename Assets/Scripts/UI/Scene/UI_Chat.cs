@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using WebSocketSharp;
 
+// TODO : UI_Chat에서 직접 Send 하는 부분을 옮겨야 함
 public class UI_Chat : UI_Scene
 {
     enum GameObjects

@@ -1,4 +1,5 @@
 using System.Collections;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class BasicMonster : DamageableEntity
@@ -54,7 +55,9 @@ public class BasicMonster : DamageableEntity
         target = null;
         lastAttackTime = 0;
         
-        dieAction += ()=> StartCoroutine(DieCoroutine());
+        dieAction -= ()=> StartCoroutine(nameof(DieCoroutine));
+        dieAction += ()=> StartCoroutine(nameof(DieCoroutine));
+
 
         idleState = new (this);
         runState = new(this);
@@ -122,15 +125,19 @@ public class BasicMonster : DamageableEntity
 
 
      protected virtual IEnumerator DieCoroutine()
-
-    {
+     {
         animator.ResetTrigger("hit");   
         animator.SetTrigger("die");
         yield return new WaitForSeconds(1.0f);
 
-        Managers.Network.RequestSpawnLootingItems(5001, 5, transform.position, 2.0f, 1.0f);
-        Destroy(gameObject);
-    }
+        if (Managers.Network.isHost)
+        {
+            S_Despawn despawn = new S_Despawn();
+            despawn.ObjectIds.Add(Id);
+            Managers.Network.Server.Room.Broadcast(despawn);
+            Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
+        }
+     }
         protected float GetDistance()
     { 
         return (target.transform.position - transform.position).magnitude;

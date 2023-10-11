@@ -21,6 +21,7 @@ enum MsgId {
   S_WORLD_MAP = 13;
   S_WORLD_MAP_EVENT = 14;
   S_ON_DAMAGE = 15;
+  S_ADD_ITEM = 16;
 }
 
 enum SceneType {
@@ -45,7 +46,8 @@ enum GameObjectType {
   NONE = 0;
   PLAYER = 1;
   MONSTER = 2;
-  PROJECTILE = 3;
+  GATHERING = 3;
+  LOOTING_ITEM = 4;
 }
 
 enum SkillType {
@@ -167,4 +169,9 @@ message S_OnDamage {
   float HP = 2;
   float damage = 3;
   bool isDead = 4;
+}
+
+message S_AddItem {
+  int32 objectId = 1;
+  int32 itemId = 2;
 }

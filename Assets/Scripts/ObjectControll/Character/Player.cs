@@ -335,6 +335,7 @@ public class Player : DamageableEntity
     {
         base.SyncPos();
         State = PosInfo.State;
+        transform.localScale = new Vector3(PosInfo.Dir,1, 1);
         wpc.transform.localPosition = new Vector3(PosInfo.WposX, PosInfo.WposY);
         wpc.transform.localEulerAngles = new Vector3(0, 0, PosInfo.WrotZ);
     }

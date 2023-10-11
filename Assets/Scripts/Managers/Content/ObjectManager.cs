@@ -3,6 +3,7 @@ using System.Linq;
 using Google.Protobuf.Protocol;
 using Photon.Pun;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using Object = System.Object;
 using Random = UnityEngine.Random;
@@ -26,10 +27,17 @@ public class ObjectManager
     }
 
     private int _counter = 0;
+    private int _monsterCounter = 0;
+    private int _lootingCounter = 0;
+    private int _gatheringCounter = 0;
     
     public int GenerateId(GameObjectType type)
     {
-        return ((int)type << 24) | (_counter++);
+        if(type == GameObjectType.Player) return ((int)type << 24) | (_counter++);
+        if(type == GameObjectType.Monster) return ((int)type << 24) | (_monsterCounter++);
+        if(type == GameObjectType.LootingItem) return ((int)type << 24) | (_lootingCounter++);
+        if(type == GameObjectType.Gathering) return ((int)type << 24) | (_gatheringCounter++);
+        return 0;
     }
     
     public GameObject FindById(int id)
@@ -66,7 +74,7 @@ public class ObjectManager
                 Player p = null;
                 if (!Managers.Network.isHost) p = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
                 else p = Managers.Network.Server.Room.FindPlayerById(info.ObjectId);
-                Managers.MakeDontDestroyOnLoad(p.gameObject);
+                UnityEngine.Object.DontDestroyOnLoad(p.gameObject);
                 
                 p.gameObject.name = info.Name;
                 _objects.Add(info.ObjectId, p.gameObject);
@@ -75,6 +83,59 @@ public class ObjectManager
                 p.Info.PosInfo = info.PosInfo;
                 p.SyncPos();
             }
+        }
+        else if (objectType == GameObjectType.Monster)
+        {
+            GameObject go = null;
+            _objects.TryGetValue(info.ObjectId, out go);
+            if (go == null)
+            {
+                if (info.Name == "BossProto")
+                    go = Managers.Resource.Instantiate($"Objects/Character/Monster/BossMonster1/BossProto");
+                else
+                    go = Managers.Resource.Instantiate($"Objects/Character/Monster/{info.Name}");
+            }
+           
+            UnityEngine.Object.DontDestroyOnLoad(go);
+            go.name = $"{info.Name}_{info.ObjectId}";
+            _objects.Add(info.ObjectId, go);
+            var bm = go.GetComponent<BasicMonster>();
+            bm.Id = info.ObjectId;
+            bm.Info = info;
+            bm.SyncPos();
+        }
+        else if (objectType == GameObjectType.LootingItem)
+        {
+            GameObject go = null;
+            if (!_objects.TryGetValue(info.ObjectId, out go))
+            {
+                go = Managers.Resource.Instantiate($"Objects/NonCharacter/Lootings/apple");
+                _objects.TryAdd(info.ObjectId, go);
+            }
+
+            go.transform.position = new Vector3(info.PosInfo.PosX, info.PosInfo.PosY);
+            LootingItemController lc = go.GetOrAddComponent<LootingItemController>();
+            lc.Id = info.ObjectId;
+            var item = Managers.Data.ItemDict[info.PosInfo.Dir];
+            lc.Item = item;
+            
+            lc.Bounce(new Vector3(info.PosInfo.WposX, info.PosInfo.WposY));
+        }
+        else if (objectType == GameObjectType.Gathering)
+        {
+            GameObject go = null;
+            if (!_objects.TryGetValue(info.ObjectId, out go))
+            {
+                go = Managers.Resource.Instantiate($"Objects/NonCharacter/Gathering/{info.Name}");
+                _objects.TryAdd(info.ObjectId, go);
+            }
+
+            go.transform.position = new Vector3(info.PosInfo.PosX, info.PosInfo.PosY);
+            GatheringController gc = go.GetOrAddComponent<GatheringController>();
+            gc.Id = info.ObjectId;
+            gc.PosInfo.PosX = info.PosInfo.PosX;
+            gc.PosInfo.PosY = info.PosInfo.PosY;
+            gc.SyncPos();
         }
     }
 
@@ -181,15 +242,15 @@ public class ObjectManager
         GameObject go =  Managers.Resource.Instantiate($"Objects/NonCharacter/Lootings/apple", pos, Quaternion.identity);
         LootingItemController lc = go.GetOrAddComponent<LootingItemController>();
         
-        if (guid == 0)
-            lc.guid = go.GetInstanceID();
-        else
-            lc.guid = guid;
-        
-        var item = Managers.Data.ItemDict[objectId];
-        lc.Item = item;
-        ObjectInfos.Add(lc.guid, new ObjectInfo(){objectID=objectId,guid=lc.guid,y = pos.y,x = pos.x});
-        LocalObjectsDict.Add(lc.guid, go);
+        // if (guid == 0)
+        //     lc.guid = go.GetInstanceID();
+        // else
+        //     lc.guid = guid;
+        //
+        // var item = Managers.Data.ItemDict[objectId];
+        // lc.Item = item;
+        // ObjectInfos.Add(lc.guid, new ObjectInfo(){objectID=objectId,guid=lc.guid,y = pos.y,x = pos.x});
+        // LocalObjectsDict.Add(lc.guid, go);
         return lc;
     }
 

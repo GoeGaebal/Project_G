@@ -50,17 +50,15 @@ public class MapManager
         var cellBounds = tmBase.cellBounds;
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
-        List<int> idList = new();
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonView[] views = go.GetPhotonViewsInChildren();
-            foreach (var view in views)
-            {
-                if (view.ViewID == 0) PhotonNetwork.AllocateViewID(view);
-                idList.Add(view.ViewID);
-            }
-            Managers.Network.BroadCastViewIds(idList);
-        }
+        
+        BasicMonster[] monsters = go.GetComponentsInChildren<BasicMonster>();
+        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
+        foreach (var monster in monsters)
+            Managers.Resource.Destroy(monster.gameObject);
+        GatheringController[] gatherings = go.GetComponentsInChildren<GatheringController>();
+        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
+        foreach (var gathering in gatherings)
+            Managers.Resource.Destroy(gathering.gameObject);
     }
 
     // TODO : 충돌 지점이 정중앙이기 때문에 원하는 느낌이 나오지 못함

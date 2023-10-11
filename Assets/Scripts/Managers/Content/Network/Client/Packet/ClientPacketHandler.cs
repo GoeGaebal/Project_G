@@ -147,6 +147,16 @@ partial class PacketHandler
 		entity.UpdateHP(damagePacket.HP, damagePacket.IsDead);
 		entity.OnDamage(damagePacket.Damage);
 	}
+	
+	public static void S_AddItemHandler(PacketSession session, IMessage packet)
+	{
+		if (Managers.Network.isHost) return;
+		S_AddItem itemPacket = packet as S_AddItem;
+		if (itemPacket == null) return;
+		
+		UI_Inven.additem(Managers.Data.ItemDict[itemPacket.ItemId]);
+		Managers.Object.Remove(itemPacket.ObjectId);
+	}
 }
 
 

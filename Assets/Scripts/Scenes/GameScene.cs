@@ -26,6 +26,7 @@ public class GameScene : BaseScene
         _thisScene = this;
         base.Init();
         SceneType = SceneType.Game;
+        
         Managers.Map.LoadMap(1);
         Managers.Sound.Play("Plane_BGM", Define.Sound.Bgm);
     }

@@ -32,15 +32,12 @@ public class DamageableEntity : NetworkObject, IDamageable
         if(Managers.Network.isHost)
         {
             HP -= damage;
-            // photonView.RPC("UpdateHP",RpcTarget.Others,HP, isDead);
-            // photonView.RPC("OnDamage",RpcTarget.Others,damage);
-
             S_OnDamage packet = new S_OnDamage();
             packet.ObjectId = Id;
             packet.Damage = damage;
             packet.HP = HP;
             packet.IsDead = isDead;
-            
+            UpdateHP(HP, isDead);
             Managers.Network.Server.Room.Broadcast(packet);
         }
         
@@ -70,14 +67,14 @@ public class DamageableEntity : NetworkObject, IDamageable
     /// 적이 죽었을 때 호출되는 함수
     /// </summary>
     public virtual void Die()
-    { 
+    {
         if (isDead) return;
         isDead = true;
 
         if(dieAction != null)
         {
             Debug.Log("die action");
-            dieAction();  
+            dieAction.Invoke();
         }
         Debug.Log("Die");
         
