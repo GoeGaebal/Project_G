@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class ServerManager
 {
-    public Queue<IEnumerator> JobQueue = new Queue<IEnumerator>();
+    public Queue<Action> JobQueue = new Queue<Action>();
     public GameRoom Room = new GameRoom();
     public SessionManager SessionManager = new SessionManager();
     public ServerPacketManager SPM = new ServerPacketManager();

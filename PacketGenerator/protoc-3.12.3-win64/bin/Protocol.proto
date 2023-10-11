@@ -17,6 +17,17 @@ enum MsgId {
   S_DIE = 9;
   S_CHAT = 10;
   C_CHAT = 11;
+  S_LOAD_SCENE = 12;
+}
+
+enum SceneType {
+    UNKNOWN = 0;
+    LOBBY = 1;
+    GAME = 2;
+    SHIP = 3;
+    FINAL_BOSS = 4;
+    LOADING = 5;
+    CREDIT = 6;
 }
 
 enum CreatureState {
@@ -119,4 +130,10 @@ message S_Chat {
 
 message C_Chat {
   string msg = 1;
+}
+
+message S_LoadScene {
+    SceneType sceneType = 1;
+    float posX = 2;
+    float posY = 3;
 }

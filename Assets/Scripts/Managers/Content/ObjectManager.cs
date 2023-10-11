@@ -49,9 +49,10 @@ public class ObjectManager
                 GameObject go = null;
                 if (!Managers.Network.isHost) go = Managers.Resource.Instantiate("Objects/Character/Player");
                 else go = Managers.Network.Server.Room.FindPlayerById(info.ObjectId).gameObject;
+                Managers.MakeDontDestroyOnLoad(go);
                 Managers.Network.LocalPlayer = go.GetComponent<Player>();
                 
-                _objects.Add(info.ObjectId, Managers.Network.LocalPlayer.gameObject);
+                _objects.TryAdd(info.ObjectId, Managers.Network.LocalPlayer.gameObject);
                 Managers.Network.LocalPlayer.BindingAction();
                 
                 Managers.Network.LocalPlayer.gameObject.name = info.Name;
@@ -65,6 +66,8 @@ public class ObjectManager
                 Player p = null;
                 if (!Managers.Network.isHost) p = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
                 else p = Managers.Network.Server.Room.FindPlayerById(info.ObjectId);
+                Managers.MakeDontDestroyOnLoad(p.gameObject);
+                
                 p.gameObject.name = info.Name;
                 _objects.Add(info.ObjectId, p.gameObject);
 

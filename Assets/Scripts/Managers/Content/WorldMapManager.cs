@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class WorldMapManager
@@ -58,7 +59,7 @@ public class WorldMapManager
         {
             Debug.Log("final boss");
             _isBossBattle = true;
-            Managers.Scene.LoadScene(Define.Scene.FinalBoss);
+            Managers.Scene.LoadScene(SceneType.FinalBoss);
         }
     }
     

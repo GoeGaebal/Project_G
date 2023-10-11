@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun; // 유니티용 포톤 컴포넌트들
 using Photon.Realtime;
 using TMPro;
@@ -17,7 +18,7 @@ public class LobbyScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.Scene.Lobby;
+        SceneType = SceneType.Lobby;
         _startScreen = Managers.UI.ShowSceneUI<UI_Start>();
     }
     public override void Clear()

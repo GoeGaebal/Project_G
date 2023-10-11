@@ -27,8 +27,11 @@ public class ServerSession : PacketSession
 	public override void OnDisconnected(EndPoint endPoint)
 	{
 		Debug.Log($"OnDisconnected : {endPoint}");
-		Managers.Scene.LoadScene(Define.Scene.Lobby);
-		Managers.Object.Clear();
+		Managers.Network.Server.JobQueue.Enqueue(() =>
+		{
+			Managers.Scene.LoadScene(SceneType.Lobby);
+			Managers.Object.Clear();
+		});
 	}
 
 	public override void OnRecvPacket(ArraySegment<byte> buffer)

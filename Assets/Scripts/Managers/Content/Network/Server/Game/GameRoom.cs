@@ -9,8 +9,8 @@ using UnityEngine;
 public class GameRoom
 {
     public int RoomId { get; set; }
-    private static Dictionary<int, Player> _players = new Dictionary<int, Player>();
-    public int PlayersCount => _players.Count;
+    public Dictionary<int, Player> Players = new Dictionary<int, Player>();
+    public int PlayersCount => Players.Count;
 
     public void EnterGame(ClientSession session, NetworkObject gameObject)
     {
@@ -22,7 +22,7 @@ public class GameRoom
         if (type == GameObjectType.Player)
         {
             Player player = gameObject.GetComponent<Player>();
-            _players.Add(gameObject.Id, player);
+            Players.Add(gameObject.Id, player);
             player.Room = this;
     
             // Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y));
@@ -34,7 +34,7 @@ public class GameRoom
                 session.Send(enterPacket);
     
                 S_Spawn spawnPacket = new S_Spawn();
-                foreach (Player p in  _players.Values)
+                foreach (Player p in  Players.Values)
                 {
                     if (player.Id != p.Id)  spawnPacket.Objects.Add(p.Info);
                 }
@@ -67,7 +67,7 @@ public class GameRoom
         {
             S_Spawn spawnPacket = new S_Spawn();
             spawnPacket.Objects.Add(gameObject.Info);
-            foreach (Player p in _players.Values)
+            foreach (Player p in Players.Values)
             {
                 if (p.Id != gameObject.Id)
                     p.Session.Send(spawnPacket);
@@ -75,16 +75,13 @@ public class GameRoom
         }
     }
 
-    public void LoadScene()
+    public void LoadScene(SceneType type)
     {
-        foreach (Player p in  _players.Values)
-        {
-            S_EnterGame enterPacket = new S_EnterGame();
-            enterPacket.Player = p.Info;
-            p.Session.Send(enterPacket);
-        }
+        S_LoadScene packet = new S_LoadScene();
+        packet.SceneType = type;
+        Managers.Network.Server.Room.Broadcast(packet);
     }
-    
+
     public void HandleMove(Player player, C_Move movePacket)
     {
         if (player == null)
@@ -120,7 +117,7 @@ public class GameRoom
         if (type == GameObjectType.Player)
         {
             Player player = null;
-            if (_players.Remove(objectId, out player) == false)
+            if (Players.Remove(objectId, out player) == false)
                 return;
 
             // Map.ApplyLeave(player);
@@ -154,7 +151,7 @@ public class GameRoom
         {
             S_Despawn despawnPacket = new S_Despawn();
             despawnPacket.ObjectIds.Add(objectId);
-            foreach (Player p in _players.Values)
+            foreach (Player p in Players.Values)
             {
                 if (p.Id != objectId)
                     p.Session.Send(despawnPacket);
@@ -164,13 +161,13 @@ public class GameRoom
 
     public Player FindPlayerById(int objectId)
     {
-        _players.TryGetValue(objectId, out var ret);
+        Players.TryGetValue(objectId, out var ret);
         return ret;
     }
     
     public void Broadcast(IMessage packet)
     {
-        foreach (Player p in _players.Values)
+        foreach (Player p in Players.Values)
         {
             p.Session.Send(packet);
         }

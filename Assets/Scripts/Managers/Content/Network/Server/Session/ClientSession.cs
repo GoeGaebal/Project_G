@@ -16,7 +16,7 @@ namespace Server
 
 		public int SessionId { get; set; }
 
-		IEnumerator OnConnectedCoroutine()
+		public void OnConnectedCoroutine()
 		{
 			MyPlayer = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
 			MyPlayer.Id = Managers.Object.GenerateId(GameObjectType.Player);
@@ -28,7 +28,7 @@ namespace Server
 			// MyPlayer.Info.PosInfo.PosY = 0;
 			MyPlayer.Session = this;
 			Managers.Network.Server.Room.EnterGame(this, MyPlayer);
-			yield break;
+			return;
 		}
 
 		public void Send(IMessage packet)
@@ -46,7 +46,7 @@ namespace Server
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Debug.Log($"OnConnected : {endPoint}");
-			Managers.Network.Server.JobQueue.Enqueue(OnConnectedCoroutine());
+			Managers.Network.Server.JobQueue.Enqueue(OnConnectedCoroutine);
 		}
 
 		public override void OnRecvPacket(ArraySegment<byte> buffer)

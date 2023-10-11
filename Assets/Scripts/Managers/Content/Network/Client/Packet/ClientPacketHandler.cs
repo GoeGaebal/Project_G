@@ -107,6 +107,17 @@ partial class PacketHandler
 		// 	cc.OnDead();
 		// }
 	}
+	
+	public static void S_ChatHandler(PacketSession session, IMessage packet)
+	{
+	}
+	
+	public static void S_LoadSceneHandler(PacketSession session, IMessage packet)
+	{
+		S_LoadScene loadScenePacket = packet as S_LoadScene;
+		Managers.Scene.LoadScene(loadScenePacket.SceneType);
+		Managers.Network.LocalPlayer.transform.position = new(loadScenePacket.PosX, loadScenePacket.PosY);
+	}
 }
 
 

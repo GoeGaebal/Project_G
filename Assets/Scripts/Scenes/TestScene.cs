@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class TestScene : BaseScene,IPunObservable
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.Scene.Game;
+        SceneType = SceneType.Game;
         Managers.Map.LoadMap(1);
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");

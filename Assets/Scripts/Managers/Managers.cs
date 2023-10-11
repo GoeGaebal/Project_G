@@ -64,7 +64,7 @@ public class Managers : MonoBehaviourPun
         Network.Server.Update();
         while (Network.Server.JobQueue.Count > 0)
         {
-            StartCoroutine(Network.Server.JobQueue.Dequeue());
+            Network.Server.JobQueue.Dequeue().Invoke();
         }
         Network.Client.Update();
         if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
@@ -105,6 +105,11 @@ public class Managers : MonoBehaviourPun
             // _network.Server.Init();
             //_network.Client.Init();
         }
+    }
+
+    public static void MakeDontDestroyOnLoad(GameObject go)
+    {
+        DontDestroyOnLoad(go);
     }
     
     public static void Clear()

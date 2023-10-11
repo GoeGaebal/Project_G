@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class ShipScene : BaseScene
     {
         if(!isStarted) isStarted = true;
         base.Init();
-        SceneType = Define.Scene.Ship;
+        SceneType = SceneType.Ship;
         Managers.Map.LoadMap(4);
 
         Dictionary<int, Player>.ValueCollection playerComponents = Managers.Network.PlayerDict.Values; 
@@ -58,11 +59,6 @@ public class ShipScene : BaseScene
 
     private void Start()
     {
-        if (Managers.Network.isHost)
-        {
-            Managers.Network.Server.Room.LoadScene();
-        }
-        
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
         //Managers.UI.ShowSceneUI<UI_Map>();
