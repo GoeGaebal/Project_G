@@ -65,6 +65,8 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     public ServerManager Server = new ServerManager();
     public ClientManager Client = new ClientManager();
     public UI_Chat UIChat { get; set; }
+    public Player LocalPlayer { get; set; }
+    public List<Player> OtherPlayers = new List<Player>();
 
     public bool isHost = false;
     
@@ -79,6 +81,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         _playerQueue = new();
         Client.Init();
         Server.Init();
+        OtherPlayers.Clear();
     }
     
     public void CreateRoom()
@@ -110,7 +113,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
 
     #region Pun
     public const int MaxPlayer = 3;
-    public Player LocalPlayer { get; set; }
+    
     public Dictionary<int, Player> PlayerDict { get; private set; }
 
     private Queue<Player> _playerQueue;

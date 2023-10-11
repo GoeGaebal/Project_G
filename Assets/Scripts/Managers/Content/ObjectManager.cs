@@ -82,6 +82,7 @@ public class ObjectManager
                 p.Id = info.ObjectId;
                 p.Info.PosInfo = info.PosInfo;
                 p.SyncPos();
+                Managers.Network.OtherPlayers.Add(p);
             }
         }
         else if (objectType == GameObjectType.Monster)

@@ -154,8 +154,7 @@ public class GameRoom
             despawnPacket.ObjectIds.Add(objectId);
             foreach (Player p in Players.Values)
             {
-                if (p.Id != objectId)
-                    p.Session.Send(despawnPacket);
+                if (p.Id != objectId) p.Session.Send(despawnPacket);
             }
         }
     }
