@@ -18,13 +18,13 @@ public class WorldMapManager
         set { _ship = value; }
     }
 
-
-
     public GameObject FinalBoss
     {
         get{ return _finalBoss; }
         set{ _finalBoss = value;}
     }
+
+    public UI_Worldmap UI { get; set; }
 
     public void Init()
     {
@@ -35,8 +35,27 @@ public class WorldMapManager
     public void UpdateWorldMap(float deltaTime)
     {
         if(_isBossBattle) return;
-        UpdateShipPosition();
-        UpdateFinalBossPosition(deltaTime);
+        if(UI == null) return;
+        // TODO : 추후 Server로 로직을 옮김
+        if (Managers.Network.isHost)
+        {
+            UpdateShipPosition();
+            UpdateFinalBossPosition(deltaTime);
+            S_WorldMap worldMap = new S_WorldMap();
+            worldMap.ShipPosX = _shipPosition.x;
+            worldMap.ShipPosY = _shipPosition.y;
+            worldMap.FinalBossX = _finalBoss.transform.localPosition.x;
+            worldMap.FinalBossY = _finalBoss.transform.localPosition.y;
+            Managers.Network.Server.Room.Broadcast(worldMap);
+        }
+    }
+
+    public void UpdateByPacket(S_WorldMap worldMap)
+    {
+        if (UI == null) return;
+        _shipPosition.x = worldMap.ShipPosX;
+        _shipPosition.y = worldMap.ShipPosY;
+        _finalBoss.transform.localPosition = new Vector3(worldMap.FinalBossX, worldMap.FinalBossY);
     }
     private void UpdateShipPosition()
     {
@@ -59,11 +78,11 @@ public class WorldMapManager
         {
             Debug.Log("final boss");
             _isBossBattle = true;
-            Managers.Scene.LoadScene(SceneType.FinalBoss);
+            Managers.Network.Server.Room.LoadScene(SceneType.FinalBoss);
         }
     }
-    
-    
+
+
     public void CheckWeather()//날씨 체크
     {
         for (int i = 1; i <= Managers.Data.WorldmapDict.Count; i++)

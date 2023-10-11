@@ -18,6 +18,8 @@ enum MsgId {
   S_CHAT = 10;
   C_CHAT = 11;
   S_LOAD_SCENE = 12;
+  S_WORLD_MAP = 13;
+  S_WORLD_MAP_EVENT = 14;
 }
 
 enum SceneType {
@@ -49,6 +51,11 @@ enum SkillType {
   SKILL_NONE = 0;
   SKILL_AUTO = 1;
   SKILL_PROJECTILE = 2;
+}
+
+enum UIWorldMapEventType {
+  SET_TARGET = 0;
+  PAUSE_MOVE = 1;
 }
 
 message S_EnterGame {
@@ -136,4 +143,20 @@ message S_LoadScene {
     SceneType sceneType = 1;
     float posX = 2;
     float posY = 3;
+}
+
+message S_WorldMap {
+  float shipPosX = 1;
+  float shipPosY = 2;
+  float finalBossX = 3;
+  float finalBossY = 4;
+}
+
+message S_WorldMapEvent {
+  UIWorldMapEventType event = 1;
+  float targetPosX = 2;
+  float targetPosY = 3;
+  float shipPosX = 4;
+  float shipPosY = 5;
+  string mapName = 6;
 }

@@ -118,6 +118,20 @@ partial class PacketHandler
 		Managers.Scene.LoadScene(loadScenePacket.SceneType);
 		Managers.Network.LocalPlayer.transform.position = new(loadScenePacket.PosX, loadScenePacket.PosY);
 	}
+
+	public static void S_WorldMapHandler(PacketSession session, IMessage packet)
+	{
+		if (Managers.Network.isHost) return;
+		S_WorldMap worldMapPacket = packet as S_WorldMap;
+		Managers.WorldMap.UpdateByPacket(worldMapPacket);
+	}
+
+	public static void S_WorldMapEventHandler(PacketSession session, IMessage packet)
+	{
+		if (Managers.Network.isHost) return;
+		S_WorldMapEvent worldMapPacket = packet as S_WorldMapEvent;
+		Managers.WorldMap.UI.UpdateByPacket(worldMapPacket);
+	}
 }
 
 

@@ -37,7 +37,11 @@ public class ClientPacketManager
 		_onRecv.Add((ushort)MsgId.SChat, MakePacket<S_Chat>);
 		_handler.Add((ushort)MsgId.SChat, PacketHandler.S_ChatHandler);		
 		_onRecv.Add((ushort)MsgId.SLoadScene, MakePacket<S_LoadScene>);
-		_handler.Add((ushort)MsgId.SLoadScene, PacketHandler.S_LoadSceneHandler);
+		_handler.Add((ushort)MsgId.SLoadScene, PacketHandler.S_LoadSceneHandler);		
+		_onRecv.Add((ushort)MsgId.SWorldMap, MakePacket<S_WorldMap>);
+		_handler.Add((ushort)MsgId.SWorldMap, PacketHandler.S_WorldMapHandler);		
+		_onRecv.Add((ushort)MsgId.SWorldMapEvent, MakePacket<S_WorldMapEvent>);
+		_handler.Add((ushort)MsgId.SWorldMapEvent, PacketHandler.S_WorldMapEventHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

@@ -47,22 +47,30 @@ namespace Google.Protobuf.Protocol {
             "BSIcCglTa2lsbEluZm8SDwoHc2tpbGxJZBgBIAEoBSIVCgZTX0NoYXQSCwoD",
             "bXNnGAEgASgJIhUKBkNfQ2hhdBILCgNtc2cYASABKAkiUQoLU19Mb2FkU2Nl",
             "bmUSJgoJc2NlbmVUeXBlGAEgASgOMhMuUHJvdG9jb2wuU2NlbmVUeXBlEgwK",
-            "BHBvc1gYAiABKAISDAoEcG9zWRgDIAEoAiq/AQoFTXNnSWQSEAoMU19FTlRF",
-            "Ul9HQU1FEAASEAoMU19MRUFWRV9HQU1FEAESCwoHU19TUEFXThACEg0KCVNf",
-            "REVTUEFXThADEgoKBkNfTU9WRRAEEgoKBlNfTU9WRRAFEgsKB0NfU0tJTEwQ",
-            "BhILCgdTX1NLSUxMEAcSDwoLU19DSEFOR0VfSFAQCBIJCgVTX0RJRRAJEgoK",
-            "BlNfQ0hBVBAKEgoKBkNfQ0hBVBALEhAKDFNfTE9BRF9TQ0VORRAMKmAKCVNj",
-            "ZW5lVHlwZRILCgdVTktOT1dOEAASCQoFTE9CQlkQARIICgRHQU1FEAISCAoE",
-            "U0hJUBADEg4KCkZJTkFMX0JPU1MQBBILCgdMT0FESU5HEAUSCgoGQ1JFRElU",
-            "EAYqQQoNQ3JlYXR1cmVTdGF0ZRIICgRJRExFEAASBwoDUlVOEAESCgoGQVRU",
-            "QUNLEAISBwoDSElUEAMSCAoEREVBRBAEKkMKDkdhbWVPYmplY3RUeXBlEggK",
-            "BE5PTkUQABIKCgZQTEFZRVIQARILCgdNT05TVEVSEAISDgoKUFJPSkVDVElM",
-            "RRADKkEKCVNraWxsVHlwZRIOCgpTS0lMTF9OT05FEAASDgoKU0tJTExfQVVU",
-            "TxABEhQKEFNLSUxMX1BST0pFQ1RJTEUQAkIbqgIYR29vZ2xlLlByb3RvYnVm",
-            "LlByb3RvY29sYgZwcm90bzM="));
+            "BHBvc1gYAiABKAISDAoEcG9zWRgDIAEoAiJYCgpTX1dvcmxkTWFwEhAKCHNo",
+            "aXBQb3NYGAEgASgCEhAKCHNoaXBQb3NZGAIgASgCEhIKCmZpbmFsQm9zc1gY",
+            "AyABKAISEgoKZmluYWxCb3NzWRgEIAEoAiKcAQoPU19Xb3JsZE1hcEV2ZW50",
+            "EiwKBWV2ZW50GAEgASgOMh0uUHJvdG9jb2wuVUlXb3JsZE1hcEV2ZW50VHlw",
+            "ZRISCgp0YXJnZXRQb3NYGAIgASgCEhIKCnRhcmdldFBvc1kYAyABKAISEAoI",
+            "c2hpcFBvc1gYBCABKAISEAoIc2hpcFBvc1kYBSABKAISDwoHbWFwTmFtZRgG",
+            "IAEoCSrnAQoFTXNnSWQSEAoMU19FTlRFUl9HQU1FEAASEAoMU19MRUFWRV9H",
+            "QU1FEAESCwoHU19TUEFXThACEg0KCVNfREVTUEFXThADEgoKBkNfTU9WRRAE",
+            "EgoKBlNfTU9WRRAFEgsKB0NfU0tJTEwQBhILCgdTX1NLSUxMEAcSDwoLU19D",
+            "SEFOR0VfSFAQCBIJCgVTX0RJRRAJEgoKBlNfQ0hBVBAKEgoKBkNfQ0hBVBAL",
+            "EhAKDFNfTE9BRF9TQ0VORRAMEg8KC1NfV09STERfTUFQEA0SFQoRU19XT1JM",
+            "RF9NQVBfRVZFTlQQDipgCglTY2VuZVR5cGUSCwoHVU5LTk9XThAAEgkKBUxP",
+            "QkJZEAESCAoER0FNRRACEggKBFNISVAQAxIOCgpGSU5BTF9CT1NTEAQSCwoH",
+            "TE9BRElORxAFEgoKBkNSRURJVBAGKkEKDUNyZWF0dXJlU3RhdGUSCAoESURM",
+            "RRAAEgcKA1JVThABEgoKBkFUVEFDSxACEgcKA0hJVBADEggKBERFQUQQBCpD",
+            "Cg5HYW1lT2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoHTU9O",
+            "U1RFUhACEg4KClBST0pFQ1RJTEUQAypBCglTa2lsbFR5cGUSDgoKU0tJTExf",
+            "Tk9ORRAAEg4KClNLSUxMX0FVVE8QARIUChBTS0lMTF9QUk9KRUNUSUxFEAIq",
+            "NQoTVUlXb3JsZE1hcEV2ZW50VHlwZRIOCgpTRVRfVEFSR0VUEAASDgoKUEFV",
+            "U0VfTU9WRRABQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.SceneType), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.SceneType), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), typeof(global::Google.Protobuf.Protocol.UIWorldMapEventType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_EnterGame), global::Google.Protobuf.Protocol.S_EnterGame.Parser, new[]{ "Player" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LeaveGame), global::Google.Protobuf.Protocol.S_LeaveGame.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Spawn), global::Google.Protobuf.Protocol.S_Spawn.Parser, new[]{ "Objects" }, null, null, null, null),
@@ -79,7 +87,9 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.SkillInfo), global::Google.Protobuf.Protocol.SkillInfo.Parser, new[]{ "SkillId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Chat), global::Google.Protobuf.Protocol.S_Chat.Parser, new[]{ "Msg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Chat), global::Google.Protobuf.Protocol.C_Chat.Parser, new[]{ "Msg" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadScene), global::Google.Protobuf.Protocol.S_LoadScene.Parser, new[]{ "SceneType", "PosX", "PosY" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadScene), global::Google.Protobuf.Protocol.S_LoadScene.Parser, new[]{ "SceneType", "PosX", "PosY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMap), global::Google.Protobuf.Protocol.S_WorldMap.Parser, new[]{ "ShipPosX", "ShipPosY", "FinalBossX", "FinalBossY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMapEvent), global::Google.Protobuf.Protocol.S_WorldMapEvent.Parser, new[]{ "Event", "TargetPosX", "TargetPosY", "ShipPosX", "ShipPosY", "MapName" }, null, null, null, null)
           }));
     }
     #endregion
@@ -100,6 +110,8 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("S_CHAT")] SChat = 10,
     [pbr::OriginalName("C_CHAT")] CChat = 11,
     [pbr::OriginalName("S_LOAD_SCENE")] SLoadScene = 12,
+    [pbr::OriginalName("S_WORLD_MAP")] SWorldMap = 13,
+    [pbr::OriginalName("S_WORLD_MAP_EVENT")] SWorldMapEvent = 14,
   }
 
   public enum SceneType {
@@ -131,6 +143,11 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("SKILL_NONE")] SkillNone = 0,
     [pbr::OriginalName("SKILL_AUTO")] SkillAuto = 1,
     [pbr::OriginalName("SKILL_PROJECTILE")] SkillProjectile = 2,
+  }
+
+  public enum UIWorldMapEventType {
+    [pbr::OriginalName("SET_TARGET")] SetTarget = 0,
+    [pbr::OriginalName("PAUSE_MOVE")] PauseMove = 1,
   }
 
   #endregion
@@ -2880,6 +2897,488 @@ namespace Google.Protobuf.Protocol {
           }
           case 29: {
             PosY = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class S_WorldMap : pb::IMessage<S_WorldMap> {
+    private static readonly pb::MessageParser<S_WorldMap> _parser = new pb::MessageParser<S_WorldMap>(() => new S_WorldMap());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<S_WorldMap> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Google.Protobuf.Protocol.ProtocolReflection.Descriptor.MessageTypes[17]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_WorldMap() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_WorldMap(S_WorldMap other) : this() {
+      shipPosX_ = other.shipPosX_;
+      shipPosY_ = other.shipPosY_;
+      finalBossX_ = other.finalBossX_;
+      finalBossY_ = other.finalBossY_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_WorldMap Clone() {
+      return new S_WorldMap(this);
+    }
+
+    /// <summary>Field number for the "shipPosX" field.</summary>
+    public const int ShipPosXFieldNumber = 1;
+    private float shipPosX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float ShipPosX {
+      get { return shipPosX_; }
+      set {
+        shipPosX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "shipPosY" field.</summary>
+    public const int ShipPosYFieldNumber = 2;
+    private float shipPosY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float ShipPosY {
+      get { return shipPosY_; }
+      set {
+        shipPosY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "finalBossX" field.</summary>
+    public const int FinalBossXFieldNumber = 3;
+    private float finalBossX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float FinalBossX {
+      get { return finalBossX_; }
+      set {
+        finalBossX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "finalBossY" field.</summary>
+    public const int FinalBossYFieldNumber = 4;
+    private float finalBossY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float FinalBossY {
+      get { return finalBossY_; }
+      set {
+        finalBossY_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as S_WorldMap);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(S_WorldMap other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ShipPosX, other.ShipPosX)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ShipPosY, other.ShipPosY)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FinalBossX, other.FinalBossX)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FinalBossY, other.FinalBossY)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ShipPosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ShipPosX);
+      if (ShipPosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ShipPosY);
+      if (FinalBossX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FinalBossX);
+      if (FinalBossY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FinalBossY);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ShipPosX != 0F) {
+        output.WriteRawTag(13);
+        output.WriteFloat(ShipPosX);
+      }
+      if (ShipPosY != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(ShipPosY);
+      }
+      if (FinalBossX != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(FinalBossX);
+      }
+      if (FinalBossY != 0F) {
+        output.WriteRawTag(37);
+        output.WriteFloat(FinalBossY);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ShipPosX != 0F) {
+        size += 1 + 4;
+      }
+      if (ShipPosY != 0F) {
+        size += 1 + 4;
+      }
+      if (FinalBossX != 0F) {
+        size += 1 + 4;
+      }
+      if (FinalBossY != 0F) {
+        size += 1 + 4;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(S_WorldMap other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ShipPosX != 0F) {
+        ShipPosX = other.ShipPosX;
+      }
+      if (other.ShipPosY != 0F) {
+        ShipPosY = other.ShipPosY;
+      }
+      if (other.FinalBossX != 0F) {
+        FinalBossX = other.FinalBossX;
+      }
+      if (other.FinalBossY != 0F) {
+        FinalBossY = other.FinalBossY;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 13: {
+            ShipPosX = input.ReadFloat();
+            break;
+          }
+          case 21: {
+            ShipPosY = input.ReadFloat();
+            break;
+          }
+          case 29: {
+            FinalBossX = input.ReadFloat();
+            break;
+          }
+          case 37: {
+            FinalBossY = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class S_WorldMapEvent : pb::IMessage<S_WorldMapEvent> {
+    private static readonly pb::MessageParser<S_WorldMapEvent> _parser = new pb::MessageParser<S_WorldMapEvent>(() => new S_WorldMapEvent());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<S_WorldMapEvent> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Google.Protobuf.Protocol.ProtocolReflection.Descriptor.MessageTypes[18]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_WorldMapEvent() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_WorldMapEvent(S_WorldMapEvent other) : this() {
+      event_ = other.event_;
+      targetPosX_ = other.targetPosX_;
+      targetPosY_ = other.targetPosY_;
+      shipPosX_ = other.shipPosX_;
+      shipPosY_ = other.shipPosY_;
+      mapName_ = other.mapName_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_WorldMapEvent Clone() {
+      return new S_WorldMapEvent(this);
+    }
+
+    /// <summary>Field number for the "event" field.</summary>
+    public const int EventFieldNumber = 1;
+    private global::Google.Protobuf.Protocol.UIWorldMapEventType event_ = global::Google.Protobuf.Protocol.UIWorldMapEventType.SetTarget;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Google.Protobuf.Protocol.UIWorldMapEventType Event {
+      get { return event_; }
+      set {
+        event_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "targetPosX" field.</summary>
+    public const int TargetPosXFieldNumber = 2;
+    private float targetPosX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float TargetPosX {
+      get { return targetPosX_; }
+      set {
+        targetPosX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "targetPosY" field.</summary>
+    public const int TargetPosYFieldNumber = 3;
+    private float targetPosY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float TargetPosY {
+      get { return targetPosY_; }
+      set {
+        targetPosY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "shipPosX" field.</summary>
+    public const int ShipPosXFieldNumber = 4;
+    private float shipPosX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float ShipPosX {
+      get { return shipPosX_; }
+      set {
+        shipPosX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "shipPosY" field.</summary>
+    public const int ShipPosYFieldNumber = 5;
+    private float shipPosY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float ShipPosY {
+      get { return shipPosY_; }
+      set {
+        shipPosY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "mapName" field.</summary>
+    public const int MapNameFieldNumber = 6;
+    private string mapName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string MapName {
+      get { return mapName_; }
+      set {
+        mapName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as S_WorldMapEvent);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(S_WorldMapEvent other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Event != other.Event) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(TargetPosX, other.TargetPosX)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(TargetPosY, other.TargetPosY)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ShipPosX, other.ShipPosX)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ShipPosY, other.ShipPosY)) return false;
+      if (MapName != other.MapName) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Event != global::Google.Protobuf.Protocol.UIWorldMapEventType.SetTarget) hash ^= Event.GetHashCode();
+      if (TargetPosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(TargetPosX);
+      if (TargetPosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(TargetPosY);
+      if (ShipPosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ShipPosX);
+      if (ShipPosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ShipPosY);
+      if (MapName.Length != 0) hash ^= MapName.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Event != global::Google.Protobuf.Protocol.UIWorldMapEventType.SetTarget) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Event);
+      }
+      if (TargetPosX != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(TargetPosX);
+      }
+      if (TargetPosY != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(TargetPosY);
+      }
+      if (ShipPosX != 0F) {
+        output.WriteRawTag(37);
+        output.WriteFloat(ShipPosX);
+      }
+      if (ShipPosY != 0F) {
+        output.WriteRawTag(45);
+        output.WriteFloat(ShipPosY);
+      }
+      if (MapName.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(MapName);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Event != global::Google.Protobuf.Protocol.UIWorldMapEventType.SetTarget) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Event);
+      }
+      if (TargetPosX != 0F) {
+        size += 1 + 4;
+      }
+      if (TargetPosY != 0F) {
+        size += 1 + 4;
+      }
+      if (ShipPosX != 0F) {
+        size += 1 + 4;
+      }
+      if (ShipPosY != 0F) {
+        size += 1 + 4;
+      }
+      if (MapName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MapName);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(S_WorldMapEvent other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Event != global::Google.Protobuf.Protocol.UIWorldMapEventType.SetTarget) {
+        Event = other.Event;
+      }
+      if (other.TargetPosX != 0F) {
+        TargetPosX = other.TargetPosX;
+      }
+      if (other.TargetPosY != 0F) {
+        TargetPosY = other.TargetPosY;
+      }
+      if (other.ShipPosX != 0F) {
+        ShipPosX = other.ShipPosX;
+      }
+      if (other.ShipPosY != 0F) {
+        ShipPosY = other.ShipPosY;
+      }
+      if (other.MapName.Length != 0) {
+        MapName = other.MapName;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Event = (global::Google.Protobuf.Protocol.UIWorldMapEventType) input.ReadEnum();
+            break;
+          }
+          case 21: {
+            TargetPosX = input.ReadFloat();
+            break;
+          }
+          case 29: {
+            TargetPosY = input.ReadFloat();
+            break;
+          }
+          case 37: {
+            ShipPosX = input.ReadFloat();
+            break;
+          }
+          case 45: {
+            ShipPosY = input.ReadFloat();
+            break;
+          }
+          case 50: {
+            MapName = input.ReadString();
             break;
           }
         }
