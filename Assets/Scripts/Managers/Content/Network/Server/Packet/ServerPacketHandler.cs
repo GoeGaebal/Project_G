@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using System;
+using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
 using ServerCore;
@@ -21,7 +22,13 @@ partial class PacketHandler
 
 	public static void C_ChatHandler(PacketSession session, IMessage packet)
 	{
+		C_Chat chat = packet as C_Chat;
+		ClientSession clientSession = session as ClientSession;
+		if (chat == null || clientSession == null) return;
 		
+		S_Chat resChat = new S_Chat();
+		resChat.Msg = $"{clientSession.MyPlayer.Info.Name}: {chat.Msg}";
+		Managers.Network.Server.Room.Broadcast(resChat);
 	}
 
 	public static void C_SkillHandler(PacketSession session, IMessage packet)

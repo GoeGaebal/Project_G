@@ -64,6 +64,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
 {
     public ServerManager Server = new ServerManager();
     public ClientManager Client = new ClientManager();
+    public UI_Chat UIChat { get; set; }
 
     public bool isHost = false;
     
@@ -111,7 +112,6 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
     public const int MaxPlayer = 3;
     public Player LocalPlayer { get; set; }
     public Dictionary<int, Player> PlayerDict { get; private set; }
-    public Player[] OtherPlayers { get { return PlayerDict.Values.Where((x) => x.photonView.ViewID != LocalPlayer.photonView.ViewID).ToArray(); } }
 
     private Queue<Player> _playerQueue;
     public GameObject[] PlayerList => _playerList;
@@ -236,10 +236,10 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
                 if (data != null)
                 {
                     LootingPacket packet = Deserialize<LootingPacket>(data);
-                    if (packet.viewId == LocalPlayer.photonView.ViewID)
-                    { 
-                        ReceiveAddItemHandler?.Invoke(packet.guid);
-                    }
+                    // if (packet.viewId == LocalPlayer.photonView.ViewID)
+                    // { 
+                    //     ReceiveAddItemHandler?.Invoke(packet.guid);
+                    // }
                 }
 
                 break;
@@ -310,7 +310,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         // damaged
         if (packet.state == 0)
         {
-            Managers.Object.LocalObjectsDict[packet.guid].GetComponent<GatheringController>().ApplyDamage(packet.damage);
+            // Managers.Object.LocalObjectsDict[packet.guid].GetComponent<GatheringController>().ApplyDamage(packet.damage);
         }
         // died
         else if (packet.state == 1)
@@ -393,14 +393,14 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
                 }
             }
             stream.Add(PlayerDict.Count);
-            foreach (var onlinePlayer in PlayerDict)
-            {
-                stream.Add(onlinePlayer.Key);
-                stream.Add(onlinePlayer.Value.photonView.ViewID);
-            }
-            stream.Add(newPlayer.ActorNumber);
-            stream.Add(_playerQueue.Peek().photonView.ViewID);
-            PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.EnterRoom, Serialize(stream), new RaiseEventOptions { Receivers = ReceiverGroup.All }, new SendOptions { Reliability = true });
+            // foreach (var onlinePlayer in PlayerDict)
+            // {
+            //     stream.Add(onlinePlayer.Key);
+            //     stream.Add(onlinePlayer.Value.photonView.ViewID);
+            // }
+            // stream.Add(newPlayer.ActorNumber);
+            // stream.Add(_playerQueue.Peek().photonView.ViewID);
+            // PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.EnterRoom, Serialize(stream), new RaiseEventOptions { Receivers = ReceiverGroup.All }, new SendOptions { Reliability = true });
         }
     }
 
@@ -410,8 +410,8 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
 
         for (int i = 0; i < _playerQueue.Count; i++)
         {
-            if (_playerQueue.Peek().photonView.ViewID == viewId) return _playerQueue.Dequeue();
-            _playerQueue.Enqueue(_playerQueue.Dequeue());
+            // if (_playerQueue.Peek().photonView.ViewID == viewId) return _playerQueue.Dequeue();
+            // _playerQueue.Enqueue(_playerQueue.Dequeue());
         }
         return null;
     }

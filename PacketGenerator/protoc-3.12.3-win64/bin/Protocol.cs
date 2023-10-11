@@ -53,21 +53,23 @@ namespace Google.Protobuf.Protocol {
             "EiwKBWV2ZW50GAEgASgOMh0uUHJvdG9jb2wuVUlXb3JsZE1hcEV2ZW50VHlw",
             "ZRISCgp0YXJnZXRQb3NYGAIgASgCEhIKCnRhcmdldFBvc1kYAyABKAISEAoI",
             "c2hpcFBvc1gYBCABKAISEAoIc2hpcFBvc1kYBSABKAISDwoHbWFwTmFtZRgG",
-            "IAEoCSrnAQoFTXNnSWQSEAoMU19FTlRFUl9HQU1FEAASEAoMU19MRUFWRV9H",
-            "QU1FEAESCwoHU19TUEFXThACEg0KCVNfREVTUEFXThADEgoKBkNfTU9WRRAE",
-            "EgoKBlNfTU9WRRAFEgsKB0NfU0tJTEwQBhILCgdTX1NLSUxMEAcSDwoLU19D",
-            "SEFOR0VfSFAQCBIJCgVTX0RJRRAJEgoKBlNfQ0hBVBAKEgoKBkNfQ0hBVBAL",
-            "EhAKDFNfTE9BRF9TQ0VORRAMEg8KC1NfV09STERfTUFQEA0SFQoRU19XT1JM",
-            "RF9NQVBfRVZFTlQQDipgCglTY2VuZVR5cGUSCwoHVU5LTk9XThAAEgkKBUxP",
-            "QkJZEAESCAoER0FNRRACEggKBFNISVAQAxIOCgpGSU5BTF9CT1NTEAQSCwoH",
-            "TE9BRElORxAFEgoKBkNSRURJVBAGKkEKDUNyZWF0dXJlU3RhdGUSCAoESURM",
-            "RRAAEgcKA1JVThABEgoKBkFUVEFDSxACEgcKA0hJVBADEggKBERFQUQQBCpD",
-            "Cg5HYW1lT2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoHTU9O",
-            "U1RFUhACEg4KClBST0pFQ1RJTEUQAypBCglTa2lsbFR5cGUSDgoKU0tJTExf",
-            "Tk9ORRAAEg4KClNLSUxMX0FVVE8QARIUChBTS0lMTF9QUk9KRUNUSUxFEAIq",
-            "NQoTVUlXb3JsZE1hcEV2ZW50VHlwZRIOCgpTRVRfVEFSR0VUEAASDgoKUEFV",
-            "U0VfTU9WRRABQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3Rv",
-            "Mw=="));
+            "IAEoCSJKCgpTX09uRGFtYWdlEhAKCG9iamVjdElkGAEgASgFEgoKAkhQGAIg",
+            "ASgCEg4KBmRhbWFnZRgDIAEoAhIOCgZpc0RlYWQYBCABKAgq+AEKBU1zZ0lk",
+            "EhAKDFNfRU5URVJfR0FNRRAAEhAKDFNfTEVBVkVfR0FNRRABEgsKB1NfU1BB",
+            "V04QAhINCglTX0RFU1BBV04QAxIKCgZDX01PVkUQBBIKCgZTX01PVkUQBRIL",
+            "CgdDX1NLSUxMEAYSCwoHU19TS0lMTBAHEg8KC1NfQ0hBTkdFX0hQEAgSCQoF",
+            "U19ESUUQCRIKCgZTX0NIQVQQChIKCgZDX0NIQVQQCxIQCgxTX0xPQURfU0NF",
+            "TkUQDBIPCgtTX1dPUkxEX01BUBANEhUKEVNfV09STERfTUFQX0VWRU5UEA4S",
+            "DwoLU19PTl9EQU1BR0UQDypgCglTY2VuZVR5cGUSCwoHVU5LTk9XThAAEgkK",
+            "BUxPQkJZEAESCAoER0FNRRACEggKBFNISVAQAxIOCgpGSU5BTF9CT1NTEAQS",
+            "CwoHTE9BRElORxAFEgoKBkNSRURJVBAGKkEKDUNyZWF0dXJlU3RhdGUSCAoE",
+            "SURMRRAAEgcKA1JVThABEgoKBkFUVEFDSxACEgcKA0hJVBADEggKBERFQUQQ",
+            "BCpDCg5HYW1lT2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoH",
+            "TU9OU1RFUhACEg4KClBST0pFQ1RJTEUQAypBCglTa2lsbFR5cGUSDgoKU0tJ",
+            "TExfTk9ORRAAEg4KClNLSUxMX0FVVE8QARIUChBTS0lMTF9QUk9KRUNUSUxF",
+            "EAIqNQoTVUlXb3JsZE1hcEV2ZW50VHlwZRIOCgpTRVRfVEFSR0VUEAASDgoK",
+            "UEFVU0VfTU9WRRABQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.SceneType), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), typeof(global::Google.Protobuf.Protocol.UIWorldMapEventType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -89,7 +91,8 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Chat), global::Google.Protobuf.Protocol.C_Chat.Parser, new[]{ "Msg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadScene), global::Google.Protobuf.Protocol.S_LoadScene.Parser, new[]{ "SceneType", "PosX", "PosY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMap), global::Google.Protobuf.Protocol.S_WorldMap.Parser, new[]{ "ShipPosX", "ShipPosY", "FinalBossX", "FinalBossY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMapEvent), global::Google.Protobuf.Protocol.S_WorldMapEvent.Parser, new[]{ "Event", "TargetPosX", "TargetPosY", "ShipPosX", "ShipPosY", "MapName" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMapEvent), global::Google.Protobuf.Protocol.S_WorldMapEvent.Parser, new[]{ "Event", "TargetPosX", "TargetPosY", "ShipPosX", "ShipPosY", "MapName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_OnDamage), global::Google.Protobuf.Protocol.S_OnDamage.Parser, new[]{ "ObjectId", "HP", "Damage", "IsDead" }, null, null, null, null)
           }));
     }
     #endregion
@@ -112,6 +115,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("S_LOAD_SCENE")] SLoadScene = 12,
     [pbr::OriginalName("S_WORLD_MAP")] SWorldMap = 13,
     [pbr::OriginalName("S_WORLD_MAP_EVENT")] SWorldMapEvent = 14,
+    [pbr::OriginalName("S_ON_DAMAGE")] SOnDamage = 15,
   }
 
   public enum SceneType {
@@ -3379,6 +3383,219 @@ namespace Google.Protobuf.Protocol {
           }
           case 50: {
             MapName = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class S_OnDamage : pb::IMessage<S_OnDamage> {
+    private static readonly pb::MessageParser<S_OnDamage> _parser = new pb::MessageParser<S_OnDamage>(() => new S_OnDamage());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<S_OnDamage> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Google.Protobuf.Protocol.ProtocolReflection.Descriptor.MessageTypes[19]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_OnDamage() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_OnDamage(S_OnDamage other) : this() {
+      objectId_ = other.objectId_;
+      hP_ = other.hP_;
+      damage_ = other.damage_;
+      isDead_ = other.isDead_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_OnDamage Clone() {
+      return new S_OnDamage(this);
+    }
+
+    /// <summary>Field number for the "objectId" field.</summary>
+    public const int ObjectIdFieldNumber = 1;
+    private int objectId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ObjectId {
+      get { return objectId_; }
+      set {
+        objectId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "HP" field.</summary>
+    public const int HPFieldNumber = 2;
+    private float hP_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float HP {
+      get { return hP_; }
+      set {
+        hP_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "damage" field.</summary>
+    public const int DamageFieldNumber = 3;
+    private float damage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float Damage {
+      get { return damage_; }
+      set {
+        damage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isDead" field.</summary>
+    public const int IsDeadFieldNumber = 4;
+    private bool isDead_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDead {
+      get { return isDead_; }
+      set {
+        isDead_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as S_OnDamage);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(S_OnDamage other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ObjectId != other.ObjectId) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(HP, other.HP)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Damage, other.Damage)) return false;
+      if (IsDead != other.IsDead) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ObjectId != 0) hash ^= ObjectId.GetHashCode();
+      if (HP != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(HP);
+      if (Damage != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Damage);
+      if (IsDead != false) hash ^= IsDead.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ObjectId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(ObjectId);
+      }
+      if (HP != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(HP);
+      }
+      if (Damage != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(Damage);
+      }
+      if (IsDead != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(IsDead);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ObjectId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ObjectId);
+      }
+      if (HP != 0F) {
+        size += 1 + 4;
+      }
+      if (Damage != 0F) {
+        size += 1 + 4;
+      }
+      if (IsDead != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(S_OnDamage other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ObjectId != 0) {
+        ObjectId = other.ObjectId;
+      }
+      if (other.HP != 0F) {
+        HP = other.HP;
+      }
+      if (other.Damage != 0F) {
+        Damage = other.Damage;
+      }
+      if (other.IsDead != false) {
+        IsDead = other.IsDead;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ObjectId = input.ReadInt32();
+            break;
+          }
+          case 21: {
+            HP = input.ReadFloat();
+            break;
+          }
+          case 29: {
+            Damage = input.ReadFloat();
+            break;
+          }
+          case 32: {
+            IsDead = input.ReadBool();
             break;
           }
         }

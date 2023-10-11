@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System;
+using Google.Protobuf.Protocol;
 
 public class DamageableEntity : NetworkObject, IDamageable
 {
@@ -28,11 +29,19 @@ public class DamageableEntity : NetworkObject, IDamageable
     public virtual void OnDamage(float damage)
     {
         if (isDead) return;
-        if(PhotonNetwork.IsMasterClient)
+        if(Managers.Network.isHost)
         {
             HP -= damage;
-            photonView.RPC("UpdateHP",RpcTarget.Others,HP, isDead);
-            photonView.RPC("OnDamage",RpcTarget.Others,damage);
+            // photonView.RPC("UpdateHP",RpcTarget.Others,HP, isDead);
+            // photonView.RPC("OnDamage",RpcTarget.Others,damage);
+
+            S_OnDamage packet = new S_OnDamage();
+            packet.ObjectId = Id;
+            packet.Damage = damage;
+            packet.HP = HP;
+            packet.IsDead = isDead;
+            
+            Managers.Network.Server.Room.Broadcast(packet);
         }
         
         if (HP<=0 && !isDead)
@@ -40,8 +49,8 @@ public class DamageableEntity : NetworkObject, IDamageable
             Die();
         }
     }
-    [PunRPC]
-    public void UpdateHP(float health, bool dead) 
+    
+    public virtual void UpdateHP(float health, bool dead) 
     {
         this.HP = health;
         this.isDead = dead;

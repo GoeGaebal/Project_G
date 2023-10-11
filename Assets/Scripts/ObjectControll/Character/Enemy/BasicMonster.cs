@@ -1,13 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
-
-
-
-
-    public class BasicMonster : DamageableEntity
+public class BasicMonster : DamageableEntity
 {
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
@@ -48,7 +42,6 @@ using Photon.Pun;
             _animState = value; 
             AnimState.Init();
         }
-
     }
 
    
@@ -82,16 +75,16 @@ using Photon.Pun;
         if(!hasTarget)
         {
              if((transform.position - _spawnPosition).magnitude > 1.0f)
-            {
-                AnimState = runState;
-            }
+             {
+                 AnimState = runState;
+             }
 
-            foreach(var playerCollider in playerColliders)
-            {
-                if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
-                hasTarget = true;
-                target = playerCollider.gameObject;
-            }
+             foreach(var playerCollider in playerColliders)
+             {
+                 if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
+                 hasTarget = true;
+                 target = playerCollider.gameObject;
+             }
 
         }
 
@@ -118,8 +111,7 @@ using Photon.Pun;
         AnimState.UpdateInState();
         
     }
-
-    [PunRPC]
+    
     override public void OnDamage(float damage) 
     {
         base.OnDamage(damage);

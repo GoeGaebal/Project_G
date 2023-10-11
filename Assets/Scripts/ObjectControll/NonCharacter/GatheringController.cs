@@ -47,20 +47,14 @@ public class GatheringController : DamageableEntity
     [PunRPC]
     public override void OnDamage(float damage)
     {
-        if (PhotonNetwork.IsMasterClient) Managers.Network.BroadCastGatheringDamaged(guid, damage);
+        base.OnDamage(damage);
+        if(!isDead) StartCoroutine(nameof(OnDamageEnumerator));
     }
 
-    public void ApplyDamage(float damage)
+    public override void UpdateHP(float health, bool dead)
     {
-        if (isDead) return;
-        HP -= damage;
-        
         HPBar.fillAmount = HP / maxHP;
         HPText.text = $"{HP / maxHP:P2}";
-        
-        if (HP<=0 && !isDead)  Die();
-        else StartCoroutine(nameof(CoFlashWhite));
-        
     }
 
     public void ApplyDie()
@@ -75,7 +69,7 @@ public class GatheringController : DamageableEntity
         
     }
 
-    private IEnumerator CoFlashWhite()
+    private IEnumerator OnDamageEnumerator()
     {
         _anim.Play("ScrapDamage");
         yield return new WaitForSeconds(flashDuration);

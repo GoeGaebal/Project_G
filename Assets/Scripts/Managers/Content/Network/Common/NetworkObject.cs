@@ -2,7 +2,7 @@ using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 
-public class NetworkObject : MonoBehaviourPun
+public class NetworkObject : MonoBehaviour
 {
     public Google.Protobuf.Protocol.ObjectInfo Info { get; set; } = new();
     public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;

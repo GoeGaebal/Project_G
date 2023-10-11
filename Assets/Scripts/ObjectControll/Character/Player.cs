@@ -51,7 +51,7 @@ public class Player : DamageableEntity
 
         State = CreatureState.Idle;
         //카메라 이동 제한
-        if(photonView.IsMine)
+        if(Managers.Network.LocalPlayer == this)
         {
             playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             playerCameraController.SetPosition(transform.position);
@@ -161,7 +161,7 @@ public class Player : DamageableEntity
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (photonView.IsMine || !PhotonNetwork.IsConnected)
+        if (Managers.Network.LocalPlayer == this || !PhotonNetwork.IsConnected)
         {
              if(isDead) return;
              moveInput = context.ReadValue<Vector2>();

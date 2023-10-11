@@ -110,11 +110,17 @@ partial class PacketHandler
 	
 	public static void S_ChatHandler(PacketSession session, IMessage packet)
 	{
+		S_Chat chat = packet as S_Chat;
+		if (chat == null) return;
+		if(Managers.Network.UIChat != null)
+			Managers.Network.UIChat.UpdateChat(chat.Msg);
 	}
 	
 	public static void S_LoadSceneHandler(PacketSession session, IMessage packet)
 	{
 		S_LoadScene loadScenePacket = packet as S_LoadScene;
+		if (loadScenePacket == null) return;
+		
 		Managers.Scene.LoadScene(loadScenePacket.SceneType);
 		Managers.Network.LocalPlayer.transform.position = new(loadScenePacket.PosX, loadScenePacket.PosY);
 	}
@@ -131,6 +137,15 @@ partial class PacketHandler
 		if (Managers.Network.isHost) return;
 		S_WorldMapEvent worldMapPacket = packet as S_WorldMapEvent;
 		Managers.WorldMap.UI.UpdateByPacket(worldMapPacket);
+	}
+
+	public static void S_OnDamageHandler(PacketSession session, IMessage packet)
+	{
+		if (Managers.Network.isHost) return;
+		S_OnDamage damagePacket = packet as S_OnDamage;
+		DamageableEntity entity =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<DamageableEntity>();
+		entity.UpdateHP(damagePacket.HP, damagePacket.IsDead);
+		entity.OnDamage(damagePacket.Damage);
 	}
 }
 

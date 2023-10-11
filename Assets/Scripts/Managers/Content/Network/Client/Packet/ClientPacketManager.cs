@@ -41,7 +41,9 @@ public class ClientPacketManager
 		_onRecv.Add((ushort)MsgId.SWorldMap, MakePacket<S_WorldMap>);
 		_handler.Add((ushort)MsgId.SWorldMap, PacketHandler.S_WorldMapHandler);		
 		_onRecv.Add((ushort)MsgId.SWorldMapEvent, MakePacket<S_WorldMapEvent>);
-		_handler.Add((ushort)MsgId.SWorldMapEvent, PacketHandler.S_WorldMapEventHandler);
+		_handler.Add((ushort)MsgId.SWorldMapEvent, PacketHandler.S_WorldMapEventHandler);		
+		_onRecv.Add((ushort)MsgId.SOnDamage, MakePacket<S_OnDamage>);
+		_handler.Add((ushort)MsgId.SOnDamage, PacketHandler.S_OnDamageHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

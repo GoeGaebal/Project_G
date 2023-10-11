@@ -107,9 +107,9 @@ public class UI_Status : UI_Scene
     {
         UpdateHPBar();
         UpdateHPText();
-        int cnt = Managers.Network.OtherPlayers.Length;
-        for(int i = 0; i < cnt; i++)
-            uiOtherHps[i].SetStatus(Managers.Network.OtherPlayers[i]);
+        // int cnt = Managers.Network.OtherPlayers.Length;
+        // for(int i = 0; i < cnt; i++)
+        //     uiOtherHps[i].SetStatus(Managers.Network.OtherPlayers[i]);
     }
 
     void FixedUpdate()

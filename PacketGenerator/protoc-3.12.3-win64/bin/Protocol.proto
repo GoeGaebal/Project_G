@@ -20,6 +20,7 @@ enum MsgId {
   S_LOAD_SCENE = 12;
   S_WORLD_MAP = 13;
   S_WORLD_MAP_EVENT = 14;
+  S_ON_DAMAGE = 15;
 }
 
 enum SceneType {
@@ -159,4 +160,11 @@ message S_WorldMapEvent {
   float shipPosX = 4;
   float shipPosY = 5;
   string mapName = 6;
+}
+
+message S_OnDamage {
+  int32 objectId = 1;
+  float HP = 2;
+  float damage = 3;
+  bool isDead = 4;
 }
