@@ -9,6 +9,7 @@ public class ArtifactManager
     [HideInInspector] public Artifact[] artifactScrolls = new Artifact[0];//현재 보유 중인 유물 목록
     [HideInInspector] public UI_ArtifactSlot[] equippedArtifactSlots = new UI_ArtifactSlot[3];
     [HideInInspector] public int currentIndex = -1;
+    private Player _player;
 
     public void Init()
     {
@@ -26,6 +27,8 @@ public class ArtifactManager
                 ArtifactTileSet.setImage(i, artifacts[i].Image);
             }
         }
+
+        _player = Managers.Network.LocalPlayer;
     }
 
     public void AddScroll(string path)//새로운 유물 획득
@@ -59,11 +62,13 @@ public class ArtifactManager
     {//유물 목록 중 한 가지를 idx번째 슬롯에 장착
         artifacts[currentIndex] = artifact;
         ArtifactTileSet.setImage(currentIndex, artifact.Image);
+        _player.artifactDamage[currentIndex] = artifact.DamageIncrease;//플레이어 스탯에 연동
     }
 
     public void DeselectArtifact()
     {
         artifacts[currentIndex] = null;
         ArtifactTileSet.resetImage(currentIndex);
+        _player.artifactDamage[currentIndex] = 0f;
     }
 }

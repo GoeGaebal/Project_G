@@ -12,13 +12,16 @@ public class UI_Item : UI_Base
     }
     
     [SerializeField] private Image _icon; //아이템의 이미지
-    GameObject[] players;
-    GameObject player;
+    //GameObject[] players;
+    //GameObject player;
     public Text countText;//개수 텍스트
 
     [HideInInspector] public Item item;//아이템
     [HideInInspector] public int count = 1;//아이템 개수
-    [HideInInspector] public Transform parentBeforeDrag;
+    [HideInInspector] public Transform parentBeforeDrag;//복귀용
+    public UI_Slot parentSlot;
+
+    private Player _player;
 
     public override void Init()
     {
@@ -31,7 +34,7 @@ public class UI_Item : UI_Base
         AddUIEvent(gameObject, OnDrag, Define.UIEvent.Drag);
         AddUIEvent(gameObject, OnDrop, Define.UIEvent.Drop);
         AddUIEvent(gameObject, OnEndDrag, Define.UIEvent.EndDrag);
-        
+        /*
         players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
         foreach (GameObject p in players)
         {
@@ -41,13 +44,19 @@ public class UI_Item : UI_Base
                 player = p;
             }
         }
+        */
+        _player = Managers.Network.LocalPlayer;
+
+        parentSlot = transform.parent.GetComponent<UI_Slot>();//스탯 동기화를 위한 코드
+        parentSlot.ItemInThisSlot = item;
     }
 
-    public void InitializeItem(Item newItem)//슬롯의 아이콘을 해당 아이템의 것으로 변경
+    public void InitializeItem(Item newItem, int c)//슬롯의 아이콘을 해당 아이템의 것으로 변경
     {
         Init();
         item = newItem;
         _icon.sprite = item.Icon;
+        count = c;
         RefreshCount();
     }
     
@@ -61,7 +70,6 @@ public class UI_Item : UI_Base
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
-        
     }
 
     public void OnBeginDrag(PointerEventData eventData)//클릭했을 때
@@ -86,9 +94,10 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            if (currentItem.item.ID/100 == item.ID/100)//장비에 해당하는 장비창일 때
+            int idex = currentItem.item.ID / 100;
+            if (idex == item.ID/100)//장비에 해당하는 장비창일 때
             {
-                if(currentItem.item.ID/100 == 40 &&
+                if(idex == 40 &&
                 currentItem.item == item &&
                 count < ((CountableItem)item).MaxCount)//포션 슬롯의 경우
                 {
@@ -101,6 +110,9 @@ public class UI_Item : UI_Base
                     }
                     else//아이템 합침
                     {
+                        currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                        currentItem.parentSlot.ItemInThisSlot = null;
+
                         count += currentItem.count;
                         currentItem.RemoveItem();
                         UI_Inven.potion1Text.text = count.ToString();
@@ -114,11 +126,6 @@ public class UI_Item : UI_Base
                     {
                         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
-                    else if (currentItem.item.ID == 1002)
-                    {
-                        //도끼가 없어져서 주석 처리
-                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Axe);
-                    }
 
                     var parentTransform = transform.parent.transform;
 
@@ -127,6 +134,9 @@ public class UI_Item : UI_Base
 
                     currentItem.parentBeforeDrag = parentTransform;
                     currentItem.transform.SetParent(parentTransform);
+
+                    currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                    currentItem.parentSlot.ItemInThisSlot = currentItem.item;
                 }
             }
             else
@@ -134,6 +144,7 @@ public class UI_Item : UI_Base
                 return;
             }
         }
+
         else//슬롯이 인벤토리일 때
         {
             if (currentItem.item is CountableItem &&
@@ -148,6 +159,9 @@ public class UI_Item : UI_Base
                 }
                 else//아이템 합침
                 {
+                    currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                    currentItem.parentSlot.ItemInThisSlot = null;
+
                     count += currentItem.count;
                     currentItem.RemoveItem();
                 }
@@ -162,8 +176,14 @@ public class UI_Item : UI_Base
 
                 currentItem.parentBeforeDrag = parentTransform;
                 currentItem.transform.SetParent(parentTransform);
+
+                currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                currentItem.parentSlot.ItemInThisSlot = currentItem.item;
             }
         }
+
+        parentSlot = transform.parent.GetComponent<UI_Slot>();//스탯 동기화를 위한 코드
+        parentSlot.ItemInThisSlot = item;
     }
     
     public void OnEndDrag(PointerEventData eventData) // 마우스를 뗄 때
@@ -171,13 +191,12 @@ public class UI_Item : UI_Base
         Managers.UI.ResetCanvasOrder();
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
         {
-            if (player != null)
+            if (_player != null)
             {
                 //사과 개수만큼 드랍
-                Managers.Object.SpawnLootingItems(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
+                Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
                 RemoveItem();//인벤토리에서 삭제
             }
-
         }
         _icon.raycastTarget = true;
         transform.SetParent(parentBeforeDrag);//원래 위치로 아이템 복귀

@@ -368,7 +368,7 @@ public class NetworkManager : MonoBehaviourPun , IOnEventCallback ,IInRoomCallba
         if(!PhotonNetwork.IsMasterClient) return;
 
         Debug.Log("send time event");
-        object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot,Managers.TimeSlot.CountTimeSlotChanged, RotateTimer.GetTimerAngle()};
+        object[] content = new object[] { Managers.TimeSlot.CurrentTime, Managers.TimeSlot.TimeSlot, RotateTimer.GetTimerAngle()};
         RaiseEventOptions raiseEventOptions = new(){ Receivers = ReceiverGroup.Others};  
         PhotonNetwork.RaiseEvent((byte)CustomRaiseEventCode.SynchronizeTime, content, raiseEventOptions, SendOptions.SendReliable);
     }

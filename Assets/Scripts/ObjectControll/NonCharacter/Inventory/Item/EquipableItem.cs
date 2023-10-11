@@ -11,9 +11,13 @@ public  class EquipableItem : Item
     [SerializeField] private int _maxDurability = 200;
     [SerializeField] private int _currentDurability = _maxDurability;
     */
-
-
     //이해랑이 추가
+
+
+    public float AttackDamge => _attackDamage;//공격대미지
+
+
+    [SerializeField] private float _attackDamage = 1f;
     public virtual void ChangeEquipableItem()
     {}
 
