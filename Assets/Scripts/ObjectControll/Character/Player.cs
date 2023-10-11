@@ -12,15 +12,16 @@ public enum EnumPlayerStates
 public class Player : DamageableEntity
 {
     [SerializeField] private float moveSpeed = 5.0f;
+
     public float attackDamage = 10f;
 
-    public float[] artifactDamage = new float[] { 1f, 1f, 1f };
-    public float[] equipDamage = new float[] { 0f, 0f, 0f, 0f, 0f };
+    public float[] artifactDamage = new float[] { 0f, 0f, 0f };//유물 대미지 (곱연산)
+    public float[] equipDamage = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 대미지 (합연산)
 
-    public float[] artifactHP = new float[] { 1f, 1f, 1f };
-    public float[] equipHP = new float[] { 0f, 0f, 0f, 0f, 0f };
+    public float[] artifactHP = new float[] { 0f, 0f, 0f };//유물 체력 (곱연산)
+    public float[] equipHP = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 체력 (합연산)
 
-    public float realDamage = 0f;
+    public float realDamage = 0f;//장비, 유물 스탯 연산 이후 공격력
 
     private PlayerCameraController playerCameraController;
     private Vector2 moveInput;
@@ -115,7 +116,7 @@ public class Player : DamageableEntity
 
     private void Update()
     {
-        realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * artifactDamage[0] * artifactDamage[1] * artifactDamage[2];
+        realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
 
     public void BindingAction()

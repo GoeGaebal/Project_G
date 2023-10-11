@@ -19,7 +19,7 @@ public class UI_Item : UI_Base
     [HideInInspector] public Item item;//아이템
     [HideInInspector] public int count = 1;//아이템 개수
     [HideInInspector] public Transform parentBeforeDrag;//복귀용
-    private UI_Slot parentSlot;
+    public UI_Slot parentSlot;
 
     private Player _player;
 
@@ -48,7 +48,7 @@ public class UI_Item : UI_Base
         _player = Managers.Network.LocalPlayer;
 
         parentSlot = transform.parent.GetComponent<UI_Slot>();//스탯 동기화를 위한 코드
-        parentSlot.ItemInThisSlot = GetComponent<UI_Item>();
+        parentSlot.ItemInThisSlot = item;
     }
 
     public void InitializeItem(Item newItem, int c)//슬롯의 아이콘을 해당 아이템의 것으로 변경
@@ -70,7 +70,6 @@ public class UI_Item : UI_Base
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
-        
     }
 
     public void OnBeginDrag(PointerEventData eventData)//클릭했을 때
@@ -111,6 +110,9 @@ public class UI_Item : UI_Base
                     }
                     else//아이템 합침
                     {
+                        currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                        currentItem.parentSlot.ItemInThisSlot = null;
+
                         count += currentItem.count;
                         currentItem.RemoveItem();
                         UI_Inven.potion1Text.text = count.ToString();
@@ -132,6 +134,9 @@ public class UI_Item : UI_Base
 
                     currentItem.parentBeforeDrag = parentTransform;
                     currentItem.transform.SetParent(parentTransform);
+
+                    currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                    currentItem.parentSlot.ItemInThisSlot = currentItem.item;
                 }
             }
             else
@@ -154,6 +159,9 @@ public class UI_Item : UI_Base
                 }
                 else//아이템 합침
                 {
+                    currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                    currentItem.parentSlot.ItemInThisSlot = null;
+
                     count += currentItem.count;
                     currentItem.RemoveItem();
                 }
@@ -168,11 +176,14 @@ public class UI_Item : UI_Base
 
                 currentItem.parentBeforeDrag = parentTransform;
                 currentItem.transform.SetParent(parentTransform);
+
+                currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                currentItem.parentSlot.ItemInThisSlot = currentItem.item;
             }
         }
 
         parentSlot = transform.parent.GetComponent<UI_Slot>();//스탯 동기화를 위한 코드
-        parentSlot.ItemInThisSlot = GetComponent<UI_Item>();
+        parentSlot.ItemInThisSlot = item;
     }
     
     public void OnEndDrag(PointerEventData eventData) // 마우스를 뗄 때

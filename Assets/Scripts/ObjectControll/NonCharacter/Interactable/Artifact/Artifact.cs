@@ -13,7 +13,7 @@ public class Artifact : ScriptableObject
 
     [SerializeField] private int _id = 0;
     [SerializeField] private Sprite _Image;
-    [SerializeField] private float _hpIncrease = 1f;
-    [SerializeField] private float _damageIncrease = 1f;
-    [SerializeField] private float _shipSpeedIncrease = 1f;
+    [SerializeField] private float _hpIncrease = 0f;
+    [SerializeField] private float _damageIncrease = 0f;
+    [SerializeField] private float _shipSpeedIncrease = 0f;
 }

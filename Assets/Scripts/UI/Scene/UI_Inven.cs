@@ -91,6 +91,7 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             }
         }
 
+        // 스탯 텍스트 동기화
         _hpText.text = "체력: " + ((int)(_player.HP)).ToString() + " / " + ((int)(_player.maxHP)).ToString();
         _adText.text = "공격력: " + ((int)(_player.realDamage)).ToString();
     }

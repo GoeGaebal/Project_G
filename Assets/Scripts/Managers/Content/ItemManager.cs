@@ -36,6 +36,7 @@ public class ItemManager
     {
         GameObject newItemGo = Managers.Resource.Instantiate("UI/SubItem/UI_Item", Vector3.zero, Quaternion.identity, parent: slot.transform);//테스트용
         UI_Item itemInSlot = newItemGo.GetComponent<UI_Item>();
+
         if (slot.isEquip)
         {
             itemInSlot.InitializeItem(item, equipCount[slot.invIndex]);
