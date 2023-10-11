@@ -1,13 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
-using Photon.Pun;
 
-
-
-
-
-    public class BasicMonster : DamageableEntity
+public class BasicMonster : DamageableEntity
 {
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
@@ -48,7 +43,6 @@ using Photon.Pun;
             _animState = value; 
             AnimState.Init();
         }
-
     }
 
    
@@ -61,7 +55,9 @@ using Photon.Pun;
         target = null;
         lastAttackTime = 0;
         
-        dieAction += ()=> StartCoroutine(DieCoroutine());
+        dieAction -= ()=> StartCoroutine(nameof(DieCoroutine));
+        dieAction += ()=> StartCoroutine(nameof(DieCoroutine));
+
 
         idleState = new (this);
         runState = new(this);
@@ -82,16 +78,16 @@ using Photon.Pun;
         if(!hasTarget)
         {
              if((transform.position - _spawnPosition).magnitude > 1.0f)
-            {
-                AnimState = runState;
-            }
+             {
+                 AnimState = runState;
+             }
 
-            foreach(var playerCollider in playerColliders)
-            {
-                if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
-                hasTarget = true;
-                target = playerCollider.gameObject;
-            }
+             foreach(var playerCollider in playerColliders)
+             {
+                 if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
+                 hasTarget = true;
+                 target = playerCollider.gameObject;
+             }
 
         }
 
@@ -118,8 +114,7 @@ using Photon.Pun;
         AnimState.UpdateInState();
         
     }
-
-    [PunRPC]
+    
     override public void OnDamage(float damage) 
     {
         base.OnDamage(damage);
@@ -130,15 +125,19 @@ using Photon.Pun;
 
 
      protected virtual IEnumerator DieCoroutine()
-
-    {
+     {
         animator.ResetTrigger("hit");   
         animator.SetTrigger("die");
         yield return new WaitForSeconds(1.0f);
 
-        //여기에 아이템 드랍 코드 넣으면 됨
-        Destroy(gameObject);
-    }
+        if (Managers.Network.isHost)
+        {
+            S_Despawn despawn = new S_Despawn();
+            despawn.ObjectIds.Add(Id);
+            Managers.Network.Server.Room.Broadcast(despawn);
+            Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
+        }
+     }
         protected float GetDistance()
     { 
         return (target.transform.position - transform.position).magnitude;

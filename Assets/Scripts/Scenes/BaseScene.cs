@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +9,7 @@ using Object = UnityEngine.Object;
 
 public abstract class BaseScene : MonoBehaviourPunCallbacks
 {
-    public Define.Scene SceneType { get; protected set; } = Define.Scene.Unknown;
+    public SceneType SceneType { get; protected set; } = SceneType.Unknown;
 
 	void Awake()
 	{

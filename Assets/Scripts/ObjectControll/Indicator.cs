@@ -41,7 +41,7 @@ public class Indicator : MonoBehaviourPun
 
     void Update()
     {
-        SetIndicator();
+        // SetIndicator();
     }
  
  
@@ -134,7 +134,7 @@ public class Indicator : MonoBehaviourPun
  
     private bool isOffScreen()
     {
-        Debug.Log("isOffScreen");
+        // Debug.Log("isOffScreen");
         Vector2 vec = Camera.main.WorldToViewportPoint(transform.position);
         // 화면에 보이는 경우
         if (vec.x >= 0 && vec.x <= 1 && vec.y >= 0 && vec.y <= 1) 

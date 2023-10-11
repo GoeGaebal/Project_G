@@ -82,13 +82,14 @@ public class BossMonster : BasicMonster
     }
 
     protected override IEnumerator DieCoroutine()
-
     {
         animator.ResetTrigger("hit");   
         animator.SetTrigger("die");
         yield return new WaitForSeconds(1.0f);
 
         //여기에 아티팩트 드랍 코드 넣으면 됨
+        Managers.Network.RequestSpawnLootingItems(5101, 10, transform.position, 2.0f, 1.0f);
+        Managers.Network.RequestSpawnLootingItems(5001, 5, transform.position, 2.0f, 1.0f);
         Destroy(gameObject);
     }
 
@@ -151,7 +152,7 @@ public class BossMonster : BasicMonster
             {
                 return;
             }
-            _bossMonster.Target.transform.position = (Vector2)_bossMonster.transform.position + Vector2.right*0.5f;
+            _bossMonster.Target.transform.position = (Vector2)_bossMonster.transform.position + Vector2.right * 0.5f;
         }
 
     }

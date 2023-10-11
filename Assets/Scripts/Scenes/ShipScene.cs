@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class ShipScene : BaseScene
     {
         if(!isStarted) isStarted = true;
         base.Init();
-        SceneType = Define.Scene.Ship;
+        SceneType = SceneType.Ship;
         Managers.Map.LoadMap(4);
 
         Dictionary<int, Player>.ValueCollection playerComponents = Managers.Network.PlayerDict.Values; 
@@ -58,17 +59,6 @@ public class ShipScene : BaseScene
 
     private void Start()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            Managers.UI.SetEventSystem();
-            GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
-            // 테스트용 강제 설정
-            PhotonView view = player.GetComponent<PhotonView>();
-            PhotonView[] weaponView = player.GetPhotonViewsInChildren();
-            PhotonNetwork.AllocateViewID(view);
-            PhotonNetwork.AllocateViewID(weaponView[1]);
-        }
-        
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
         //Managers.UI.ShowSceneUI<UI_Map>();
@@ -83,7 +73,11 @@ public class ShipScene : BaseScene
 
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
-        scene.AddNames(null);
+        // scene.AddNames(null);
+        // foreach (var player in Managers.Network.PlayerDict.Values)
+        // {
+        //     player.transform.position = Vector3.zero;
+        // }
     }
 
     public override void Clear()

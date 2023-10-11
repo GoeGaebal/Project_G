@@ -48,6 +48,13 @@ public class UI_CreateRoomSetting : UI_Popup
         GetButton((int)Buttons.ExitBtn).onClick.AddListener((() => { Managers.UI.ClosePopupUI(); }));
         LoadingSet = GetObject((int)GameObjects.LoadingSet);
         LoadingSet.SetActive(false);
+        
+        CreateRoomBtn.onClick.RemoveAllListeners();
+        CreateRoomBtn.onClick.AddListener(() =>
+        {
+            Managers.Network.CreateRoom();
+            
+        });
     }
     
     public void SetInteractableButtons(bool value)

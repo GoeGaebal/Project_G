@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Intro.unity
     guid: 6c93b19726fdd6345aee2724a3a64d64
   - enabled: 1
@@ -17,15 +17,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Ship.unity
     guid: 6882f7c4fcf2313469fb0f2755016c3d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FinalBoss.unity
     guid: bda2f18577f672541920d4b654762930
   - enabled: 1
     path: Assets/Scenes/Loading.unity
     guid: 6bccafc84eed1e2419de5edad28b7b44
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Credit.unity
     guid: 741fb97d301bdbe4c848adfd6b141f05
+  - enabled: 0
+    path: Assets/Scenes/NetworkTest.unity
+    guid: 81ce56e19a348f14486d9199253974a5
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: d1f073cbcf5dc3f4489128403befbf05,
       type: 2}

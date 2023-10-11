@@ -1,9 +1,11 @@
 using System;
+using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using WebSocketSharp;
 
+// TODO : UI_Chat에서 직접 Send 하는 부분을 옮겨야 함
 public class UI_Chat : UI_Scene
 {
     enum GameObjects
@@ -36,8 +38,7 @@ public class UI_Chat : UI_Scene
         Managers.Input.UIActions.Submit.AddEvent(FocusInputField);
         Get<TMP_InputField>((int)InputFields.InputField).onSelect.AddListener(delegate { Managers.Input.PlayerActionMap.Disable(); });
         Get<TMP_InputField>((int)InputFields.InputField).onDeselect.AddListener(delegate { Managers.Input.PlayerActionMap.Enable(); });
-        Managers.Network.ReceiveChatHandler -= UpdateChat;
-        Managers.Network.ReceiveChatHandler += UpdateChat;
+        Managers.Network.UIChat = this;
         Get<TMP_InputField>((int)InputFields.InputField).onSubmit.AddListener(delegate { SendChat(); } );
         // Get<TMP_InputField>((int)InputFields.InputField).onEndEdit.AddListener(OnEndEditEventMethod);
     }
@@ -61,12 +62,14 @@ public class UI_Chat : UI_Scene
     {
         TMP_InputField inputField = Get<TMP_InputField>((int)InputFields.InputField);
         if (inputField.text.IsNullOrEmpty()) return;
-        else
-            Managers.Network.SendChat(inputField.text);
+        
+        C_Chat chat = new C_Chat();
+        chat.Msg = String.Copy(inputField.text);
+        Managers.Network.Client.Send(chat);
         inputField.text = "";
     }
 
-    private void UpdateChat(string text)
+    public void UpdateChat(string text)
     {
         GameObject chatText = Managers.Resource.Instantiate("UI/SubItem/UI_ChatText", Vector3.zero, Quaternion.identity,
             parent: Get<GameObject>((int)GameObjects.Content).transform);

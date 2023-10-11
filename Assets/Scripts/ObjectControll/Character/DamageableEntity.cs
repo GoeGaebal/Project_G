@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System;
+using Google.Protobuf.Protocol;
 
-public class DamageableEntity : MonoBehaviourPun, IDamageable
+public class DamageableEntity : NetworkObject, IDamageable
 {
     public float maxHP;
     public float HP{get;protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.
 
-    public bool isDead {get;set;}
+    public bool isDead {get; set;}
 
     // event는 Action이 이 클래스 외부에서 실행되는 것을 방지한다.
     // 그리고 Ondeath가 호출되어야 하는 시점에 어떤 행동을 해야 하는지 런타임 단계에서 정할 수 있다.
@@ -28,11 +29,16 @@ public class DamageableEntity : MonoBehaviourPun, IDamageable
     public virtual void OnDamage(float damage)
     {
         if (isDead) return;
-        if(PhotonNetwork.IsMasterClient)
+        if(Managers.Network.isHost)
         {
             HP -= damage;
-            photonView.RPC("UpdateHP",RpcTarget.Others,HP, isDead);
-            photonView.RPC("OnDamage",RpcTarget.Others,damage);
+            S_OnDamage packet = new S_OnDamage();
+            packet.ObjectId = Id;
+            packet.Damage = damage;
+            packet.HP = HP;
+            packet.IsDead = isDead;
+            UpdateHP(HP, isDead);
+            Managers.Network.Server.Room.Broadcast(packet);
         }
         
         if (HP<=0 && !isDead)
@@ -40,8 +46,8 @@ public class DamageableEntity : MonoBehaviourPun, IDamageable
             Die();
         }
     }
-    [PunRPC]
-    public void UpdateHP(float health, bool dead) 
+    
+    public virtual void UpdateHP(float health, bool dead) 
     {
         this.HP = health;
         this.isDead = dead;
@@ -61,14 +67,14 @@ public class DamageableEntity : MonoBehaviourPun, IDamageable
     /// 적이 죽었을 때 호출되는 함수
     /// </summary>
     public virtual void Die()
-    { 
+    {
         if (isDead) return;
         isDead = true;
 
         if(dieAction != null)
         {
             Debug.Log("die action");
-            dieAction();  
+            dieAction.Invoke();
         }
         Debug.Log("Die");
         

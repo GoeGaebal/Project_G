@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public partial class FinalBossMonster : DamageableEntity
@@ -47,6 +48,6 @@ public partial class FinalBossMonster : DamageableEntity
         yield return new WaitForSeconds(3.0f);
 
         Destroy(gameObject);
-        Managers.Scene.LoadScene(Define.Scene.Credit);
+        Managers.Scene.LoadScene(SceneType.Credit);
     }
 }

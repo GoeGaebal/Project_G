@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,10 +28,10 @@ public class SceneManagerEx
     /// <param name="type">
     /// Define에 존재하는 Scene enum class에 존재하는 상수
     /// /param>
-	public void LoadScene(Define.Scene type)
+	public void LoadScene(SceneType type)
     {
         Managers.Clear();
-        SceneManager.LoadScene(GetSceneName(Define.Scene.Loading));
+        SceneManager.LoadScene(GetSceneName(SceneType.Loading));
         _isLoading = true;
         loadedTime = 0;
         nextSceneName = GetSceneName(type);
@@ -43,12 +44,14 @@ public class SceneManagerEx
         
         else if(_isLoading == true && loadedTime < minTime)
         {
+            Managers.Input.Asset.Disable();
             loadedTime += time;
         }
         else 
         {
             _asyncOp = SceneManager.LoadSceneAsync(nextSceneName);
             _isLoading = false;
+            Managers.Input.Asset.Enable();
         }
 
     }
@@ -62,16 +65,16 @@ public class SceneManagerEx
     /// <param name="type">
     /// Define에 존재하는 Scene enum class에 존재하는 상수
     /// /param>
-    public void LoadLevel(Define.Scene type)
+    public void LoadLevel(SceneType type)
     {
         Managers.Clear();
         
         PhotonNetwork.LoadLevel(GetSceneName(type));
     }
 
-    private string GetSceneName(Define.Scene type)
+    private string GetSceneName(SceneType type)
     {
-        string name = System.Enum.GetName(typeof(Define.Scene), type);
+        string name = System.Enum.GetName(typeof(SceneType), type);
         return name;
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 
@@ -24,7 +25,8 @@ public class GameScene : BaseScene
     {
         _thisScene = this;
         base.Init();
-        SceneType = Define.Scene.Game;
+        SceneType = SceneType.Game;
+        
         Managers.Map.LoadMap(1);
         Managers.Sound.Play("Plane_BGM", Define.Sound.Bgm);
     }
@@ -33,6 +35,7 @@ public class GameScene : BaseScene
     {
         // Managers.Network.SpawnLocalPlayer(Vector3.zero);
         Managers.Object.SpawnGatherings(1,5);
+        
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
         Managers.UI.ShowSceneUI<UI_Map>();
@@ -40,6 +43,10 @@ public class GameScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chat>();
         
         _playerLifeCnt = Managers.Network.PlayerDict.Count;
+        foreach (var player in Managers.Network.PlayerDict.Values)
+        {
+            player.transform.position = Vector3.zero;
+        }
     }
 
     public override void Clear()
@@ -52,6 +59,6 @@ public class GameScene : BaseScene
         //Managers.UI.ShowSceneUI<>();
         yield return new WaitForSeconds(3.0f);
         UI_Leaf.AvailableCount--;
-        Managers.Scene.LoadScene(Define.Scene.Ship);
+        Managers.Scene.LoadScene(SceneType.Ship);
     }
 }

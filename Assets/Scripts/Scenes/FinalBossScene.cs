@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class FinalBossScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.Scene.Ship;
+        SceneType = SceneType.Ship;
         Managers.Map.LoadMap(4);
         Managers.Input.PlayerActionMap.Enable();
 

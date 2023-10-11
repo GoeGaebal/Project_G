@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -42,12 +43,22 @@ public class MapManager
         DestoryMap();
         // 1인 경우 000 중 마지막 0만 1로 바꿈
         string mapName = "Map_" + mapId.ToString("000");
+        currentMapId = mapId;
         GameObject go = Managers.Resource.Instantiate($"Map/{mapName}", Vector3.zero, Quaternion.identity);
         go.name = "Map";
         Tilemap tmBase = Util.FindChild<Tilemap>(go, "Grass_Tilemap", true);
         var cellBounds = tmBase.cellBounds;
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
+        
+        BasicMonster[] monsters = go.GetComponentsInChildren<BasicMonster>();
+        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
+        foreach (var monster in monsters)
+            Managers.Resource.Destroy(monster.gameObject);
+        GatheringController[] gatherings = go.GetComponentsInChildren<GatheringController>();
+        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
+        foreach (var gathering in gatherings)
+            Managers.Resource.Destroy(gathering.gameObject);
     }
 
     // TODO : 충돌 지점이 정중앙이기 때문에 원하는 느낌이 나오지 못함

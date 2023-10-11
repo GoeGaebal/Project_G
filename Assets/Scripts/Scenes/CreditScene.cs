@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using Photon;
 
@@ -16,7 +17,7 @@ public class CreditScene : BaseScene
         Photon.Pun.PhotonNetwork.LeaveRoom();
         yield return new WaitForSeconds(3f);
         
-        Managers.Scene.LoadScene(Define.Scene.Lobby);
+        Managers.Scene.LoadScene(SceneType.Credit);
         
         
         

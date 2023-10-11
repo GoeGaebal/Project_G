@@ -2026,7 +2026,7 @@ GameObject:
   - component: {fileID: 1744205016629997602}
   m_Layer: 0
   m_Name: Map_005
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31071,6 +31071,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Portal (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5976556288755945178, guid: d13da8c84152f884cadb5048423210a8,
+        type: 3}
+      propertyPath: isExitPortal
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6843920580590945153, guid: d13da8c84152f884cadb5048423210a8,
         type: 3}

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,26 +22,37 @@ public class Portal : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!Managers.Network.isHost) return;
+        Player player = null;
+        if (!other.TryGetComponent<Player>(out player)) return;
+        
         incomingObjectCount++;
-        if (isExitPortal && Managers.Network.PlayerDict[other.gameObject.GetPhotonView().OwnerActorNr] == Managers.Network.LocalPlayer)
+        if (isExitPortal)
         {
-            PhotonNetwork.LeaveRoom();
+            S_LeaveGame packet = new S_LeaveGame();
+            player.Session.Send(packet);
+            //Managers.Network.Server.Room.LeaveGame(player.Info.ObjectId);
         }
         else
         {
-            if (_movable && PhotonNetwork.CurrentRoom.PlayerCount <= incomingObjectCount)
+            // TODO : 추후 서버측으로 완전 이전
+            if (_movable && Managers.Network.Server.Room.PlayersCount <= incomingObjectCount)
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
-                    Managers.Scene.LoadScene(Define.Scene.Ship);
+                    foreach (Player p in Managers.Network.Server.Room.Players.Values)
+                    {
+                        DontDestroyOnLoad(p.gameObject);
+                    }
+                    Managers.Network.Server.Room.LoadScene(SceneType.Ship);
                 }
                 else if (SceneManager.GetActiveScene().name == "Ship")
                 {
-                    Managers.Scene.LoadScene(Define.Scene.Game);
+                    Managers.Network.Server.Room.LoadScene(SceneType.Game);
                 }
                 else if (SceneManager.GetActiveScene().name == "Game")
                 {
-                    Managers.Scene.LoadScene(Define.Scene.Ship);
+                    Managers.Network.Server.Room.LoadScene(SceneType.Ship);
                 }
             }
         }

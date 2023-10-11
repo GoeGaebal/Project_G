@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using UnityEngine.EventSystems;
 using TMPro;
+using Unity.VisualScripting;
 
 public class UI_Worldmap : UI_Scene
 {
@@ -39,7 +41,7 @@ public class UI_Worldmap : UI_Scene
     private GameObject _ship;//배
     private Sprite _rightShip;//배 오른쪽 이미지
     private Sprite _leftShip;//배 왼쪽 이미지
-    private GameObject _target;//이동 목표
+    private Vector3 _targetPosition;//이동 목표
     private float _elapsedTime = 0f;
     private int _speed = 50;//초당 이동 거리
     private float _timePerMeter;//거리 1 이동하는데 걸리는 시간
@@ -79,10 +81,10 @@ public class UI_Worldmap : UI_Scene
 
         if (_moveFlag)
         {
-            if (Vector2.Distance(_ship.transform.localPosition, _target.transform.localPosition) >= 1f)
+            if (Vector2.Distance(_ship.transform.localPosition, _targetPosition) >= 1f)
             {
                 MoveToTarget();
-                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_target.name[6] - '0'].name + "로 이동 중");
+                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_mapName[6] - '0'].name + "로 이동 중");
             }
             else
             {
@@ -95,7 +97,7 @@ public class UI_Worldmap : UI_Scene
         }
         if (_arriveFlag && _mapName != "Worldmap_Ship")
         {
-            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_target.name[6] - '0'].name + "에 정박 중");
+            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_mapName[6] - '0'].name + "에 정박 중");
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
 
@@ -123,7 +125,7 @@ public class UI_Worldmap : UI_Scene
         _ship = Get<GameObject>((int)GameObjects.Worldmap_Ship);
         _rightShip = Managers.Resource.Load<Sprite>("Art/UI/WorldMap/Worldmap_Ship");
         _leftShip = Managers.Resource.Load<Sprite>("Art/UI/WorldMap/Worldmap_Ship_Left");
-        _target = _ship;
+        _targetPosition = _ship.transform.localPosition;
         _timePerMeter = 1f / _speed;
         _lrGO = Get<GameObject>((int)GameObjects.Worldmap_Line);
         _lr = _lrGO.GetComponent<UILineRenderer>();
@@ -145,22 +147,24 @@ public class UI_Worldmap : UI_Scene
         GetButton((int)Buttons.Map_001).gameObject.BindEvent(OnWorldmapButtonClick);
         GetButton((int)Buttons.Map_002).gameObject.BindEvent(OnWorldmapButtonClick);
         GetButton((int)Buttons.Map_003).gameObject.BindEvent(OnWorldmapButtonClick);
-        GetButton((int)Buttons.Worldmap_Button_Stop).gameObject.BindEvent(PauseMove);
+        GetButton((int)Buttons.Worldmap_Button_Stop).onClick.AddListener(PauseMove);
 
         //set the ship position on world map manager
         Managers.WorldMap.Ship = _ship;
         Managers.WorldMap.FinalBoss = _finalBoss;
+
+        Managers.WorldMap.UI = this;
     }
 
     public void SetTarget(GameObject t)//목표 지정
     {
-        _target = t;
+        _targetPosition = t.transform.localPosition;
         _mapName = t.name;
     }
     private void MoveToTarget()//목표 방향으로 이동
     {
         _elapsedTime += Time.deltaTime;
-        Vector2 direction = _target.transform.localPosition - _ship.transform.localPosition;
+        Vector2 direction = _targetPosition - _ship.transform.localPosition;
         if (_elapsedTime >= _timePerMeter)
         {
             _ship.transform.localPosition = _ship.transform.localPosition + ((Vector3)(direction.normalized) * (_elapsedTime / _timePerMeter));
@@ -201,21 +205,34 @@ public class UI_Worldmap : UI_Scene
     private void SetLine()//배와 목표 사이 선 새로 긋기
     {
         _lrGO.transform.position = _ship.transform.position;
-        _lr.Points[0] = _ship.transform.InverseTransformPoint(_ship.transform.position); ;
-        _lr.Points[1] = _ship.transform.InverseTransformPoint(_target.transform.position);
+        _lr.Points[0] = Vector2.zero;
+        _lr.Points[1] = _targetPosition - _lrGO.transform.localPosition;
         _lr.SetAllDirty();
     }
 
     public void OnWorldmapButtonClick(PointerEventData evt)
     {
+        if (!Managers.Network.isHost) return;
+        
         SetTarget(evt.pointerPress);
         _arriveFlag = false;
         _moveFlag = true;
         _lr.enabled = true;
+        
+        S_WorldMapEvent packet = new S_WorldMapEvent();
+        packet.Event = UIWorldMapEventType.SetTarget;
+        packet.ShipPosX = _ship.transform.localPosition.x;
+        packet.ShipPosY = _ship.transform.localPosition.y;
+        packet.TargetPosX = _targetPosition.x;
+        packet.TargetPosY = _targetPosition.y;
+        packet.MapName = _mapName;
+        Managers.Network.Server.Room.Broadcast(packet);
     }
 
-    public void PauseMove(PointerEventData evt)
+    public void PauseMove()
     {
+        if (!Managers.Network.isHost) return;
+        
         SetTarget(_ship);
         _moveFlag = false;
         _lr.enabled = false;
@@ -223,6 +240,41 @@ public class UI_Worldmap : UI_Scene
         _timeText.SetActive(false);
         _distanceText.SetActive(false);
         _arrow.SetActive(false);
+
+        S_WorldMapEvent packet = new S_WorldMapEvent();
+        packet.Event = UIWorldMapEventType.PauseMove;
+        packet.ShipPosX = _ship.transform.localPosition.x;
+        packet.ShipPosY = _ship.transform.localPosition.y;
+        packet.TargetPosX = _targetPosition.x;
+        packet.TargetPosY = _targetPosition.y;
+        packet.MapName = _mapName;
+        Managers.Network.Server.Room.Broadcast(packet);
+    }
+
+    // TODO : 추후 통합 필요
+    public void UpdateByPacket(S_WorldMapEvent evt)
+    {
+        if (evt.Event == UIWorldMapEventType.SetTarget)
+        {
+            _targetPosition = new Vector3(evt.TargetPosX, evt.TargetPosY);
+            _ship.transform.localPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
+            _mapName = evt.MapName;
+            _arriveFlag = false;
+            _moveFlag = true;
+            _lr.enabled = true;
+        }
+        else
+        {
+            _targetPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
+            _ship.transform.localPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
+            _mapName = evt.MapName;
+            _moveFlag = false;
+            _lr.enabled = false;
+            _movingText.GetComponent<TMP_Text>().SetText("정지 중");
+            _timeText.SetActive(false);
+            _distanceText.SetActive(false);
+            _arrow.SetActive(false);
+        }
     }
 
     public void OpenWorldmapUI(/*PointerEventData evt*/)

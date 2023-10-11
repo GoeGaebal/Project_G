@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package Protocol;
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId {
+  S_ENTER_GAME = 0;
+  S_LEAVE_GAME = 1;
+  S_SPAWN = 2;
+  S_DESPAWN = 3;
+  C_MOVE = 4;
+  S_MOVE = 5;
+  C_SKILL = 6;
+  S_SKILL = 7;
+  S_CHANGE_HP = 8;
+  S_DIE = 9;
+  S_CHAT = 10;
+  C_CHAT = 11;
+  S_LOAD_SCENE = 12;
+  S_WORLD_MAP = 13;
+  S_WORLD_MAP_EVENT = 14;
+  S_ON_DAMAGE = 15;
+  S_ADD_ITEM = 16;
+}
+
+enum SceneType {
+    UNKNOWN = 0;
+    LOBBY = 1;
+    GAME = 2;
+    SHIP = 3;
+    FINAL_BOSS = 4;
+    LOADING = 5;
+    CREDIT = 6;
+}
+
+enum CreatureState {
+  IDLE = 0;
+  RUN = 1;
+  ATTACK = 2;
+  HIT = 3;
+  DEAD = 4;
+}
+
+enum GameObjectType {
+  NONE = 0;
+  PLAYER = 1;
+  MONSTER = 2;
+  GATHERING = 3;
+  LOOTING_ITEM = 4;
+}
+
+enum SkillType {
+  SKILL_NONE = 0;
+  SKILL_AUTO = 1;
+  SKILL_PROJECTILE = 2;
+}
+
+enum UIWorldMapEventType {
+  SET_TARGET = 0;
+  PAUSE_MOVE = 1;
+}
+
+message S_EnterGame {
+  ObjectInfo player = 1;
+}
+
+message S_LeaveGame {
+}
+
+message S_Spawn {
+  repeated ObjectInfo objects = 1;
+}
+
+message S_Despawn {
+  repeated int32 objectIds = 1;
+}
+
+message C_Move {
+  PositionInfo posInfo = 1;
+}
+
+message S_Move {
+  int32 objectId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Skill {
+  SkillInfo info = 1;
+}
+
+message S_Skill {
+  int32 objectId = 1;
+  SkillInfo info = 2;
+}
+
+message S_ChangeHp {
+  int32 objectId = 1;
+  int32 hp = 2;
+}
+
+message S_Die {
+  int32 objectId = 1;
+  int32 attackerId = 2;
+}
+
+message ObjectInfo {
+  int32 objectId = 1;
+  string name = 2;
+  PositionInfo posInfo = 3;
+  StatInfo statInfo = 4;
+}
+
+message PositionInfo {
+  CreatureState state = 1;
+  int32 dir = 2;
+  float posX = 3;
+  float posY = 4;
+  float wposX = 5;
+  float wposY = 6;
+  float wrotZ = 7;
+}
+
+message StatInfo {
+  int32 level = 1;
+  int32 hp = 2;
+  int32 maxHp = 3;
+  int32 attack = 4;
+  float speed = 5;
+  int32 totalExp = 6;
+}
+
+message SkillInfo {
+  int32 skillId = 1;
+}
+
+message S_Chat {
+  string msg = 1;
+}
+
+message C_Chat {
+  string msg = 1;
+}
+
+message S_LoadScene {
+    SceneType sceneType = 1;
+    float posX = 2;
+    float posY = 3;
+}
+
+message S_WorldMap {
+  float shipPosX = 1;
+  float shipPosY = 2;
+  float finalBossX = 3;
+  float finalBossY = 4;
+}
+
+message S_WorldMapEvent {
+  UIWorldMapEventType event = 1;
+  float targetPosX = 2;
+  float targetPosY = 3;
+  float shipPosX = 4;
+  float shipPosY = 5;
+  string mapName = 6;
+}
+
+message S_OnDamage {
+  int32 objectId = 1;
+  float HP = 2;
+  float damage = 3;
+  bool isDead = 4;
+}
+
+message S_AddItem {
+  int32 objectId = 1;
+  int32 itemId = 2;
+}

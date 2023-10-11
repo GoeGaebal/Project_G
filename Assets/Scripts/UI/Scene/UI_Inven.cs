@@ -66,13 +66,13 @@ public class UI_Inven : UI_Scene//, IDataPersistence
 
     public static System.Func<Item, int> checkItem;
     public static System.Action<Item, int> removeItems;
-    public static System.Action<Item> additem;
+    public static System.Func<Item, bool> additem;
 
     private void Awake()
     {
         checkItem = CheckItem;
         removeItems = (itm, n) => { RemoveItems(itm, n); };
-        additem = (itm) => { AddItem(itm); };
+        additem = (itm) => { return AddItem(itm); };
     }
 
     private void Start()

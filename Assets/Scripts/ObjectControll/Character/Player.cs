@@ -1,13 +1,10 @@
 using System;
 using System.Collections;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Photon.Pun;
-
-public enum EnumPlayerStates
-{
-    Idle, Attack, Run, Hit
-}
+using Server;
 
 public class Player : DamageableEntity
 {
@@ -24,29 +21,24 @@ public class Player : DamageableEntity
     public float realDamage = 0f;//장비, 유물 스탯 연산 이후 공격력
 
     private PlayerCameraController playerCameraController;
+    private WeaponPivotController wpc;
     private Vector2 moveInput;
 
     private Rigidbody2D rb;
 
     protected Animator animator;
 
-    private EnumPlayerStates _state;
+    private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
 
-    private PhotonView[] _photonViews;
-    public PhotonView[] PhotonViews {
-        get
-        {
-            _photonViews ??= gameObject.GetPhotonViewsInChildren();
-            return _photonViews;
-        }
-    }
+    public ClientSession Session { get; set; }
+
     IInteractable interactable;
     string interactableName;
 
-    public EnumPlayerStates State
+    public CreatureState State
     {
         get{
             return _state;
@@ -56,14 +48,22 @@ public class Player : DamageableEntity
                 UpdateState();
         }
     }
-    
+
+    private void Awake()
+    {
+        ObjectType = GameObjectType.Player;
+        wpc = transform.GetComponentInChildren<WeaponPivotController>();
+        PosInfo.Dir = 1;
+    }
+
     protected override void OnEnable() {
         base.OnEnable();
-        State = EnumPlayerStates.Idle;
+
+        State = CreatureState.Idle;
         //카메라 이동 제한
-        if(photonView.IsMine)
+        if(Managers.Network.LocalPlayer == this)
         {
-            playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+            playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             playerCameraController.SetPosition(transform.position);
             if(playerCameraController.enabled)
                 playerCameraController.enabled = false;
@@ -76,17 +76,17 @@ public class Player : DamageableEntity
         switch (State)
         {
             
-            case EnumPlayerStates.Idle:
+            case CreatureState.Idle:
                 animator.SetBool("run",false);
                 break;
-            case EnumPlayerStates.Run:
+            case CreatureState.Run:
                 animator.SetBool("run",true);
                 break;
-            case EnumPlayerStates.Hit:
+            case CreatureState.Hit:
                 //hit를 코루틴이 애니메이션 이벤트로 한 번 해보자
                 StartCoroutine(HitStateCoroutine());
                 break;
-            case EnumPlayerStates.Attack:
+            case CreatureState.Attack:
                 animator.SetTrigger("attack");
                 break;
             default:
@@ -100,9 +100,8 @@ public class Player : DamageableEntity
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
-        playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+        playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
-        BindingAction();
 
         dieAction += () => {
             animator.SetTrigger("die");
@@ -128,7 +127,7 @@ public class Player : DamageableEntity
 
     private void FixedUpdate()
     {
-        if(!photonView.IsMine) return;
+        if(Managers.Network.LocalPlayer != this) return;
         if(isDead) return;
 
         // Vector3 mousePos = Mouse.current.position.value;
@@ -149,8 +148,7 @@ public class Player : DamageableEntity
             transform.localScale = localSc;
         }
 
-
-        if (State == EnumPlayerStates.Run || State == EnumPlayerStates.Attack)
+        if (State == CreatureState.Run || State == CreatureState.Attack)
         {
             Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
             if (Managers.Map.CheckCanGo(dest))
@@ -158,11 +156,27 @@ public class Player : DamageableEntity
                 rb.MovePosition(dest);
             }
         }
+        // 매번 패킷을 보낸다.
+        var position = transform.position;
+        PosInfo.PosX = position.x;
+        PosInfo.PosY = position.y;
+        PosInfo.Dir = (int)transform.localScale.x;
+        PosInfo.State = State;
+        var wpcTrasform = wpc.transform;
+        PosInfo.WposX = wpcTrasform.localPosition.x;
+        PosInfo.WposY = wpcTrasform.localPosition.y;
+        PosInfo.WrotZ = wpcTrasform.localEulerAngles.z;
+        Info.PosInfo = PosInfo;
+
+        C_Move packet = new C_Move();
+        packet.PosInfo = PosInfo;
+        Managers.Network.Client.Send(packet);
+        
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (photonView.IsMine)
+        if (Managers.Network.LocalPlayer == this || !PhotonNetwork.IsConnected)
         {
              if(isDead) return;
              moveInput = context.ReadValue<Vector2>();
@@ -171,15 +185,15 @@ public class Player : DamageableEntity
              
             switch(State)
             {
-                case EnumPlayerStates.Idle:
+                case CreatureState.Idle:
                  if((context.performed || context.started))
-                    State = EnumPlayerStates.Run;
+                    State = CreatureState.Run;
                     break;
-                case EnumPlayerStates.Run:
+                case CreatureState.Run:
                     if (context.canceled)
-                        State = EnumPlayerStates.Idle;
+                        State = CreatureState.Idle;
                     break;
-                case EnumPlayerStates.Attack:
+                case CreatureState.Attack:
                     if(context.started)
                     {
                         //공격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
@@ -187,7 +201,7 @@ public class Player : DamageableEntity
                         return;
                     }
                     break;
-                case EnumPlayerStates.Hit:
+                case CreatureState.Hit:
                     if(context.started)
                     {
                         //피격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
@@ -205,19 +219,19 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
 
-        if (photonView.IsMine)
+        if (Managers.Network.LocalPlayer == this)
         {
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
         }
     }
     
-    [PunRPC]
     public override void OnDamage(float damage)
     {
+        if (!Managers.Network.isHost) return;
         if(isDead) return;
         base.OnDamage(damage);
-        if(State == EnumPlayerStates.Idle || State == EnumPlayerStates.Run) 
-            State = EnumPlayerStates.Hit;
+        if(State == CreatureState.Idle || State == CreatureState.Run) 
+            State = CreatureState.Hit;
         
     }
 
@@ -227,11 +241,11 @@ public class Player : DamageableEntity
         yield return new WaitForSeconds(0.5f);
         if (!runInputBuffer.Equals(Vector2.zero))
         {
-            State = EnumPlayerStates.Run;
+            State = CreatureState.Run;
             moveInput = runInputBuffer;
             runInputBuffer = Vector2.zero;
         }
-        else State = EnumPlayerStates.Idle;
+        else State = CreatureState.Idle;
     }
 
     ///
@@ -242,18 +256,18 @@ public class Player : DamageableEntity
     {
         if(isDead) return;
         if(!context.started) return;
-        if(!photonView.IsMine) return;
-        if(State != EnumPlayerStates.Idle && State != EnumPlayerStates.Attack && State != EnumPlayerStates.Run) return;
+        if(Managers.Network.LocalPlayer != this) return;
+        if(State != CreatureState.Idle && State != CreatureState.Attack && State != CreatureState.Run) return;
         
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
         rb.velocity = Vector2.zero;
 
-        if( State == EnumPlayerStates.Attack && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
+        if( State == CreatureState.Attack && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
             attackInputBuffer = true;
 
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
-        State = EnumPlayerStates.Attack;
+        State = CreatureState.Attack;
     }
     
     public void FinishAttackState()
@@ -264,13 +278,13 @@ public class Player : DamageableEntity
         }
         else if (Managers.Input.PlayerActions.Move.IsPressed())
         {
-            State = EnumPlayerStates.Run;
+            State = CreatureState.Run;
             moveInput = runInputBuffer;
             runInputBuffer = Vector2.zero;
         }
         else 
         {
-            State = EnumPlayerStates.Idle;
+            State = CreatureState.Idle;
         }
     }
 
@@ -279,9 +293,9 @@ public class Player : DamageableEntity
 
         gameObject.SetActive(false);
 
-        if (photonView.IsMine)
+        if (Managers.Network.LocalPlayer == this)
         {
-            playerCameraController = GameObject.Find("Main Camera").GetComponent<PlayerCameraController>();
+            if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             if (!playerCameraController.enabled)
                 playerCameraController.enabled = true;
             playerCameraController.SetPosition(transform.position);
@@ -330,5 +344,14 @@ public class Player : DamageableEntity
         {
             interactable.Interact();
         }
+    }
+
+    public override void SyncPos()
+    {
+        base.SyncPos();
+        State = PosInfo.State;
+        transform.localScale = new Vector3(PosInfo.Dir,1, 1);
+        wpc.transform.localPosition = new Vector3(PosInfo.WposX, PosInfo.WposY);
+        wpc.transform.localEulerAngles = new Vector3(0, 0, PosInfo.WrotZ);
     }
 }
