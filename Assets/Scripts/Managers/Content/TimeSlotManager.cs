@@ -14,11 +14,11 @@ public enum EnumTimeSlot
 public class TimeSlotManager : IOnEventCallback
 {
 
-    [SerializeField] private float _timeChangePeriod = 5.0f;
+    [SerializeField] private float _timeChangePeriod = 3.0f;
     public float TimeChangePeriod{
         get { return _timeChangePeriod;}
     }
-    private float _curremtTime;
+    private float _curremtTime = 0f;
     private EnumTimeSlot _timeSlot = EnumTimeSlot.Day;
     private int countTimeSlotChanged = 1;
     public int CountTimeSlotChanged{
@@ -51,8 +51,7 @@ public class TimeSlotManager : IOnEventCallback
 
     public void Init()
     {
-        CurrentTime = 0f;
-        _timeChangePeriod = 5.0f;
+        
         PhotonNetwork.AddCallbackTarget(this);
 
         if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
@@ -88,6 +87,7 @@ public class TimeSlotManager : IOnEventCallback
 
             switch (TimeSlot)
             {
+                
                 case EnumTimeSlot.Day:
                     UpdateTimeSlot(EnumTimeSlot.Night);
                     break;
@@ -103,7 +103,6 @@ public class TimeSlotManager : IOnEventCallback
 
     private void UpdateTimeSlot(EnumTimeSlot changeTimeSlot)
     {
-        
        switch(changeTimeSlot)
             {
                 case EnumTimeSlot.Day:
@@ -139,8 +138,7 @@ public class TimeSlotManager : IOnEventCallback
                     
                     CurrentTime = (float)data[0];
                     TimeSlot = (EnumTimeSlot)data[1];
-                    CountTimeSlotChanged = (int)data[2];
-                    RotateTimer.SetTimerAngle((Quaternion)data[3]);
+                    RotateTimer.SetTimerAngle((Quaternion)data[2]);
                 }
                 UpdateTimeSlot(TimeSlot);
                 break;

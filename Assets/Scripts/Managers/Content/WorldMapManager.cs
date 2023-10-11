@@ -75,26 +75,21 @@ public class WorldMapManager : MonoBehaviour
 
                 string weather = Managers.Data.WorldmapDict[i].weather;
 
-                if(weather == "sunny")
+
+                if(weather == "sunny" && Managers.Weather.Weather != EnumWeather.Sun)
                 {
                     Managers.Weather.UpdateWeather(EnumWeather.Sun);
                 }
-                else if(weather =="hot")
+                else if(weather =="hot" && Managers.Weather.Weather != EnumWeather.Desert)
                 {
                     Managers.Weather.UpdateWeather(EnumWeather.Desert);
                 }
-                else if(weather =="rainy")
+                else if(weather =="rainy" && Managers.Weather.Weather != EnumWeather.Rain)
                 {
                     Managers.Weather.UpdateWeather(EnumWeather.Rain);
                 }
             }
 
-            else
-            {
-                Managers.Weather.UpdateWeather(EnumWeather.Sun);
-
-            }
- 
         }   
     }
 }

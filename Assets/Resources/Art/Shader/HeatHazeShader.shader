@@ -56,15 +56,6 @@ Shader "Custom/NewSurfaceShader"
 				//float3 fGrayTex = dot(fMainTex.rgb, float3(0.3333f, 0.3333f, 0.3333f));	//! 흑백 계산
 
 
-                // float sineNoise = sin(_Frequency * (i.uv.y - _Time * _Speed));
-                // float offset = sineNoise * _Strength; 
-               
-                // float2 uv = (i.uv.x + offset, i.uv.y);
-                // float4 heatHaze=  tex2D(_MainTex, uv);
-                // return heatHaze;
-
-
-
                 float offset = sin(_Time.y*_Frequency)*sin(i.uv.y*_Yamplitude)/_Xamplitude;
 
                 return tex2D(_MainTex,float2(i.uv.x + offset * saturate(_Height - i.uv.y) , i.uv.y));
