@@ -37,6 +37,11 @@ public class Player : DamageableEntity
 
     IInteractable interactable;
     string interactableName;
+    private static readonly int Die = Animator.StringToHash("die");
+    private static readonly int Run = Animator.StringToHash("run");
+
+    [SerializeField] private GameObject Left_Arm;
+    [SerializeField] private GameObject Right_Arm;
 
     public CreatureState State
     {
@@ -63,7 +68,7 @@ public class Player : DamageableEntity
         //카메라 이동 제한
         if(Managers.Network.LocalPlayer == this)
         {
-            playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+            if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             playerCameraController.SetPosition(transform.position);
             if(playerCameraController.enabled)
                 playerCameraController.enabled = false;
@@ -76,17 +81,17 @@ public class Player : DamageableEntity
         switch (State)
         {
             case CreatureState.Idle:
-                animator.SetBool("run",false);
+                animator.SetBool(Run,false);
                 break;
             case CreatureState.Run:
-                animator.SetBool("run",true);
+                animator.SetBool(Run,true);
                 break;
             case CreatureState.Hit:
                 //hit를 코루틴이 애니메이션 이벤트로 한 번 해보자
                 StartCoroutine(HitStateCoroutine());
                 break;
-            case CreatureState.Attack:
-                animator.SetTrigger("attack");
+            case CreatureState.Dead:
+                animator.SetTrigger(Die);
                 break;
             default:
                 break;
@@ -103,7 +108,7 @@ public class Player : DamageableEntity
         playerCameraController.enabled = false;
 
         dieAction += () => {
-            animator.SetTrigger("die");
+            animator.SetTrigger(Die);
 
             if(Managers.Scene.CurrentScene is GameScene)
             {
@@ -136,12 +141,16 @@ public class Player : DamageableEntity
 
         if(worldPos.x >=  transform.position.x)
         {
+            Left_Arm.SetActive(true);
+            Right_Arm.SetActive(false);
             Vector2 localSc = transform.localScale;
             localSc.x = -1 * Math.Abs(localSc.x);
             transform.localScale = localSc;
         }
         else
         {
+            Left_Arm.SetActive(false);
+            Right_Arm.SetActive(true);
             Vector2 localSc = transform.localScale;
             localSc.x = Math.Abs(localSc.x);
             transform.localScale = localSc;

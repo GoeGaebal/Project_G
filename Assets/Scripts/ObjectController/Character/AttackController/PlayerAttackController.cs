@@ -36,10 +36,10 @@ public class PlayerAttackController : AttackController
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         
-        if(photonView.IsMine)
-        {
-            localPlayer = this.gameObject;
-        }        
+        // if(Managers.Network.LocalPlayer == )
+        // {
+        //     localPlayer = this.gameObject;
+        // }        
     }
 
     [PunRPC]
