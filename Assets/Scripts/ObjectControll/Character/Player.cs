@@ -99,7 +99,7 @@ public class Player : DamageableEntity
     {
         rb = GetComponent<Rigidbody2D>();
 
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
 
