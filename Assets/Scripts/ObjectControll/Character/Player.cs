@@ -75,7 +75,6 @@ public class Player : DamageableEntity
         if(isDead || animator == null) return;
         switch (State)
         {
-            
             case CreatureState.Idle:
                 animator.SetBool("run",false);
                 break;
