@@ -59,8 +59,6 @@ public class DamageableEntity : NetworkObject, IDamageable
 
         if (HP + restoreHP >= maxHP) HP = maxHP;
         else HP += restoreHP;
-       
-
     }
 
     /// <summary>
