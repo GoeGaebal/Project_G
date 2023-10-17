@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Photon.Pun;
 using Server;
 
-public class Player : DamageableEntity
+public class Player : CreatureController
 {
     [SerializeField] private float moveSpeed = 5.0f;
 
@@ -22,11 +20,12 @@ public class Player : DamageableEntity
 
     private PlayerCameraController playerCameraController;
     private WeaponPivotController wpc;
-    private Vector2 moveInput;
+    private Vector2 _moveInput;
 
-    private Rigidbody2D rb;
+    private Rigidbody2D _rb;
 
-    protected Animator animator;
+    [SerializeField] private Animator bodyAnimator;
+    [SerializeField]private Animator legAnimator;
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
@@ -37,22 +36,18 @@ public class Player : DamageableEntity
 
     IInteractable interactable;
     string interactableName;
+    private static readonly int DieAnimParam = Animator.StringToHash("die");
+    private static readonly int WalkAnimParam = Animator.StringToHash("walk");
+    private static readonly int HitAnimParam = Animator.StringToHash("hit");
 
-    public CreatureState State
-    {
-        get{
-            return _state;
-        }
-        protected set{
-                _state = value;
-                UpdateState();
-        }
-    }
-
+    [SerializeField] private GameObject Left_Arm;
+    [SerializeField] private GameObject Right_Arm;
+    
     private void Awake()
     {
         ObjectType = GameObjectType.Player;
         wpc = transform.GetComponentInChildren<WeaponPivotController>();
+        _rb = GetComponent<Rigidbody2D>();
         PosInfo.Dir = 1;
     }
 
@@ -61,56 +56,51 @@ public class Player : DamageableEntity
 
         State = CreatureState.Idle;
         //카메라 이동 제한
-        if(Managers.Network.LocalPlayer == this)
-        {
-            playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
-            playerCameraController.SetPosition(transform.position);
-            if(playerCameraController.enabled)
-                playerCameraController.enabled = false;
-        }
+        if (Managers.Network.LocalPlayer != this) return;
+        
+        
+        if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+        playerCameraController.SetPosition(transform.position);
+        if(playerCameraController.enabled)
+            playerCameraController.enabled = false;
     }
 
-    private void UpdateState()
+    protected override void OnIdle()
     {
-        if(isDead || animator == null) return;
-        switch (State)
-        {
-            
-            case CreatureState.Idle:
-                animator.SetBool("run",false);
-                break;
-            case CreatureState.Run:
-                animator.SetBool("run",true);
-                break;
-            case CreatureState.Hit:
-                //hit를 코루틴이 애니메이션 이벤트로 한 번 해보자
-                StartCoroutine(HitStateCoroutine());
-                break;
-            case CreatureState.Attack:
-                animator.SetTrigger("attack");
-                break;
-            default:
-                break;
-            
-        }
+        bodyAnimator.SetBool(WalkAnimParam,false);
+        legAnimator.SetBool(WalkAnimParam,false);
+    }
+
+    protected override void OnRun()
+    {
+        bodyAnimator.SetBool(WalkAnimParam,true);
+        legAnimator.SetBool(WalkAnimParam,true);
+    }
+
+    protected override void OnDie()
+    {
+        bodyAnimator.SetTrigger(DieAnimParam);
+        legAnimator.SetTrigger(DieAnimParam);
+
+        if (Managers.Scene.CurrentScene is not GameScene) return;
+        if(GameScene.PlayerLifeCnt > 0) GameScene.PlayerLifeCnt --;
+    }
+
+    protected override void OnAttack()
+    {
+        wpc.Attack();
+    }
+
+    protected override void OnHit()
+    {
+        bodyAnimator.SetTrigger(HitAnimParam);
+        // StartCoroutine(HitStateCoroutine());
     }
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-
-        animator = GetComponent<Animator>();
         playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
-
-        dieAction += () => {
-            animator.SetTrigger("die");
-
-            if(Managers.Scene.CurrentScene is GameScene)
-            {
-                if(GameScene.PlayerLifeCnt > 0) GameScene.PlayerLifeCnt --;
-            }
-        };
     }
 
     private void Update()
@@ -120,15 +110,15 @@ public class Player : DamageableEntity
 
     public void BindingAction()
     {
-        Managers.Input.PlayerActions.Move.AddEvent(OnMove);
-        Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        Managers.Input.PlayerActions.Move.AddEvent(OnMoveInput);
+        Managers.Input.PlayerActions.Attack.AddEvent(OnAttackInput);
         Managers.Input.PlayerActions.Interact.AddEvent(OnInteract);
     }
 
     private void FixedUpdate()
     {
         if(Managers.Network.LocalPlayer != this) return;
-        if(isDead) return;
+        if(IsDead) return;
 
         // Vector3 mousePos = Mouse.current.position.value;
         Vector3 mousePos = Managers.Input.UIActions.Point.ReadValue<Vector2>();
@@ -137,23 +127,31 @@ public class Player : DamageableEntity
 
         if(worldPos.x >=  transform.position.x)
         {
+            Left_Arm.SetActive(true);
+            Right_Arm.SetActive(false);
             Vector2 localSc = transform.localScale;
             localSc.x = -1 * Math.Abs(localSc.x);
             transform.localScale = localSc;
+            Vector2 wpcLocalScale = wpc.transform.localScale;
+            wpc.transform.localScale = new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y));
         }
         else
         {
+            Left_Arm.SetActive(false);
+            Right_Arm.SetActive(true);
             Vector2 localSc = transform.localScale;
             localSc.x = Math.Abs(localSc.x);
             transform.localScale = localSc;
+            Vector2 wpcLocalScale = wpc.transform.localScale;
+            wpc.transform.localScale = new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
         }
 
         if (State == CreatureState.Run || State == CreatureState.Attack)
         {
-            Vector3 dest = rb.position + moveInput * moveSpeed * Time.fixedDeltaTime;
+            Vector3 dest = _rb.position + _moveInput * moveSpeed * Time.fixedDeltaTime;
             if (Managers.Map.CheckCanGo(dest))
             {
-                rb.MovePosition(dest);
+                _rb.MovePosition(dest);
             }
         }
         // 매번 패킷을 보낸다.
@@ -171,98 +169,64 @@ public class Player : DamageableEntity
         C_Move packet = new C_Move();
         packet.PosInfo = PosInfo;
         Managers.Network.Client.Send(packet);
-        
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    private void OnMoveInput(InputAction.CallbackContext context)
     {
-        if (Managers.Network.LocalPlayer == this || !PhotonNetwork.IsConnected)
-        {
-             if(isDead) return;
-             moveInput = context.ReadValue<Vector2>();
-             
-             if(moveInput == null) return;
-             
-            switch(State)
-            {
-                case CreatureState.Idle:
-                 if((context.performed || context.started))
-                    State = CreatureState.Run;
-                    break;
-                case CreatureState.Run:
-                    if (context.canceled)
-                        State = CreatureState.Idle;
-                    break;
-                case CreatureState.Attack:
-                    if(context.started)
-                    {
-                        //공격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
-                        runInputBuffer  = moveInput;
-                        return;
-                    }
-                    break;
-                case CreatureState.Hit:
-                    if(context.started)
-                    {
-                        //피격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
-                        runInputBuffer  = moveInput;
-                        return;
-                    }
-                    break;
-                default: 
-                    break;
-            }
-        }
+        if(IsDead || Managers.Network.LocalPlayer != this) return;
+
+        _moveInput = context.ReadValue<Vector2>();
+        if(_moveInput == null) return;
+        State = context.canceled ? CreatureState.Idle : CreatureState.Run;
     }   
     
     private void LateUpdate()
     {
-        if(isDead) return;
+        if(IsDead) return;
 
         if (Managers.Network.LocalPlayer == this)
-        {
-            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y,-10);
-        }
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
     
     public override void OnDamage(float damage)
     {
         if (!Managers.Network.isHost) return;
-        if(isDead) return;
+        
+        if(IsDead) return;
         base.OnDamage(damage);
         if(State == CreatureState.Idle || State == CreatureState.Run) 
             State = CreatureState.Hit;
         
     }
 
-    private  IEnumerator HitStateCoroutine()
-    {
-        animator.SetTrigger("hit");
-        yield return new WaitForSeconds(0.5f);
-        if (!runInputBuffer.Equals(Vector2.zero))
-        {
-            State = CreatureState.Run;
-            moveInput = runInputBuffer;
-            runInputBuffer = Vector2.zero;
-        }
-        else State = CreatureState.Idle;
-    }
+    // private  IEnumerator HitStateCoroutine()
+    // {
+    //     bodyAnimator.SetTrigger("hit");
+    //     yield return new WaitForSeconds(0.5f);
+    //     if (!runInputBuffer.Equals(Vector2.zero))
+    //     {
+    //         State = CreatureState.Run;
+    //         moveInput = runInputBuffer;
+    //         runInputBuffer = Vector2.zero;
+    //     }
+    //     else State = CreatureState.Idle;
+    // }
 
     ///
     ///<summary>
     ///공격 입력이 들어왔을 때 가장 먼저 호출되는 함수
     ///</summary>
-    public void OnAttack(InputAction.CallbackContext context)
+    public void OnAttackInput(InputAction.CallbackContext context)
     {
-        if(isDead) return;
+        if(IsDead) return;
         if(!context.started) return;
         if(Managers.Network.LocalPlayer != this) return;
         if(State != CreatureState.Idle && State != CreatureState.Attack && State != CreatureState.Run) return;
         
-        //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
-        rb.velocity = Vector2.zero;
+        // //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
+        // rb.velocity = Vector2.zero;
 
-        if( State == CreatureState.Attack && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
+        if( State == CreatureState.Attack && bodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
             attackInputBuffer = true;
 
         // else if (State == EnumPlayerStates.Run)
@@ -279,7 +243,7 @@ public class Player : DamageableEntity
         else if (Managers.Input.PlayerActions.Move.IsPressed())
         {
             State = CreatureState.Run;
-            moveInput = runInputBuffer;
+            _moveInput = runInputBuffer;
             runInputBuffer = Vector2.zero;
         }
         else 
@@ -290,7 +254,6 @@ public class Player : DamageableEntity
 
     public void FinishDieAnimClip()
     {
-
         gameObject.SetActive(false);
 
         if (Managers.Network.LocalPlayer == this)
@@ -304,8 +267,8 @@ public class Player : DamageableEntity
 
     private void OnDestroy()
     {
-        Managers.Input.PlayerActions.Move.RemoveEvent(OnMove);
-        Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
+        Managers.Input.PlayerActions.Move.RemoveEvent(OnMoveInput);
+        Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttackInput);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

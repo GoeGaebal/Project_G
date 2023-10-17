@@ -31,7 +31,7 @@ public class PlayerCameraController : MonoBehaviour
         }
         else
         {
-            if(targetPlayer.GetComponent<Player>().isDead) targetPlayer = null;
+            if(targetPlayer.GetComponent<Player>().IsDead) targetPlayer = null;
             else transform.position = targetPlayer.transform.position + new Vector3(0,0, - targetPlayer.transform.position.z + transform.position.z);
         }
         
