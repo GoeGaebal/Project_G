@@ -111,7 +111,7 @@ public class Player : CreatureController
     public void BindingAction()
     {
         Managers.Input.PlayerActions.Move.AddEvent(OnMoveInput);
-        Managers.Input.PlayerActions.Attack.AddEvent(OnAttack);
+        Managers.Input.PlayerActions.Attack.AddEvent(OnAttackInput);
         Managers.Input.PlayerActions.Interact.AddEvent(OnInteract);
     }
 
@@ -216,7 +216,7 @@ public class Player : CreatureController
     ///<summary>
     ///공격 입력이 들어왔을 때 가장 먼저 호출되는 함수
     ///</summary>
-    public void OnAttack(InputAction.CallbackContext context)
+    public void OnAttackInput(InputAction.CallbackContext context)
     {
         if(IsDead) return;
         if(!context.started) return;
@@ -268,7 +268,7 @@ public class Player : CreatureController
     private void OnDestroy()
     {
         Managers.Input.PlayerActions.Move.RemoveEvent(OnMoveInput);
-        Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttack);
+        Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttackInput);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
