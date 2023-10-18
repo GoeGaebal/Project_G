@@ -77,7 +77,13 @@ public class WorldMapManager
 
         _finalBoss.transform.localPosition = _finalBoss.transform.localPosition + direction * _finalBossMoveSpeed * deltaTime;
 
-        if((_shipPosition - _finalBoss.transform.localPosition).sqrMagnitude < _minDistacnceBetShipBoss)
+
+        float distance = (_shipPosition - _finalBoss.transform.localPosition).sqrMagnitude;
+        if (1998f < distance && distance < 2000f)
+        {
+            UI_SystemMessage.alert("최종보스가 가까이 있습니다!", Color.red);
+        }
+        else if(distance < _minDistacnceBetShipBoss)
         {
             Debug.Log("final boss");
             _isBossBattle = true;

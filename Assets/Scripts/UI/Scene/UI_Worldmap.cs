@@ -94,6 +94,7 @@ public class UI_Worldmap : UI_Scene
                 _timeText.SetActive(false);
                 _distanceText.SetActive(false);
                 _arrow.SetActive(false);
+                UI_SystemMessage.alert(_targetMapName + "에 도착했습니다.", Color.white);
             }
         }
         if (_arriveFlag && _targetMapName != "Worldmap_Ship")
@@ -162,6 +163,8 @@ public class UI_Worldmap : UI_Scene
     {
         _targetPosition = t.transform.localPosition;
         _targetMapName = t.name;
+
+        UI_SystemMessage.alert(_targetMapName + "로 이동 중입니다.", Color.white);
     }
     private void MoveToTarget()//목표 방향으로 이동
     {
@@ -220,6 +223,7 @@ public class UI_Worldmap : UI_Scene
         _arriveFlag = false;
         _moveFlag = true;
         _lr.enabled = true;
+        CloseWorldmapUI();
         
         S_WorldMapEvent packet = new S_WorldMapEvent();
         packet.Event = UIWorldMapEventType.SetTarget;
@@ -284,8 +288,13 @@ public class UI_Worldmap : UI_Scene
         _worldmap.SetActive(true);
         Managers.Input.PlayerActionMap.Disable();
     }
-
+    
     public void CloseWorldmapUI(PointerEventData evt)
+    {
+        _worldmap.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
+    }
+    public void CloseWorldmapUI()
     {
         _worldmap.SetActive(false);
         Managers.Input.PlayerActionMap.Enable();
@@ -305,7 +314,7 @@ public class UI_Worldmap : UI_Scene
         Debug.Log(pos[1]);
     }
     */
-    
+
     /*
     private void UpdateWeatherUI()
     {
