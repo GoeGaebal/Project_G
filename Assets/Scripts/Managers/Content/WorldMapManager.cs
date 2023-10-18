@@ -12,6 +12,9 @@ public class WorldMapManager
 
     private bool _isBossBattle;
     private float _minDistacnceBetShipBoss;
+
+    public string currentMapName = "Map_001";
+
     public GameObject Ship
     {
         get { return _ship; }

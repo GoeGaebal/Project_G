@@ -629,6 +629,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: SteeringWheel
       objectReference: {fileID: 0}
+    - target: {fileID: 3131306014911877580, guid: d35fe0d4d84d028439650f73233ad32e,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 38.954407
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131306014911877580, guid: d35fe0d4d84d028439650f73233ad32e,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 38.954407
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131306014911877580, guid: d35fe0d4d84d028439650f73233ad32e,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -0.0000009536743
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d35fe0d4d84d028439650f73233ad32e, type: 3}
 --- !u!1001 &5716094553503384862
