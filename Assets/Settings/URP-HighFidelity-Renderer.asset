@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f2dde4f64a9ba419d1e111c40edf46, type: 3}
   m_Name: TemplateFeature
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   passSettings:
     renderPassEvent: 500
     downsample: 1

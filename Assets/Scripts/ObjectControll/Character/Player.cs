@@ -115,7 +115,7 @@ public class Player : DamageableEntity
 
     private void Update()
     {
-        Debug.Log(runInputBuffer.x + " " + runInputBuffer.y); 
+
         realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
 
