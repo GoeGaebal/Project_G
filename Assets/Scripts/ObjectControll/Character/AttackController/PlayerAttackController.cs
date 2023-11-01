@@ -18,7 +18,7 @@ public class PlayerAttackController : AttackController
     private Weapon meleeWeaponController;
     //private Weapon pickaxWeaponController;
     private EnumWeaponList currentWeapon;
-    private static GameObject localPlayer;
+    private static Player playerComponent;
     private SpriteRenderer spriteRenderer;
     // Start is called before the first frame update
     void Start()
@@ -36,10 +36,20 @@ public class PlayerAttackController : AttackController
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         
-        if(photonView.IsMine)
+        playerComponent = transform.root.GetComponentInChildren<Player>();
+
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D other) {
+        if(other == null) return;
+        
+        IDamageable damageable = other.GetComponent<IDamageable>();
+        if(damageable == null) return;
+        if(weaponController.CheckAttackLayer((int)other.gameObject.layer))
         {
-            localPlayer = this.gameObject;
-        }        
+            damageable.OnDamage(playerComponent.realDamage);
+        }
+
     }
 
     [PunRPC]

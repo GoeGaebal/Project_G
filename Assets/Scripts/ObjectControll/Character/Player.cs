@@ -10,7 +10,7 @@ public class Player : DamageableEntity
 {
     [SerializeField] private float moveSpeed = 5.0f;
 
-    public float attackDamage = 10f;
+    public float attackDamage = 1000f;
 
     public float[] artifactDamage = new float[] { 0f, 0f, 0f };//유물 대미지 (곱연산)
     public float[] equipDamage = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 대미지 (합연산)
@@ -115,8 +115,8 @@ public class Player : DamageableEntity
 
     private void Update()
     {
-
-        realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
+        realDamage = 100f;
+        //realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
 
     public void BindingAction()

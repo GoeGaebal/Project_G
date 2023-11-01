@@ -115,8 +115,9 @@ public class BasicMonster : DamageableEntity
         
     }
     
-    override public void OnDamage(float damage) 
+    public override void OnDamage(float damage) 
     {
+        Debug.Log(damage + "damaged");
         base.OnDamage(damage);
         if(isDead) return;
         if(!(AnimState is IdleState) && !(AnimState is RunState)) return;
