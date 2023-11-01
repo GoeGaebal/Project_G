@@ -54,6 +54,7 @@ public class Player : DamageableEntity
         ObjectType = GameObjectType.Player;
         wpc = transform.GetComponentInChildren<WeaponPivotController>();
         PosInfo.Dir = 1;
+        attackDamage = 100f;
     }
 
     protected override void OnEnable() {
@@ -115,8 +116,8 @@ public class Player : DamageableEntity
 
     private void Update()
     {
-        realDamage = 100f;
-        //realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
+        //realDamage = 100f;
+        realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
 
     public void BindingAction()
