@@ -85,6 +85,7 @@ public class GameRoom
     {
         S_LoadScene packet = new S_LoadScene();
         packet.SceneType = type;
+        _objects.Clear();
         Managers.Network.Server.Room.Broadcast(packet);
     }
 

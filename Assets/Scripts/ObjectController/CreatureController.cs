@@ -8,19 +8,21 @@ public abstract class CreatureController : NetworkObject
     
     private CreatureState _state;
     public bool IsDead => CreatureState.Dead == _state;
-    public CreatureState State
+
+    protected CreatureState State
     {
         get => _state;
-        protected set
+        set
         {
+            UpdateState(value);
             _state = value;
-            UpdateState();
         }
     }
 
-    private void UpdateState()
+    private void UpdateState(CreatureState newState)
     {
-        switch (State)
+        if (IsDead) return;
+        switch (newState)
         {
             case CreatureState.Idle:
                 OnIdle();
@@ -60,6 +62,7 @@ public abstract class CreatureController : NetworkObject
     
     public virtual void OnDamage(float damage)
     {
+        if (State == CreatureState.Hit) return;
         if (Managers.Network.IsHost)
         {
             var hp = HP;
@@ -73,10 +76,10 @@ public abstract class CreatureController : NetworkObject
             };
             Managers.Network.Server.Room.Broadcast(packet);
         }
-        OnHit();
+        State = CreatureState.Hit;
     }
 
-    public void UpdateHP(float hp, bool dead) 
+    public virtual void UpdateHp(float hp, bool dead) 
     {
         HP = hp;
         if (dead) State = CreatureState.Dead;

@@ -153,8 +153,12 @@ public class ObjectManager
 
     public void Clear()
     {
-        var objects = _objects.Values.ToArray();
-        foreach(var obj in objects) Managers.Resource.Destroy(obj);
+        var objects = _objects.ToArray();
+        foreach (var obj in objects)
+        {
+            if (!PlayerDict.ContainsKey(obj.Key)) Managers.Resource.Destroy(obj.Value);
+        }
         _objects.Clear();
+        foreach (var pair in PlayerDict) _objects.Add(pair.Key,pair.Value.gameObject);
     }
 }

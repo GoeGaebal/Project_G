@@ -13,7 +13,7 @@ public class BasicMonster : CreatureController
     [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
     private Vector3 _spawnPosition;
-    private Animator _animator;
+    protected Animator _animator;
 
     protected SpriteRenderer SpriteRenderer;
 

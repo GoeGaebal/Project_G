@@ -272,9 +272,6 @@ GameObject:
   - component: {fileID: 7030104513904931494}
   - component: {fileID: -7150734512121841761}
   - component: {fileID: 4417218321329297627}
-  - component: {fileID: 9168397809358324139}
-  - component: {fileID: 3099570448451978042}
-  - component: {fileID: 2131224239709415061}
   m_Layer: 3
   m_Name: BossProto
   m_TagString: Untagged
@@ -291,7 +288,7 @@ Transform:
   m_GameObject: {fileID: 7349318779710265433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.85, y: -1.89, z: 0}
-  m_LocalScale: {x: 1.7179, y: 1.6268, z: 1}
+  m_LocalScale: {x: 4.98, y: 4.715911, z: 2.898888}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5756389718499201869}
@@ -397,10 +394,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   speed: 1.1
-  minDisFromPlayer: 0.6
+  minDisFromPlayer: 0.8
   isSpriteRightSide: 0
-  BossroomLeftDownWorldPos: {x: 0, y: 0}
-  BossroomRightUpWorldPos: {x: 0, y: 0}
+  BossroomLeftDownWorldPos: {x: 63, y: 0}
+  BossroomRightUpWorldPos: {x: 90, y: 24}
   cooltimeCasting: 5
 --- !u!61 &4417218321329297627
 BoxCollider2D:
@@ -428,82 +425,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.40762895, y: 0.56157243}
   m_EdgeRadius: 0
---- !u!114 &9168397809358324139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7349318779710265433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 3099570448451978042}
-  - {fileID: 2131224239709415061}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &3099570448451978042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7349318779710265433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
---- !u!114 &2131224239709415061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7349318779710265433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 9
-    SynchronizeType: 1
-    Name: attack
-  - Type: 9
-    SynchronizeType: 1
-    Name: hit
-  - Type: 9
-    SynchronizeType: 1
-    Name: die
-  - Type: 1
-    SynchronizeType: 1
-    Name: distance
-  - Type: 4
-    SynchronizeType: 1
-    Name: run
-  - Type: 9
-    SynchronizeType: 1
-    Name: casting
-  m_SynchronizeLayers:
-  - SynchronizeType: 1
-    LayerIndex: 0
 --- !u!1 &8060987528558531727
 GameObject:
   m_ObjectHideFlags: 0

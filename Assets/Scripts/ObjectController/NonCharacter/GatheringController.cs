@@ -8,7 +8,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine.UI;
 
-public class GatheringController : DamageableEntity
+public class GatheringController : CreatureController
 {
     public int id = 1;
     public int guid = 1;
@@ -20,58 +20,75 @@ public class GatheringController : DamageableEntity
     private Animator _anim;
     public Image HPBar;
     public TextMeshProUGUI HPText;
+    private static readonly int Hit = Animator.StringToHash("Hit");
+    private static readonly int Die = Animator.StringToHash("Die");
 
 
+    private void Awake()
+    {
+        _sprite = GetComponent<SpriteRenderer>();
+        _anim = GetComponent<Animator>();
+    }
 
     private void Init()
     {
         if (HPBar == null) HPBar = Util.FindChild(gameObject,"HP", true).GetComponent<Image>();
         if (HPText == null) HPText = Util.FindChild(gameObject,"HPText", true).GetComponent<TextMeshProUGUI>();
         maxHP =  Managers.Data.GatheringDict[id].maxHp;
-        HP = maxHP;
+        UpdateHp(maxHP,IsDead);
         lootingId = Managers.Data.GatheringDict[id].lootingId;
-        HPBar.fillAmount = HP / maxHP;
-        HPText.text = $"{HP / maxHP:P2}";
     }
     private void Start()
     {
         Init();
-        _sprite = GetComponent<SpriteRenderer>();
-        _anim = GetComponent<Animator>();
         _originalColor = _sprite.color;
-        base.dieAction += () =>
-        {
-            StartDelayDeath();
-        };
-    }
-    
-    public override void OnDamage(float damage)
-    {
-        base.OnDamage(damage);
-        if(!isDead) _anim.Play("ScrapDamage");
     }
 
-    public override void UpdateHP(float health, bool dead)
+    protected override void OnIdle()
     {
+        _anim.ResetTrigger(Hit);
+        _anim.ResetTrigger(Die);
+    }
+
+    protected override void OnRun()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void OnAttack()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void OnHit()
+    {
+        if(!IsDead) _anim.SetTrigger(Hit);
+    }
+
+    protected override void OnDie()
+    {
+        _anim.SetTrigger(Die);
+        base.OnDie();
+    }
+
+    public override void UpdateHp(float health, bool dead)
+    {
+        base.UpdateHp(health,dead);
         HPBar.fillAmount = HP / maxHP;
         HPText.text = $"{HP / maxHP:P2}";
     }
 
-    private IEnumerator DelayDeath()
+    private void FinishDieAnim()
     {
-        _anim.Play("ScrapDeath");
-        yield return new WaitForSeconds(flashDuration);
-        if (Managers.Network.IsHost)
-        {
-            Managers.Network.Server.Room.SpawnLootingItems(lootingId,5,transform.position, 1.0f, 2.0f);
-            S_DeSpawn packet = new S_DeSpawn();
-            packet.ObjectIds.Add(Id);
-            Managers.Network.Server.Room.Broadcast(packet);
-        }
+        if (!Managers.Network.IsHost) return;
+        Managers.Network.Server.Room.SpawnLootingItems(lootingId,5,transform.position, 1.0f, 2.0f);
+        S_DeSpawn packet = new S_DeSpawn();
+        packet.ObjectIds.Add(Id);
+        Managers.Network.Server.Room.Broadcast(packet);
     }
-    
-    public void StartDelayDeath()
+
+    private void FinishHitAnim()
     {
-        StartCoroutine(nameof(DelayDeath));
+        State = CreatureState.Idle;
     }
 }

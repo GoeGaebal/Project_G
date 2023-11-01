@@ -109,6 +109,7 @@ public class Managers : MonoBehaviour
     
     public static void Clear()
     {
+        Object.Clear();
         Scene.Clear();
         Pool.Clear();
     }

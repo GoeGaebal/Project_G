@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -80,6 +81,7 @@ public class Player : CreatureController
     {
         bodyAnimator.SetTrigger(DieAnimParam);
         legAnimator.SetTrigger(DieAnimParam);
+        StartCoroutine(FinishDie());
 
         if (Managers.Scene.CurrentScene is not GameScene) return;
         if(GameScene.PlayerLifeCnt > 0) GameScene.PlayerLifeCnt --;
@@ -238,6 +240,20 @@ public class Player : CreatureController
 
     public void FinishDieAnimClip()
     {
+        gameObject.SetActive(false);
+
+        if (Managers.Network.LocalPlayer == this)
+        {
+            if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+            if (!playerCameraController.enabled)
+                playerCameraController.enabled = true;
+            playerCameraController.SetPosition(transform.position);
+        }
+    }
+
+    private IEnumerator FinishDie()
+    {
+        yield return new WaitForSeconds(5.0f);
         gameObject.SetActive(false);
 
         if (Managers.Network.LocalPlayer == this)

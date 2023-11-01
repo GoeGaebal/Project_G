@@ -49,7 +49,7 @@ public class WeaponPivotController : NetworkObject
         
         // 실제 데미지 함수
         var numResults = Physics2D.OverlapCollider(_collider,_filter2D,_results);
-        for (var i = 0; i < numResults; i++)  _results[i].gameObject.GetComponent<BasicMonster>()?.OnDamage(realDamage);
+        for (var i = 0; i < numResults; i++)  _results[i].gameObject.GetComponent<CreatureController>()?.OnDamage(realDamage);
     }
 
     public void OnEndAttack()

@@ -102,14 +102,16 @@ AnimationClip:
   - time: 0.6
     functionName: DoSpell
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 52f198374662eb348a547b9b77c46905,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.8
     functionName: FinishCasthingState
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 52f198374662eb348a547b9b77c46905,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
