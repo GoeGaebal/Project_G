@@ -32,8 +32,6 @@ public class LootingItemController : NetworkObject
     [Tooltip("충돌계수")]
     [Range(0.0f,1.0f)]
     [SerializeField] private float cof;
-    [Tooltip("튕겨지는 개수")]
-    [SerializeField] private int bounceCount;
     [Tooltip("임계 속도")]
     [SerializeField] private float threshold;
     private static float Sn;
@@ -50,7 +48,6 @@ public class LootingItemController : NetworkObject
         shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
         
         cof = 0.6f;
-        bounceCount = 5;
         threshold = 1.0f;
         Sn = 2.3056f;
         
@@ -111,7 +108,7 @@ public class LootingItemController : NetworkObject
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!Managers.Network.isHost) return;
+        if (!Managers.Network.IsHost) return;
         
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
@@ -122,7 +119,7 @@ public class LootingItemController : NetworkObject
                 if (ui_inven.AddItem(Item))
                 {
                     Debug.Log("아이템 획득 성공");
-                    S_Despawn packet = new S_Despawn();
+                    S_DeSpawn packet = new S_DeSpawn();
                     packet.ObjectIds.Add(Id);
                     Managers.Network.Server.Room.Broadcast(packet);
                 }
@@ -138,7 +135,7 @@ public class LootingItemController : NetworkObject
                 itemPacket.ObjectId = Id;
                 itemPacket.ItemId = Item.ID;
                 player.Session.Send(itemPacket);
-                S_Despawn packet = new S_Despawn();
+                S_DeSpawn packet = new S_DeSpawn();
                 packet.ObjectIds.Add(Id);
                 Managers.Network.Server.Room.Broadcast(player.Id, packet);
             }

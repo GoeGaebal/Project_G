@@ -19,7 +19,7 @@ public class Player : CreatureController
     public float realDamage = 0f;//장비, 유물 스탯 연산 이후 공격력
 
     private PlayerCameraController playerCameraController;
-    private WeaponPivotController wpc;
+    private WeaponPivotController _wpc;
     private Vector2 _moveInput;
 
     private Rigidbody2D _rb;
@@ -32,7 +32,7 @@ public class Player : CreatureController
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
 
-    public ClientSession Session { get; set; }
+    public ClientSession Session => Managers.Network.Server.Room.PlayersSessions[Id];
 
     IInteractable interactable;
     string interactableName;
@@ -46,7 +46,7 @@ public class Player : CreatureController
     private void Awake()
     {
         ObjectType = GameObjectType.Player;
-        wpc = transform.GetComponentInChildren<WeaponPivotController>();
+        _wpc = transform.GetComponentInChildren<WeaponPivotController>();
         _rb = GetComponent<Rigidbody2D>();
         PosInfo.Dir = 1;
     }
@@ -57,7 +57,6 @@ public class Player : CreatureController
         State = CreatureState.Idle;
         //카메라 이동 제한
         if (Managers.Network.LocalPlayer != this) return;
-        
         
         if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.SetPosition(transform.position);
@@ -88,7 +87,7 @@ public class Player : CreatureController
 
     protected override void OnAttack()
     {
-        wpc.Attack();
+        _wpc.Attack(realDamage);
     }
 
     protected override void OnHit()
@@ -124,35 +123,13 @@ public class Player : CreatureController
         Vector3 mousePos = Managers.Input.UIActions.Point.ReadValue<Vector2>();
         mousePos.z = Camera.main.transform.position.z;
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-
-        if(worldPos.x >=  transform.position.x)
-        {
-            Left_Arm.SetActive(true);
-            Right_Arm.SetActive(false);
-            Vector2 localSc = transform.localScale;
-            localSc.x = -1 * Math.Abs(localSc.x);
-            transform.localScale = localSc;
-            Vector2 wpcLocalScale = wpc.transform.localScale;
-            wpc.transform.localScale = new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y));
-        }
-        else
-        {
-            Left_Arm.SetActive(false);
-            Right_Arm.SetActive(true);
-            Vector2 localSc = transform.localScale;
-            localSc.x = Math.Abs(localSc.x);
-            transform.localScale = localSc;
-            Vector2 wpcLocalScale = wpc.transform.localScale;
-            wpc.transform.localScale = new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
-        }
+        
+        Flip(worldPos.x >=  transform.position.x);
 
         if (State == CreatureState.Run || State == CreatureState.Attack)
         {
             Vector3 dest = _rb.position + _moveInput * moveSpeed * Time.fixedDeltaTime;
-            if (Managers.Map.CheckCanGo(dest))
-            {
-                _rb.MovePosition(dest);
-            }
+            if (Managers.Map.CheckCanGo(dest)) _rb.MovePosition(dest);
         }
         // 매번 패킷을 보낸다.
         var position = transform.position;
@@ -160,15 +137,33 @@ public class Player : CreatureController
         PosInfo.PosY = position.y;
         PosInfo.Dir = (int)transform.localScale.x;
         PosInfo.State = State;
-        var wpcTrasform = wpc.transform;
-        PosInfo.WposX = wpcTrasform.localPosition.x;
-        PosInfo.WposY = wpcTrasform.localPosition.y;
-        PosInfo.WrotZ = wpcTrasform.localEulerAngles.z;
         Info.PosInfo = PosInfo;
 
-        C_Move packet = new C_Move();
-        packet.PosInfo = PosInfo;
+        var t = _wpc.transform;
+        var p = t.localPosition;
+        var packet = new C_PlayerMove
+        {
+            PosInfo = new PlayerPosInfo()
+            {
+                PosInfo = PosInfo,
+                WPosX = p.x,
+                WPosY = p.y,
+                WRotZ = t.localEulerAngles.z
+            }
+        };
         Managers.Network.Client.Send(packet);
+    }
+
+    private void Flip(bool isFlip)
+    {
+        Left_Arm.SetActive(isFlip);
+        Right_Arm.SetActive(!isFlip);
+        Vector2 localSc = transform.localScale;
+        localSc.x = isFlip ? -1 * Math.Abs(localSc.x) : localSc.x = Math.Abs(localSc.x);
+        transform.localScale = localSc;
+        Vector2 wpcLocalScale = _wpc.transform.localScale;
+        _wpc.transform.localScale = 
+            (isFlip) ? new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y)) : new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -190,7 +185,7 @@ public class Player : CreatureController
     
     public override void OnDamage(float damage)
     {
-        if (!Managers.Network.isHost) return;
+        if (!Managers.Network.IsHost) return;
         
         if(IsDead) return;
         base.OnDamage(damage);
@@ -236,20 +231,9 @@ public class Player : CreatureController
     
     public void FinishAttackState()
     {
-        if(attackInputBuffer) 
-        {
-            attackInputBuffer = false;
-        }
-        else if (Managers.Input.PlayerActions.Move.IsPressed())
-        {
-            State = CreatureState.Run;
-            _moveInput = runInputBuffer;
-            runInputBuffer = Vector2.zero;
-        }
-        else 
-        {
-            State = CreatureState.Idle;
-        }
+        if (this == Managers.Network.LocalPlayer)
+            State = Managers.Input.PlayerActions.Move.IsPressed() ? CreatureState.Run : CreatureState.Idle;
+        else State = CreatureState.Idle;
     }
 
     public void FinishDieAnimClip()
@@ -314,7 +298,15 @@ public class Player : CreatureController
         base.SyncPos();
         State = PosInfo.State;
         transform.localScale = new Vector3(PosInfo.Dir,1, 1);
-        wpc.transform.localPosition = new Vector3(PosInfo.WposX, PosInfo.WposY);
-        wpc.transform.localEulerAngles = new Vector3(0, 0, PosInfo.WrotZ);
+        _wpc.transform.localScale = new Vector3(PosInfo.Dir, PosInfo.Dir, 1);
+        Left_Arm.SetActive(PosInfo.Dir == -1);
+        Right_Arm.SetActive(PosInfo.Dir != -1);
+    }
+
+    public void SyncWPos(float WposX, float WposY, float WrotZ)
+    {
+        var t = _wpc.transform;
+        t.localPosition = new Vector3(WposX, WposY);
+        t.localEulerAngles = new Vector3(0, 0, WrotZ);
     }
 }

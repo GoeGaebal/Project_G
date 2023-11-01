@@ -212,7 +212,7 @@ public class UI_Worldmap : UI_Scene
 
     public void OnWorldmapButtonClick(PointerEventData evt)
     {
-        if (!Managers.Network.isHost) return;
+        if (!Managers.Network.IsHost) return;
         
         SetTarget(evt.pointerPress);
         _arriveFlag = false;
@@ -231,7 +231,7 @@ public class UI_Worldmap : UI_Scene
 
     public void PauseMove()
     {
-        if (!Managers.Network.isHost) return;
+        if (!Managers.Network.IsHost) return;
         
         SetTarget(_ship);
         _moveFlag = false;

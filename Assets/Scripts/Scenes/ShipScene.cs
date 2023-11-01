@@ -14,7 +14,7 @@ public class ShipScene : BaseScene
         SceneType = SceneType.Ship;
         Managers.Map.LoadMap(4);
 
-        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Network.PlayerDict.Values; 
+        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Object.PlayerDict.Values; 
         foreach(Player playerComponent in playerComponents)
         {   
             playerComponent.gameObject.SetActive(true);

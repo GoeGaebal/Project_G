@@ -14,8 +14,7 @@ public partial class FinalBossMonster
 
         public void Spell()
         {
-            
-            List<KeyValuePair<int, Player>> playerList =  Managers.Network.PlayerDict.ToList();
+            List<KeyValuePair<int, Player>> playerList =  Managers.Object.PlayerDict.ToList();
             for(int i =0;i<playerList.Count;i++)
             {
                 _finalBossMonster.thunders[i].SetActive(true);

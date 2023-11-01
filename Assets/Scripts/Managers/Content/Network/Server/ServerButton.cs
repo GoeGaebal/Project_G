@@ -8,6 +8,6 @@ public class ServerButton : MonoBehaviour
     public void Begin()
     {
         Managers.Network.Server.Init();
-        Managers.Network.isHost = true;
+        Managers.Network.IsHost = true;
     }
 }

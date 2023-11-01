@@ -12,23 +12,19 @@ namespace Server
 {
 	public class ClientSession : PacketSession
 	{
-		public Player MyPlayer { get; set; }
+		public Player MyPlayer => Managers.Object.PlayerDict[_myPlayerId];
+		private int _myPlayerId;
 
 		public int SessionId { get; set; }
 
 		public void OnConnectedCoroutine()
 		{
-			MyPlayer = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
-			MyPlayer.Id = Managers.Object.GenerateId(GameObjectType.Player);
-			MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
-			MyPlayer.gameObject.name = MyPlayer.Info.Name;
-			// MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-			// MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
-			// MyPlayer.Info.PosInfo.PosX = 0;
-			// MyPlayer.Info.PosInfo.PosY = 0;
-			MyPlayer.Session = this;
-			Managers.Network.Server.Room.EnterGame(this, MyPlayer);
-			return;
+			// MyPlayer = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
+			_myPlayerId = Managers.Object.GenerateId(GameObjectType.Player);
+			ObjectInfo myPlayerInfo = new ObjectInfo();
+			myPlayerInfo.ObjectId = _myPlayerId;
+			myPlayerInfo.Name =  $"Player_{_myPlayerId}";
+			Managers.Network.Server.Room.EnterGame(this, myPlayerInfo);
 		}
 
 		public void Send(IMessage packet)
@@ -56,7 +52,7 @@ namespace Server
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
-			MyPlayer.Room.LeaveGame(MyPlayer.Info.ObjectId);
+			Managers.Network.Server.Room.LeaveGame(MyPlayer.Info.ObjectId);
 			Managers.Network.Server.SessionManager.Remove(this);
 			Debug.Log($"OnDisconnected : {endPoint}");
 		}

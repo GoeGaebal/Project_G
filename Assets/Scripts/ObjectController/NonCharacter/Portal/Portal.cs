@@ -1,16 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour
 {
     public bool isExitPortal;
-    private int incomingObjectCount = 0;
+    private static ContactFilter2D _filter2D;
+
+    private Collider2D _collider;
+    private Collider2D[] _results = new Collider2D[5];
 
     private SpriteRenderer _sprite;
     [SerializeField] private bool _movable = true;
@@ -18,15 +16,17 @@ public class Portal : MonoBehaviour
     private void Start()
     {
         _sprite = GetComponent<SpriteRenderer>();
+        _collider = GetComponent<Collider2D>();
+        _filter2D.useLayerMask = true;
+        _filter2D.useTriggers = true;
+        _filter2D.SetLayerMask(LayerMask.GetMask("Player"));
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!Managers.Network.isHost) return;
-        Player player = null;
-        if (!other.TryGetComponent<Player>(out player)) return;
-        
-        incomingObjectCount++;
+        if (!Managers.Network.IsHost) return;
+        if (!other.TryGetComponent<Player>(out var player)) return;
+        var incomingObjectCount = Physics2D.OverlapCollider(_collider,_filter2D,_results);
         if (isExitPortal)
         {
             S_LeaveGame packet = new S_LeaveGame();
@@ -40,10 +40,10 @@ public class Portal : MonoBehaviour
             {
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
-                    foreach (Player p in Managers.Network.Server.Room.Players.Values)
-                    {
-                        DontDestroyOnLoad(p.gameObject);
-                    }
+                    // foreach (Player p in Managers.Network.Server.Room.Players.Values)
+                    // {
+                    //     DontDestroyOnLoad(p.gameObject);
+                    // }
                     Managers.Network.Server.Room.LoadScene(SceneType.Ship);
                 }
                 else if (SceneManager.GetActiveScene().name == "Ship")
@@ -66,10 +66,5 @@ public class Portal : MonoBehaviour
     public void SetPortal(bool move)
     {
         _movable = move;
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        incomingObjectCount--;
     }
 }

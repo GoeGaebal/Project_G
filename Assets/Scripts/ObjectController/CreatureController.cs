@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Google.Protobuf.Protocol;
-using Unity.VisualScripting;
-using UnityEngine;
 
 public abstract class CreatureController : NetworkObject
 {
     public float maxHP;
-    public float HP{get;protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.
+    public float HP {get; protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.
     
     private CreatureState _state;
     public bool IsDead => CreatureState.Dead == _state;
@@ -20,10 +17,9 @@ public abstract class CreatureController : NetworkObject
             UpdateState();
         }
     }
-    
-    protected virtual void UpdateState()
+
+    private void UpdateState()
     {
-        if(IsDead) return;
         switch (State)
         {
             case CreatureState.Idle:
@@ -48,42 +44,41 @@ public abstract class CreatureController : NetworkObject
 
     protected abstract void OnIdle();
     protected abstract void OnRun();
-    protected abstract void OnDie();
+
+    protected virtual void OnDie()
+    {
+        if (Managers.Network.IsHost)
+        {
+            S_DeSpawn despawn = new S_DeSpawn();
+            despawn.ObjectIds.Add(Id);
+            Managers.Network.Server.Room.Broadcast(despawn);
+            Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
+        }
+    }
     protected abstract void OnAttack();
     protected abstract void OnHit();
     
     public virtual void OnDamage(float damage)
     {
-        if (IsDead) return;
-        if(Managers.Network.isHost)
+        if (Managers.Network.IsHost)
         {
-            HP -= damage;
-            S_OnDamage packet = new S_OnDamage();
-            packet.ObjectId = Id;
-            packet.Damage = damage;
-            packet.HP = HP;
-            packet.IsDead = IsDead;
-            UpdateHP(HP, IsDead);
+            var hp = HP;
+            hp -= damage;
+            var packet = new S_OnDamage
+            {
+                ObjectId = Id,
+                Damage = damage,
+                HP = hp,
+                IsDead = hp <= 0
+            };
             Managers.Network.Server.Room.Broadcast(packet);
         }
-        
-        if (HP<=0 && !IsDead)
-        {
-            Die();
-        }
+        OnHit();
     }
-    
-    public virtual void Die()
+
+    public void UpdateHP(float hp, bool dead) 
     {
-        if (IsDead) return;
-        State = CreatureState.Dead;
-        Debug.Log("Die");
-        
-    }
-    
-    public virtual void UpdateHP(float health, bool dead) 
-    {
-        this.HP = health;
+        HP = hp;
         if (dead) State = CreatureState.Dead;
     }
 
@@ -106,5 +101,11 @@ public abstract class CreatureController : NetworkObject
 
         if (HP + restoreHP >= maxHP) HP = maxHP;
         else HP += restoreHP;
+    }
+
+    public override void SyncPos()
+    {
+        base.SyncPos();
+        State = PosInfo.State;
     }
 }

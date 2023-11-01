@@ -29,7 +29,7 @@ public class DamageableEntity : NetworkObject, IDamageable
     public virtual void OnDamage(float damage)
     {
         if (isDead) return;
-        if(Managers.Network.isHost)
+        if(Managers.Network.IsHost)
         {
             HP -= damage;
             S_OnDamage packet = new S_OnDamage();

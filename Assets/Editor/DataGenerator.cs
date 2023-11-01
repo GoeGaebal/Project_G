@@ -18,5 +18,11 @@ public class DataGenrator
     {
         Process.Start("DataBase\\ConvertExcelToJson.bat");
     }
+    
+    [MenuItem("Tools/GeneratePacket")]
+    private static void GeneratePacket()
+    {
+        Process.Start("PacketGenerator\\protoc-3.12.3-win64\\bin\\GenProto.bat");
+    }
 #endif
 }

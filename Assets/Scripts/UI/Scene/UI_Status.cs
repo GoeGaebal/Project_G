@@ -44,8 +44,7 @@ public class UI_Status : UI_Scene
 
     private GameObject[] players;
     private GameObject playerGO;
-    private Player player;
-    
+
     private GameObject rotatingTimer;
     private float ratio = 0;
 
@@ -73,8 +72,6 @@ public class UI_Status : UI_Scene
         hpText = GetTextMeshPro((int)Texts.HPText);
 
         rotatingTimer = GetObject((int)GameObjects.Timer);
-
-        player = Managers.Network.LocalPlayer;
 
         _optionPanel = Get<GameObject>((int)GameObjects.OptionPanel);
         _optionPanel.SetActive(false);
@@ -107,9 +104,8 @@ public class UI_Status : UI_Scene
     {
         UpdateHPBar();
         UpdateHPText();
-        int cnt = Managers.Network.OtherPlayers.Count;
-        for(int i = 0; i < cnt; i++)
-            uiOtherHps[i].SetStatus(Managers.Network.OtherPlayers[i]);
+        int i = 0;
+        foreach (var player in Managers.Object.OtherPlayerDict.Values) uiOtherHps[i++].SetStatus(player);
     }
 
     void FixedUpdate()
@@ -117,36 +113,20 @@ public class UI_Status : UI_Scene
         AddTime();
     }
 
-    private Player FindPlayer()
-    {
-        players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
-        Debug.Log(players.Length);
-        foreach (GameObject p in players)
-        {
-            PhotonView photonView = p.GetPhotonView();
-            if (photonView != null && photonView.IsMine)//내 플레이어 오브젝트 찾기
-            {
-                playerGO = p;//플레이어 게임오브젝트
-                return playerGO.GetComponent<Player>();//플레이어 스크립트
-            }
-        }
-        return null;
-    }
-
     private void UpdateHPBar()
     {
-        if (player != null)
+        if (Managers.Network.LocalPlayer != null)
         {
-            float temp = player.HP / player.maxHP;
+            float temp = Managers.Network.LocalPlayer.HP / Managers.Network.LocalPlayer.maxHP;
             hpBar.fillAmount = temp;
         }
     }
 
     private void UpdateHPText()
     {
-        if(player != null)
+        if(Managers.Network.LocalPlayer != null)
         {
-            hpText.SetText(player.HP + " / " + player.maxHP);
+            hpText.SetText(Managers.Network.LocalPlayer.HP + " / " + Managers.Network.LocalPlayer.maxHP);
         }
     }
     

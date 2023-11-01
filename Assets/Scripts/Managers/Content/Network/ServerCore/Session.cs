@@ -112,7 +112,7 @@ namespace ServerCore
 		{
 			if (Interlocked.Exchange(ref _disconnected, 1) == 1)
 				return;
-
+			
 			OnDisconnected(_socket.RemoteEndPoint);
 			_socket.Shutdown(SocketShutdown.Both);
 			_socket.Close();

@@ -12,12 +12,12 @@ public class UI_Leaf : UI_Scene
         Leaf3
     }
 
-    [SerializeField] Color _colorAvailable;
-    [SerializeField] Color _colorUnavailable;
-    [SerializeField] float _healPercentage;
+    [SerializeField] private Color colorAvailable;
+    [SerializeField] private Color colorUnavailable;
+    [SerializeField] private float healPercentage;
 
-    static private int _availableCount = 2;
-    static public int AvailableCount{
+    private static int _availableCount = 2;
+    public static int AvailableCount{
         get{return _availableCount;}
         set{
             _availableCount = value;
@@ -39,22 +39,22 @@ public class UI_Leaf : UI_Scene
 
         for(int i = 0;i<_availableCount;i++)
         {
-            _imageList[i].GetComponent<Image>().color = _colorAvailable;
+            _imageList[i].GetComponent<Image>().color = colorAvailable;
         }
         for(int i = _availableCount;i<_imageList.Count;i++)
         {
-            _imageList[i].GetComponent<Image>().color = _colorUnavailable;
+            _imageList[i].GetComponent<Image>().color = colorUnavailable;
         }
     }
 
     public void HealPlayers()
     {
-        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Network.PlayerDict.Values; 
+        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Object.PlayerDict.Values; 
         foreach(Player playerComponent in playerComponents)
         {
             if(playerComponent == null) continue;
-            Debug.Log(playerComponent.maxHP * (_healPercentage)/100 * _availableCount + "healed");
-            playerComponent.RestoreHP(playerComponent.maxHP * (_healPercentage)/100 * _availableCount);
+            Debug.Log(playerComponent.maxHP * (healPercentage)/100 * _availableCount + "healed");
+            playerComponent.RestoreHP(playerComponent.maxHP * (healPercentage)/100 * _availableCount);
         }
     }
 }

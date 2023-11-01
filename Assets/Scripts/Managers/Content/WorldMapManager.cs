@@ -37,7 +37,7 @@ public class WorldMapManager
         if(_isBossBattle) return;
         if(UI == null) return;
         // TODO : 추후 Server로 로직을 옮김
-        if (Managers.Network.isHost)
+        if (Managers.Network.IsHost)
         {
             UpdateShipPosition();
             UpdateFinalBossPosition(deltaTime);

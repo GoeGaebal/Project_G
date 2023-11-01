@@ -24,8 +24,10 @@ public class ClientPacketManager
 		_handler.Add((ushort)MsgId.SLeaveGame, PacketHandler.S_LeaveGameHandler);		
 		_onRecv.Add((ushort)MsgId.SSpawn, MakePacket<S_Spawn>);
 		_handler.Add((ushort)MsgId.SSpawn, PacketHandler.S_SpawnHandler);		
-		_onRecv.Add((ushort)MsgId.SDespawn, MakePacket<S_Despawn>);
-		_handler.Add((ushort)MsgId.SDespawn, PacketHandler.S_DespawnHandler);		
+		_onRecv.Add((ushort)MsgId.SDeSpawn, MakePacket<S_DeSpawn>);
+		_handler.Add((ushort)MsgId.SDeSpawn, PacketHandler.S_DeSpawnHandler);		
+		_onRecv.Add((ushort)MsgId.SPlayerMove, MakePacket<S_PlayerMove>);
+		_handler.Add((ushort)MsgId.SPlayerMove, PacketHandler.S_PlayerMoveHandler);		
 		_onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
 		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
 		_onRecv.Add((ushort)MsgId.SSkill, MakePacket<S_Skill>);
@@ -45,7 +47,9 @@ public class ClientPacketManager
 		_onRecv.Add((ushort)MsgId.SOnDamage, MakePacket<S_OnDamage>);
 		_handler.Add((ushort)MsgId.SOnDamage, PacketHandler.S_OnDamageHandler);		
 		_onRecv.Add((ushort)MsgId.SAddItem, MakePacket<S_AddItem>);
-		_handler.Add((ushort)MsgId.SAddItem, PacketHandler.S_AddItemHandler);
+		_handler.Add((ushort)MsgId.SAddItem, PacketHandler.S_AddItemHandler);		
+		_onRecv.Add((ushort)MsgId.SSpawnLooting, MakePacket<S_SpawnLooting>);
+		_handler.Add((ushort)MsgId.SSpawnLooting, PacketHandler.S_SpawnLootingHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

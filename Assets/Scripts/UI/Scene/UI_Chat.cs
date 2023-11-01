@@ -45,7 +45,6 @@ public class UI_Chat : UI_Scene
 
     private void OnDestroy()
     {
-        Managers.Network.ReceiveChatHandler -= UpdateChat;
         Managers.Input.UIActions.Submit.RemoveEvent(FocusInputField);
     }
 

@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public class BasicMonster : DamageableEntity
+public class BasicMonster : CreatureController
 {
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
@@ -11,272 +12,140 @@ public class BasicMonster : DamageableEntity
     [SerializeField] protected float speed;
     [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
-     internal Vector3 _spawnPosition;
+    private Vector3 _spawnPosition;
+    private Animator _animator;
 
-
-    internal Animator animator;
-    protected SpriteRenderer spriteRenderer;
-
-    protected IdleState idleState;
-    protected RunState runState;
-    protected HitState hitState;
-    protected AttackState attackState;
+    protected SpriteRenderer SpriteRenderer;
 
     protected bool hasTarget;
-    public bool HasTarget{
-        get{return hasTarget;}
-    }
-    protected GameObject target;
-    public GameObject Target
-    {
-        get{return target;}
-    }
+    public bool HasTarget => hasTarget;
+    protected Transform _target;
+    public Transform Target => _target;
+    private readonly Collider2D[] _colliders = new Collider2D[1];
     protected float lastAttackTime;
-    private State _animState;
-    public State AnimState
+    
+    private static readonly int RunAnimParam = Animator.StringToHash("run");
+    private static readonly int Hit = Animator.StringToHash("hit");
+    private static readonly int DieAnimParam = Animator.StringToHash("die");
+    private static readonly int AttackAnimParam = Animator.StringToHash("attack");
+    private static readonly int DistanceAnimParam = Animator.StringToHash("distance");
+
+    private void Awake()
     {
-        get{
-            return _animState;
-        }
-
-        protected set{ 
-            _animState = value; 
-            AnimState.Init();
-        }
+        _animator = GetComponent<Animator>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-   
-    protected virtual void Start() {
-
-        animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
+    protected virtual void Start()
+    {
         hasTarget = false;
-        target = null;
-        lastAttackTime = 0;
-        
-        dieAction -= ()=> StartCoroutine(nameof(DieCoroutine));
-        dieAction += ()=> StartCoroutine(nameof(DieCoroutine));
-
-
-        idleState = new (this);
-        runState = new(this);
-        attackState = new(this);
-        hitState = new(this);
-
-        AnimState = idleState;
+        _target = null;
         _spawnPosition = transform.position;
+        lastAttackTime = 0;
     }
 
-    protected virtual void Update() {
+    protected virtual void FixedUpdate() {
         
-        if(isDead) return;
-        
-        Collider2D[] playerColliders = Physics2D.OverlapCircleAll(gameObject.transform.position, detectRadius,chaseTargetLayerMask);
- 
-
-        if(!hasTarget)
+        if(IsDead || !Managers.Network.IsHost) return;
+        if (!hasTarget)
         {
-             if((transform.position - _spawnPosition).magnitude > 1.0f)
-             {
-                 AnimState = runState;
-             }
-
-             foreach(var playerCollider in playerColliders)
-             {
-                 if(playerCollider.GetComponent<DamageableEntity>() == null || playerCollider.GetComponent<DamageableEntity>().isDead) continue;
-                 hasTarget = true;
-                 target = playerCollider.gameObject;
-             }
-
-        }
-
-        if(playerColliders.Length == 0 || playerColliders == null)
-        {
-            hasTarget = false;          
-            target = null;
-        }
-
- 
-        
-        if(hasTarget)
-        {
-            
-            //target check
-            if(target == null) return;
-            //타겟 잃어버림
-            if(target.GetComponent<DamageableEntity>() == null ||target.GetComponent<DamageableEntity>().isDead) 
+            var size = Physics2D.OverlapCircleNonAlloc(gameObject.transform.position, detectRadius, _colliders, chaseTargetLayerMask);
+            if (size > 0)
             {
-                target = null;
-                hasTarget = false;
+                _target = _colliders[0].transform;
+                hasTarget = true;
             }
         }
-        AnimState.UpdateInState();
-        
-    }
-    
-    override public void OnDamage(float damage) 
-    {
-        base.OnDamage(damage);
-        if(isDead) return;
-        if(!(AnimState is IdleState) && !(AnimState is RunState)) return;
-        AnimState = hitState;
-    }
 
-
-     protected virtual IEnumerator DieCoroutine()
-     {
-        animator.ResetTrigger("hit");   
-        animator.SetTrigger("die");
-        yield return new WaitForSeconds(1.0f);
-
-        if (Managers.Network.isHost)
+        if (hasTarget)
         {
-            S_Despawn despawn = new S_Despawn();
+            var distance = GetDistance(Target.transform.position);
+            State = distance > minDisFromPlayer ? CreatureState.Run : CreatureState.Idle;
+            _animator.SetFloat(DistanceAnimParam, distance);
+        }
+        // 만일 타겟을 가지고 있지 않다면
+        else
+        {
+            var distance = GetDistance(_spawnPosition);
+            State = distance > 1.0f ? CreatureState.Run : CreatureState.Idle;
+        }
+        
+        var packet = new S_Move
+        {
+            ObjectId = Id,
+            PosInfo = new PositionInfo()
+            {
+                Dir = (int)transform.localScale.x,
+                PosX = transform.position.x,
+                PosY = transform.position.y,
+                State = State
+            }
+        };
+        Managers.Network.Server.Room.Broadcast(Managers.Network.LocalPlayer.Id, packet);
+    }
+
+    protected override void OnIdle()
+    {
+        _animator.SetBool(RunAnimParam,false);
+        if (hasTarget && Time.time - lastAttackTime >= attackCooldown)
+            State = CreatureState.Attack;
+    }
+
+    protected override void OnRun()
+    {
+        _animator.SetBool(RunAnimParam, true);
+        var position = transform.position;
+        Vector2 targetPosition = hasTarget ? Target.transform.position : _spawnPosition;
+        DoFlip(targetPosition.x < position.x);
+        transform.position = Vector2.MoveTowards(position, targetPosition, speed * Time.deltaTime);
+    }
+
+    protected override void OnAttack()
+    {
+        _animator.SetTrigger(AttackAnimParam);
+    }
+
+    protected override void OnHit()
+    {
+        _animator.SetTrigger(Hit);
+    }
+
+    protected override void OnDie()
+    {
+        _animator.ResetTrigger(Hit);
+        _animator.SetTrigger(DieAnimParam);
+    }
+
+    private void OnEndDieAnim()
+    {
+        if (!Managers.Network.IsHost) return;
+        Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
+        {
+            S_DeSpawn despawn = new S_DeSpawn();
             despawn.ObjectIds.Add(Id);
             Managers.Network.Server.Room.Broadcast(despawn);
-            Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
         }
-     }
-        protected float GetDistance()
+    }
+
+    private void FinishAttackAnim()
+    {
+        lastAttackTime = Time.time;
+        State = CreatureState.Idle;
+    }
+
+    private void FinishHitAnim()
+    {
+        if (hasTarget && GetDistance(Target.position) > minDisFromPlayer) State = CreatureState.Run;
+        else State = CreatureState.Idle;
+    }
+    protected float GetDistance(Vector3 targetPosition)
     { 
-        return (target.transform.position - transform.position).magnitude;
-    }
-
-    public void FinishAttackState()
-    {
-        AnimState = idleState;
-    }
-
-    public void FinishHitState()
-    {
-        AnimState = idleState;
+        return (targetPosition - transform.position).magnitude;
     }
 
     protected virtual void DoFlip(bool value)
     {
-        if(isSpriteRightSide)spriteRenderer.flipX = value;
-        else spriteRenderer.flipX = !value;
-    }
-
-    public abstract class State
-    {
-        protected BasicMonster basicMonster;
-        public abstract void Init();
-        public virtual void UpdateInState()
-        {
-        }
-    }
-
-     protected class IdleState : State
-    {
-        internal IdleState(BasicMonster bm)
-        {
-            basicMonster = bm;
-        }
-        public override void Init()
-        {
-            basicMonster.animator.SetBool("run",false);
-        }
-
-        public override void UpdateInState()
-        {
-            if(basicMonster.target != null && basicMonster.GetDistance() > basicMonster.minDisFromPlayer )
-            {
-                basicMonster.AnimState = basicMonster.runState;
-            }
-            else if(basicMonster.hasTarget == true && Time.time - basicMonster.lastAttackTime >=basicMonster. attackCooldown)  
-            {
-                basicMonster.lastAttackTime = Time.time;
-                basicMonster.AnimState = basicMonster.attackState;
-            }
-            if(basicMonster.target != null)
-            {
-                float distance = basicMonster.GetDistance();
-                basicMonster.animator.SetFloat("distance", distance);
-            }
-            
-        }
-    }
-
-    protected class AttackState : State
-    {
-        internal AttackState(BasicMonster bm)
-        {
-            basicMonster = bm;
-        }
-        public override void Init()
-        {
-            
-            basicMonster.animator.SetTrigger("attack");
-        }
-
-        public override void UpdateInState()
-        {
-            if(basicMonster.target != null)
-            {
-                float distance = basicMonster.GetDistance();
-                basicMonster.animator.SetFloat("distance", distance);
-            }
-           
-        }
-    }
-
-    protected class RunState : State
-    {
-        internal RunState(BasicMonster bm)
-        {
-            basicMonster = bm;
-        }
-        public override void Init()
-        {
-            basicMonster.animator.SetBool("run",true);
-        }
-
-        public override void UpdateInState()
-        {
-            if(!basicMonster.animator.GetBool("run")) basicMonster.animator.SetBool("run",true);
-            if(basicMonster.hasTarget == false )
-            {
-                if(basicMonster._spawnPosition.x < basicMonster.transform.position.x) basicMonster.DoFlip(true);
-                else basicMonster.DoFlip(false);
-                basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster._spawnPosition, basicMonster.speed * Time.deltaTime);
-                
-                if( (basicMonster.transform.position - basicMonster._spawnPosition).magnitude <= 0.001f)
-                {
-                    basicMonster.AnimState = basicMonster.idleState;
-                }
-            }
-            else if (basicMonster.target != null && basicMonster.GetDistance()<= basicMonster.minDisFromPlayer)
-            {
-                basicMonster.AnimState = basicMonster.idleState;
-            }
-            else if(basicMonster.target != null && basicMonster.GetDistance()> basicMonster.minDisFromPlayer)
-            {
-                if(basicMonster.target.transform.position.x < basicMonster.transform.position.x) basicMonster.DoFlip(true);
-                else basicMonster.DoFlip(false);
-                basicMonster.transform.position = Vector3.MoveTowards(basicMonster.transform.position, basicMonster.target.transform.position, basicMonster.speed * Time.deltaTime);
-
-                if(basicMonster.target != null)
-                {
-                    float distance = basicMonster.GetDistance();
-                    basicMonster.animator.SetFloat("distance", distance);
-                }
-                
-            }
-                
-        }
-    }
-
-    protected class HitState : State
-    {
-        internal HitState (BasicMonster bm)
-        {
-            basicMonster = bm;
-        }
-        public override void Init()
-        {
-            basicMonster.animator.SetTrigger("hit");
-        }
+        if(isSpriteRightSide)SpriteRenderer.flipX = value;
+        else SpriteRenderer.flipX = !value;
     }
 }

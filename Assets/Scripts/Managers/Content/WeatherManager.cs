@@ -39,7 +39,7 @@ public class WeatherManager : IOnEventCallback
 
         PhotonNetwork.AddCallbackTarget(this);
 
-        if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
+        // if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
          
     }
 

@@ -193,8 +193,9 @@ public class UI_Item : UI_Base
         {
             if (_player != null)
             {
+                // TODO : PUN2에서 교체해야함
                 //사과 개수만큼 드랍
-                Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
+                // Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
                 RemoveItem();//인벤토리에서 삭제
             }
         }

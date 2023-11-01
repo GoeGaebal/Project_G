@@ -175,24 +175,13 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         _inventory.SetActive(false);
         _inventory_activeself = _inventory.activeSelf;
 
-        Managers.Network.ReceiveAddItemHandler -= AddItem;
-        Managers.Network.ReceiveAddItemHandler += AddItem;
-
         // LoadData();
     }
 
     private void OnDestroy()
     {
         Managers.Input.PlayerActions.Inventory.RemoveEvent(OnOffInventory);
-        Managers.Network.ReceiveAddItemHandler -= AddItem;
         SaveItems();
-    }
-
-    public void AddItem(int guid)
-    {
-        var item = Managers.Data.ItemDict[
-            Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().Item.ID];
-        AddItem(item);
     }
 
     private IEnumerator PotionUse()

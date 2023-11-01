@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
-using Photon.Pun;
-using UnityEngine.InputSystem;
+
 
 public class WeaponPivotController : NetworkObject
 {
@@ -25,9 +22,9 @@ public class WeaponPivotController : NetworkObject
         _player = transform.parent.gameObject.GetComponent<Player>();
         _animator = GetComponent<Animator>();
         _collider = GetComponent<BoxCollider2D>();
-        // _filter2D.useLayerMask = true;
-        // _filter2D.SetLayerMask(LayerMask.GetMask("Monster"));
-        // _filter2D.
+        _filter2D.useLayerMask = true;
+        _filter2D.useTriggers = true;
+        _filter2D.SetLayerMask(LayerMask.GetMask("Monster"));
     }
 
     void Update()
@@ -45,19 +42,19 @@ public class WeaponPivotController : NetworkObject
         transform.rotation = Quaternion.Euler(new Vector3(0.0f,0.0f,(Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg) + 180.0f));
     }
 
-    public void Attack()
+    public void Attack(float realDamage)
     {
         _animator.SetTrigger(AttackAnimParam);
-        if (!Managers.Network.isHost) return;
+        if (!Managers.Network.IsHost) return;
         
         // 실제 데미지 함수
         var numResults = Physics2D.OverlapCollider(_collider,_filter2D,_results);
-        for (var i = 0; i < numResults; i++)  _results[i].gameObject.GetComponent<BasicMonster>().OnDamage(10.0f);
+        for (var i = 0; i < numResults; i++)  _results[i].gameObject.GetComponent<BasicMonster>()?.OnDamage(realDamage);
     }
 
     public void OnEndAttack()
     {
-        //;
+        _player.FinishAttackState();
     }
     
     

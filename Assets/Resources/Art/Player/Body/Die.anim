@@ -866,7 +866,8 @@ AnimationClip:
   - time: 1.15
     functionName: FinishDieAnimClip
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 845651cad91537a418d42ce75a6bafc7,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

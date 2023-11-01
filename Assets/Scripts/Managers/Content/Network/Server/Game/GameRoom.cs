@@ -1,52 +1,57 @@
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
 using ServerCore;
-using Unity.VisualScripting;
 using UnityEngine;
-using ObjectInfo = Google.Protobuf.Protocol.ObjectInfo;
 
 public class GameRoom
 {
     public int RoomId { get; set; }
-    public Dictionary<int, Player> Players = new Dictionary<int, Player>();
-    public int PlayersCount => Players.Count;
+    public readonly Dictionary<int, ClientSession> PlayersSessions = new Dictionary<int, ClientSession>();
+    private readonly Dictionary<int, ObjectInfo> _players = new Dictionary<int, ObjectInfo>();
+    private readonly Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
+    public int PlayersCount => _players.Count;
 
-    public void EnterGame(ClientSession session, NetworkObject gameObject)
+    public void EnterGame(ClientSession session, ObjectInfo gameObject)
     {
         if (gameObject == null)
             return;
     
-        GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
+        GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.ObjectId);
     
         if (type == GameObjectType.Player)
         {
-            Player player = gameObject.GetComponent<Player>();
-            Players.Add(gameObject.Id, player);
-            player.Room = this;
-    
-            // Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y));
-    
+            // TODO : 들어왔을 때 정보 초기화
+            gameObject.PosInfo = new PositionInfo()
+            {
+                PosX = 0.0f,
+                PosY = 0.0f,
+                Dir = 1,
+            };
+            
+            _players.Add(gameObject.ObjectId, gameObject);
+            PlayersSessions.Add(gameObject.ObjectId, session);
             // 본인한테 정보 전송
             {
                 S_EnterGame enterPacket = new S_EnterGame();
-                enterPacket.Player = player.Info;
+                enterPacket.Player = gameObject;
                 session.Send(enterPacket);
     
-                S_Spawn spawnPacket = new S_Spawn();
-                foreach (Player p in  Players.Values)
+                var spawnPacket = new S_Spawn();
+                foreach (var p in  _players.Values)
                 {
-                    if (player.Id != p.Id)  spawnPacket.Objects.Add(p.Info);
+                    if (gameObject.ObjectId != p.ObjectId)  spawnPacket.Objects.Add(p);
                 }
     
-                // foreach (Monster m in _monsters.Values)
-                //     spawnPacket.Objects.Add(m.Info);
+                foreach (var m in _objects.Values)
+                    spawnPacket.Objects.Add(m);
                 //
                 // foreach (Projectile p in _projectiles.Values)
                 //     spawnPacket.Objects.Add(p.Info);
     
-                player.Session.Send(spawnPacket);
+                session.Send(spawnPacket);
             }
         }
         // else if (type == GameObjectType.Monster)
@@ -67,11 +72,11 @@ public class GameRoom
         // 타인한테 정보 전송
         {
             S_Spawn spawnPacket = new S_Spawn();
-            spawnPacket.Objects.Add(gameObject.Info);
-            foreach (Player p in Players.Values)
+            spawnPacket.Objects.Add(gameObject);
+            foreach (var p in _players.Values)
             {
-                if (p.Id != gameObject.Id)
-                    p.Session.Send(spawnPacket);
+                if (p.ObjectId != gameObject.ObjectId)
+                    PlayersSessions[p.ObjectId].Send(spawnPacket);
             }
         }
     }
@@ -83,32 +88,22 @@ public class GameRoom
         Managers.Network.Server.Room.Broadcast(packet);
     }
 
-    public void HandleMove(Player player, C_Move movePacket)
+    public void HandleMove(Player player, C_PlayerMove movePacket)
     {
-        if (player == null)
-            return;
+        if (player == null) return;
 
-        // // TODO : 검증
-        PositionInfo movePosInfo = movePacket.PosInfo;
+        // TODO : 검증
+        PlayerPosInfo movePosInfo = movePacket.PosInfo;
         var info = player.Info;
-        //
-        // // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-        // if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
-        // {
-        //     if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
-        //         return;
-        // }
+        _players[info.ObjectId].PosInfo = movePosInfo.PosInfo;
+        
+        S_PlayerMove resMovePacket = new S_PlayerMove
+        {
+            ObjectId = player.Info.ObjectId,
+            PosInfo = movePosInfo
+        };
 
-        // info.PosInfo.State = movePosInfo.State;
-        // info.PosInfo.MoveDir = movePosInfo.MoveDir;
-        // Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
-
-        // 다른 플레이어한테도 알려준다
-        S_Move resMovePacket = new S_Move();
-        resMovePacket.ObjectId = player.Info.ObjectId;
-        resMovePacket.PosInfo = movePacket.PosInfo;
-
-        Broadcast(resMovePacket);
+        Broadcast(player.Id, resMovePacket);
     }
     
     public void LeaveGame(int objectId)
@@ -117,17 +112,17 @@ public class GameRoom
 
         if (type == GameObjectType.Player)
         {
-            Player player = null;
-            if (Players.Remove(objectId, out player) == false)
+            if (_players.Remove(objectId, out var player) == false)
                 return;
 
             // Map.ApplyLeave(player);
-            player.Room = null;
+            // player.Room = null;
 
             // 본인한테 정보 전송
             {
                 S_LeaveGame leavePacket = new S_LeaveGame();
-                player.Session.Send(leavePacket);
+                PlayersSessions[player.ObjectId].Send(leavePacket);
+                PlayersSessions.Remove(player.ObjectId);
             }
         }
         // else if (type == GameObjectType.Monster)
@@ -150,11 +145,11 @@ public class GameRoom
 
         // 타인한테 정보 전송
         {
-            S_Despawn despawnPacket = new S_Despawn();
+            S_DeSpawn despawnPacket = new S_DeSpawn();
             despawnPacket.ObjectIds.Add(objectId);
-            foreach (Player p in Players.Values)
+            foreach (var p in _players.Values)
             {
-                if (p.Id != objectId) p.Session.Send(despawnPacket);
+                PlayersSessions[p.ObjectId].Send(despawnPacket);
             }
         }
     }
@@ -171,10 +166,12 @@ public class GameRoom
                 name = name.Substring(0, end).Trim();
             
             monster.Info.Name = name;
-            monster.PosInfo.PosX = monster.transform.position.x;
-            monster.PosInfo.PosY = monster.transform.position.y;
+            var position = monster.transform.position;
+            monster.PosInfo.PosX = position.x;
+            monster.PosInfo.PosY = position.y;
             monster.PosInfo.State = CreatureState.Idle;
             spawn.Objects.Add(monster.Info);
+            _objects.Add(monster.Id, monster.Info);
         }
         Broadcast(spawn);
     }
@@ -191,46 +188,50 @@ public class GameRoom
                 name = name.Substring(0, end).Trim();
             
             gathering.Info.Name = name;
-            gathering.PosInfo.PosX = gathering.transform.position.x;
-            gathering.PosInfo.PosY = gathering.transform.position.y;
+            var position = gathering.transform.position;
+            gathering.PosInfo.PosX = position.x;
+            gathering.PosInfo.PosY = position.y;
             gathering.PosInfo.State = CreatureState.Idle;
             spawn.Objects.Add(gathering.Info);
+            _objects.Add(gathering.Id,gathering.Info);
         }
         Broadcast(spawn);
     }
     
     public void SpawnLootingItems(int objectId,int count, Vector3 pos, float maxRadious = 10.0f,float minRadious = 0.0f)
     {
-        S_Spawn spawn = new S_Spawn();
+        S_SpawnLooting spawn = new S_SpawnLooting();
         for (int i = 0; i < count; i++)
         {
-            Google.Protobuf.Protocol.ObjectInfo info = new();
+            
             Vector2 randPos = Random.insideUnitCircle * Random.Range(minRadious,maxRadious);
             randPos.x += pos.x;
             randPos.y += pos.y;
-            info.ObjectId = Managers.Object.GenerateId(GameObjectType.LootingItem);
-            info.PosInfo = new PositionInfo();
-            info.PosInfo.PosX = pos.x;
-            info.PosInfo.PosY = pos.y;
-            info.PosInfo.WposX = randPos.x;
-            info.PosInfo.WposY = randPos.y;
-            info.PosInfo.Dir = objectId;
-            spawn.Objects.Add(info);
+            LootingInfo info = new()
+            {
+                ObjectId = Managers.Object.GenerateId(GameObjectType.LootingItem),
+                LootingId = objectId,
+                PosX = pos.x,
+                PosY = pos.y,
+                DestPosX = randPos.x,
+                DestPosY = randPos.y
+            };
+            spawn.Infos.Add(info);
         }
         Broadcast(spawn);
     }
 
-    public Player FindPlayerById(int objectId)
+    public ObjectInfo FindPlayerById(int objectId)
     {
-        Players.TryGetValue(objectId, out var ret);
+        _players.TryGetValue(objectId, out var ret);
         return ret;
     }
     
     public void Broadcast(IMessage packet)
     {
-        foreach (Player p in Players.Values)
+        foreach (var p in _players.Values)
         {
-            p.Session.Send(packet);
+            PlayersSessions[p.ObjectId].Send(packet);
         }
     }
     
@@ -242,9 +243,9 @@ public class GameRoom
     /// <param name="packet">보내는 패킷</param>
     public void Broadcast(int exceptId, IMessage packet)
     {
-        foreach (Player p in Players.Values)
+        foreach (var p in _players.Values.Where(p => p.ObjectId != exceptId))
         {
-            if(p.Id != exceptId) p.Session.Send(packet);
+            PlayersSessions[p.ObjectId].Send(packet);
         }
     }
 }

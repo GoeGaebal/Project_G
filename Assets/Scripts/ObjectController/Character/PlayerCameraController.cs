@@ -49,14 +49,14 @@ public class PlayerCameraController : MonoBehaviour
     private Player GetPlayer(int i)
     {
         List<int> playerIDs = new();
-        foreach(int key in Managers.Network.PlayerDict.Keys)
+        foreach(int key in Managers.Object.PlayerDict.Keys)
         {
             playerIDs.Add(key);            
         }
         playerIDs.Sort();
         if(i < playerIDs.Count)
         {
-            return Managers.Network.PlayerDict[playerIDs[i]];
+            return Managers.Object.PlayerDict[playerIDs[i]];
         }
         else
         {

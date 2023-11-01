@@ -61,10 +61,10 @@ public class GatheringController : DamageableEntity
     {
         _anim.Play("ScrapDeath");
         yield return new WaitForSeconds(flashDuration);
-        if (Managers.Network.isHost)
+        if (Managers.Network.IsHost)
         {
             Managers.Network.Server.Room.SpawnLootingItems(lootingId,5,transform.position, 1.0f, 2.0f);
-            S_Despawn packet = new S_Despawn();
+            S_DeSpawn packet = new S_DeSpawn();
             packet.ObjectIds.Add(Id);
             Managers.Network.Server.Room.Broadcast(packet);
         }

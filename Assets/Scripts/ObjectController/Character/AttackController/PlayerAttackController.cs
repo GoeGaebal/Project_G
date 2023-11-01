@@ -68,8 +68,7 @@ public class PlayerAttackController : AttackController
     public void _ChangeWeapon(EnumWeaponList changeWeapon)
     {  
         if(changeWeapon == currentWeapon) return;
-        if(!photonView.IsMine) return;
-        
+
         switch(changeWeapon)
         {
             case EnumWeaponList.Sword:
@@ -88,8 +87,6 @@ public class PlayerAttackController : AttackController
             
         }
         spriteRenderer.sortingOrder = 3;
-       
-        photonView.RPC("SyncWeapon",RpcTarget.Others,currentWeapon);
     }
 
 }
