@@ -11,7 +11,8 @@ public class BasicMonster : DamageableEntity
     [SerializeField] protected float speed;
     [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
-     internal Vector3 _spawnPosition;
+
+    internal Vector3 _spawnPosition;
 
 
     internal Animator animator;
@@ -23,6 +24,9 @@ public class BasicMonster : DamageableEntity
     protected AttackState attackState;
 
     protected bool hasTarget;
+
+    private GameObject FloatingDamageObject;
+    private Transform FloatingPos;
     public bool HasTarget{
         get{return hasTarget;}
     }
@@ -66,6 +70,9 @@ public class BasicMonster : DamageableEntity
 
         AnimState = idleState;
         _spawnPosition = transform.position;
+
+        FloatingDamageObject = Managers.Resource.Load<GameObject>("Prefabs/Objects/NonCharacter/FloatingDamageText");
+        FloatingPos = transform.GetChild(0).transform;
     }
 
     protected virtual void Update() {
@@ -119,6 +126,11 @@ public class BasicMonster : DamageableEntity
     {
         Debug.Log(damage + "damaged");
         base.OnDamage(damage);
+
+        GameObject damageText = Instantiate(FloatingDamageObject);
+        damageText.transform.position = FloatingPos.position;
+        damageText.GetComponent<FloatingDamage>().SetText(damage);
+
         if(isDead) return;
         if(!(AnimState is IdleState) && !(AnimState is RunState)) return;
         AnimState = hitState;

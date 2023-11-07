@@ -266,7 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 100
   moveSpeed: 10
-  attackDamage: 0
+  attackDamage: 10
   artifactDamage:
   - 0
   - 0

@@ -10,7 +10,7 @@ public class Player : DamageableEntity
 {
     [SerializeField] private float moveSpeed = 5.0f;
 
-    public float attackDamage = 1000f;
+    public float attackDamage = 10f;
 
     public float[] artifactDamage = new float[] { 0f, 0f, 0f };//유물 대미지 (곱연산)
     public float[] equipDamage = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 대미지 (합연산)
@@ -54,7 +54,7 @@ public class Player : DamageableEntity
         ObjectType = GameObjectType.Player;
         wpc = transform.GetComponentInChildren<WeaponPivotController>();
         PosInfo.Dir = 1;
-        attackDamage = 100f;
+        attackDamage = 10f;
     }
 
     protected override void OnEnable() {

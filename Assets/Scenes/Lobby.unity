@@ -3058,18 +3058,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f86d534408b17a4eb48b2cd0948976c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionInfoText: {fileID: 593629196}
-  joinButton: {fileID: 138921917}
-  inputfield: {fileID: 2003843758}
-  roomButtons:
-  - {fileID: 811127342}
-  - {fileID: 2096751410}
-  - {fileID: 1289639529}
-  - {fileID: 609471520}
-  - {fileID: 1258128578}
-  - {fileID: 306866348}
-  - {fileID: 778809703}
-  - {fileID: 412564466}
 --- !u!4 &1744399991
 Transform:
   m_ObjectHideFlags: 0
