@@ -59,9 +59,9 @@ public class UI_Worldmap : UI_Scene
     private bool _moveFlag = false;//이동 중
     private bool _arriveFlag = false;//도착
 
-    private Portal _portal;
+    private int _targetMapId = 0;
 
-    private string _targetMapName = "";
+    private Portal _portal;
 
     public static System.Action open;
 
@@ -84,22 +84,22 @@ public class UI_Worldmap : UI_Scene
             if (Vector2.Distance(_ship.transform.localPosition, _targetPosition) >= 1f)
             {//이동 중
                 MoveToTarget();
-                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapName[6] - '0'].name + "로 이동 중");
+                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapId].name + "로 이동 중");
             }
             else
             {//도착
                 _moveFlag = false;
                 _arriveFlag = true;
-                Managers.WorldMap.currentMapName = _targetMapName;
+                Managers.WorldMap.currentMapId = _targetMapId;
                 _timeText.SetActive(false);
                 _distanceText.SetActive(false);
                 _arrow.SetActive(false);
-                UI_SystemMessage.alert(_targetMapName + "에 도착했습니다.", Color.white);
+                UI_SystemMessage.alert(_targetMapId + "에 도착했습니다.", Color.white);
             }
         }
-        if (_arriveFlag && _targetMapName != "Worldmap_Ship")
+        if (_arriveFlag && _targetMapId != 0)
         {//도착해 있을 때
-            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapName[6] - '0'].name + "에 정박 중");
+            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapId].name + "에 정박 중");
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
             
@@ -162,9 +162,9 @@ public class UI_Worldmap : UI_Scene
     public void SetTarget(GameObject t)//목표 지정
     {
         _targetPosition = t.transform.localPosition;
-        _targetMapName = t.name;
+        _targetMapId = t.name[6] - '0';
 
-        UI_SystemMessage.alert(_targetMapName + "로 이동 중입니다.", Color.white);
+        UI_SystemMessage.alert(_targetMapId + "로 이동 중입니다.", Color.white);
     }
     private void MoveToTarget()//목표 방향으로 이동
     {
@@ -231,7 +231,7 @@ public class UI_Worldmap : UI_Scene
         packet.ShipPosY = _ship.transform.localPosition.y;
         packet.TargetPosX = _targetPosition.x;
         packet.TargetPosY = _targetPosition.y;
-        packet.MapName = _targetMapName;
+        packet.TargetMapId = _targetMapId;
         Managers.Network.Server.Room.Broadcast(packet);
     }
 
@@ -253,7 +253,7 @@ public class UI_Worldmap : UI_Scene
         packet.ShipPosY = _ship.transform.localPosition.y;
         packet.TargetPosX = _targetPosition.x;
         packet.TargetPosY = _targetPosition.y;
-        packet.MapName = _targetMapName;
+        packet.TargetMapId = _targetMapId;
         Managers.Network.Server.Room.Broadcast(packet);
     }
 
@@ -264,7 +264,7 @@ public class UI_Worldmap : UI_Scene
         {
             _targetPosition = new Vector3(evt.TargetPosX, evt.TargetPosY);
             _ship.transform.localPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
-            _targetMapName = evt.MapName;
+            _targetMapId = evt.TargetMapId;
             _arriveFlag = false;
             _moveFlag = true;
             _lr.enabled = true;
@@ -273,7 +273,7 @@ public class UI_Worldmap : UI_Scene
         {
             _targetPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
             _ship.transform.localPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
-            _targetMapName = evt.MapName;
+            _targetMapId = evt.TargetMapId;
             _moveFlag = false;
             _lr.enabled = false;
             _movingText.GetComponent<TMP_Text>().SetText("정지 중");

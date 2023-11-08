@@ -84,7 +84,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                     this.colorAdjustments.colorFilter.SetValue(this.rainNightColor);
                 break;
             case EnumWeather.Desert:
-                rainSystem.SetActive(false);
+                rainSystem?.SetActive(false);
                 _universalRenderfeature.SetActive(true);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);

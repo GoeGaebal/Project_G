@@ -172,7 +172,7 @@ message S_WorldMapEvent {
   float targetPosY = 3;
   float shipPosX = 4;
   float shipPosY = 5;
-  string mapName = 6;
+  int32 targetMapId = 6;
 }
 
 message S_OnDamage {

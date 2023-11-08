@@ -66,7 +66,7 @@ public class Managers : MonoBehaviour
             Network.Server.JobQueue.Dequeue().Invoke();
         }
         Network.Client.Update();
-        if(Managers.Network.isHost) TimeSlot.AddDelataTime(Time.deltaTime);
+        if(Managers.Network.IsHost) TimeSlot.AddDelataTime(Time.deltaTime);
        WorldMap.UpdateWorldMap(Time.deltaTime);
        Scene.WaitLoading(Time.deltaTime);
     }

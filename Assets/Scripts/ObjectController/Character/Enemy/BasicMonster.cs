@@ -23,6 +23,9 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     public Transform Target => _target;
     private readonly Collider2D[] _colliders = new Collider2D[1];
     protected float lastAttackTime;
+
+    private GameObject FloatingDamageObject;
+    private Transform FloatingPos;
     
     private static readonly int RunAnimParam = Animator.StringToHash("run");
     private static readonly int Hit = Animator.StringToHash("hit");
@@ -37,6 +40,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
         UpdateState.Add(CreatureState.Run, OnRun);
         _animator = GetComponent<Animator>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
+        FloatingPos = transform.GetChild(0);
     }
 
     protected virtual void Start()
@@ -121,6 +125,14 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     public override void OnHit(CreatureState state)
     {
         _animator.SetTrigger(Hit);
+    }
+
+    public override void OnDamage(float damage)
+    {
+        base.OnDamage(damage);
+        FloatingDamageObject = Managers.Resource.Instantiate("Objects/NonCharacter/FloatingDamageText");
+        FloatingDamageObject.transform.position = FloatingPos.position;
+        FloatingDamageObject.GetComponent<FloatingDamage>().SetText(damage);
     }
 
     protected override void OnDie(CreatureState state)

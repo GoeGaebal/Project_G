@@ -52,33 +52,33 @@ namespace Google.Protobuf.Protocol {
             "YWRTY2VuZRImCglzY2VuZVR5cGUYASABKA4yEy5Qcm90b2NvbC5TY2VuZVR5",
             "cGUSDAoEcG9zWBgCIAEoAhIMCgRwb3NZGAMgASgCIlgKClNfV29ybGRNYXAS",
             "EAoIc2hpcFBvc1gYASABKAISEAoIc2hpcFBvc1kYAiABKAISEgoKZmluYWxC",
-            "b3NzWBgDIAEoAhISCgpmaW5hbEJvc3NZGAQgASgCIpwBCg9TX1dvcmxkTWFw",
+            "b3NzWBgDIAEoAhISCgpmaW5hbEJvc3NZGAQgASgCIqABCg9TX1dvcmxkTWFw",
             "RXZlbnQSLAoFZXZlbnQYASABKA4yHS5Qcm90b2NvbC5VSVdvcmxkTWFwRXZl",
             "bnRUeXBlEhIKCnRhcmdldFBvc1gYAiABKAISEgoKdGFyZ2V0UG9zWRgDIAEo",
-            "AhIQCghzaGlwUG9zWBgEIAEoAhIQCghzaGlwUG9zWRgFIAEoAhIPCgdtYXBO",
-            "YW1lGAYgASgJIkoKClNfT25EYW1hZ2USEAoIb2JqZWN0SWQYASABKAUSCgoC",
-            "SFAYAiABKAISDgoGZGFtYWdlGAMgASgCEg4KBmlzRGVhZBgEIAEoCCItCglT",
-            "X0FkZEl0ZW0SEAoIb2JqZWN0SWQYASABKAUSDgoGaXRlbUlkGAIgASgFInIK",
-            "C0xvb3RpbmdJbmZvEhAKCG9iamVjdElkGAEgASgFEhEKCWxvb3RpbmdJZBgC",
-            "IAEoBRIMCgRQb3NYGAMgASgCEgwKBFBvc1kYBCABKAISEAoIRGVzdFBvc1gY",
-            "BSABKAISEAoIRGVzdFBvc1kYBiABKAIiNgoOU19TcGF3bkxvb3RpbmcSJAoF",
-            "aW5mb3MYASADKAsyFS5Qcm90b2NvbC5Mb290aW5nSW5mbyq4AgoFTXNnSWQS",
-            "EAoMU19FTlRFUl9HQU1FEAASEAoMU19MRUFWRV9HQU1FEAESCwoHU19TUEFX",
-            "ThACEg4KClNfREVfU1BBV04QAxIRCg1DX1BMQVlFUl9NT1ZFEAQSEQoNU19Q",
-            "TEFZRVJfTU9WRRAFEgoKBlNfTU9WRRAGEgsKB0NfU0tJTEwQBxILCgdTX1NL",
-            "SUxMEAgSDwoLU19DSEFOR0VfSFAQCRIJCgVTX0RJRRAKEgoKBlNfQ0hBVBAL",
-            "EgoKBkNfQ0hBVBAMEhAKDFNfTE9BRF9TQ0VORRANEg8KC1NfV09STERfTUFQ",
-            "EA4SFQoRU19XT1JMRF9NQVBfRVZFTlQQDxIPCgtTX09OX0RBTUFHRRAQEg4K",
-            "ClNfQUREX0lURU0QERITCg9TX1NQQVdOX0xPT1RJTkcQEipgCglTY2VuZVR5",
-            "cGUSCwoHVU5LTk9XThAAEgkKBUxPQkJZEAESCAoER0FNRRACEggKBFNISVAQ",
-            "AxIOCgpGSU5BTF9CT1NTEAQSCwoHTE9BRElORxAFEgoKBkNSRURJVBAGKkEK",
-            "DUNyZWF0dXJlU3RhdGUSCAoESURMRRAAEgcKA1JVThABEgoKBkFUVEFDSxAC",
-            "EgcKA0hJVBADEggKBERFQUQQBCpUCg5HYW1lT2JqZWN0VHlwZRIICgROT05F",
-            "EAASCgoGUExBWUVSEAESCwoHTU9OU1RFUhACEg0KCUdBVEhFUklORxADEhAK",
-            "DExPT1RJTkdfSVRFTRAEKkEKCVNraWxsVHlwZRIOCgpTS0lMTF9OT05FEAAS",
-            "DgoKU0tJTExfQVVUTxABEhQKEFNLSUxMX1BST0pFQ1RJTEUQAio1ChNVSVdv",
-            "cmxkTWFwRXZlbnRUeXBlEg4KClNFVF9UQVJHRVQQABIOCgpQQVVTRV9NT1ZF",
-            "EAFCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
+            "AhIQCghzaGlwUG9zWBgEIAEoAhIQCghzaGlwUG9zWRgFIAEoAhITCgt0YXJn",
+            "ZXRNYXBJZBgGIAEoBSJKCgpTX09uRGFtYWdlEhAKCG9iamVjdElkGAEgASgF",
+            "EgoKAkhQGAIgASgCEg4KBmRhbWFnZRgDIAEoAhIOCgZpc0RlYWQYBCABKAgi",
+            "LQoJU19BZGRJdGVtEhAKCG9iamVjdElkGAEgASgFEg4KBml0ZW1JZBgCIAEo",
+            "BSJyCgtMb290aW5nSW5mbxIQCghvYmplY3RJZBgBIAEoBRIRCglsb290aW5n",
+            "SWQYAiABKAUSDAoEUG9zWBgDIAEoAhIMCgRQb3NZGAQgASgCEhAKCERlc3RQ",
+            "b3NYGAUgASgCEhAKCERlc3RQb3NZGAYgASgCIjYKDlNfU3Bhd25Mb290aW5n",
+            "EiQKBWluZm9zGAEgAygLMhUuUHJvdG9jb2wuTG9vdGluZ0luZm8quAIKBU1z",
+            "Z0lkEhAKDFNfRU5URVJfR0FNRRAAEhAKDFNfTEVBVkVfR0FNRRABEgsKB1Nf",
+            "U1BBV04QAhIOCgpTX0RFX1NQQVdOEAMSEQoNQ19QTEFZRVJfTU9WRRAEEhEK",
+            "DVNfUExBWUVSX01PVkUQBRIKCgZTX01PVkUQBhILCgdDX1NLSUxMEAcSCwoH",
+            "U19TS0lMTBAIEg8KC1NfQ0hBTkdFX0hQEAkSCQoFU19ESUUQChIKCgZTX0NI",
+            "QVQQCxIKCgZDX0NIQVQQDBIQCgxTX0xPQURfU0NFTkUQDRIPCgtTX1dPUkxE",
+            "X01BUBAOEhUKEVNfV09STERfTUFQX0VWRU5UEA8SDwoLU19PTl9EQU1BR0UQ",
+            "EBIOCgpTX0FERF9JVEVNEBESEwoPU19TUEFXTl9MT09USU5HEBIqYAoJU2Nl",
+            "bmVUeXBlEgsKB1VOS05PV04QABIJCgVMT0JCWRABEggKBEdBTUUQAhIICgRT",
+            "SElQEAMSDgoKRklOQUxfQk9TUxAEEgsKB0xPQURJTkcQBRIKCgZDUkVESVQQ",
+            "BipBCg1DcmVhdHVyZVN0YXRlEggKBElETEUQABIHCgNSVU4QARIKCgZBVFRB",
+            "Q0sQAhIHCgNISVQQAxIICgRERUFEEAQqVAoOR2FtZU9iamVjdFR5cGUSCAoE",
+            "Tk9ORRAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhINCglHQVRIRVJJTkcQ",
+            "AxIQCgxMT09USU5HX0lURU0QBCpBCglTa2lsbFR5cGUSDgoKU0tJTExfTk9O",
+            "RRAAEg4KClNLSUxMX0FVVE8QARIUChBTS0lMTF9QUk9KRUNUSUxFEAIqNQoT",
+            "VUlXb3JsZE1hcEV2ZW50VHlwZRIOCgpTRVRfVEFSR0VUEAASDgoKUEFVU0Vf",
+            "TU9WRRABQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.SceneType), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), typeof(global::Google.Protobuf.Protocol.UIWorldMapEventType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -102,7 +102,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Chat), global::Google.Protobuf.Protocol.C_Chat.Parser, new[]{ "Msg" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadScene), global::Google.Protobuf.Protocol.S_LoadScene.Parser, new[]{ "SceneType", "PosX", "PosY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMap), global::Google.Protobuf.Protocol.S_WorldMap.Parser, new[]{ "ShipPosX", "ShipPosY", "FinalBossX", "FinalBossY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMapEvent), global::Google.Protobuf.Protocol.S_WorldMapEvent.Parser, new[]{ "Event", "TargetPosX", "TargetPosY", "ShipPosX", "ShipPosY", "MapName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WorldMapEvent), global::Google.Protobuf.Protocol.S_WorldMapEvent.Parser, new[]{ "Event", "TargetPosX", "TargetPosY", "ShipPosX", "ShipPosY", "TargetMapId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_OnDamage), global::Google.Protobuf.Protocol.S_OnDamage.Parser, new[]{ "ObjectId", "HP", "Damage", "IsDead" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_AddItem), global::Google.Protobuf.Protocol.S_AddItem.Parser, new[]{ "ObjectId", "ItemId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.LootingInfo), global::Google.Protobuf.Protocol.LootingInfo.Parser, new[]{ "ObjectId", "LootingId", "PosX", "PosY", "DestPosX", "DestPosY" }, null, null, null, null),
@@ -3468,7 +3468,7 @@ namespace Google.Protobuf.Protocol {
       targetPosY_ = other.targetPosY_;
       shipPosX_ = other.shipPosX_;
       shipPosY_ = other.shipPosY_;
-      mapName_ = other.mapName_;
+      targetMapId_ = other.targetMapId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3532,14 +3532,14 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "mapName" field.</summary>
-    public const int MapNameFieldNumber = 6;
-    private string mapName_ = "";
+    /// <summary>Field number for the "targetMapId" field.</summary>
+    public const int TargetMapIdFieldNumber = 6;
+    private int targetMapId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string MapName {
-      get { return mapName_; }
+    public int TargetMapId {
+      get { return targetMapId_; }
       set {
-        mapName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        targetMapId_ = value;
       }
     }
 
@@ -3561,7 +3561,7 @@ namespace Google.Protobuf.Protocol {
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(TargetPosY, other.TargetPosY)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ShipPosX, other.ShipPosX)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ShipPosY, other.ShipPosY)) return false;
-      if (MapName != other.MapName) return false;
+      if (TargetMapId != other.TargetMapId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3573,7 +3573,7 @@ namespace Google.Protobuf.Protocol {
       if (TargetPosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(TargetPosY);
       if (ShipPosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ShipPosX);
       if (ShipPosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ShipPosY);
-      if (MapName.Length != 0) hash ^= MapName.GetHashCode();
+      if (TargetMapId != 0) hash ^= TargetMapId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3607,9 +3607,9 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(45);
         output.WriteFloat(ShipPosY);
       }
-      if (MapName.Length != 0) {
-        output.WriteRawTag(50);
-        output.WriteString(MapName);
+      if (TargetMapId != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(TargetMapId);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3634,8 +3634,8 @@ namespace Google.Protobuf.Protocol {
       if (ShipPosY != 0F) {
         size += 1 + 4;
       }
-      if (MapName.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(MapName);
+      if (TargetMapId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetMapId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3663,8 +3663,8 @@ namespace Google.Protobuf.Protocol {
       if (other.ShipPosY != 0F) {
         ShipPosY = other.ShipPosY;
       }
-      if (other.MapName.Length != 0) {
-        MapName = other.MapName;
+      if (other.TargetMapId != 0) {
+        TargetMapId = other.TargetMapId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3697,8 +3697,8 @@ namespace Google.Protobuf.Protocol {
             ShipPosY = input.ReadFloat();
             break;
           }
-          case 50: {
-            MapName = input.ReadString();
+          case 48: {
+            TargetMapId = input.ReadInt32();
             break;
           }
         }

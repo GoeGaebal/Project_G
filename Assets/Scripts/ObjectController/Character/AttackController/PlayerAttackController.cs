@@ -63,7 +63,7 @@ public class PlayerAttackController : AttackController
             //     break;
             
         }
-        spriteRenderer.sortingOrder = 3;
+        // spriteRenderer.sortingOrder = 3;
     }
     public void _ChangeWeapon(EnumWeaponList changeWeapon)
     {  
@@ -86,7 +86,7 @@ public class PlayerAttackController : AttackController
             //     break;
             
         }
-        spriteRenderer.sortingOrder = 3;
+        // spriteRenderer.sortingOrder = 3;
     }
 
 }
