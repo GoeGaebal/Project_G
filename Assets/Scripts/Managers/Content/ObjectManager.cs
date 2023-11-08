@@ -159,6 +159,6 @@ public class ObjectManager
             if (!PlayerDict.ContainsKey(obj.Key)) Managers.Resource.Destroy(obj.Value);
         }
         _objects.Clear();
-        foreach (var pair in PlayerDict) _objects.Add(pair.Key,pair.Value.gameObject);
+        foreach (var pair in PlayerDict) _objects.TryAdd(pair.Key,pair.Value.gameObject);
     }
 }

@@ -62,6 +62,11 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
         if (hasTarget)
         {
+            if (_target == null)
+            {
+                hasTarget = false;
+                return;
+            }
             var distance = GetDistance(Target.transform.position);
             State = distance > minDisFromPlayer ? CreatureState.Run : CreatureState.Idle;
             _animator.SetFloat(DistanceAnimParam, distance);

@@ -40,13 +40,6 @@ public abstract class CreatureController : NetworkObject, IDamageable
     protected virtual void OnDie(CreatureState state)
     {
         if (state == CreatureState.Dead) return;
-        if (Managers.Network.IsHost)
-        {
-            S_DeSpawn despawn = new S_DeSpawn();
-            despawn.ObjectIds.Add(Id);
-            Managers.Network.Server.Room.Broadcast(despawn);
-            Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
-        }
     }
 
     public virtual void OnDamage(float damage)

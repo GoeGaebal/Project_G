@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Google.Protobuf.Protocol;
+using ObjectController.Character.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Server;
@@ -25,22 +26,21 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private Rigidbody2D _rb;
 
-    [SerializeField] private Animator bodyAnimator;
-    [SerializeField]private Animator legAnimator;
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
     private bool attackInputBuffer = false;
     private Vector2 runInputBuffer = Vector2.zero;
 
+    private AnimationEvent OnFinishDieAnim;
+
     public ClientSession Session => Managers.Network.Server.Room.PlayersSessions[Id];
 
     IInteractable interactable;
     string interactableName;
-    private static readonly int DieAnimParam = Animator.StringToHash("die");
-    private static readonly int WalkAnimParam = Animator.StringToHash("walk");
-    private static readonly int HitAnimParam = Animator.StringToHash("hit");
 
+    [SerializeField] private PlayerBody _playerBody;
+    [SerializeField] private PlayerLeg _playerLeg;
     [SerializeField] private GameObject Left_Arm;
     [SerializeField] private GameObject Right_Arm;
     
@@ -54,7 +54,26 @@ public class Player : CreatureController, IAttackable, IMoveable
         ObjectType = GameObjectType.Player;
         _wpc = transform.GetComponentInChildren<WeaponPivotController>();
         _rb = GetComponent<Rigidbody2D>();
+        _playerBody = GetComponentInChildren<PlayerBody>();
+        _playerLeg = GetComponentInChildren<PlayerLeg>();
+        _playerBody.Init();
+        _playerLeg.Init();
+
         PosInfo.Dir = 1;
+
+        _playerBody.OnFinishDie = null;
+        _playerBody.OnFinishDie = () =>
+        {
+            gameObject.SetActive(false);
+
+            if (Managers.Network.LocalPlayer == this)
+            {
+                if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+                if (!playerCameraController.enabled)
+                    playerCameraController.enabled = true;
+                playerCameraController.SetPosition(transform.position);
+            }
+        };
     }
     
     void Start()
@@ -133,21 +152,21 @@ public class Player : CreatureController, IAttackable, IMoveable
     #region State
     protected override void OnIdle(CreatureState state)
     {
-        bodyAnimator.SetBool(WalkAnimParam,false);
-        legAnimator.SetBool(WalkAnimParam,false);
+        _playerBody.Walk(false);
+        _playerLeg.Walk(false);
     }
 
     public virtual void OnRun(CreatureState state)
     {
-        bodyAnimator.SetBool(WalkAnimParam,true);
-        legAnimator.SetBool(WalkAnimParam,true);
+        _playerBody.Walk(true);
+        _playerLeg.Walk(true);
     }
 
     protected override void OnDie(CreatureState state)
     {
         base.OnDie(state);
-        bodyAnimator.SetTrigger(DieAnimParam);
-        legAnimator.SetTrigger(DieAnimParam);
+        _playerBody.Die();
+        _playerLeg.Die();
         StartCoroutine(FinishDie());
 
         if (Managers.Scene.CurrentScene is not GameScene) return;
@@ -156,8 +175,7 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     public override void OnHit(CreatureState state)
     {
-        bodyAnimator.SetTrigger(HitAnimParam);
-        // StartCoroutine(HitStateCoroutine());
+        _playerBody.Hit();
     }
     
     public void OnAttack(CreatureState prevState)
@@ -218,7 +236,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         // //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
         // rb.velocity = Vector2.zero;
 
-        if( State == CreatureState.Attack && bodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
+        if( State == CreatureState.Attack)
             attackInputBuffer = true;
 
         // else if (State == EnumPlayerStates.Run)
@@ -235,15 +253,7 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     public void FinishDieAnimClip()
     {
-        gameObject.SetActive(false);
-
-        if (Managers.Network.LocalPlayer == this)
-        {
-            if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
-            if (!playerCameraController.enabled)
-                playerCameraController.enabled = true;
-            playerCameraController.SetPosition(transform.position);
-        }
+        
     }
 
     private IEnumerator FinishDie()
@@ -258,6 +268,12 @@ public class Player : CreatureController, IAttackable, IMoveable
                 playerCameraController.enabled = true;
             playerCameraController.SetPosition(transform.position);
         }
+
+        if (!Managers.Network.IsHost) yield break;
+        S_DeSpawn despawn = new S_DeSpawn();
+        despawn.ObjectIds.Add(Id);
+        Managers.Network.Server.Room.Broadcast(despawn);
+        Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
     }
 
     private void OnDestroy()

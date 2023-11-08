@@ -29,9 +29,7 @@ public class Portal : MonoBehaviour
         var incomingObjectCount = Physics2D.OverlapCollider(_collider,_filter2D,_results);
         if (isExitPortal)
         {
-            S_LeaveGame packet = new S_LeaveGame();
-            player.Session.Send(packet);
-            //Managers.Network.Server.Room.LeaveGame(player.Info.ObjectId);
+            Managers.Network.Server.Room.LeaveGame(player.Info.ObjectId);
         }
         else
         {

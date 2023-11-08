@@ -52,7 +52,7 @@ namespace Server
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
-			Managers.Network.Server.Room.LeaveGame(MyPlayer.Info.ObjectId);
+			// Managers.Network.Server.Room.LeaveGame(MyPlayer.Info.ObjectId);
 			Managers.Network.Server.SessionManager.Remove(this);
 			Debug.Log($"OnDisconnected : {endPoint}");
 		}
