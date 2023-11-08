@@ -45,9 +45,9 @@ namespace Google.Protobuf.Protocol {
             "BHBvc1gYAyABKAISDAoEcG9zWRgEIAEoAiJlCg1QbGF5ZXJQb3NJbmZvEicK",
             "B3Bvc0luZm8YASABKAsyFi5Qcm90b2NvbC5Qb3NpdGlvbkluZm8SDQoFV1Bv",
             "c1gYAiABKAISDQoFV1Bvc1kYAyABKAISDQoFV1JvdFoYBCABKAIiZQoIU3Rh",
-            "dEluZm8SDQoFbGV2ZWwYASABKAUSCgoCaHAYAiABKAUSDQoFbWF4SHAYAyAB",
-            "KAUSDgoGYXR0YWNrGAQgASgFEg0KBXNwZWVkGAUgASgCEhAKCHRvdGFsRXhw",
-            "GAYgASgFIhwKCVNraWxsSW5mbxIPCgdza2lsbElkGAEgASgFIhUKBlNfQ2hh",
+            "dEluZm8SDQoFbGV2ZWwYASABKAUSCgoCaHAYAiABKAISDQoFbWF4SHAYAyAB",
+            "KAISDgoGYXR0YWNrGAQgASgCEg0KBXNwZWVkGAUgASgCEhAKCHRvdGFsRXhw",
+            "GAYgASgCIhwKCVNraWxsSW5mbxIPCgdza2lsbElkGAEgASgFIhUKBlNfQ2hh",
             "dBILCgNtc2cYASABKAkiFQoGQ19DaGF0EgsKA21zZxgBIAEoCSJRCgtTX0xv",
             "YWRTY2VuZRImCglzY2VuZVR5cGUYASABKA4yEy5Qcm90b2NvbC5TY2VuZVR5",
             "cGUSDAoEcG9zWBgCIAEoAhIMCgRwb3NZGAMgASgCIlgKClNfV29ybGRNYXAS",
@@ -2436,9 +2436,9 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "hp" field.</summary>
     public const int HpFieldNumber = 2;
-    private int hp_;
+    private float hp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Hp {
+    public float Hp {
       get { return hp_; }
       set {
         hp_ = value;
@@ -2447,9 +2447,9 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "maxHp" field.</summary>
     public const int MaxHpFieldNumber = 3;
-    private int maxHp_;
+    private float maxHp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int MaxHp {
+    public float MaxHp {
       get { return maxHp_; }
       set {
         maxHp_ = value;
@@ -2458,9 +2458,9 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "attack" field.</summary>
     public const int AttackFieldNumber = 4;
-    private int attack_;
+    private float attack_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Attack {
+    public float Attack {
       get { return attack_; }
       set {
         attack_ = value;
@@ -2480,9 +2480,9 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "totalExp" field.</summary>
     public const int TotalExpFieldNumber = 6;
-    private int totalExp_;
+    private float totalExp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int TotalExp {
+    public float TotalExp {
       get { return totalExp_; }
       set {
         totalExp_ = value;
@@ -2503,11 +2503,11 @@ namespace Google.Protobuf.Protocol {
         return true;
       }
       if (Level != other.Level) return false;
-      if (Hp != other.Hp) return false;
-      if (MaxHp != other.MaxHp) return false;
-      if (Attack != other.Attack) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Hp, other.Hp)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(MaxHp, other.MaxHp)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Attack, other.Attack)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Speed, other.Speed)) return false;
-      if (TotalExp != other.TotalExp) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(TotalExp, other.TotalExp)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2515,11 +2515,11 @@ namespace Google.Protobuf.Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (Level != 0) hash ^= Level.GetHashCode();
-      if (Hp != 0) hash ^= Hp.GetHashCode();
-      if (MaxHp != 0) hash ^= MaxHp.GetHashCode();
-      if (Attack != 0) hash ^= Attack.GetHashCode();
+      if (Hp != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Hp);
+      if (MaxHp != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(MaxHp);
+      if (Attack != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Attack);
       if (Speed != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Speed);
-      if (TotalExp != 0) hash ^= TotalExp.GetHashCode();
+      if (TotalExp != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(TotalExp);
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2537,25 +2537,25 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(Level);
       }
-      if (Hp != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Hp);
+      if (Hp != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Hp);
       }
-      if (MaxHp != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(MaxHp);
+      if (MaxHp != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(MaxHp);
       }
-      if (Attack != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(Attack);
+      if (Attack != 0F) {
+        output.WriteRawTag(37);
+        output.WriteFloat(Attack);
       }
       if (Speed != 0F) {
         output.WriteRawTag(45);
         output.WriteFloat(Speed);
       }
-      if (TotalExp != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(TotalExp);
+      if (TotalExp != 0F) {
+        output.WriteRawTag(53);
+        output.WriteFloat(TotalExp);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2568,20 +2568,20 @@ namespace Google.Protobuf.Protocol {
       if (Level != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Level);
       }
-      if (Hp != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Hp);
+      if (Hp != 0F) {
+        size += 1 + 4;
       }
-      if (MaxHp != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxHp);
+      if (MaxHp != 0F) {
+        size += 1 + 4;
       }
-      if (Attack != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Attack);
+      if (Attack != 0F) {
+        size += 1 + 4;
       }
       if (Speed != 0F) {
         size += 1 + 4;
       }
-      if (TotalExp != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TotalExp);
+      if (TotalExp != 0F) {
+        size += 1 + 4;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2597,19 +2597,19 @@ namespace Google.Protobuf.Protocol {
       if (other.Level != 0) {
         Level = other.Level;
       }
-      if (other.Hp != 0) {
+      if (other.Hp != 0F) {
         Hp = other.Hp;
       }
-      if (other.MaxHp != 0) {
+      if (other.MaxHp != 0F) {
         MaxHp = other.MaxHp;
       }
-      if (other.Attack != 0) {
+      if (other.Attack != 0F) {
         Attack = other.Attack;
       }
       if (other.Speed != 0F) {
         Speed = other.Speed;
       }
-      if (other.TotalExp != 0) {
+      if (other.TotalExp != 0F) {
         TotalExp = other.TotalExp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -2627,24 +2627,24 @@ namespace Google.Protobuf.Protocol {
             Level = input.ReadInt32();
             break;
           }
-          case 16: {
-            Hp = input.ReadInt32();
+          case 21: {
+            Hp = input.ReadFloat();
             break;
           }
-          case 24: {
-            MaxHp = input.ReadInt32();
+          case 29: {
+            MaxHp = input.ReadFloat();
             break;
           }
-          case 32: {
-            Attack = input.ReadInt32();
+          case 37: {
+            Attack = input.ReadFloat();
             break;
           }
           case 45: {
             Speed = input.ReadFloat();
             break;
           }
-          case 48: {
-            TotalExp = input.ReadInt32();
+          case 53: {
+            TotalExp = input.ReadFloat();
             break;
           }
         }

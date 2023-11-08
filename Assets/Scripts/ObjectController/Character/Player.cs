@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Server;
 
-public class Player : CreatureController
+public class Player : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] private float moveSpeed = 5.0f;
 
-    public float attackDamage = 10f;
+    public float attackDamage = 100f;
 
     public float[] artifactDamage = new float[] { 0f, 0f, 0f };//유물 대미지 (곱연산)
     public float[] equipDamage = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 대미지 (합연산)
@@ -44,60 +44,19 @@ public class Player : CreatureController
     [SerializeField] private GameObject Left_Arm;
     [SerializeField] private GameObject Right_Arm;
     
-    private void Awake()
+    #region UnityMessages
+    protected override void Awake()
     {
+        base.Awake();
+        UpdateState.Add(CreatureState.Attack, OnAttack);
+        UpdateState.Add(CreatureState.Run, OnRun);
+        
         ObjectType = GameObjectType.Player;
         _wpc = transform.GetComponentInChildren<WeaponPivotController>();
         _rb = GetComponent<Rigidbody2D>();
         PosInfo.Dir = 1;
     }
-
-    protected override void OnEnable() {
-        base.OnEnable();
-
-        State = CreatureState.Idle;
-        //카메라 이동 제한
-        if (Managers.Network.LocalPlayer != this) return;
-        
-        if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
-        playerCameraController.SetPosition(transform.position);
-        if(playerCameraController.enabled)
-            playerCameraController.enabled = false;
-    }
-
-    protected override void OnIdle()
-    {
-        bodyAnimator.SetBool(WalkAnimParam,false);
-        legAnimator.SetBool(WalkAnimParam,false);
-    }
-
-    protected override void OnRun()
-    {
-        bodyAnimator.SetBool(WalkAnimParam,true);
-        legAnimator.SetBool(WalkAnimParam,true);
-    }
-
-    protected override void OnDie()
-    {
-        bodyAnimator.SetTrigger(DieAnimParam);
-        legAnimator.SetTrigger(DieAnimParam);
-        StartCoroutine(FinishDie());
-
-        if (Managers.Scene.CurrentScene is not GameScene) return;
-        if(GameScene.PlayerLifeCnt > 0) GameScene.PlayerLifeCnt --;
-    }
-
-    protected override void OnAttack()
-    {
-        _wpc.Attack(realDamage);
-    }
-
-    protected override void OnHit()
-    {
-        bodyAnimator.SetTrigger(HitAnimParam);
-        // StartCoroutine(HitStateCoroutine());
-    }
-
+    
     void Start()
     {
         playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
@@ -108,14 +67,7 @@ public class Player : CreatureController
     {
         realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
-
-    public void BindingAction()
-    {
-        Managers.Input.PlayerActions.Move.AddEvent(OnMoveInput);
-        Managers.Input.PlayerActions.Attack.AddEvent(OnAttackInput);
-        Managers.Input.PlayerActions.Interact.AddEvent(OnInteract);
-    }
-
+    
     private void FixedUpdate()
     {
         if(Managers.Network.LocalPlayer != this) return;
@@ -155,6 +107,81 @@ public class Player : CreatureController
         };
         Managers.Network.Client.Send(packet);
     }
+    
+    private void LateUpdate()
+    {
+        if(IsDead) return;
+
+        if (Managers.Network.LocalPlayer == this)
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+    }
+
+    protected override void OnEnable() {
+        base.OnEnable();
+
+        State = CreatureState.Idle;
+        //카메라 이동 제한
+        if (Managers.Network.LocalPlayer != this) return;
+        
+        if (Camera.main != null) playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+        playerCameraController.SetPosition(transform.position);
+        if(playerCameraController.enabled)
+            playerCameraController.enabled = false;
+    }
+    #endregion
+
+    #region State
+    protected override void OnIdle(CreatureState state)
+    {
+        bodyAnimator.SetBool(WalkAnimParam,false);
+        legAnimator.SetBool(WalkAnimParam,false);
+    }
+
+    public virtual void OnRun(CreatureState state)
+    {
+        bodyAnimator.SetBool(WalkAnimParam,true);
+        legAnimator.SetBool(WalkAnimParam,true);
+    }
+
+    protected override void OnDie(CreatureState state)
+    {
+        base.OnDie(state);
+        bodyAnimator.SetTrigger(DieAnimParam);
+        legAnimator.SetTrigger(DieAnimParam);
+        StartCoroutine(FinishDie());
+
+        if (Managers.Scene.CurrentScene is not GameScene) return;
+        if(GameScene.PlayerLifeCnt > 0) GameScene.PlayerLifeCnt --;
+    }
+
+    public override void OnHit(CreatureState state)
+    {
+        bodyAnimator.SetTrigger(HitAnimParam);
+        // StartCoroutine(HitStateCoroutine());
+    }
+    
+    public void OnAttack(CreatureState prevState)
+    {
+        _wpc.Attack(realDamage);
+    }
+    
+    public override void OnDamage(float damage)
+    {
+        if (!Managers.Network.IsHost) return;
+        
+        if(IsDead) return;
+        base.OnDamage(damage);
+        if(State == CreatureState.Idle || State == CreatureState.Run) 
+            State = CreatureState.Hit;
+    }
+    #endregion
+
+    public void BindingAction()
+    {
+        Managers.Input.PlayerActions.Move.AddEvent(OnMoveInput);
+        Managers.Input.PlayerActions.Attack.AddEvent(OnAttackInput);
+        Managers.Input.PlayerActions.Interact.AddEvent(OnInteract);
+    }
 
     private void Flip(bool isFlip)
     {
@@ -175,45 +202,13 @@ public class Player : CreatureController
         _moveInput = context.ReadValue<Vector2>();
         if(_moveInput == null) return;
         State = context.canceled ? CreatureState.Idle : CreatureState.Run;
-    }   
-    
-    private void LateUpdate()
-    {
-        if(IsDead) return;
-
-        if (Managers.Network.LocalPlayer == this)
-            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
-    
-    public override void OnDamage(float damage)
-    {
-        if (!Managers.Network.IsHost) return;
-        
-        if(IsDead) return;
-        base.OnDamage(damage);
-        if(State == CreatureState.Idle || State == CreatureState.Run) 
-            State = CreatureState.Hit;
-        
-    }
-
-    // private  IEnumerator HitStateCoroutine()
-    // {
-    //     bodyAnimator.SetTrigger("hit");
-    //     yield return new WaitForSeconds(0.5f);
-    //     if (!runInputBuffer.Equals(Vector2.zero))
-    //     {
-    //         State = CreatureState.Run;
-    //         moveInput = runInputBuffer;
-    //         runInputBuffer = Vector2.zero;
-    //     }
-    //     else State = CreatureState.Idle;
-    // }
 
     ///
     ///<summary>
     ///공격 입력이 들어왔을 때 가장 먼저 호출되는 함수
     ///</summary>
-    public void OnAttackInput(InputAction.CallbackContext context)
+    private void OnAttackInput(InputAction.CallbackContext context)
     {
         if(IsDead) return;
         if(!context.started) return;

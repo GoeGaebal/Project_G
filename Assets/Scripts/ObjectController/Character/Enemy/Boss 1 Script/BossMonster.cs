@@ -73,9 +73,9 @@ public class BossMonster : BasicMonster
         _canCastingState = true;
     }
 
-    protected override void OnDie()
+    protected override void OnDie(CreatureState state)
     {
-        base.OnDie();
+        base.OnDie(state);
         if (!Managers.Network.IsHost) return;
         Managers.Network.Server.Room.SpawnLootingItems(5101, 10, transform.position, 2.0f, 1.0f);
         Managers.Network.Server.Room.SpawnLootingItems(5001, 5, transform.position, 2.0f, 1.0f);
@@ -137,9 +137,9 @@ public class BossMonster : BasicMonster
         }
     }
 
-    protected override void OnRun()
+    public override void OnRun(CreatureState state)
     {
-        base.OnRun();
+        base.OnRun(state);
         var position = transform.position;
         float xpos = Mathf.Clamp(position.x, BossroomLeftDownWorldPos.x, BossroomRightUpWorldPos.x);
         float ypos = Mathf.Clamp(position.y, BossroomLeftDownWorldPos.y, BossroomRightUpWorldPos.y);

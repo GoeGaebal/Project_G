@@ -16,15 +16,23 @@ public class NetworkObject : MonoBehaviour
 
     public PositionInfo PosInfo
     {
-        get
-        {
-            Info.PosInfo ??= new PositionInfo();
-            return Info.PosInfo;
-        }
+        get => Info.PosInfo;
         private set => Info.PosInfo = value;
     }
 
+    public StatInfo StatInfo
+    {
+        get => Info.StatInfo;
+        private set => Info.StatInfo = value;
+    }
+
     public GameRoom Room { get; set; }
+
+    protected virtual void Awake()
+    {
+        PosInfo ??= new PositionInfo();
+        StatInfo ??= new StatInfo();
+    }
 
     public virtual void SyncPos()
     {

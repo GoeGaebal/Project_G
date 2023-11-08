@@ -6,6 +6,7 @@ using System;
 using Google.Protobuf.Protocol;
 using Photon.Pun;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class GatheringController : CreatureController
@@ -24,17 +25,24 @@ public class GatheringController : CreatureController
     private static readonly int Die = Animator.StringToHash("Die");
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        if (HPBar == null) HPBar = Util.FindChild(gameObject,"HP", true).GetComponent<Image>();
+        if (HPText == null) HPText = Util.FindChild(gameObject,"HPText", true).GetComponent<TextMeshProUGUI>();
         _sprite = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
     }
 
+    protected override void OnIdle(CreatureState state)
+    {
+        _anim.ResetTrigger(Hit);
+        _anim.ResetTrigger(Die);
+    }
+
     private void Init()
     {
-        if (HPBar == null) HPBar = Util.FindChild(gameObject,"HP", true).GetComponent<Image>();
-        if (HPText == null) HPText = Util.FindChild(gameObject,"HPText", true).GetComponent<TextMeshProUGUI>();
-        maxHP =  Managers.Data.GatheringDict[id].maxHp;
+        StatInfo.MaxHp =  Managers.Data.GatheringDict[id].maxHp;
         UpdateHp(maxHP,IsDead);
         lootingId = Managers.Data.GatheringDict[id].lootingId;
     }
@@ -44,31 +52,15 @@ public class GatheringController : CreatureController
         _originalColor = _sprite.color;
     }
 
-    protected override void OnIdle()
-    {
-        _anim.ResetTrigger(Hit);
-        _anim.ResetTrigger(Die);
-    }
-
-    protected override void OnRun()
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void OnAttack()
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void OnHit()
+    public override void OnHit(CreatureState state)
     {
         if(!IsDead) _anim.SetTrigger(Hit);
     }
 
-    protected override void OnDie()
+    protected override void OnDie(CreatureState state)
     {
         _anim.SetTrigger(Die);
-        base.OnDie();
+        base.OnDie(state);
     }
 
     public override void UpdateHp(float health, bool dead)

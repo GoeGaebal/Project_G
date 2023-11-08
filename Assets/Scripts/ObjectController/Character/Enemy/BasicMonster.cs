@@ -3,7 +3,7 @@ using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public class BasicMonster : CreatureController
+public class BasicMonster : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
@@ -30,8 +30,11 @@ public class BasicMonster : CreatureController
     private static readonly int AttackAnimParam = Animator.StringToHash("attack");
     private static readonly int DistanceAnimParam = Animator.StringToHash("distance");
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        UpdateState.Add(CreatureState.Attack, OnAttack);
+        UpdateState.Add(CreatureState.Run, OnRun);
         _animator = GetComponent<Animator>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -69,7 +72,15 @@ public class BasicMonster : CreatureController
             var distance = GetDistance(_spawnPosition);
             State = distance > 1.0f ? CreatureState.Run : CreatureState.Idle;
         }
-        
+
+        if (State == CreatureState.Run)
+        {
+            var position = transform.position;
+            Vector2 targetPosition = hasTarget ? Target.transform.position : _spawnPosition;
+            DoFlip(targetPosition.x < position.x);
+            transform.position = Vector2.MoveTowards(position, targetPosition, speed * Time.deltaTime);
+        }
+
         var packet = new S_Move
         {
             ObjectId = Id,
@@ -84,33 +95,30 @@ public class BasicMonster : CreatureController
         Managers.Network.Server.Room.Broadcast(Managers.Network.LocalPlayer.Id, packet);
     }
 
-    protected override void OnIdle()
+    protected override void OnIdle(CreatureState state)
     {
         _animator.SetBool(RunAnimParam,false);
-        if (hasTarget && Time.time - lastAttackTime >= attackCooldown)
-            State = CreatureState.Attack;
+        if (!hasTarget || !(Time.timeSinceLevelLoad - lastAttackTime >= attackCooldown)) return;
+        lastAttackTime = Time.timeSinceLevelLoad;
+        State = CreatureState.Attack;
     }
 
-    protected override void OnRun()
+    public virtual void OnRun(CreatureState state)
     {
         _animator.SetBool(RunAnimParam, true);
-        var position = transform.position;
-        Vector2 targetPosition = hasTarget ? Target.transform.position : _spawnPosition;
-        DoFlip(targetPosition.x < position.x);
-        transform.position = Vector2.MoveTowards(position, targetPosition, speed * Time.deltaTime);
     }
 
-    protected override void OnAttack()
+    public void OnAttack(CreatureState state)
     {
         _animator.SetTrigger(AttackAnimParam);
     }
 
-    protected override void OnHit()
+    public override void OnHit(CreatureState state)
     {
         _animator.SetTrigger(Hit);
     }
 
-    protected override void OnDie()
+    protected override void OnDie(CreatureState state)
     {
         _animator.ResetTrigger(Hit);
         _animator.SetTrigger(DieAnimParam);
@@ -129,7 +137,6 @@ public class BasicMonster : CreatureController
 
     private void FinishAttackAnim()
     {
-        lastAttackTime = Time.time;
         State = CreatureState.Idle;
     }
 

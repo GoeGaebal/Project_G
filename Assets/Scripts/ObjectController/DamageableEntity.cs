@@ -5,7 +5,7 @@ using Photon.Pun;
 using System;
 using Google.Protobuf.Protocol;
 
-public class DamageableEntity : NetworkObject, IDamageable
+public class DamageableEntity : NetworkObject
 {
     public float maxHP;
     public float HP{get;protected set;} // 기존의 getter, setter 메소드를 대체한다, get은 public , set은 protected으로 접근제어를 한다.

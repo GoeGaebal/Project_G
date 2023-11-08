@@ -134,11 +134,11 @@ message PlayerPosInfo {
 
 message StatInfo {
   int32 level = 1;
-  int32 hp = 2;
-  int32 maxHp = 3;
-  int32 attack = 4;
+  float hp = 2;
+  float maxHp = 3;
+  float attack = 4;
   float speed = 5;
-  int32 totalExp = 6;
+  float totalExp = 6;
 }
 
 message SkillInfo {
