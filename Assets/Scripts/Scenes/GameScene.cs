@@ -27,7 +27,7 @@ public class GameScene : BaseScene
         base.Init();
         SceneType = SceneType.Game;
         
-        Managers.Map.LoadMap(1);
+        Managers.Map.LoadMap(Managers.WorldMap.currentMapName);
         Managers.Sound.Play("Plane_BGM", Define.Sound.Bgm);
     }
 
@@ -38,8 +38,14 @@ public class GameScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
+        Managers.UI.ShowSceneUI<UI_SystemMessage>();
+        Managers.UI.ShowSceneUI<UI_Crosshair>();
 
-        _playerLifeCnt = Managers.Object.PlayerDict.Count;
+        _playerLifeCnt = Managers.Network.PlayerDict.Count;
+        foreach (var player in Managers.Network.PlayerDict.Values)
+        {
+            player.transform.position = Vector3.zero;
+        }
     }
 
     public override void Clear()

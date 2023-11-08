@@ -12,6 +12,9 @@ public class WorldMapManager
 
     private bool _isBossBattle;
     private float _minDistacnceBetShipBoss;
+
+    public string currentMapName = "Map_001";
+
     public GameObject Ship
     {
         get { return _ship; }
@@ -74,7 +77,13 @@ public class WorldMapManager
 
         _finalBoss.transform.localPosition = _finalBoss.transform.localPosition + direction * _finalBossMoveSpeed * deltaTime;
 
-        if((_shipPosition - _finalBoss.transform.localPosition).sqrMagnitude < _minDistacnceBetShipBoss)
+
+        float distance = (_shipPosition - _finalBoss.transform.localPosition).sqrMagnitude;
+        if (1998f < distance && distance < 2000f)
+        {
+            UI_SystemMessage.alert("최종보스가 가까이 있습니다!", Color.red);
+        }
+        else if(distance < _minDistacnceBetShipBoss)
         {
             Debug.Log("final boss");
             _isBossBattle = true;
@@ -85,6 +94,7 @@ public class WorldMapManager
 
     public void CheckWeather()//날씨 체크
     {
+        EnumWeather currentWeather = EnumWeather.Sun;
         for (int i = 1; i <= Managers.Data.WorldmapDict.Count; i++)
         {
             if (_shipPosition.x >= Managers.Data.WorldmapDict[i].minX
@@ -96,21 +106,23 @@ public class WorldMapManager
                 string weather = Managers.Data.WorldmapDict[i].weather;
 
 
-                if(weather == "sunny" && Managers.Weather.Weather != EnumWeather.Sun)
+                if(weather == "sunny" )
                 {
-                    Managers.Weather.UpdateWeather(EnumWeather.Sun);
+                    currentWeather = EnumWeather.Sun;
                 }
-                else if(weather =="hot" && Managers.Weather.Weather != EnumWeather.Desert)
+                else if(weather =="hot")
                 {
-                    Managers.Weather.UpdateWeather(EnumWeather.Desert);
+                    currentWeather = EnumWeather.Desert;
                 }
-                else if(weather =="rainy" && Managers.Weather.Weather != EnumWeather.Rain)
+                else if(weather =="rainy")
                 {
-                    Managers.Weather.UpdateWeather(EnumWeather.Rain);
+                    currentWeather = EnumWeather.Rain;
                 }
             }
 
         }   
+        
+        if(currentWeather != Managers.Weather.Weather) Managers.Weather.UpdateWeather(currentWeather);
     }
 }
 

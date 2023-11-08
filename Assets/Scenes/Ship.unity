@@ -227,7 +227,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &898084417
 MonoBehaviour:
@@ -483,7 +483,7 @@ PrefabInstance:
     - target: {fileID: 1969079089133650517, guid: c7de0a82320c38242b325e7fefade6d2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1969079089133650517, guid: c7de0a82320c38242b325e7fefade6d2,
         type: 3}
@@ -628,6 +628,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SteeringWheel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131306014911877580, guid: d35fe0d4d84d028439650f73233ad32e,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 38.954407
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131306014911877580, guid: d35fe0d4d84d028439650f73233ad32e,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 38.954407
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131306014911877580, guid: d35fe0d4d84d028439650f73233ad32e,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -0.0000009536743
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d35fe0d4d84d028439650f73233ad32e, type: 3}

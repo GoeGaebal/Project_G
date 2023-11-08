@@ -18,7 +18,7 @@ public class PlayerAttackController : AttackController
     private Weapon meleeWeaponController;
     //private Weapon pickaxWeaponController;
     private EnumWeaponList currentWeapon;
-    private static GameObject localPlayer;
+    private static Player playerComponent;
     private SpriteRenderer spriteRenderer;
     // Start is called before the first frame update
     void Start()

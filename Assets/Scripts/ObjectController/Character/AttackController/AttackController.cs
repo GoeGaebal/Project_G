@@ -18,11 +18,16 @@ public class AttackController : MonoBehaviour
     
     protected Weapon weaponController;
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    protected virtual void OnTriggerEnter2D(Collider2D other) {
+
         if(other == null) return;
         
-        CreatureController cc = other.GetComponent<CreatureController>();
-        if(cc == null) return;
-        if(weaponController.CheckAttackLayer((int)other.gameObject.layer))  cc.OnDamage(10.0f);
+        IDamageable damageable = other.GetComponent<IDamageable>();
+        if(damageable == null) return;
+        if(weaponController.CheckAttackLayer((int)other.gameObject.layer))
+        {
+            damageable.OnDamage(20.0f);
+        }
+
     }
 }

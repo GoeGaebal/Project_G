@@ -27,8 +27,8 @@ public struct UIActions
     public InputAction MiddleClick;
     public InputAction RightClick;
     //public InputAction ScrollWheel;
+    public InputAction Option;
 }
-
 
 public class InputManager
 {
@@ -75,6 +75,7 @@ public class InputManager
         UIActions.Click = _uiActionMap.AddAction("Click", type: InputActionType.PassThrough);
         UIActions.MiddleClick = _uiActionMap.AddAction("MiddleClick", type: InputActionType.PassThrough);
         UIActions.RightClick = _uiActionMap.AddAction("RightClick", type: InputActionType.PassThrough);
+        UIActions.Option = _uiActionMap.AddAction("Option", type: InputActionType.Button);
 
         // Binding
         PlayerActions.Move.AddCompositeBinding("2DVector(mode=1)")
@@ -108,6 +109,7 @@ public class InputManager
         UIActions.Click.AddBinding("<Mouse>/leftButton", groups: PCBindingGroup);
         UIActions.MiddleClick.AddBinding("<Mouse>/middleButton", groups: PCBindingGroup);
         UIActions.RightClick.AddBinding("<Mouse>/rightButton", groups: PCBindingGroup);
+        UIActions.Option.AddBinding("<Keyboard>/escape", groups: PCBindingGroup);
 
         // Initial Check
         UIActions.Click.wantsInitialStateCheck = true;

@@ -49,6 +49,7 @@ public class UI_Status : UI_Scene
     private float ratio = 0;
 
     private GameObject _optionPanel;
+    private bool _isOptionPanelOn;
 
     private UI_OtherHP[] uiOtherHps;
 
@@ -75,6 +76,7 @@ public class UI_Status : UI_Scene
 
         _optionPanel = Get<GameObject>((int)GameObjects.OptionPanel);
         _optionPanel.SetActive(false);
+        _isOptionPanelOn = _optionPanel.activeSelf;
 
         CheckFullScreenMode();
         CheckResolution();
@@ -90,6 +92,8 @@ public class UI_Status : UI_Scene
         //Get<Toggle>((int)Toggles.FullscreenWindow).onValueChanged.AddListener(ChangeFullscreenWindow);
         //Get<Toggle>((int)Toggles.MaximizedWindow).onValueChanged.AddListener(ChangeMaximizedWindow);
         Get<Toggle>((int)Toggles.Windowed).onValueChanged.AddListener(ChangeWindowed);
+
+        Managers.Input.UIActions.Option.AddEvent(OnOffOption);
 
         uiOtherHps = new[]
         {
@@ -133,6 +137,22 @@ public class UI_Status : UI_Scene
     private void AddTime()
     {
         rotatingTimer.transform.rotation *= Quaternion.Euler(0f, 0f, 180f * ratio);
+    }
+
+    private void OnOffOption(InputAction.CallbackContext evt)
+    {
+        if (_isOptionPanelOn)
+        {
+            _optionPanel.SetActive(false);
+            Managers.Input.PlayerActionMap.Enable();
+        }
+        else
+        {
+            _optionPanel.SetActive(true);
+            Managers.Input.PlayerActionMap.Disable();
+        }
+
+        _isOptionPanelOn = _optionPanel.activeSelf;
     }
 
     private void OpenOption(PointerEventData evt)
