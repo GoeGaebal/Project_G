@@ -19,7 +19,7 @@ public class AttackController : MonoBehaviourPun
     protected Weapon weaponController; 
 
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    protected virtual void OnTriggerEnter2D(Collider2D other) {
 
         if(other == null) return;
         
@@ -27,7 +27,7 @@ public class AttackController : MonoBehaviourPun
         if(damageable == null) return;
         if(weaponController.CheckAttackLayer((int)other.gameObject.layer))
         {
-            damageable.OnDamage(10.0f);
+            damageable.OnDamage(20.0f);
         }
 
     }

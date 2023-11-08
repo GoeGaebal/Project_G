@@ -86,8 +86,6 @@ Shader "Hidden/Box Blur"
             HLSLPROGRAM
             half4 frag(Varyings IN) : SV_TARGET         
             {
-
-
                 return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
             }
             ENDHLSL

@@ -67,7 +67,7 @@ public class Managers : MonoBehaviourPun
             Network.Server.JobQueue.Dequeue().Invoke();
         }
         Network.Client.Update();
-        if(PhotonNetwork.IsMasterClient) TimeSlot.AddDelataTime(Time.deltaTime);
+        if(Managers.Network.isHost) TimeSlot.AddDelataTime(Time.deltaTime);
        WorldMap.UpdateWorldMap(Time.deltaTime);
        Scene.WaitLoading(Time.deltaTime);
     }

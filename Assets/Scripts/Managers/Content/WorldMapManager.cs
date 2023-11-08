@@ -94,6 +94,7 @@ public class WorldMapManager
 
     public void CheckWeather()//날씨 체크
     {
+        EnumWeather currentWeather = EnumWeather.Sun;
         for (int i = 1; i <= Managers.Data.WorldmapDict.Count; i++)
         {
             if (_shipPosition.x >= Managers.Data.WorldmapDict[i].minX
@@ -105,21 +106,23 @@ public class WorldMapManager
                 string weather = Managers.Data.WorldmapDict[i].weather;
 
 
-                if(weather == "sunny" && Managers.Weather.Weather != EnumWeather.Sun)
+                if(weather == "sunny" )
                 {
-                    Managers.Weather.UpdateWeather(EnumWeather.Sun);
+                    currentWeather = EnumWeather.Sun;
                 }
-                else if(weather =="hot" && Managers.Weather.Weather != EnumWeather.Desert)
+                else if(weather =="hot")
                 {
-                    Managers.Weather.UpdateWeather(EnumWeather.Desert);
+                    currentWeather = EnumWeather.Desert;
                 }
-                else if(weather =="rainy" && Managers.Weather.Weather != EnumWeather.Rain)
+                else if(weather =="rainy")
                 {
-                    Managers.Weather.UpdateWeather(EnumWeather.Rain);
+                    currentWeather = EnumWeather.Rain;
                 }
             }
 
         }   
+        
+        if(currentWeather != Managers.Weather.Weather) Managers.Weather.UpdateWeather(currentWeather);
     }
 }
 
