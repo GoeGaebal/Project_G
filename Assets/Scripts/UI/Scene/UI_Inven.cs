@@ -92,12 +92,11 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         }
 
         // 스탯 텍스트 동기화
-        if(_player == null)
+        if (Managers.Network.LocalPlayer != null)
         {
-            _player = Managers.Network.LocalPlayer;
+            _hpText.text = "체력: " + ((int)(Managers.Network.LocalPlayer.HP)).ToString() + " / " + ((int)(Managers.Network.LocalPlayer.maxHP)).ToString();
+            _adText.text = "공격력: " + ((int)(Managers.Network.LocalPlayer.realDamage)).ToString();
         }
-        _hpText.text = "체력: " + ((int)(_player.HP)).ToString() + " / " + ((int)(_player.maxHP)).ToString();
-        _adText.text = "공격력: " + ((int)(_player.realDamage)).ToString();
     }
 
     public override void Init()
@@ -176,24 +175,13 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         _inventory.SetActive(false);
         _inventory_activeself = _inventory.activeSelf;
 
-        Managers.Network.ReceiveAddItemHandler -= AddItem;
-        Managers.Network.ReceiveAddItemHandler += AddItem;
-
         // LoadData();
     }
 
     private void OnDestroy()
     {
         Managers.Input.PlayerActions.Inventory.RemoveEvent(OnOffInventory);
-        Managers.Network.ReceiveAddItemHandler -= AddItem;
         SaveItems();
-    }
-
-    public void AddItem(int guid)
-    {
-        var item = Managers.Data.ItemDict[
-            Managers.Object.LocalObjectsDict[guid].GetComponent<LootingItemController>().Item.ID];
-        AddItem(item);
     }
 
     private IEnumerator PotionUse()

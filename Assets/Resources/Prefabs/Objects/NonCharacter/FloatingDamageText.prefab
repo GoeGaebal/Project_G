@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 778806425805760457}
   - component: {fileID: 6110854352350061892}
   - component: {fileID: 8388617685927828333}
+  - component: {fileID: 480424219973309987}
   m_Layer: 0
   m_Name: FloatingDamageText
   m_TagString: Untagged
@@ -89,8 +90,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -44025399
-  m_SortingLayer: 2
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8388617685927828333
@@ -186,3 +187,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6110854352350061892}
   m_maskType: 0
+--- !u!114 &480424219973309987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8379769871654897685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532713fbc1b4bd745a9e59b2c9992542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsUsing: 0

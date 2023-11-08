@@ -345,9 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be9fdae41819cfc4584fff1ab234f657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _colorAvailable: {r: 1, g: 1, b: 1, a: 1}
-  _colorUnavailable: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
-  _healPercentage: 15
+  colorAvailable: {r: 1, g: 1, b: 1, a: 1}
+  colorUnavailable: {r: 0, g: 0, b: 0, a: 0}
+  healPercentage: 0
   _imageList:
   - {fileID: 0}
   - {fileID: 0}

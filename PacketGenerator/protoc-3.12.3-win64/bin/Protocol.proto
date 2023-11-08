@@ -8,20 +8,22 @@ enum MsgId {
   S_ENTER_GAME = 0;
   S_LEAVE_GAME = 1;
   S_SPAWN = 2;
-  S_DESPAWN = 3;
-  C_MOVE = 4;
-  S_MOVE = 5;
-  C_SKILL = 6;
-  S_SKILL = 7;
-  S_CHANGE_HP = 8;
-  S_DIE = 9;
-  S_CHAT = 10;
-  C_CHAT = 11;
-  S_LOAD_SCENE = 12;
-  S_WORLD_MAP = 13;
-  S_WORLD_MAP_EVENT = 14;
-  S_ON_DAMAGE = 15;
-  S_ADD_ITEM = 16;
+  S_DE_SPAWN = 3;
+  C_PLAYER_MOVE = 4;
+  S_PLAYER_MOVE = 5;
+  S_MOVE = 6;
+  C_SKILL = 7;
+  S_SKILL = 8;
+  S_CHANGE_HP = 9;
+  S_DIE = 10;
+  S_CHAT = 11;
+  C_CHAT = 12;
+  S_LOAD_SCENE = 13;
+  S_WORLD_MAP = 14;
+  S_WORLD_MAP_EVENT = 15;
+  S_ON_DAMAGE = 16;
+  S_ADD_ITEM = 17;
+  S_SPAWN_LOOTING = 18;
 }
 
 enum SceneType {
@@ -72,12 +74,17 @@ message S_Spawn {
   repeated ObjectInfo objects = 1;
 }
 
-message S_Despawn {
+message S_DeSpawn {
   repeated int32 objectIds = 1;
 }
 
-message C_Move {
-  PositionInfo posInfo = 1;
+message C_PlayerMove {
+  PlayerPosInfo posInfo = 1;
+}
+
+message S_PlayerMove {
+  int32 objectId = 1;
+  PlayerPosInfo posInfo = 2;
 }
 
 message S_Move {
@@ -116,18 +123,22 @@ message PositionInfo {
   int32 dir = 2;
   float posX = 3;
   float posY = 4;
-  float wposX = 5;
-  float wposY = 6;
-  float wrotZ = 7;
+}
+
+message PlayerPosInfo {
+  PositionInfo posInfo = 1;
+  float WPosX = 2;
+  float WPosY = 3;
+  float WRotZ = 4;
 }
 
 message StatInfo {
   int32 level = 1;
-  int32 hp = 2;
-  int32 maxHp = 3;
-  int32 attack = 4;
+  float hp = 2;
+  float maxHp = 3;
+  float attack = 4;
   float speed = 5;
-  int32 totalExp = 6;
+  float totalExp = 6;
 }
 
 message SkillInfo {
@@ -161,7 +172,7 @@ message S_WorldMapEvent {
   float targetPosY = 3;
   float shipPosX = 4;
   float shipPosY = 5;
-  string mapName = 6;
+  int32 targetMapId = 6;
 }
 
 message S_OnDamage {
@@ -174,4 +185,17 @@ message S_OnDamage {
 message S_AddItem {
   int32 objectId = 1;
   int32 itemId = 2;
+}
+
+message LootingInfo {
+  int32 objectId = 1;
+  int32 lootingId = 2;
+  float PosX = 3;
+  float PosY = 4;
+  float DestPosX = 5;
+  float DestPosY = 6;
+}
+
+message S_SpawnLooting {
+  repeated LootingInfo infos = 1;
 }

@@ -70,7 +70,6 @@ public class FinalBossScene : BaseScene
 
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
-        scene.AddNames(null);
     }
 
     public override void Clear()

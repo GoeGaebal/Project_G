@@ -1,10 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
 partial class PacketHandler
 {
@@ -31,9 +27,9 @@ partial class PacketHandler
 		}
 	}
 
-	public static void S_DespawnHandler(PacketSession session, IMessage packet)
+	public static void S_DeSpawnHandler(PacketSession session, IMessage packet)
 	{
-		S_Despawn despawnPacket = packet as S_Despawn;
+		S_DeSpawn despawnPacket = packet as S_DeSpawn;
 		foreach (int id in despawnPacket.ObjectIds)
 		{
 			Managers.Object.Remove(id);
@@ -43,23 +39,28 @@ partial class PacketHandler
 	public static void S_MoveHandler(PacketSession session, IMessage packet)
 	{
 		S_Move movePacket = packet as S_Move;
+		if (movePacket == null) return;
 		
-		// Debug.Log($"Receive: (id: {movePacket.ObjectId} {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY})");
+		var go = Managers.Object.FindById(movePacket.ObjectId);
+		if (go == null) return;
 		
-		GameObject go = Managers.Object.FindById(movePacket.ObjectId);
-		if (go == null)
-			return;
+		var no = go.GetComponent<NetworkObject>();
+		no.Info.PosInfo = movePacket.PosInfo;
+		no.SyncPos();
+	}
+	
+	public static void S_PlayerMoveHandler(PacketSession session, IMessage packet)
+	{
+		S_PlayerMove movePacket = packet as S_PlayerMove;
+		if (movePacket == null) return;
 		
-		// BaseController bc = go.GetComponent<BaseController>();
-		// if (bc == null)
-		// 	return;
-		if (movePacket.ObjectId != Managers.Network.LocalPlayer.Id)
-		{
-			var p = go.GetComponent<Player>();
-			p.Info.PosInfo = movePacket.PosInfo;
-			p.SyncPos();
-		}
-		//go.PosInfo = movePacket.PosInfo;
+		var go = Managers.Object.FindById(movePacket.ObjectId);
+		if (go == null) return;
+		
+		var p = go.GetComponent<Player>();
+		p.Info.PosInfo = movePacket.PosInfo.PosInfo;
+		p.SyncPos();
+		p.SyncWPos(movePacket.PosInfo.WPosX, movePacket.PosInfo.WPosY,movePacket.PosInfo.WRotZ);
 	}
 
 	public static void S_SkillHandler(PacketSession session, IMessage packet)
@@ -127,35 +128,40 @@ partial class PacketHandler
 
 	public static void S_WorldMapHandler(PacketSession session, IMessage packet)
 	{
-		if (Managers.Network.isHost) return;
+		if (Managers.Network.IsHost) return;
 		S_WorldMap worldMapPacket = packet as S_WorldMap;
 		Managers.WorldMap.UpdateByPacket(worldMapPacket);
 	}
 
 	public static void S_WorldMapEventHandler(PacketSession session, IMessage packet)
 	{
-		if (Managers.Network.isHost) return;
+		if (Managers.Network.IsHost) return;
 		S_WorldMapEvent worldMapPacket = packet as S_WorldMapEvent;
 		Managers.WorldMap.UI.UpdateByPacket(worldMapPacket);
 	}
 
 	public static void S_OnDamageHandler(PacketSession session, IMessage packet)
 	{
-		if (Managers.Network.isHost) return;
 		S_OnDamage damagePacket = packet as S_OnDamage;
-		DamageableEntity entity =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<DamageableEntity>();
-		entity.UpdateHP(damagePacket.HP, damagePacket.IsDead);
-		entity.OnDamage(damagePacket.Damage);
+		CreatureController cc =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<CreatureController>();
+		cc.UpdateHp(damagePacket.HP, damagePacket.IsDead);
 	}
 	
 	public static void S_AddItemHandler(PacketSession session, IMessage packet)
 	{
-		if (Managers.Network.isHost) return;
+		if (Managers.Network.IsHost) return;
 		S_AddItem itemPacket = packet as S_AddItem;
 		if (itemPacket == null) return;
 		
 		UI_Inven.additem(Managers.Data.ItemDict[itemPacket.ItemId]);
 		Managers.Object.Remove(itemPacket.ObjectId);
+	}
+
+	public static void S_SpawnLootingHandler(PacketSession session, IMessage packet)
+	{
+		S_SpawnLooting spawns = packet as S_SpawnLooting;
+		if (spawns == null) return;
+		foreach (var info in spawns.Infos) Managers.Object.Add(info);
 	}
 }
 

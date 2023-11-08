@@ -49,7 +49,6 @@ public class TestScene : BaseScene,IPunObservable
 
     private void Start()
     {
-        Managers.Object.SpawnGatherings(1,5);
         GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
         // 테스트용 강제 설정
         PhotonView view = player.GetComponent<PhotonView>();

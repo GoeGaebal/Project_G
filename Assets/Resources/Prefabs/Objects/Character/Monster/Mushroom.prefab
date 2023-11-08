@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -44025399
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 4723107735738678597, guid: f8b30c2afe165d645b54d500a9c30862,
     type: 3}
@@ -151,9 +151,9 @@ MonoBehaviour:
   attackPoint: 10
   attackCooldown: 4
   detectRadius: 1.5
-  targetLayerMask:
+  chaseTargetLayerMask:
     serializedVersion: 2
-    m_Bits: 64
-  animator: {fileID: 5620210490018935792}
-  spriteRenderer: {fileID: 5620210490018935793}
+    m_Bits: 0
   speed: 2
+  minDisFromPlayer: 0
+  isSpriteRightSide: 0

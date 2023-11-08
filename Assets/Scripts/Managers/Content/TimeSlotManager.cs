@@ -54,7 +54,7 @@ public class TimeSlotManager : IOnEventCallback
         
         PhotonNetwork.AddCallbackTarget(this);
 
-        if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
+        // if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
          
     }
 
@@ -97,7 +97,7 @@ public class TimeSlotManager : IOnEventCallback
                 default:
                     break; 
             }
-            Managers.Network.SynchronizeTime();
+            // Managers.Network.SynchronizeTime();
         }
     }
 
@@ -127,28 +127,27 @@ public class TimeSlotManager : IOnEventCallback
 
         byte eventCode = photonEvent.Code;
 
-        switch (eventCode)
-
-        {
-            case (byte)NetworkManager.CustomRaiseEventCode.SynchronizeTime:
-                if (!PhotonNetwork.IsMasterClient)
-                {
-                    Debug.Log("recieved time event");
-                    object[] data = (object[])photonEvent.CustomData;
-                    
-                    CurrentTime = (float)data[0];
-                    TimeSlot = (EnumTimeSlot)data[1];
-                    RotateTimer.SetTimerAngle((Quaternion)data[2]);
-                }
-                UpdateTimeSlot(TimeSlot);
-                break;
-            case (byte)NetworkManager.CustomRaiseEventCode.RequestSynchronizeTime:
-                if(!PhotonNetwork.IsMasterClient) break;
-                Managers.Network.SynchronizeTime();
-                break;
-            default:
-                break;
-        }
+        // switch (eventCode)
+        // {
+        //     case (byte)NetworkManager.CustomRaiseEventCode.SynchronizeTime:
+        //         if (!PhotonNetwork.IsMasterClient)
+        //         {
+        //             Debug.Log("recieved time event");
+        //             object[] data = (object[])photonEvent.CustomData;
+        //             
+        //             CurrentTime = (float)data[0];
+        //             TimeSlot = (EnumTimeSlot)data[1];
+        //             RotateTimer.SetTimerAngle((Quaternion)data[2]);
+        //         }
+        //         UpdateTimeSlot(TimeSlot);
+        //         break;
+        //     case (byte)NetworkManager.CustomRaiseEventCode.RequestSynchronizeTime:
+        //         if(!PhotonNetwork.IsMasterClient) break;
+        //         Managers.Network.SynchronizeTime();
+        //         break;
+        //     default:
+        //         break;
+        // }
         
     }
 }

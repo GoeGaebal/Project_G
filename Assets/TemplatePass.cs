@@ -36,7 +36,7 @@ public class TemplatePass : ScriptableRenderPass
         // We create a material that will be used during our pass. You can do it like this using the 'CreateEngineMaterial' method, giving it
         // a shader path as an input or you can use a 'public Material material;' field in your pass settings and access it here through 'passSettings.material'.
         //내가 지정한 shader로 material을 만든다.
-        if(material == null) material = CoreUtils.CreateEngineMaterial("Hidden/Box Blur");
+        if(material == null) material = CoreUtils.CreateEngineMaterial( "Hidden/Box Blur");
         
         // Set any material properties based on our pass settings.
         //feature에서 정한 property의 값으로 material의 값을 정한다. 

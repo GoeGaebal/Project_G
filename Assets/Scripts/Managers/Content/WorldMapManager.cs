@@ -12,8 +12,8 @@ public class WorldMapManager
 
     private bool _isBossBattle;
     private float _minDistacnceBetShipBoss;
-
-    public string currentMapName = "Map_001";
+    
+    public int currentMapId;
 
     public GameObject Ship
     {
@@ -40,7 +40,7 @@ public class WorldMapManager
         if(_isBossBattle) return;
         if(UI == null) return;
         // TODO : 추후 Server로 로직을 옮김
-        if (Managers.Network.isHost)
+        if (Managers.Network.IsHost)
         {
             UpdateShipPosition();
             UpdateFinalBossPosition(deltaTime);

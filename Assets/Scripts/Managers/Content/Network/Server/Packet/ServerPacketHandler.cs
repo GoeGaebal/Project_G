@@ -6,19 +6,16 @@ using ServerCore;
 
 partial class PacketHandler
 {
-	public static void C_MoveHandler(PacketSession session, IMessage packet)
+	public static void C_PlayerMoveHandler(PacketSession session, IMessage packet)
 	{
-		C_Move movePacket = packet as C_Move;
+		C_PlayerMove movePacket = packet as C_PlayerMove;
 		ClientSession clientSession = session as ClientSession;
 		if (movePacket == null || clientSession == null) return;
 		
 		Player player = clientSession.MyPlayer;
 		if (player == null)  return;
-
-		GameRoom room = player.Room;
-		if (room == null) return;
-
-		room.HandleMove(player,movePacket);
+		
+		Managers.Network.Server.Room.HandleMove(player,movePacket);
 	}
 
 	public static void C_ChatHandler(PacketSession session, IMessage packet)

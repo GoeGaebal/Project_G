@@ -1,3 +1,8 @@
+set current_folder=%cd%
+for %%a in ("%current_folder%") do set folder_name=%%~nxa
+echo Current folder name: %folder_name%
+if "%folder_name%" neq "bin" cd PacketGenerator\\protoc-3.12.3-win64\\bin
+
 protoc.exe -I=./ --csharp_out=./ ./Protocol.proto 
 IF ERRORLEVEL 1 PAUSE
 

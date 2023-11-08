@@ -42,9 +42,6 @@ public class InputManager
     public UIActions UIActions;
     //public DefaultInputActions.UIActions UIActions;
     
-    
-
-
     public void Init()
     {
         Asset = ScriptableObject.CreateInstance<InputActionAsset>();

@@ -52,11 +52,11 @@ public class MapManager
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
         
         BasicMonster[] monsters = go.GetComponentsInChildren<BasicMonster>();
-        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
+        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
         foreach (var monster in monsters)
             Managers.Resource.Destroy(monster.gameObject);
         GatheringController[] gatherings = go.GetComponentsInChildren<GatheringController>();
-        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
+        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
         foreach (var gathering in gatherings)
             Managers.Resource.Destroy(gathering.gameObject);
     }
@@ -76,11 +76,11 @@ public class MapManager
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
 
         BasicMonster[] monsters = go.GetComponentsInChildren<BasicMonster>();
-        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
+        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
         foreach (var monster in monsters)
             Managers.Resource.Destroy(monster.gameObject);
         GatheringController[] gatherings = go.GetComponentsInChildren<GatheringController>();
-        if (Managers.Network.isHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
+        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
         foreach (var gathering in gatherings)
             Managers.Resource.Destroy(gathering.gameObject);
     }
