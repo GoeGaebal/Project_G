@@ -61,7 +61,7 @@ public class UI_Worldmap : UI_Scene
 
     private Portal _portal;
 
-    private string _mapName;
+    private string _targetMapName = "";
 
     public static System.Action open;
 
@@ -79,27 +79,30 @@ public class UI_Worldmap : UI_Scene
     {
         //UpdateWeatherUI();
 
-        if (_moveFlag)
+        if (_moveFlag)//이동 중
         {
             if (Vector2.Distance(_ship.transform.localPosition, _targetPosition) >= 1f)
-            {
+            {//이동 중
                 MoveToTarget();
-                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_mapName[6] - '0'].name + "로 이동 중");
+                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapName[6] - '0'].name + "로 이동 중");
             }
             else
-            {
+            {//도착
                 _moveFlag = false;
                 _arriveFlag = true;
+                Managers.WorldMap.currentMapName = _targetMapName;
                 _timeText.SetActive(false);
                 _distanceText.SetActive(false);
                 _arrow.SetActive(false);
+                UI_SystemMessage.alert(_targetMapName + "에 도착했습니다.", Color.white);
             }
         }
-        if (_arriveFlag && _mapName != "Worldmap_Ship")
-        {
-            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_mapName[6] - '0'].name + "에 정박 중");
+        if (_arriveFlag && _targetMapName != "Worldmap_Ship")
+        {//도착해 있을 때
+            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapName[6] - '0'].name + "에 정박 중");
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
+            
 
             _portal.SetColor(Color.blue);
             _portal.SetPortal(true);
@@ -159,7 +162,9 @@ public class UI_Worldmap : UI_Scene
     public void SetTarget(GameObject t)//목표 지정
     {
         _targetPosition = t.transform.localPosition;
-        _mapName = t.name;
+        _targetMapName = t.name;
+
+        UI_SystemMessage.alert(_targetMapName + "로 이동 중입니다.", Color.white);
     }
     private void MoveToTarget()//목표 방향으로 이동
     {
@@ -218,6 +223,7 @@ public class UI_Worldmap : UI_Scene
         _arriveFlag = false;
         _moveFlag = true;
         _lr.enabled = true;
+        CloseWorldmapUI();
         
         S_WorldMapEvent packet = new S_WorldMapEvent();
         packet.Event = UIWorldMapEventType.SetTarget;
@@ -225,7 +231,7 @@ public class UI_Worldmap : UI_Scene
         packet.ShipPosY = _ship.transform.localPosition.y;
         packet.TargetPosX = _targetPosition.x;
         packet.TargetPosY = _targetPosition.y;
-        packet.MapName = _mapName;
+        packet.MapName = _targetMapName;
         Managers.Network.Server.Room.Broadcast(packet);
     }
 
@@ -247,7 +253,7 @@ public class UI_Worldmap : UI_Scene
         packet.ShipPosY = _ship.transform.localPosition.y;
         packet.TargetPosX = _targetPosition.x;
         packet.TargetPosY = _targetPosition.y;
-        packet.MapName = _mapName;
+        packet.MapName = _targetMapName;
         Managers.Network.Server.Room.Broadcast(packet);
     }
 
@@ -258,7 +264,7 @@ public class UI_Worldmap : UI_Scene
         {
             _targetPosition = new Vector3(evt.TargetPosX, evt.TargetPosY);
             _ship.transform.localPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
-            _mapName = evt.MapName;
+            _targetMapName = evt.MapName;
             _arriveFlag = false;
             _moveFlag = true;
             _lr.enabled = true;
@@ -267,7 +273,7 @@ public class UI_Worldmap : UI_Scene
         {
             _targetPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
             _ship.transform.localPosition = new Vector3(evt.ShipPosX, evt.ShipPosY);
-            _mapName = evt.MapName;
+            _targetMapName = evt.MapName;
             _moveFlag = false;
             _lr.enabled = false;
             _movingText.GetComponent<TMP_Text>().SetText("정지 중");
@@ -282,8 +288,13 @@ public class UI_Worldmap : UI_Scene
         _worldmap.SetActive(true);
         Managers.Input.PlayerActionMap.Disable();
     }
-
+    
     public void CloseWorldmapUI(PointerEventData evt)
+    {
+        _worldmap.SetActive(false);
+        Managers.Input.PlayerActionMap.Enable();
+    }
+    public void CloseWorldmapUI()
     {
         _worldmap.SetActive(false);
         Managers.Input.PlayerActionMap.Enable();
@@ -303,7 +314,7 @@ public class UI_Worldmap : UI_Scene
         Debug.Log(pos[1]);
     }
     */
-    
+
     /*
     private void UpdateWeatherUI()
     {

@@ -15,7 +15,6 @@ public class UI_Crosshair : UI_Scene
     [SerializeField] private Sprite cursor;
     [SerializeField] private Sprite crossHair;
     private GameObject _cursor;
-    private bool _isLobby = false;
 
     // Start is called before the first frame update
     void Start()
