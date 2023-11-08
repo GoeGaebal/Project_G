@@ -54,6 +54,7 @@ public class Player : DamageableEntity
         ObjectType = GameObjectType.Player;
         wpc = transform.GetComponentInChildren<WeaponPivotController>();
         PosInfo.Dir = 1;
+        attackDamage = 10f;
     }
 
     protected override void OnEnable() {
@@ -115,6 +116,7 @@ public class Player : DamageableEntity
 
     private void Update()
     {
+        //realDamage = 100f;
         realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
 
@@ -194,12 +196,9 @@ public class Player : DamageableEntity
                         State = CreatureState.Idle;
                     break;
                 case CreatureState.Attack:
-                    if(context.started)
-                    {
                         //공격 중에 이동 키 눌리면 선입력 버퍼에 저장하고 리턴
+       
                         runInputBuffer  = moveInput;
-                        return;
-                    }
                     break;
                 case CreatureState.Hit:
                     if(context.started)
@@ -260,7 +259,7 @@ public class Player : DamageableEntity
         if(State != CreatureState.Idle && State != CreatureState.Attack && State != CreatureState.Run) return;
         
         //이동중간에 액션 들어올 경우를 대비해서, 공격 시작 시 위치 고정
-        rb.velocity = Vector2.zero;
+        //rb.velocity = Vector2.zero;
 
         if( State == CreatureState.Attack && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
             attackInputBuffer = true;
@@ -279,8 +278,8 @@ public class Player : DamageableEntity
         else if (Managers.Input.PlayerActions.Move.IsPressed())
         {
             State = CreatureState.Run;
-            moveInput = runInputBuffer;
-            runInputBuffer = Vector2.zero;
+            if(runInputBuffer.x != 0 || runInputBuffer.y !=0)
+                moveInput = runInputBuffer;
         }
         else 
         {
