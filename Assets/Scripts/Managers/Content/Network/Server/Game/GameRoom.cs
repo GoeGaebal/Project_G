@@ -3,7 +3,6 @@ using System.Linq;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
-using ServerCore;
 using UnityEngine;
 
 public class GameRoom
@@ -13,6 +12,30 @@ public class GameRoom
     private readonly Dictionary<int, ObjectInfo> _players = new Dictionary<int, ObjectInfo>();
     private readonly Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
     public int PlayersCount => _players.Count;
+    
+    private static int _counter = 0;
+    private static int _monsterCounter = 0;
+    private static int _lootingCounter = 0;
+    private static int _gatheringCounter = 0;
+    
+    public static int GenerateId(GameObjectType type)
+    {
+        return type switch
+        {
+            GameObjectType.Player => ((int)type << 24) | (_counter++),
+            GameObjectType.Monster => ((int)type << 24) | (_monsterCounter++),
+            GameObjectType.LootingItem => ((int)type << 24) | (_lootingCounter++),
+            GameObjectType.Gathering => ((int)type << 24) | (_gatheringCounter++),
+            _ => 0
+        };
+    }
+    
+    private ObjectInfo FindById(int id)
+    {
+        ObjectInfo go = null;
+        _objects.TryGetValue(id, out go);
+        return go;
+    }
 
     public void EnterGame(ClientSession session, ObjectInfo gameObject)
     {
@@ -26,9 +49,7 @@ public class GameRoom
             // TODO : 들어왔을 때 정보 초기화
             gameObject.PosInfo = new PositionInfo()
             {
-                PosX = 0.0f,
-                PosY = 0.0f,
-                Dir = 1,
+                PosX = 0.0f, PosY = 0.0f, Dir = 1,
             };
             
             _players.Add(gameObject.ObjectId, gameObject);
@@ -94,11 +115,12 @@ public class GameRoom
         if (player == null) return;
 
         // TODO : 검증
-        PlayerPosInfo movePosInfo = movePacket.PosInfo;
+        var movePosInfo = movePacket.PosInfo;
         var info = player.Info;
-        _players[info.ObjectId].PosInfo = movePosInfo.PosInfo;
+        if (!_players.TryGetValue(info.ObjectId, out var p)) return;
         
-        S_PlayerMove resMovePacket = new S_PlayerMove
+        p.PosInfo = movePosInfo.PosInfo;
+        var resMovePacket = new S_PlayerMove
         {
             ObjectId = player.Info.ObjectId,
             PosInfo = movePosInfo
@@ -153,6 +175,9 @@ public class GameRoom
                 PlayersSessions[p.ObjectId].Send(despawnPacket);
             }
         }
+        
+        // TODO: 서버 종료
+        if (_players.Count == 0) Clear();
     }
 
     public void SpawnMonsters(BasicMonster[] monsters)
@@ -160,7 +185,7 @@ public class GameRoom
         S_Spawn spawn = new S_Spawn();
         foreach (var monster in monsters)
         {
-            monster.Id = Managers.Object.GenerateId(GameObjectType.Monster);
+            monster.Id = GenerateId(GameObjectType.Monster);
             string name = monster.gameObject.name;
             int end = name.IndexOf('(');
             if (end >= 0)
@@ -182,7 +207,7 @@ public class GameRoom
         S_Spawn spawn = new S_Spawn();
         foreach (var gathering in gatherings)
         {
-            gathering.Id = Managers.Object.GenerateId(GameObjectType.Gathering);
+            gathering.Id = GenerateId(GameObjectType.Gathering);
             string name = gathering.gameObject.name;
             int end = name.IndexOf('(');
             if (end >= 0)
@@ -210,7 +235,7 @@ public class GameRoom
             randPos.y += pos.y;
             LootingInfo info = new()
             {
-                ObjectId = Managers.Object.GenerateId(GameObjectType.LootingItem),
+                ObjectId = GenerateId(GameObjectType.LootingItem),
                 LootingId = objectId,
                 PosX = pos.x,
                 PosY = pos.y,
@@ -248,5 +273,13 @@ public class GameRoom
         {
             PlayersSessions[p.ObjectId].Send(packet);
         }
+    }
+
+    public void Clear()
+    {
+        _objects.Clear();
+        _players.Clear();
+        _counter = _gatheringCounter = _lootingCounter = _monsterCounter = 0;
+        Managers.Network.Server.ShutDown();
     }
 }

@@ -36,7 +36,7 @@ public class LootingItemController : NetworkObject
     [SerializeField] private float threshold;
     private static float Sn;
 
-    private void Awake()
+    protected override void Awake()
     {
         mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
         shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();

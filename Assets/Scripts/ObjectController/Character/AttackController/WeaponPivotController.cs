@@ -17,7 +17,7 @@ public class WeaponPivotController : NetworkObject
     private Collider2D[] _results = new Collider2D[10];
     private static readonly int AttackAnimParam = Animator.StringToHash("attack");
 
-    private void Awake()
+    protected override void Awake()
     {
         _player = transform.parent.gameObject.GetComponent<Player>();
         _animator = GetComponent<Animator>();

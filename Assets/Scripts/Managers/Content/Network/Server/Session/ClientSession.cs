@@ -12,7 +12,14 @@ namespace Server
 {
 	public class ClientSession : PacketSession
 	{
-		public Player MyPlayer => Managers.Object.PlayerDict[_myPlayerId];
+		public Player MyPlayer {
+			get
+			{
+				Managers.Object.PlayerDict.TryGetValue(_myPlayerId, out var ret);
+				return ret;
+			}
+		}
+		
 		private int _myPlayerId;
 
 		public int SessionId { get; set; }
@@ -20,11 +27,7 @@ namespace Server
 		public void OnConnectedCoroutine()
 		{
 			// MyPlayer = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
-			_myPlayerId = Managers.Object.GenerateId(GameObjectType.Player);
-			ObjectInfo myPlayerInfo = new ObjectInfo();
-			myPlayerInfo.ObjectId = _myPlayerId;
-			myPlayerInfo.Name =  $"Player_{_myPlayerId}";
-			Managers.Network.Server.Room.EnterGame(this, myPlayerInfo);
+			
 		}
 
 		public void Send(IMessage packet)
@@ -42,7 +45,13 @@ namespace Server
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Debug.Log($"OnConnected : {endPoint}");
-			Managers.Network.Server.JobQueue.Enqueue(OnConnectedCoroutine);
+			_myPlayerId = GameRoom.GenerateId(GameObjectType.Player);
+			ObjectInfo myPlayerInfo = new ObjectInfo
+			{
+				ObjectId = _myPlayerId,
+				Name = $"Player_{_myPlayerId}"
+			};
+			Managers.Network.Server.Room.EnterGame(this, myPlayerInfo);
 		}
 
 		public override void OnRecvPacket(ArraySegment<byte> buffer)

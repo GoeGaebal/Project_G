@@ -142,9 +142,9 @@ partial class PacketHandler
 
 	public static void S_OnDamageHandler(PacketSession session, IMessage packet)
 	{
-		S_OnDamage damagePacket = packet as S_OnDamage;
-		CreatureController cc =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<CreatureController>();
-		cc.UpdateHp(damagePacket.HP, damagePacket.IsDead);
+		if (packet is not S_OnDamage damagePacket) return;
+		var id =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<IDamageable>();
+		id.UpdateHp(damagePacket.HP, damagePacket.IsDead);
 	}
 	
 	public static void S_AddItemHandler(PacketSession session, IMessage packet)

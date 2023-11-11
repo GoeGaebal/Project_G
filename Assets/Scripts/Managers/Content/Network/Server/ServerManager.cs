@@ -60,4 +60,11 @@ public class ServerManager
     {
         SessionManager.Update();
     }
+
+    public void ShutDown()
+    {
+        SessionManager.Close();
+        _listener.ShutDown();
+        _isListening = false;
+    }
 }

@@ -70,7 +70,6 @@ namespace ServerCore
 			_listenSocket.Dispose();
 			// _listenSocket.Shutdown(SocketShutdown.Both);
 			_sessionFactory = null;
-			
 		}
 	}
 }

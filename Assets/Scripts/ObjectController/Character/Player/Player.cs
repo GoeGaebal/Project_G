@@ -29,8 +29,8 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
-    private bool attackInputBuffer = false;
-    private Vector2 runInputBuffer = Vector2.zero;
+    private bool _attackInputBuffer = false;
+    private Vector2 _runInputBuffer = Vector2.zero;
 
     private AnimationEvent OnFinishDieAnim;
 
@@ -180,7 +180,8 @@ public class Player : CreatureController, IAttackable, IMoveable
     
     public void OnAttack(CreatureState prevState)
     {
-        _wpc.Attack(realDamage);
+        if(prevState != CreatureState.Attack)
+            _wpc.Attack(realDamage);
     }
     
     public override void OnDamage(float damage)
@@ -237,7 +238,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         // rb.velocity = Vector2.zero;
 
         if( State == CreatureState.Attack)
-            attackInputBuffer = true;
+            _attackInputBuffer = true;
 
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
@@ -273,7 +274,6 @@ public class Player : CreatureController, IAttackable, IMoveable
         S_DeSpawn despawn = new S_DeSpawn();
         despawn.ObjectIds.Add(Id);
         Managers.Network.Server.Room.Broadcast(despawn);
-        Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
     }
 
     private void OnDestroy()

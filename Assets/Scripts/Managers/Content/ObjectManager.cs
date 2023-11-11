@@ -15,23 +15,6 @@ public class ObjectManager
         return (GameObjectType)type;
     }
 
-    private int _counter = 0;
-    private int _monsterCounter = 0;
-    private int _lootingCounter = 0;
-    private int _gatheringCounter = 0;
-    
-    public int GenerateId(GameObjectType type)
-    {
-        return type switch
-        {
-            GameObjectType.Player => ((int)type << 24) | (_counter++),
-            GameObjectType.Monster => ((int)type << 24) | (_monsterCounter++),
-            GameObjectType.LootingItem => ((int)type << 24) | (_lootingCounter++),
-            GameObjectType.Gathering => ((int)type << 24) | (_gatheringCounter++),
-            _ => 0
-        };
-    }
-    
     public GameObject FindById(int id)
     {
         GameObject go = null;
@@ -42,38 +25,26 @@ public class ObjectManager
     public void Add(ObjectInfo info, bool myPlayer = false)
     {
         GameObjectType objectType = GetObjectTypeById(info.ObjectId);
+        if (_objects.ContainsKey(info.ObjectId)) return;
+        
         if (objectType == GameObjectType.Player)
         {
+            var go = Managers.Resource.Instantiate("Objects/Character/Player");
+            _objects.Add(info.ObjectId, go);
+            go.name = info.Name;
+            
+            Player p = go.GetComponent<Player>();
+            p.Id = info.ObjectId;
+            p.Info.PosInfo = info.PosInfo;
+            p.SyncPos();
+            PlayerDict.Add(p.Id, p);
+
             if (myPlayer)
             {
-                var go = Managers.Resource.Instantiate("Objects/Character/Player");
-                Managers.MakeDontDestroyOnLoad(go);
-                Managers.Network.LocalPlayer = go.GetComponent<Player>();
-                
-                _objects.TryAdd(info.ObjectId, Managers.Network.LocalPlayer.gameObject);
+                Managers.Network.LocalPlayer = p;
                 Managers.Network.LocalPlayer.BindingAction();
-                
-                Managers.Network.LocalPlayer.gameObject.name = info.Name;
-                Managers.Network.LocalPlayer.Id = info.ObjectId;
-                Managers.Network.LocalPlayer.Info.PosInfo = info.PosInfo;
-                Managers.Network.LocalPlayer.SyncPos();
-                // LocalPlayer.Stat = info.StatInfo;
-                PlayerDict.Add(Managers.Network.LocalPlayer.Id, Managers.Network.LocalPlayer);
             }
-            else
-            {
-                Player p = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
-                UnityEngine.Object.DontDestroyOnLoad(p.gameObject);
-                
-                p.gameObject.name = info.Name;
-                _objects.Add(info.ObjectId, p.gameObject);
-
-                p.Id = info.ObjectId;
-                p.Info.PosInfo = info.PosInfo;
-                p.SyncPos();
-                PlayerDict.Add(p.Id, p);
-                OtherPlayerDict.Add(p.Id,p);
-            }
+            else OtherPlayerDict.Add(p.Id,p);
         }
         else if (objectType == GameObjectType.Monster)
         {
@@ -81,13 +52,8 @@ public class ObjectManager
             _objects.TryGetValue(info.ObjectId, out go);
             if (go == null)
             {
-                if (info.Name == "BossProto")
-                    go = Managers.Resource.Instantiate($"Objects/Character/Monster/BossMonster1/BossProto");
-                else
-                    go = Managers.Resource.Instantiate($"Objects/Character/Monster/{info.Name}");
+                go = Managers.Resource.Instantiate(info.Name == "BossProto" ? $"Objects/Character/Monster/BossMonster1/BossProto" : $"Objects/Character/Monster/{info.Name}");
             }
-           
-            UnityEngine.Object.DontDestroyOnLoad(go);
             go.name = $"{info.Name}_{info.ObjectId}";
             _objects.Add(info.ObjectId, go);
             var bm = go.GetComponent<BasicMonster>();
@@ -153,12 +119,12 @@ public class ObjectManager
 
     public void Clear()
     {
-        var objects = _objects.ToArray();
-        foreach (var obj in objects)
+        foreach (var obj in _objects.Values.Where(obj => obj != null))
         {
-            if (!PlayerDict.ContainsKey(obj.Key)) Managers.Resource.Destroy(obj.Value);
+            Managers.Resource.Destroy(obj);
         }
+        PlayerDict.Clear();
+        OtherPlayerDict.Clear();
         _objects.Clear();
-        foreach (var pair in PlayerDict) _objects.TryAdd(pair.Key,pair.Value.gameObject);
     }
 }
