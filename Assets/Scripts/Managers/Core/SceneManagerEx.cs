@@ -47,15 +47,14 @@ public class SceneManagerEx
             Managers.Input.Asset.Disable();
             loadedTime += time;
         }
-        else 
+        else
         {
             _asyncOp = SceneManager.LoadSceneAsync(nextSceneName);
             _isLoading = false;
             Managers.Input.Asset.Enable();
         }
-
     }
-    
+
     /// <summary>
     /// Scene을 불러오는 함수, 기존 Unity 방식으로는 type에 따라서 불러오지 못하므로 이를 반영하였다.
     /// </summary>

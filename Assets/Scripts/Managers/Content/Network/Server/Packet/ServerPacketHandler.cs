@@ -44,4 +44,17 @@ partial class PacketHandler
 		//
 		// room.Push(room.HandleSkill, player, skillPacket);
 	}
+
+	public static void C_ArtifactEventHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+
+		if (packet is not C_ArtifactEvent evt) return;
+		S_ArtifactEvent resEvt = new S_ArtifactEvent()
+		{
+			CurrentId = evt.CurrentId,
+			ArtifactId = evt.ArtifactId
+		};
+		Managers.Network.Server.Room.Broadcast(resEvt);
+	}
 }

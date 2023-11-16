@@ -13,7 +13,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
     private Vector3 _spawnPosition;
-    protected Animator _animator;
+    protected Animator Animator;
 
     protected SpriteRenderer SpriteRenderer;
 
@@ -38,7 +38,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
         base.Awake();
         UpdateState.Add(CreatureState.Attack, OnAttack);
         UpdateState.Add(CreatureState.Run, OnRun);
-        _animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
         FloatingPos = transform.GetChild(0);
     }
@@ -66,17 +66,13 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
         if (hasTarget)
         {
-            if (_target == null)
-            {
-                hasTarget = false;
-                return;
-            }
             var distance = GetDistance(Target.transform.position);
+            if (detectRadius < distance) hasTarget = false;
             State = distance > minDisFromPlayer ? CreatureState.Run : CreatureState.Idle;
-            _animator.SetFloat(DistanceAnimParam, distance);
+            Animator.SetFloat(DistanceAnimParam, distance);
         }
         // 만일 타겟을 가지고 있지 않다면
-        else
+        if(!hasTarget)
         {
             var distance = GetDistance(_spawnPosition);
             State = distance > 1.0f ? CreatureState.Run : CreatureState.Idle;
@@ -106,7 +102,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     protected override void OnIdle(CreatureState state)
     {
-        _animator.SetBool(RunAnimParam,false);
+        Animator.SetBool(RunAnimParam,false);
         if (!hasTarget || !(Time.timeSinceLevelLoad - lastAttackTime >= attackCooldown)) return;
         lastAttackTime = Time.timeSinceLevelLoad;
         State = CreatureState.Attack;
@@ -114,17 +110,17 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     public virtual void OnRun(CreatureState state)
     {
-        _animator.SetBool(RunAnimParam, true);
+        Animator.SetBool(RunAnimParam, true);
     }
 
     public void OnAttack(CreatureState state)
     {
-        _animator.SetTrigger(AttackAnimParam);
+        Animator.SetTrigger(AttackAnimParam);
     }
 
     public override void OnHit(CreatureState state)
     {
-        _animator.SetTrigger(Hit);
+        Animator.SetTrigger(Hit);
     }
 
     public override void OnDamage(float damage)
@@ -137,8 +133,8 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     protected override void OnDie(CreatureState state)
     {
-        _animator.ResetTrigger(Hit);
-        _animator.SetTrigger(DieAnimParam);
+        Animator.ResetTrigger(Hit);
+        Animator.SetTrigger(DieAnimParam);
     }
 
     private void OnEndDieAnim()

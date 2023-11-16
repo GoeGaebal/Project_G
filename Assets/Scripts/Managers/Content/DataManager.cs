@@ -22,6 +22,7 @@ public class DataManager
     public Dictionary<int, WorldmapData> WorldmapDict { get; private set; } = new Dictionary<int, WorldmapData>();
 
     public Dictionary<int, CraftData> CraftDict { get; private set; } = new Dictionary<int, CraftData>();
+    public Dictionary<int, Artifact> ArtifactDict { get; private set; } = new Dictionary<int, Artifact>();
 
     public void Init()
     {
@@ -29,14 +30,20 @@ public class DataManager
         
         // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
         Item item = null;
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Apple");
+        item = Managers.Resource.Load<Item>("Prefabs/UI/Inventory/Item/Apple");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/IronIngot");
+        item = Managers.Resource.Load<Item>("Prefabs/UI/Inventory/Item/IronIngot");
         ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("prefabs/UI/Inventory/Item/Sword");
+        item = Managers.Resource.Load<Item>("Prefabs/UI/Inventory/Item/Sword");
         ItemDict.Add(item.ID,item);
         WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
         CraftDict = LoadJson<CraftDataLoader, int, CraftData>("CraftData").MakeDict();
+        Artifact artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_1");
+        ArtifactDict.Add(artifact.ID, artifact);
+        artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_2");
+        ArtifactDict.Add(artifact.ID, artifact);
+        artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_Deselect");
+        ArtifactDict.Add(artifact.ID, artifact);
     }
 
     Loader LoadJson<Loader, TKey, TValue>(string path) where Loader : ILoader<TKey, TValue>

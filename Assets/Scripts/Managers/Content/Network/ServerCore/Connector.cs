@@ -9,9 +9,10 @@ namespace ServerCore
 {
 	public class Connector
 	{
-		Func<Session> _sessionFactory;
+		private Func<Session> _sessionFactory;
+		private Action _onConnectedFailed;
 
-		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, int count = 1)
+		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, Action onConnectedFailed = null , int count = 1)
 		{
 			for (int i = 0; i < count; i++)
 			{
@@ -23,7 +24,7 @@ namespace ServerCore
 				args.Completed += OnConnectCompleted;
 				args.RemoteEndPoint = endPoint;
 				args.UserToken = socket;
-
+				if(onConnectedFailed != null) _onConnectedFailed += onConnectedFailed;
 				RegisterConnect(args);
 			}
 		}
@@ -50,6 +51,7 @@ namespace ServerCore
 			else
 			{
 				Debug.Log($"OnConnectCompleted Fail: {args.SocketError}");
+				_onConnectedFailed?.Invoke();
 			}
 		}
 	}

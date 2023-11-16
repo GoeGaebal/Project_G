@@ -21,30 +21,40 @@ public class ClientManager
 
 	private string _host;
 	private IPHostEntry _ipHost;
-	private IPAddress _ipAddr;
+	private IPAddress _ipAddress;
 	private IPEndPoint _endPoint;
 
 	public void Init()
 	{
-		// DNS (Domain Name System)
-		_host = Dns.GetHostName();
-		_ipHost = Dns.GetHostEntry(_host);
-		_ipAddr = _ipHost.AddressList[0];
-		
 		Managers.Network.Client.CPM.CustomHandler = (s, m, i) =>
 		{
 			Managers.Network.Client.PQ.Push(s, i, m);
 		};
 	}
 
-	public void Connect(int port = 7777)
+	public void Connect(Action onConnectedFailed, int port = 7777)
 	{
-		_endPoint = new IPEndPoint(_ipAddr, port);
+		_host = Dns.GetHostName();
+		_ipHost = Dns.GetHostEntry(_host);
+		_ipAddress = _ipHost.AddressList[0];
+		_endPoint = new IPEndPoint(_ipAddress, port);
 		Connector connector = new Connector();
 
 		connector.Connect(_endPoint,
 			() => { return _session = new ServerSession(); },
-			1);
+			onConnectedFailed, 1);
+	}
+	
+	public void Connect(string hostNameOrAddress, Action onConnectedFailed ,int port = 7777)
+	{
+		_ipHost = Dns.GetHostEntry(hostNameOrAddress);
+		_host = _ipHost.HostName;
+		_ipAddress = _ipHost.AddressList[0];
+		_endPoint = new IPEndPoint(_ipAddress, port);
+		Connector connector = new Connector();
+		connector.Connect(_endPoint,
+			() => { return _session = new ServerSession(); },
+			onConnectedFailed, 1);
 	}
 
 	public void DisConnect()

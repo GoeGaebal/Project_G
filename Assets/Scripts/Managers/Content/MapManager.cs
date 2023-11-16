@@ -84,21 +84,19 @@ public class MapManager
         foreach (var gathering in gatherings)
             Managers.Resource.Destroy(gathering.gameObject);
     }
-
-    // TODO : 충돌 지점이 정중앙이기 때문에 원하는 느낌이 나오지 못함
+    
     public bool CheckCanGo(Vector2 pos)
     {
-        bool value;
         int y = (int)pos.y;
         int x = (int)pos.x;
         // 만일 음수면 -0.xx가 -1이 아니라 0이 되버린다. 그걸 방지
         if (pos.y < 0.0f) y--; if (pos.x < 0.0f) x--;
        
         ulong key = ((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x;
-        if (_currentMapInfo.TryGetValue(key, out value))
+        if (_currentMapInfo.TryGetValue(key, out var value))
             return !value;
-        else
-            return !false;
+        
+        return false;
     }
 
     public Vector3 GenerateCurrentRandPos()

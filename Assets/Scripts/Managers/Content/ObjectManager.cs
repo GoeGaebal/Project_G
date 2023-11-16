@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Protocol;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class ObjectManager
 {
     private readonly Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
+    private readonly Dictionary<int, BasicMonster> _monsters = new Dictionary<int, BasicMonster>();
+    private readonly Dictionary<int, GatheringController> _gatherings = new Dictionary<int, GatheringController>();
     public readonly Dictionary<int, Player> PlayerDict = new Dictionary<int, Player>();
     public readonly Dictionary<int, Player> OtherPlayerDict = new Dictionary<int, Player>();
 
@@ -24,60 +28,62 @@ public class ObjectManager
 
     public void Add(ObjectInfo info, bool myPlayer = false)
     {
-        GameObjectType objectType = GetObjectTypeById(info.ObjectId);
         if (_objects.ContainsKey(info.ObjectId)) return;
         
-        if (objectType == GameObjectType.Player)
-        {
-            var go = Managers.Resource.Instantiate("Objects/Character/Player");
-            _objects.Add(info.ObjectId, go);
-            go.name = info.Name;
-            
-            Player p = go.GetComponent<Player>();
-            p.Id = info.ObjectId;
-            p.Info.PosInfo = info.PosInfo;
-            p.SyncPos();
-            PlayerDict.Add(p.Id, p);
-
-            if (myPlayer)
+        GameObjectType objectType = GetObjectTypeById(info.ObjectId);
+        GameObject go = null;
+        switch (objectType)
+        { 
+            case GameObjectType.Player:
             {
-                Managers.Network.LocalPlayer = p;
-                Managers.Network.LocalPlayer.BindingAction();
+                go = Managers.Resource.Instantiate("Objects/Character/Player");
+                go.name = info.Name;
+            
+                Player p = go.GetComponent<Player>();
+                p.Id = info.ObjectId;
+                p.Info.PosInfo = info.PosInfo;
+                p.SyncPos();
+                PlayerDict.Add(p.Id, p);
+
+                if (myPlayer)
+                {
+                    Managers.Network.LocalPlayer = p;
+                    Managers.Network.LocalPlayer.BindingAction();
+                }
+                else OtherPlayerDict.Add(p.Id,p);
+                break;
             }
-            else OtherPlayerDict.Add(p.Id,p);
-        }
-        else if (objectType == GameObjectType.Monster)
-        {
-            GameObject go = null;
-            _objects.TryGetValue(info.ObjectId, out go);
-            if (go == null)
+            case GameObjectType.Monster:
             {
                 go = Managers.Resource.Instantiate(info.Name == "BossProto" ? $"Objects/Character/Monster/BossMonster1/BossProto" : $"Objects/Character/Monster/{info.Name}");
+                go.name = $"{info.Name}_{info.ObjectId}";
+                var bm = go.GetComponent<BasicMonster>();
+                bm.Id = info.ObjectId;
+                bm.Info = info;
+                bm.SyncPos();
+                _monsters.Add(bm.Id, bm);
+                break;
             }
-            go.name = $"{info.Name}_{info.ObjectId}";
-            _objects.Add(info.ObjectId, go);
-            var bm = go.GetComponent<BasicMonster>();
-            bm.Id = info.ObjectId;
-            bm.Info = info;
-            bm.SyncPos();
-        }
-        
-        else if (objectType == GameObjectType.Gathering)
-        {
-            GameObject go = null;
-            if (!_objects.TryGetValue(info.ObjectId, out go))
+            case GameObjectType.Gathering:
             {
                 go = Managers.Resource.Instantiate($"Objects/NonCharacter/Gathering/{info.Name}");
-                _objects.TryAdd(info.ObjectId, go);
-            }
 
-            go.transform.position = new Vector3(info.PosInfo.PosX, info.PosInfo.PosY);
-            GatheringController gc = go.GetOrAddComponent<GatheringController>();
-            gc.Id = info.ObjectId;
-            gc.PosInfo.PosX = info.PosInfo.PosX;
-            gc.PosInfo.PosY = info.PosInfo.PosY;
-            gc.SyncPos();
+                go.transform.position = new Vector3(info.PosInfo.PosX, info.PosInfo.PosY);
+                GatheringController gc = go.GetOrAddComponent<GatheringController>();
+                gc.Id = info.ObjectId;
+                gc.PosInfo.PosX = info.PosInfo.PosX;
+                gc.PosInfo.PosY = info.PosInfo.PosY;
+                gc.SyncPos();
+                _gatherings.Add(gc.Id, gc);
+                break;
+            }
+            case GameObjectType.None:
+            case GameObjectType.LootingItem:
+            default:
+                break;
         }
+        Object.DontDestroyOnLoad(go);
+        _objects.Add(info.ObjectId, go);
     }
     public void Add(LootingInfo info)
     {
@@ -101,7 +107,26 @@ public class ObjectManager
         GameObject go = FindById(id);
         if (go == null)
             return;
-		
+        
+        GameObjectType objectType = GetObjectTypeById(id);
+        switch (objectType)
+        {
+            case GameObjectType.Monster:
+                _monsters.Remove(id);
+                break;
+            case GameObjectType.Gathering:
+                _gatherings.Remove(id);
+                break;
+            case GameObjectType.Player:
+                PlayerDict.Remove(id);
+                OtherPlayerDict.Remove(id);
+                break;
+            case GameObjectType.None:
+            case GameObjectType.LootingItem:
+            default:
+                break;
+        }
+
         _objects.Remove(id);	// 딕셔너리에서 삭제
         // 실질적으로 게임화면에서 삭제
         Managers.Resource.Destroy(go);
@@ -125,6 +150,43 @@ public class ObjectManager
         }
         PlayerDict.Clear();
         OtherPlayerDict.Clear();
+        _monsters.Clear();
+        _gatherings.Clear();
         _objects.Clear();
+    }
+
+    public void ClearObjects(params GameObjectType[] types)
+    {
+        foreach (var type in types)
+        {
+            if (type == GameObjectType.Monster)
+            {
+                foreach (var key in _monsters.Keys)
+                {
+                    Managers.Resource.Destroy(_objects[key]);
+                    _objects.Remove(key);
+                }
+                _monsters.Clear();
+            }
+            else if (type == GameObjectType.Gathering)
+            {
+                foreach (var key in _gatherings.Keys)
+                {
+                    Managers.Resource.Destroy(_objects[key]);
+                    _objects.Remove(key);
+                }
+                _gatherings.Clear();
+            }
+            else if (type == GameObjectType.Player)
+            {
+                foreach (var key in PlayerDict.Keys)
+                {
+                    Managers.Resource.Destroy(_objects[key]);
+                    _objects.Remove(key);
+                }
+                PlayerDict.Clear();
+                OtherPlayerDict.Clear();
+            }
+        }
     }
 }

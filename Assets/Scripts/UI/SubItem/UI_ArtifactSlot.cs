@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -75,6 +77,13 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
                 UI_Artifact.close();
             }
         }
+        
+        C_ArtifactEvent packet = new C_ArtifactEvent()
+        {
+            CurrentId = Managers.Artifact.currentIndex,
+            ArtifactId = artifact.ID
+        };
+        Managers.Network.Client.Send(packet);
     }
 
     public void SetEquipped(bool b)

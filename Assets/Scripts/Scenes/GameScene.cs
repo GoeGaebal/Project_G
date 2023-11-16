@@ -49,7 +49,8 @@ public class GameScene : BaseScene
     }
 
     public override void Clear()
-    {   
+    {
+        Managers.Object.ClearObjects(GameObjectType.Monster, GameObjectType.Gathering);
     }
 
     IEnumerator FieldGameOverCoroutine()

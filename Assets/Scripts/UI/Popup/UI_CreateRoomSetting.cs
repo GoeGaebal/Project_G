@@ -1,6 +1,9 @@
+using System;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 public class UI_CreateRoomSetting : UI_Popup
 {
@@ -12,7 +15,7 @@ public class UI_CreateRoomSetting : UI_Popup
 
     enum Texts
     {
-        RoomName,
+        RoomPort,
         UserName,
         WarningText,
     }
@@ -21,7 +24,7 @@ public class UI_CreateRoomSetting : UI_Popup
     {
         LoadingSet,
     }
-    public TextMeshProUGUI RoomName, UserName, WarningText;
+    public TextMeshProUGUI RoomPort, UserName, WarningText;
     public Button CreateRoomBtn;
     public GameObject LoadingSet;
     
@@ -40,7 +43,7 @@ public class UI_CreateRoomSetting : UI_Popup
         Bind<GameObject>(typeof(GameObjects));
         
         CreateRoomBtn = GetButton((int)Buttons.CreateBtn);
-        RoomName = GetTextMeshPro((int)Texts.RoomName);
+        RoomPort = GetTextMeshPro((int)Texts.RoomPort);
         UserName = GetTextMeshPro((int)Texts.UserName);
         
         WarningText = GetTextMeshPro((int)Texts.WarningText);
@@ -52,12 +55,28 @@ public class UI_CreateRoomSetting : UI_Popup
         CreateRoomBtn.onClick.RemoveAllListeners();
         CreateRoomBtn.onClick.AddListener(() =>
         {
-            Managers.Network.CreateRoom();
-            
+            SetInteractableButtons(false);
+            var portText = RoomPort.text.Trim((char)8203);;
+            if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(OnConnectedFailed);
+            else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
+            {
+                Managers.Network.CreateRoom(OnConnectedFailed,port);
+            }
+            else
+            {
+                WarningText.SetText($"포트번호는 1024~65535 사이의 정수여야 합니다.");
+                SetInteractableButtons(true);
+            }
         });
     }
-    
-    public void SetInteractableButtons(bool value)
+
+    private void OnConnectedFailed()
+    {
+        WarningText.SetText($"방 생성에 실패하였습니다.");
+        SetInteractableButtons(true);
+    }
+
+    private void SetInteractableButtons(bool value)
     {
         GetButton((int)Buttons.CreateBtn).interactable = value;
         GetButton((int)Buttons.ExitBtn).interactable = value;

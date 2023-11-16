@@ -159,9 +159,17 @@ partial class PacketHandler
 
 	public static void S_SpawnLootingHandler(PacketSession session, IMessage packet)
 	{
-		S_SpawnLooting spawns = packet as S_SpawnLooting;
-		if (spawns == null) return;
+		if (packet is not S_SpawnLooting spawns) return;
 		foreach (var info in spawns.Infos) Managers.Object.Add(info);
+	}
+
+
+	// TODO : Artifact 동기화 덜됨
+	public static void S_ArtifactEventHandler(PacketSession session, IMessage packet)
+	{
+		if (packet is not S_ArtifactEvent artifactEvent) return;
+		Managers.Artifact.SetCurrentIndex(artifactEvent.CurrentId);
+		Managers.Artifact.SelectArtifact(Managers.Data.ArtifactDict[artifactEvent.ArtifactId]);
 	}
 }
 
