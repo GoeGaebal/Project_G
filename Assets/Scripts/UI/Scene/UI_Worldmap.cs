@@ -43,14 +43,14 @@ public class UI_Worldmap : UI_Scene
     private Sprite _leftShip;//배 왼쪽 이미지
     private Vector3 _targetPosition;//이동 목표
     private float _elapsedTime = 0f;
-    private int _speed = 50;//초당 이동 거리
+    private int _speed = 100;//초당 이동 거리
     private float _timePerMeter;//거리 1 이동하는데 걸리는 시간
     private GameObject _lrGO;
     private GameObject _worldmap;
     private UILineRenderer _lr;
     //private GameObject _weatherText;
     private GameObject _arrow;
-    private GameObject _minimapShip;
+    //private GameObject _minimapShip;
     private GameObject _movingText;
     private GameObject _timeText;
     private GameObject _distanceText;
@@ -84,7 +84,7 @@ public class UI_Worldmap : UI_Scene
             if (Vector2.Distance(_ship.transform.localPosition, _targetPosition) >= 1f)
             {//이동 중
                 MoveToTarget();
-                _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapId].name + "로 이동 중");
+                _movingText.GetComponent<TMP_Text>().SetText("TO: " + Managers.Data.WorldmapDict[_targetMapId].name);
             }
             else
             {//도착
@@ -99,7 +99,9 @@ public class UI_Worldmap : UI_Scene
         }
         if (_arriveFlag && _targetMapId != 0)
         {//도착해 있을 때
-            _movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapId].name + "에 정박 중");
+            //_movingText.GetComponent<TMP_Text>().SetText(Managers.Data.WorldmapDict[_targetMapId].name + "에 정박 중");
+
+
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
             
@@ -134,7 +136,7 @@ public class UI_Worldmap : UI_Scene
         _lr = _lrGO.GetComponent<UILineRenderer>();
         _arrow = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Arrow);
         _arrow.SetActive(false);
-        _minimapShip = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Ship);
+        //_minimapShip = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Ship);
         //_weatherText = Get<GameObject>((int)GameObjects.WeatherText);
         _movingText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_MovingText);
         _timeText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_TimeText);
@@ -176,17 +178,19 @@ public class UI_Worldmap : UI_Scene
             _elapsedTime %= _timePerMeter;
         }
         SetLine();
+        /*
         if (direction.x >= 0)
         {
-            _ship.GetComponent<Image>().sprite = _rightShip;
+            //_ship.GetComponent<Image>().sprite = _rightShip;
             _minimapShip.GetComponent<Image>().sprite = _rightShip;
         }
         else
         {
-            _ship.GetComponent<Image>().sprite = _leftShip;
+            //_ship.GetComponent<Image>().sprite = _leftShip;
             _minimapShip.GetComponent<Image>().sprite = _leftShip;
         }
-
+        */
+        SetShipRot(direction);
         SetTimeDistanceText(direction);
         SetArrow(direction);
     }
@@ -195,8 +199,15 @@ public class UI_Worldmap : UI_Scene
     {
         _timeText.SetActive(true);
         _distanceText.SetActive(true);
-        _timeText.GetComponent<TMP_Text>().SetText("남은 시간: " + ((int)(direction.magnitude / _speed) + 1) + "sec");
-        _distanceText.GetComponent<TMP_Text>().SetText("남은 거리: " + (int)(direction.magnitude) + "m");
+        _timeText.GetComponent<TMP_Text>().SetText(((int)(direction.magnitude / _speed) + 1) + "sec");
+        _distanceText.GetComponent<TMP_Text>().SetText(+ (int)(direction.magnitude) + "km");
+    }
+
+    public void SetShipRot(Vector2 direction)
+    {
+        float angle = Vector2.SignedAngle(Vector2.up, direction);
+        Quaternion rot = Quaternion.Euler(0f, 0f, angle);
+        _ship.transform.rotation = rot;
     }
 
     public void SetArrow(Vector2 direction)//화살표 방향 갱신
