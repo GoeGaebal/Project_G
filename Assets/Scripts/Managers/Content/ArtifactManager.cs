@@ -7,7 +7,11 @@ public class ArtifactManager
 {
     [HideInInspector] public Artifact[] artifacts = new Artifact[3];//실제 착용 중인 유물
     [HideInInspector] public Artifact[] artifactScrolls = new Artifact[0];//현재 보유 중인 유물 목록
-    [HideInInspector] public UI_ArtifactSlot[] equippedArtifactSlots = new UI_ArtifactSlot[3];
+    
+    //UI_Artifact의 Init()이 실행될 때,
+    //ArtifactManager의 artifacts, artifactScrolls 배열에서 아티팩트를 가져와 슬롯을 생성, 저장시켜둠
+    [HideInInspector] public UI_ArtifactSlot[] equippedArtifactSlots = new UI_ArtifactSlot[3];//현재 착용 중인 유물의 UI 상에서의 슬롯
+    [HideInInspector] public UI_ArtifactSlot[] ArtifactScrollSlots = new UI_ArtifactSlot[0];//보유 중인 유물의 UI 상에서의 슬롯
     [HideInInspector] public int currentIndex = -1;
 
     public void Init()
@@ -65,7 +69,26 @@ public class ArtifactManager
     public void DeselectArtifact()
     {
         artifacts[currentIndex] = null;
+        equippedArtifactSlots[currentIndex] = null;
         ArtifactTileSet.resetImage(currentIndex);
         Managers.Network.LocalPlayer.artifactDamage[currentIndex] = 0f;
+    }
+
+    public void SetSlotEquipped(Artifact artifact, bool flag)
+    {
+        ArtifactScrollSlots[FindArtifactIndex(artifact)].SetEquipped(flag);
+    }
+
+    public int FindArtifactIndex(Artifact artifact)
+    {
+        for(int i = 0; i < artifactScrolls.Length; i++)
+        {
+            if(artifactScrolls[i] == artifact)
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

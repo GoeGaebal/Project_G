@@ -60,6 +60,8 @@ public class UI_Artifact : UI_Scene
             var slot = Managers.Artifact.MakeArtifactSlot(_content.transform);
             slot.Init();
             slot.SetArtifact(Managers.Artifact.artifactScrolls[i]);
+            Managers.Artifact.ArtifactScrollSlots[i] = slot;
+
             for (int j = 0; j < 3; j++)
             {//착용중인 유물이면
                 if(Managers.Artifact.artifacts[j] == slot.artifact)
