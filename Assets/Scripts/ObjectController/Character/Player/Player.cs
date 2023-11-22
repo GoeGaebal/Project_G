@@ -181,6 +181,7 @@ public class Player : CreatureController, IAttackable, IMoveable
     
     public void OnAttack(CreatureState prevState)
     {
+        if(State == CreatureState.Attack) return;
         _wpc.Attack(realDamage);
     }
     
