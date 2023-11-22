@@ -4,20 +4,10 @@ using UnityEngine;
 
 public class Artifact_0 : Artifact
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public override void Select()
     {
+        base.Select();
+
         Debug.Log("아티팩트 장착 해제됨");
     }
 

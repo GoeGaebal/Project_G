@@ -71,8 +71,6 @@ public class ArtifactManager
         artifacts[currentIndex] = artifact;
         ArtifactTileSet.setImage(currentIndex, artifact.Image);
         artifact.Select();
-        
-        //Managers.Network.LocalPlayer.artifactDamage[currentIndex] = artifact.DamageIncrease;//플레이어 스탯에 연동
     }
 
     public void DeselectArtifact()

@@ -12,9 +12,7 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     public float attackDamage = 100f;
 
-    public delegate void Artifact1Skill();
-    public delegate void Artifact2Skill();
-    public delegate void Artifact3Skill();
+    public Action[] ArtifactSkills = new Action[3];
 
     public float realDamage = 100f;//장비, 유물 스탯 연산 이후 공격력
 
