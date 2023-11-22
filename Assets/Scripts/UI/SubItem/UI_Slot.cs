@@ -27,11 +27,11 @@ public class UI_Slot : UI_Base
                         if(value != null)
                         {
                             EquipableItem equipItem = (EquipableItem)(value);
-                            _player.equipDamage[invIndex] = equipItem.AttackDamge;
+                            //_player.equipDamage[invIndex] = equipItem.AttackDamge;
                         }
                         else
                         {
-                            _player.equipDamage[invIndex] = 0;
+                            //_player.equipDamage[invIndex] = 0;
                         }   
                     }
                 }

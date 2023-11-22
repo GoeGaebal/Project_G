@@ -55,11 +55,14 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)//아티팩트 클릭 시
     {
-        if (artifact.name == "Artifact_Deselect")
+        if (artifact.name == "Artifact_0")
         {
-            Managers.Artifact.DeselectArtifact();
-            Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex].SetEquipped(false);
-            //UI_Artifact.close();
+            if(Managers.Artifact.artifacts[Managers.Artifact.currentIndex] != null)
+            {
+                Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex].SetEquipped(false);
+                Managers.Artifact.DeselectArtifact();
+                //UI_Artifact.close();
+            }
         }
         else
         {
