@@ -176,6 +176,7 @@ public class Player : CreatureController, IAttackable, IMoveable
     public override void OnHit(CreatureState state)
     {
         _playerBody.Hit();
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
     
     public void OnAttack(CreatureState prevState)
