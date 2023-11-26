@@ -22,18 +22,19 @@ public class UI_Slot : UI_Base
                 if (isEquip)//장비창의 경우에는 스탯 동기화도 같이
                 {
                     Managers.Item.equipSlots[invIndex] = value;
+                    /*
                     if(invIndex < 5)
                     {
                         if(value != null)
                         {
                             EquipableItem equipItem = (EquipableItem)(value);
-                            //_player.equipDamage[invIndex] = equipItem.AttackDamge;
                         }
                         else
                         {
-                            //_player.equipDamage[invIndex] = 0;
+
                         }   
                     }
+                    */
                 }
                 else if(isChest)
                 {
@@ -77,12 +78,14 @@ public class UI_Slot : UI_Base
 
                 currentItem.parentBeforeDrag = transform;
 
+                currentItem.item.Select();
+
                 if (checkIndex == 10)//무기
                 {//TODO: 무기 이미지 제대로 안 바뀜
                     UI_Inven.ChangeQuickslotImage(0, currentItem);
                     if (currentItem.item.ID == 1001)
                     {
-                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
                 }
                 else if (checkIndex == 40)//포션
@@ -98,6 +101,10 @@ public class UI_Slot : UI_Base
         else//슬롯이 인벤토리, 창고일 때
         {
             currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+            if (currentItem.parentSlot.isEquip)
+            {
+                currentItem.item.Deselect();
+            }
             currentItem.parentSlot.ItemInThisSlot = null;
 
             currentItem.parentBeforeDrag = transform;

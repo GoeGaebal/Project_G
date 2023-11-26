@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Artifact/Artifact")]
 public class Artifact : ScriptableObject
 {
     public int ID => _id;

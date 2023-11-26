@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Artifact/Artifact_0")]
+
 public class Artifact_0 : Artifact
 {
     public override void Select()
