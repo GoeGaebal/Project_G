@@ -37,8 +37,8 @@ public class ObjectManager
             case GameObjectType.Player:
             {
                 go = Managers.Resource.Instantiate("Objects/Character/Player");
-                go.name = info.Name;
-            
+                go.name = $"Player_{info.ObjectId}";
+
                 Player p = go.GetComponent<Player>();
                 p.Id = info.ObjectId;
                 p.Info.PosInfo = info.PosInfo;
@@ -48,9 +48,17 @@ public class ObjectManager
                 if (myPlayer)
                 {
                     Managers.Network.LocalPlayer = p;
+                    p.Info.Name = Managers.Network.UserName;
+                    p.Name = p.Info.Name;
+                    Managers.Network.Client.Send(new C_ChangeName() { Name = p.Info.Name
+                    });
                     Managers.Network.LocalPlayer.BindingAction();
                 }
-                else OtherPlayerDict.Add(p.Id,p);
+                else
+                {
+                    OtherPlayerDict.Add(p.Id,p);
+                    p.Name = info.Name;
+                }
                 break;
             }
             case GameObjectType.Monster:

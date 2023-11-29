@@ -15,12 +15,12 @@ namespace Server
 		public Player MyPlayer {
 			get
 			{
-				Managers.Object.PlayerDict.TryGetValue(_myPlayerId, out var ret);
+				Managers.Object.PlayerDict.TryGetValue(MyPlayerId, out var ret);
 				return ret;
 			}
 		}
 		
-		private int _myPlayerId;
+		public int MyPlayerId;
 
 		public int SessionId { get; set; }
 
@@ -45,11 +45,10 @@ namespace Server
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Debug.Log($"OnConnected : {endPoint}");
-			_myPlayerId = GameRoom.GenerateId(GameObjectType.Player);
-			ObjectInfo myPlayerInfo = new ObjectInfo
+			MyPlayerId = GameRoom.GenerateId(GameObjectType.Player);
+			var myPlayerInfo = new ObjectInfo
 			{
-				ObjectId = _myPlayerId,
-				Name = $"Player_{_myPlayerId}"
+				ObjectId = MyPlayerId,
 			};
 			Managers.Network.Server.Room.EnterGame(this, myPlayerInfo);
 		}
@@ -61,7 +60,7 @@ namespace Server
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
-			// Managers.Network.Server.Room.LeaveGame(MyPlayer.Info.ObjectId);
+			Managers.Network.Server.Room.LeaveGame(MyPlayer.Info.ObjectId);
 			Managers.Network.Server.SessionManager.Remove(this);
 			Debug.Log($"OnDisconnected : {endPoint}");
 		}

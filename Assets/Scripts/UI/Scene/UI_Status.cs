@@ -51,7 +51,7 @@ public class UI_Status : UI_Scene
     private GameObject _optionPanel;
     private bool _isOptionPanelOn;
 
-    private UI_OtherHP[] uiOtherHps;
+    private readonly List<UI_OtherHP> _uiOtherHps = new List<UI_OtherHP>();
 
     private void Start()
     {
@@ -94,22 +94,13 @@ public class UI_Status : UI_Scene
         Get<Toggle>((int)Toggles.Windowed).onValueChanged.AddListener(ChangeWindowed);
 
         Managers.Input.UIActions.Option.AddEvent(OnOffOption);
-
-        uiOtherHps = new[]
-        {
-            Managers.UI.MakeSubItem<UI_OtherHP>(parent: GetObject((int)GameObjects.OtherStatus).transform),
-            Managers.UI.MakeSubItem<UI_OtherHP>(parent: GetObject((int)GameObjects.OtherStatus).transform)
-        };
-        foreach(var ui in uiOtherHps)
-            ui.Init();
     }
     
     private void Update()
     {
         UpdateHPBar();
+        UpdateOtherHp();
         UpdateHPText();
-        int i = 0;
-        foreach (var player in Managers.Object.OtherPlayerDict.Values) uiOtherHps[i++].SetStatus(player);
     }
 
     void FixedUpdate()
@@ -124,6 +115,24 @@ public class UI_Status : UI_Scene
             float temp = Managers.Network.LocalPlayer.HP / Managers.Network.LocalPlayer.maxHP;
             hpBar.fillAmount = temp;
         }
+    }
+
+    private void UpdateOtherHp()
+    {
+        int i;
+        if (_uiOtherHps.Count != Managers.Object.OtherPlayerDict.Count)
+        {
+            foreach(var ui in _uiOtherHps) Managers.Resource.Destroy(ui.gameObject);
+            _uiOtherHps.Clear();
+            for (i = 0; i < Managers.Object.OtherPlayerDict.Count; i++)
+            {
+                _uiOtherHps.Add(Managers.UI.MakeSubItem<UI_OtherHP>(parent: GetObject((int)GameObjects.OtherStatus).transform));
+                _uiOtherHps[i].Init();
+            }
+        }
+
+        i = 0;
+        foreach (var player in Managers.Object.OtherPlayerDict.Values) _uiOtherHps[i++].SetStatus(player);
     }
 
     private void UpdateHPText()

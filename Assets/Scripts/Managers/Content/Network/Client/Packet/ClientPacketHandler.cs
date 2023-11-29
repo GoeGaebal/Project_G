@@ -171,6 +171,12 @@ partial class PacketHandler
 		Managers.Artifact.SetCurrentIndex(artifactEvent.CurrentId);
 		Managers.Artifact.SelectArtifact(Managers.Data.ArtifactDict[artifactEvent.ArtifactId]);
 	}
+	
+	public static void S_ChangeNameHandler(PacketSession session, IMessage packet)
+	{
+		if (packet is not S_ChangeName changeEvent) return;
+		Managers.Object.PlayerDict[changeEvent.ObjectId].Name = changeEvent.Name;
+	}
 }
 
 

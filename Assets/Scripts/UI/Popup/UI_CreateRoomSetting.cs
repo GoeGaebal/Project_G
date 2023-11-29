@@ -24,14 +24,38 @@ public class UI_CreateRoomSetting : UI_Popup
     {
         LoadingSet,
     }
-    public TextMeshProUGUI RoomPort, UserName, WarningText;
-    public Button CreateRoomBtn;
-    public GameObject LoadingSet;
+    public TextMeshProUGUI roomPort, userName, warningText;
+    public Button createRoomBtn;
+    public GameObject loadingSet;
+    
+    private bool _isConnectedFailed;
+    private bool _isConnectedSucceed;
     
     private void Start()
     {
-        if(CreateRoomBtn == null)
+        if(createRoomBtn == null)
             Init();
+    }
+
+    private void Update()
+    {
+        if (_isConnectedFailed)
+        {
+            warningText.SetText($"연결에 실패하였습니다.");
+            SetInteractableButtons(true);
+            _isConnectedFailed = false;
+        }
+        if (_isConnectedSucceed)
+        {
+            Managers.UI.Clear();
+            Managers.UI.SetEventSystem();
+            Managers.UI.ShowSceneUI<UI_Inven>();
+            //Managers.UI.ShowSceneUI<UI_Map>();
+            Managers.UI.ShowSceneUI<UI_Status>();
+            Managers.UI.ShowSceneUI<UI_Chat>();
+            Managers.UI.ShowSceneUI<UI_Leaf>();
+            Managers.Map.LoadMap(5);
+        }
     }
 
     
@@ -42,38 +66,40 @@ public class UI_CreateRoomSetting : UI_Popup
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
         
-        CreateRoomBtn = GetButton((int)Buttons.CreateBtn);
-        RoomPort = GetTextMeshPro((int)Texts.RoomPort);
-        UserName = GetTextMeshPro((int)Texts.UserName);
+        createRoomBtn = GetButton((int)Buttons.CreateBtn);
+        roomPort = GetTextMeshPro((int)Texts.RoomPort);
+        userName = GetTextMeshPro((int)Texts.UserName);
         
-        WarningText = GetTextMeshPro((int)Texts.WarningText);
+        warningText = GetTextMeshPro((int)Texts.WarningText);
         GetButton((int)Buttons.ExitBtn).onClick.RemoveAllListeners();
         GetButton((int)Buttons.ExitBtn).onClick.AddListener((() => { Managers.UI.ClosePopupUI(); }));
-        LoadingSet = GetObject((int)GameObjects.LoadingSet);
-        LoadingSet.SetActive(false);
+        loadingSet = GetObject((int)GameObjects.LoadingSet);
+        loadingSet.SetActive(false);
         
-        CreateRoomBtn.onClick.RemoveAllListeners();
-        CreateRoomBtn.onClick.AddListener(() =>
+        createRoomBtn.onClick.RemoveAllListeners();
+        createRoomBtn.onClick.AddListener(() =>
         {
             SetInteractableButtons(false);
-            var portText = RoomPort.text.Trim((char)8203);;
-            if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(OnConnectedFailed);
+            var portText = roomPort.text.Trim((char)8203);;
+            var name = userName.text.Trim((char)8203);
+            if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(() => { _isConnectedSucceed = true;}, () => _isConnectedFailed = true);
             else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                Managers.Network.CreateRoom(OnConnectedFailed,port);
+                Managers.Network.CreateRoom(() =>
+                {
+                    Managers.Network.UserName = userName.text.Trim((char)8203);
+                    _isConnectedSucceed = true;
+                }, () => _isConnectedFailed = true ,port);
             }
             else
             {
-                WarningText.SetText($"포트번호는 1024~65535 사이의 정수여야 합니다.");
+                warningText.SetText($"포트번호는 1024~65535 사이의 정수여야 합니다.");
                 SetInteractableButtons(true);
             }
         });
-    }
-
-    private void OnConnectedFailed()
-    {
-        WarningText.SetText($"방 생성에 실패하였습니다.");
-        SetInteractableButtons(true);
+        
+        _isConnectedFailed = false;
+        _isConnectedSucceed = false;
     }
 
     private void SetInteractableButtons(bool value)

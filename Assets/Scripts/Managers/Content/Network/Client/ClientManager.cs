@@ -32,7 +32,7 @@ public class ClientManager
 		};
 	}
 
-	public void Connect(Action onConnectedFailed, int port = 7777)
+	public void Connect(Action onConnectedSucceed = null, Action onConnectedFailed = null, int port = 7777)
 	{
 		_host = Dns.GetHostName();
 		_ipHost = Dns.GetHostEntry(_host);
@@ -42,10 +42,10 @@ public class ClientManager
 
 		connector.Connect(_endPoint,
 			() => { return _session = new ServerSession(); },
-			onConnectedFailed, 1);
+			onConnectedSucceed, onConnectedFailed, 1);
 	}
 	
-	public void Connect(string hostNameOrAddress, Action onConnectedFailed ,int port = 7777)
+	public void Connect(string hostNameOrAddress, Action onConnectedSucceed = null, Action onConnectedFailed = null ,int port = 7777)
 	{
 		_ipHost = Dns.GetHostEntry(hostNameOrAddress);
 		_host = _ipHost.HostName;
@@ -54,7 +54,7 @@ public class ClientManager
 		Connector connector = new Connector();
 		connector.Connect(_endPoint,
 			() => { return _session = new ServerSession(); },
-			onConnectedFailed, 1);
+			onConnectedSucceed, onConnectedFailed, 1);
 	}
 
 	public void DisConnect()
@@ -68,8 +68,7 @@ public class ClientManager
 		foreach (PacketMessage packet in list)
 		{
 			Action<PacketSession, IMessage> handler = CPM.GetPacketHandler(packet.Id);
-			if (handler != null)
-				handler.Invoke(_session, packet.Message);
+			handler?.Invoke(_session, packet.Message);
 		}	
 	}
 

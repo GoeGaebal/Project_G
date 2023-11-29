@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using UnityEngine;
 
 namespace ServerCore
@@ -11,8 +9,9 @@ namespace ServerCore
 	{
 		private Func<Session> _sessionFactory;
 		private Action _onConnectedFailed;
+		private Action _onConnectedSucceed;
 
-		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, Action onConnectedFailed = null , int count = 1)
+		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, Action onConnectedSucceed = null, Action onConnectedFailed = null , int count = 1)
 		{
 			for (int i = 0; i < count; i++)
 			{
@@ -25,28 +24,28 @@ namespace ServerCore
 				args.RemoteEndPoint = endPoint;
 				args.UserToken = socket;
 				if(onConnectedFailed != null) _onConnectedFailed += onConnectedFailed;
+				if(onConnectedSucceed != null) _onConnectedSucceed += onConnectedSucceed;
 				RegisterConnect(args);
 			}
 		}
 
-		void RegisterConnect(SocketAsyncEventArgs args)
+		private void RegisterConnect(SocketAsyncEventArgs args)
 		{
-			Socket socket = args.UserToken as Socket;
-			if (socket == null)
-				return;
+			if (args.UserToken is not Socket socket) return;
 
 			bool pending = socket.ConnectAsync(args);
 			if (pending == false)
 				OnConnectCompleted(null, args);
 		}
 
-		void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
+		private void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
 		{
 			if (args.SocketError == SocketError.Success)
 			{
 				Session session = _sessionFactory.Invoke();
 				session.Start(args.ConnectSocket);
 				session.OnConnected(args.RemoteEndPoint);
+				_onConnectedSucceed?.Invoke();
 			}
 			else
 			{

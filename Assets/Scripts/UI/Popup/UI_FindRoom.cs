@@ -39,7 +39,10 @@ public class UI_FindRoom : UI_Popup
     private Button _findBtn;
     private GameObject _loadingSet;
 
+    private string _nameText;
+
     private bool _isConnectedFailed;
+    private bool _isConnectedSucceed;
     
     private void Start()
     {
@@ -49,10 +52,23 @@ public class UI_FindRoom : UI_Popup
 
     private void Update()
     {
-        if (!_isConnectedFailed) return;
-        _warningText.SetText($"연결에 실패하였습니다.");
-        SetInteractableButtons(true);
-        _isConnectedFailed = false;
+        if (_isConnectedFailed)
+        {
+            _warningText.SetText($"연결에 실패하였습니다.");
+            SetInteractableButtons(true);
+            _isConnectedFailed = false;
+        }
+        if (_isConnectedSucceed)
+        {
+            Managers.UI.Clear();
+            Managers.UI.SetEventSystem();
+            Managers.UI.ShowSceneUI<UI_Inven>();
+            //Managers.UI.ShowSceneUI<UI_Map>();
+            Managers.UI.ShowSceneUI<UI_Status>();
+            Managers.UI.ShowSceneUI<UI_Chat>();
+            Managers.UI.ShowSceneUI<UI_Leaf>();
+            Managers.Map.LoadMap(5);
+        }
     }
 
     public override void Init()
@@ -85,12 +101,12 @@ public class UI_FindRoom : UI_Popup
         {
             SetInteractableButtons(false);
             var portText = _port.text.Trim((char)8203);;
-            var nameText = _name.text.Trim((char)8203);;
+            _nameText = _name.text.Trim((char)8203);;
             var addressText = _address.text.Trim((char)8203);
             if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if(Get<Toggle>((int)Toggles.LocalHost).isOn) Managers.Network.Client.Connect(OnConnectedFailed, port);
-                else Managers.Network.Client.Connect(addressText, OnConnectedFailed, port);
+                if(Get<Toggle>((int)Toggles.LocalHost).isOn) Managers.Network.Client.Connect(OnConnectedSucceed, OnConnectedFailed, port);
+                else Managers.Network.Client.Connect(addressText, OnConnectedSucceed, OnConnectedFailed, port);
             }
             else
             {
@@ -99,6 +115,7 @@ public class UI_FindRoom : UI_Popup
             }
         });
         _isConnectedFailed = false;
+        _isConnectedSucceed = false;
     }
     
     private void SetInteractableButtons(bool value)
@@ -112,5 +129,11 @@ public class UI_FindRoom : UI_Popup
     private void OnConnectedFailed()
     {
         _isConnectedFailed = true;
+    }
+    
+    private void OnConnectedSucceed()
+    {
+        Managers.Network.UserName = _nameText;
+        _isConnectedSucceed = true;
     }
 }

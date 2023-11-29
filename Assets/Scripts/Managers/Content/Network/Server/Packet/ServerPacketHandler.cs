@@ -57,4 +57,19 @@ partial class PacketHandler
 		};
 		Managers.Network.Server.Room.Broadcast(resEvt);
 	}
+
+	public static void C_ChangeNameHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+		if (packet is not C_ChangeName evt) return;
+		if (clientSession == null) return;
+		
+		Managers.Network.Server.Room.ChangeName(clientSession.MyPlayerId, evt.Name);
+		Managers.Network.Server.Room.Broadcast(new S_ChangeName()
+		{
+			Name = evt.Name,
+			ObjectId = clientSession.MyPlayerId
+		});
+
+	}
 }

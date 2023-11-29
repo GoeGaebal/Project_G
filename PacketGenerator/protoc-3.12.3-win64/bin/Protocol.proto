@@ -26,6 +26,8 @@ enum MsgId {
   S_SPAWN_LOOTING = 18;
   C_ARTIFACT_EVENT = 19;
   S_ARTIFACT_EVENT = 20;
+  C_CHANGE_NAME = 21;
+  S_CHANGE_NAME = 22;
 }
 
 enum SceneType {
@@ -210,4 +212,13 @@ message S_ArtifactEvent {
 message C_ArtifactEvent {
   int32 currentId = 1;
   int32 artifactId = 2;
+}
+
+message C_ChangeName {
+  string name = 1;
+}
+
+message S_ChangeName {
+  int32 objectId = 1;
+  string name = 2;
 }

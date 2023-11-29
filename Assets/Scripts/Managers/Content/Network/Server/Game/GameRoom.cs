@@ -30,11 +30,10 @@ public class GameRoom
         };
     }
     
-    private ObjectInfo FindById(int id)
+    public void ChangeName(int id, string newName)
     {
-        ObjectInfo go = null;
-        _objects.TryGetValue(id, out go);
-        return go;
+        if (!_players.TryGetValue(id, out var player)) return;
+        player.Name = newName;
     }
 
     public void EnterGame(ClientSession session, ObjectInfo gameObject)
@@ -51,7 +50,7 @@ public class GameRoom
             {
                 PosX = 0.0f, PosY = 0.0f, Dir = 1,
             };
-            
+
             _players.Add(gameObject.ObjectId, gameObject);
             PlayersSessions.Add(gameObject.ObjectId, session);
             // 본인한테 정보 전송
@@ -179,51 +178,33 @@ public class GameRoom
         // TODO: 서버 종료
         if (_players.Count == 0) Clear();
     }
+    
+    private ObjectInfo SpawnObject(NetworkObject obj, GameObjectType type)
+    {
+        obj.Id = GenerateId(type);
+        string name = obj.gameObject.name;
+        int end = name.IndexOf('(');
+        if (end >= 0) name = name[..end].Trim();
 
-    public void SpawnMonsters(BasicMonster[] monsters)
+        obj.Info.Name = name;
+        var position = obj.transform.position;
+        obj.PosInfo.PosX = position.x;
+        obj.PosInfo.PosY = position.y;
+        obj.PosInfo.State = CreatureState.Idle;
+        _objects.Add(obj.Id, obj.Info);
+        return obj.Info;
+    }
+    
+    public void SpawnObjects(NetworkObject[] objects, GameObjectType type)
     {
         S_Spawn spawn = new S_Spawn();
-        foreach (var monster in monsters)
+        foreach (var obj in objects)
         {
-            monster.Id = GenerateId(GameObjectType.Monster);
-            string name = monster.gameObject.name;
-            int end = name.IndexOf('(');
-            if (end >= 0)
-                name = name.Substring(0, end).Trim();
-            
-            monster.Info.Name = name;
-            var position = monster.transform.position;
-            monster.PosInfo.PosX = position.x;
-            monster.PosInfo.PosY = position.y;
-            monster.PosInfo.State = CreatureState.Idle;
-            spawn.Objects.Add(monster.Info);
-            _objects.Add(monster.Id, monster.Info);
+            spawn.Objects.Add(SpawnObject(obj, type));
         }
         Broadcast(spawn);
     }
-    
-    public void SpawnGatherings(GatheringController[] gatherings)
-    {
-        S_Spawn spawn = new S_Spawn();
-        foreach (var gathering in gatherings)
-        {
-            gathering.Id = GenerateId(GameObjectType.Gathering);
-            string name = gathering.gameObject.name;
-            int end = name.IndexOf('(');
-            if (end >= 0)
-                name = name.Substring(0, end).Trim();
-            
-            gathering.Info.Name = name;
-            var position = gathering.transform.position;
-            gathering.PosInfo.PosX = position.x;
-            gathering.PosInfo.PosY = position.y;
-            gathering.PosInfo.State = CreatureState.Idle;
-            spawn.Objects.Add(gathering.Info);
-            _objects.Add(gathering.Id,gathering.Info);
-        }
-        Broadcast(spawn);
-    }
-    
+
     public void SpawnLootingItems(int objectId,int count, Vector3 pos, float maxRadious = 10.0f,float minRadious = 0.0f)
     {
         S_SpawnLooting spawn = new S_SpawnLooting();

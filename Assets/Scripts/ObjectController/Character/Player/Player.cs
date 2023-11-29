@@ -5,6 +5,7 @@ using ObjectController.Character.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Server;
+using TMPro;
 
 public class Player : CreatureController, IAttackable, IMoveable
 {
@@ -43,6 +44,18 @@ public class Player : CreatureController, IAttackable, IMoveable
     [SerializeField] private PlayerLeg _playerLeg;
     [SerializeField] private GameObject Left_Arm;
     [SerializeField] private GameObject Right_Arm;
+
+    public string Name
+    {
+        get => _name.text;
+        set
+        {
+            Info.Name = value;
+            _name.SetText(value);
+        }
+    }
+    private TextMeshProUGUI _name;
+    
     
     #region UnityMessages
     protected override void Awake()
@@ -56,6 +69,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         _rb = GetComponent<Rigidbody2D>();
         _playerBody = GetComponentInChildren<PlayerBody>();
         _playerLeg = GetComponentInChildren<PlayerLeg>();
+        _name = GetComponentInChildren<TextMeshProUGUI>();
         _playerBody.Init();
         _playerLeg.Init();
 
@@ -209,6 +223,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         Vector2 localSc = transform.localScale;
         localSc.x = isFlip ? -1 * Math.Abs(localSc.x) : localSc.x = Math.Abs(localSc.x);
         transform.localScale = localSc;
+        _name.transform.localScale = localSc;
         Vector2 wpcLocalScale = _wpc.transform.localScale;
         _wpc.transform.localScale = 
             (isFlip) ? new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y)) : new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));

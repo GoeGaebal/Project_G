@@ -25,7 +25,9 @@ public class ServerPacketManager
 		_onRecv.Add((ushort)MsgId.CChat, MakePacket<C_Chat>);
 		_handler.Add((ushort)MsgId.CChat, PacketHandler.C_ChatHandler);		
 		_onRecv.Add((ushort)MsgId.CArtifactEvent, MakePacket<C_ArtifactEvent>);
-		_handler.Add((ushort)MsgId.CArtifactEvent, PacketHandler.C_ArtifactEventHandler);
+		_handler.Add((ushort)MsgId.CArtifactEvent, PacketHandler.C_ArtifactEventHandler);		
+		_onRecv.Add((ushort)MsgId.CChangeName, MakePacket<C_ChangeName>);
+		_handler.Add((ushort)MsgId.CChangeName, PacketHandler.C_ChangeNameHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
