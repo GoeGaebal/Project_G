@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class UI_Start : UI_Scene
     private LobbyScene _lobbyScene;
     public TextMeshProUGUI _loadingText;
     public GameObject LoadingIcon;
+    static public Animator animator;
     enum Buttons
     {
         StartBtn,
@@ -28,6 +30,11 @@ public class UI_Start : UI_Scene
         LoadingIcon
     }
 
+    enum Animators
+    {
+        UI_Start
+    }
+
     private void Start()
     {
         Init();
@@ -39,9 +46,11 @@ public class UI_Start : UI_Scene
         Bind<Button>(typeof(Buttons));
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
+        Bind<Animator>(typeof(Animators));
         _lobbyScene = FindObjectOfType<LobbyScene>();
         GetButton((int)Buttons.StartBtn).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.StartBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_Lobby>();});
+        animator = Get<Animator>((int)Animators.UI_Start);
+        GetButton((int)Buttons.StartBtn).onClick.AddListener(() => { animator.SetTrigger("PlayButtonClicked"); });
         GetButton((int)Buttons.ExitBtn).gameObject.BindEvent((evt) => { Application.Quit(); });
         _loadingText = GetTextMeshPro((int)Texts.LoadingText);
         LoadingIcon = GetObject((int)GameObjects.LoadingIcon);
@@ -53,5 +62,10 @@ public class UI_Start : UI_Scene
         GetButton((int)Buttons.StartBtn).interactable = value;
         GetButton((int)Buttons.OptionBtn).interactable = value;
         GetButton((int)Buttons.ExitBtn).interactable = value;
+    }
+
+    public void ShowUI_Lobby()
+    {
+        Managers.UI.ShowPopupUI<UI_Lobby>();
     }
 }

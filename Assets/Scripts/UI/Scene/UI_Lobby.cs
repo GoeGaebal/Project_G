@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -51,7 +52,10 @@ public class UI_Lobby : UI_Popup
         LoadingPane = GetObject((int)GameObjects.LoadingPane);
         GetButton((int)Buttons.CreateBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_CreateRoomSetting>();});
         GetButton((int)Buttons.FindBtn).onClick.AddListener(() => { Managers.Network.FindRoom(); });
-        RedoBtn.onClick.AddListener(() => { Managers.UI.CloseAllPopupUI();});
+        RedoBtn.onClick.AddListener(() => {
+            UI_Start.animator.SetTrigger("ReturnButtonClicked");
+            Managers.UI.CloseAllPopupUI();
+        });
         LoadingPane.SetActive(false);
     }
 
