@@ -41,7 +41,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                     this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 break;
             case EnumWeather.Rain:
-                rainSystem.SetActive(true);
+                rainSystem?.SetActive(true);
                  _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);

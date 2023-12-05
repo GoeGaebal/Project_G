@@ -101,7 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a99008fba40d14687de679064373e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
 --- !u!1 &1502167816442822244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,6 +1860,7 @@ GameObject:
   - component: {fileID: 8719182393959086323}
   - component: {fileID: 292276533582991692}
   - component: {fileID: 8034137682537573393}
+  - component: {fileID: 2909273866149145306}
   m_Layer: 11
   m_Name: PlayerWeapon
   m_TagString: Untagged
@@ -1947,6 +1947,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &2909273866149145306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555614727113110835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c76d54b7aea23574da2a4299bc996c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swordSprite: {fileID: 21300174, guid: 15b2d2faaecad4bfb9edc6585d94f509, type: 3}
+  axeSprite: {fileID: 21300230, guid: 15b2d2faaecad4bfb9edc6585d94f509, type: 3}
 --- !u!1 &5947935160424069246
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,7 +2198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b24d68d7b58de468af8c15eba8df92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
 --- !u!1 &6926622341473651745
 GameObject:
   m_ObjectHideFlags: 0
