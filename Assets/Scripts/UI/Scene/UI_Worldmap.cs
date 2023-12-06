@@ -55,6 +55,9 @@ public class UI_Worldmap : UI_Scene
     private GameObject _timeText;
     private GameObject _distanceText;
     private GameObject _finalBoss;
+    private Button _map1;
+    private Button _map2;
+    private Button _map3;
 
     private bool _moveFlag = false;//이동 중
     private bool _arriveFlag = false;//도착
@@ -93,7 +96,7 @@ public class UI_Worldmap : UI_Scene
                 Managers.WorldMap.currentMapId = _targetMapId;
                 _timeText.SetActive(false);
                 _distanceText.SetActive(false);
-                _arrow.SetActive(false);
+                SetArrow(Vector2.up);
                 UI_SystemMessage.alert(_targetMapId + "에 도착했습니다.", Color.white);
             }
         }
@@ -135,7 +138,7 @@ public class UI_Worldmap : UI_Scene
         _lrGO = Get<GameObject>((int)GameObjects.Worldmap_Line);
         _lr = _lrGO.GetComponent<UILineRenderer>();
         _arrow = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Arrow);
-        _arrow.SetActive(false);
+        _arrow.SetActive(true);
         //_minimapShip = Get<GameObject>((int)GameObjects.Worldmap_Minimap_Ship);
         //_weatherText = Get<GameObject>((int)GameObjects.WeatherText);
         _movingText = Get<GameObject>((int)GameObjects.Worldmap_Minimap_MovingText);
@@ -149,9 +152,15 @@ public class UI_Worldmap : UI_Scene
 
         //GetButton((int)Buttons.Worldmap_Button).gameObject.BindEvent(OpenWorldmapUI);
         GetButton((int)Buttons.Worldmap_Button_Close).gameObject.BindEvent(CloseWorldmapUI);
-        GetButton((int)Buttons.Map_001).gameObject.BindEvent(OnWorldmapButtonClick);
-        GetButton((int)Buttons.Map_002).gameObject.BindEvent(OnWorldmapButtonClick);
-        GetButton((int)Buttons.Map_003).gameObject.BindEvent(OnWorldmapButtonClick);
+        _map1 = GetButton((int)Buttons.Map_001);
+        _map2 = GetButton((int)Buttons.Map_002);
+        _map3 = GetButton((int)Buttons.Map_003);
+        _map1.gameObject.BindEvent(OnWorldmapButtonClick);
+        _map2.gameObject.BindEvent(OnWorldmapButtonClick);
+        _map3.gameObject.BindEvent(OnWorldmapButtonClick);
+        _map1.transform.GetChild(0).gameObject.SetActive(false);
+        _map2.transform.GetChild(0).gameObject.SetActive(false);
+        _map3.transform.GetChild(0).gameObject.SetActive(false);
         GetButton((int)Buttons.Worldmap_Button_Stop).onClick.AddListener(PauseMove);
 
         //set the ship position on world map manager
@@ -234,6 +243,10 @@ public class UI_Worldmap : UI_Scene
         _arriveFlag = false;
         _moveFlag = true;
         _lr.enabled = true;
+        _map1.transform.GetChild(0).gameObject.SetActive(false);
+        _map2.transform.GetChild(0).gameObject.SetActive(false);
+        _map3.transform.GetChild(0).gameObject.SetActive(false);
+        evt.pointerPressRaycast.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         CloseWorldmapUI();
         
         S_WorldMapEvent packet = new S_WorldMapEvent();
@@ -257,6 +270,9 @@ public class UI_Worldmap : UI_Scene
         _timeText.SetActive(false);
         _distanceText.SetActive(false);
         _arrow.SetActive(false);
+        _map1.transform.GetChild(0).gameObject.SetActive(false);
+        _map2.transform.GetChild(0).gameObject.SetActive(false);
+        _map3.transform.GetChild(0).gameObject.SetActive(false);
 
         S_WorldMapEvent packet = new S_WorldMapEvent();
         packet.Event = UIWorldMapEventType.PauseMove;
