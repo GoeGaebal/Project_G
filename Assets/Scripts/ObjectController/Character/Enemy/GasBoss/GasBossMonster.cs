@@ -47,7 +47,6 @@ public class GasBossMonster : BasicMonster
                 switch(ChooseNextAttack())
                 {
                    case Attack.EARTHQUAKE:
-                   
                    _animator.SetTrigger("earthquake");
                     break;
                     case Attack.FIREFLAME:
