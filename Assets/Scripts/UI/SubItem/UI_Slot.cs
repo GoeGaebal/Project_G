@@ -80,10 +80,7 @@ public class UI_Slot : UI_Base
                 if (checkIndex == 10)//무기
                 {//TODO: 무기 이미지 제대로 안 바뀜
                     UI_Inven.ChangeQuickslotImage(0, currentItem);
-                    if (currentItem.item.ID == 1001)
-                    {
-                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
-                    }
+                    _player.EquipWeapon(currentItem.item.ID);
                 }
                 else if (checkIndex == 40)//포션
                 {

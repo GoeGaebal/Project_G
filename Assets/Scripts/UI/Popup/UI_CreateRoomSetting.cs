@@ -85,11 +85,19 @@ public class UI_CreateRoomSetting : UI_Popup
             if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(() => { _isConnectedSucceed = true;}, () => _isConnectedFailed = true);
             else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                Managers.Network.CreateRoom(() =>
+                if (!name.IsNullOrEmpty() && name.Length <= 6)
                 {
-                    Managers.Network.UserName = userName.text.Trim((char)8203);
-                    _isConnectedSucceed = true;
-                }, () => _isConnectedFailed = true ,port);
+                    Managers.Network.CreateRoom(() =>
+                    {
+                        Managers.Network.UserName = name;
+                        _isConnectedSucceed = true;
+                    }, () => _isConnectedFailed = true ,port);
+                }
+                else
+                {
+                    warningText.SetText($"이름은 비어있지 않거나 6글자 이내여야 합니다.");
+                    SetInteractableButtons(true);
+                }
             }
             else
             {

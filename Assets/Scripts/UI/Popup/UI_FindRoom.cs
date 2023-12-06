@@ -7,30 +7,30 @@ using WebSocketSharp;
 
 public class UI_FindRoom : UI_Popup
 {
-    enum Buttons
+    private enum Buttons
     {
         FindBtn,
         ExitBtn,
     }
 
-    enum TMP_InputFields
+    private enum TMPInputFields
     {
         RoomAddressArea,
         RoomPortArea,
         UserNameArea,
     }
 
-    enum Texts
+    private enum Texts
     {
         WarningText
     }
-    
-    enum Toggles
+
+    private enum Toggles
     {
         LocalHost
     }
 
-    enum GameObjects
+    private enum GameObjects
     {
         LoadingSet,
     }
@@ -58,32 +58,32 @@ public class UI_FindRoom : UI_Popup
             SetInteractableButtons(true);
             _isConnectedFailed = false;
         }
-        if (_isConnectedSucceed)
-        {
-            Managers.UI.Clear();
-            Managers.UI.SetEventSystem();
-            Managers.UI.ShowSceneUI<UI_Inven>();
-            //Managers.UI.ShowSceneUI<UI_Map>();
-            Managers.UI.ShowSceneUI<UI_Status>();
-            Managers.UI.ShowSceneUI<UI_Chat>();
-            Managers.UI.ShowSceneUI<UI_Leaf>();
-            Managers.Map.LoadMap(5);
-        }
+
+        if (!_isConnectedSucceed) return;
+        
+        Managers.UI.Clear();
+        Managers.UI.SetEventSystem();
+        Managers.UI.ShowSceneUI<UI_Inven>();
+        //Managers.UI.ShowSceneUI<UI_Map>();
+        Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Chat>();
+        Managers.UI.ShowSceneUI<UI_Leaf>();
+        Managers.Map.LoadMap(5);
     }
 
     public override void Init()
     {
         base.Init();
         Bind<Button>(typeof(Buttons));
-        Bind<TMP_InputField>(typeof(TMP_InputFields));
+        Bind<TMP_InputField>(typeof(TMPInputFields));
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
         Bind<Toggle>(typeof(Toggles));
         
         _findBtn = GetButton((int)Buttons.FindBtn);
-        _port = Get<TMP_InputField>((int)TMP_InputFields.RoomPortArea);
-        _name = Get<TMP_InputField>((int)TMP_InputFields.UserNameArea);
-        _address = Get<TMP_InputField>((int)TMP_InputFields.RoomAddressArea);
+        _port = Get<TMP_InputField>((int)TMPInputFields.RoomPortArea);
+        _name = Get<TMP_InputField>((int)TMPInputFields.UserNameArea);
+        _address = Get<TMP_InputField>((int)TMPInputFields.RoomAddressArea);
         _warningText = GetTextMeshPro((int)Texts.WarningText);
         
         GetButton((int)Buttons.ExitBtn).onClick.RemoveAllListeners();
@@ -105,8 +105,16 @@ public class UI_FindRoom : UI_Popup
             var addressText = _address.text.Trim((char)8203);
             if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if(Get<Toggle>((int)Toggles.LocalHost).isOn) Managers.Network.Client.Connect(OnConnectedSucceed, OnConnectedFailed, port);
-                else Managers.Network.Client.Connect(addressText, OnConnectedSucceed, OnConnectedFailed, port);
+                if (!_nameText.IsNullOrEmpty() && _nameText.Length <= 6)
+                {
+                    if(Get<Toggle>((int)Toggles.LocalHost).isOn) Managers.Network.Client.Connect(OnConnectedSucceed, OnConnectedFailed, port);
+                    else Managers.Network.Client.Connect(addressText, OnConnectedSucceed, OnConnectedFailed, port);
+                }
+                else
+                {
+                    _warningText.SetText($"이름은 비어있지 않거나 6글자 이내여야 합니다.");
+                    SetInteractableButtons(true);
+                }
             }
             else
             {

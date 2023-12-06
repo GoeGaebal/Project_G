@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Server;
 using TMPro;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Player : CreatureController, IAttackable, IMoveable
 {
@@ -44,6 +46,10 @@ public class Player : CreatureController, IAttackable, IMoveable
     [SerializeField] private PlayerLeg _playerLeg;
     [SerializeField] private GameObject Left_Arm;
     [SerializeField] private GameObject Right_Arm;
+    [SerializeField] private Transform _weapon_pivot;
+    
+    public Image HPBar;
+    public TextMeshProUGUI HPText;
 
     public string Name
     {
@@ -64,12 +70,15 @@ public class Player : CreatureController, IAttackable, IMoveable
         UpdateState.Add(CreatureState.Attack, OnAttack);
         UpdateState.Add(CreatureState.Run, OnRun);
         
+        if (HPBar == null) HPBar = Util.FindChild(gameObject,"HP", true).GetComponent<Image>();
+        var texts = GetComponentsInChildren<TextMeshProUGUI>();
+        _name = texts[1];
+        HPText = texts[0];
         ObjectType = GameObjectType.Player;
-        _wpc = transform.GetComponentInChildren<WeaponPivotController>();
+        _wpc = GetComponentInChildren<WeaponPivotController>();
         _rb = GetComponent<Rigidbody2D>();
         _playerBody = GetComponentInChildren<PlayerBody>();
         _playerLeg = GetComponentInChildren<PlayerLeg>();
-        _name = GetComponentInChildren<TextMeshProUGUI>();
         _playerBody.Init();
         _playerLeg.Init();
 
@@ -197,6 +206,13 @@ public class Player : CreatureController, IAttackable, IMoveable
         if(prevState != CreatureState.Attack)
             _wpc.Attack(realDamage);
     }
+
+    public void EquipWeapon(int itemId)
+    {
+        Managers.Resource.Destroy(_wpc.gameObject);
+        _wpc = Managers.Resource.Instantiate($"Objects/Character/Weapon/{itemId}", parent: this.transform).GetComponent<WeaponPivotController>();
+        _wpc.pivot = _weapon_pivot;
+    }
     
     public override void OnDamage(float damage)
     {
@@ -224,6 +240,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         localSc.x = isFlip ? -1 * Math.Abs(localSc.x) : localSc.x = Math.Abs(localSc.x);
         transform.localScale = localSc;
         _name.transform.localScale = localSc;
+        HPText.transform.localScale = localSc;
         Vector2 wpcLocalScale = _wpc.transform.localScale;
         _wpc.transform.localScale = 
             (isFlip) ? new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y)) : new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
@@ -341,8 +358,19 @@ public class Player : CreatureController, IAttackable, IMoveable
         State = PosInfo.State;
         transform.localScale = new Vector3(PosInfo.Dir,1, 1);
         _wpc.transform.localScale = new Vector3(PosInfo.Dir, PosInfo.Dir, 1);
-        Left_Arm.SetActive(PosInfo.Dir == -1);
-        Right_Arm.SetActive(PosInfo.Dir != -1);
+        var isFlip = PosInfo.Dir == -1;
+        Left_Arm.SetActive(isFlip);
+        Right_Arm.SetActive(!isFlip);
+        Vector2 localSc = transform.localScale;
+        _name.transform.localScale = localSc;
+        HPText.transform.localScale = localSc;
+    }
+
+    public override void UpdateHp(float health, bool dead)
+    {
+        base.UpdateHp(health,dead);
+        HPBar.fillAmount = HP / maxHP;
+        HPText.text = $"{HP / maxHP:P2}";
     }
 
     public void SyncWPos(float WposX, float WposY, float WrotZ)

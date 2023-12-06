@@ -6,13 +6,6 @@ public class Managers : MonoBehaviour
     private static Managers _instance; // 유일성이 보장된다
     private static Managers Instance { get { Init(); return _instance; } } // 유일한 매니저를 갖고온다
 
-    #region PUN2
-    private static PhotonView _photonView;
-    private static PhotonView ManagersPhotonView { get { return _photonView; } } // 유일한 포톤뷰를 들고 온다.
-    
-    
-    #endregion
-
 
     #region Content
     private readonly MapManager _map = new();
@@ -87,7 +80,6 @@ public class Managers : MonoBehaviour
 
             _instance._network.Init();
             _instance._input.Init();
-            _instance._item.Init();
             _instance._data.Init();
             _instance._pool.Init();
             // _instance._object.Init();
@@ -96,6 +88,7 @@ public class Managers : MonoBehaviour
             _instance._artifact.Init();
             _instance._weather.Init();
             _instance._worldMap.Init();
+            _instance._item.Init();
 
             // _network.Server.Init();
             //_network.Client.Init();

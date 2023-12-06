@@ -30,5 +30,5 @@ EditorBuildSettings:
     path: Assets/Scenes/NetworkTest.unity
     guid: 81ce56e19a348f14486d9199253974a5
   m_configObjects:
-    com.unity.input.settings: {fileID: 11400000, guid: d1f073cbcf5dc3f4489128403befbf05,
+    com.unity.input.settings: {fileID: 11400000, guid: 0a725e8354808a14b9e8f483fe60ac89,
       type: 2}

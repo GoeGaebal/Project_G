@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public interface ILoader<Key, Value>
@@ -29,13 +30,7 @@ public class DataManager
         GatheringDict = LoadJson<GatheringDataLoader, int, GatheringData>("GatheringData").MakeDict();
         
         // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
-        Item item = null;
-        item = Managers.Resource.Load<Item>("Prefabs/UI/Inventory/Item/Apple");
-        ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("Prefabs/UI/Inventory/Item/IronIngot");
-        ItemDict.Add(item.ID,item);
-        item = Managers.Resource.Load<Item>("Prefabs/UI/Inventory/Item/Sword");
-        ItemDict.Add(item.ID,item);
+        AddItems(new [] {"Apple", "IronIngot", "Sword", "CPU", "Motherboard", "Transistor", "Antenna", "NanoBlade", "RazorGun", "Gauntlet"});
         WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
         CraftDict = LoadJson<CraftDataLoader, int, CraftData>("CraftData").MakeDict();
         Artifact artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_1");
@@ -44,6 +39,14 @@ public class DataManager
         ArtifactDict.Add(artifact.ID, artifact);
         artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_Deselect");
         ArtifactDict.Add(artifact.ID, artifact);
+    }
+
+    private void AddItems(IEnumerable<string> itemList)
+    {
+        foreach (var item in itemList.Select(it => Managers.Resource.Load<Item>($"Prefabs/UI/Inventory/Item/{it}")))
+        {
+            ItemDict.Add(item.ID,item);
+        }
     }
 
     Loader LoadJson<Loader, TKey, TValue>(string path) where Loader : ILoader<TKey, TValue>

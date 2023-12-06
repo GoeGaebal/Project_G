@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -51,40 +52,16 @@ public class MapManager
         CurrentMapInfo = new MapInfo(mapId,cellBounds.xMin,cellBounds.xMax,cellBounds.yMin,cellBounds.yMax);
         _currentMapInfo = Managers.Data.LoadMapData(mapName);
         
-        BasicMonster[] monsters = go.GetComponentsInChildren<BasicMonster>();
-        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
+        NetworkObject[] monsters = go.GetComponentsInChildren<BasicMonster>();
+        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnObjects(monsters, GameObjectType.Monster);
         foreach (var monster in monsters)
             Managers.Resource.Destroy(monster.gameObject);
-        GatheringController[] gatherings = go.GetComponentsInChildren<GatheringController>();
-        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
+        NetworkObject[] gatherings = go.GetComponentsInChildren<GatheringController>();
+        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnObjects(gatherings, GameObjectType.Gathering);
         foreach (var gathering in gatherings)
             Managers.Resource.Destroy(gathering.gameObject);
     }
 
-    public void LoadMap(string mapName)
-    {
-        DestoryMap();
-        // 1인 경우 000 중 마지막 0만 1로 바꿈
-        //string mapName = "Map_" + mapId.ToString("000");
-        string temp = mapName.Substring(4,3);
-        currentMapId = int.Parse(temp);
-        GameObject go = Managers.Resource.Instantiate($"Map/{mapName}", Vector3.zero, Quaternion.identity);
-        go.name = "Map";
-        Tilemap tmBase = Util.FindChild<Tilemap>(go, "Grass_Tilemap", true);
-        var cellBounds = tmBase.cellBounds;
-        CurrentMapInfo = new MapInfo(currentMapId, cellBounds.xMin, cellBounds.xMax, cellBounds.yMin, cellBounds.yMax);
-        _currentMapInfo = Managers.Data.LoadMapData(mapName);
-
-        BasicMonster[] monsters = go.GetComponentsInChildren<BasicMonster>();
-        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnMonsters(monsters);
-        foreach (var monster in monsters)
-            Managers.Resource.Destroy(monster.gameObject);
-        GatheringController[] gatherings = go.GetComponentsInChildren<GatheringController>();
-        if (Managers.Network.IsHost) Managers.Network.Server.Room.SpawnGatherings(gatherings);
-        foreach (var gathering in gatherings)
-            Managers.Resource.Destroy(gathering.gameObject);
-    }
-    
     public bool CheckCanGo(Vector2 pos)
     {
         int y = (int)pos.y;

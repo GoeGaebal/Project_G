@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f01f5a94ee7037498e9156553d227dc, type: 3}
-  m_Name: Sword
+  m_Name: Gauntlet
   m_EditorClassIdentifier: 
-  _id: 1001
-  _name: "\uAC80"
-  _tooltip: "\uB0A0\uCE74\uB86D\uB2E4"
-  _icon: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+  _id: 1002
+  _name: "\uD3ED\uBC1C\uAC74\uD2C0\uB9BF"
+  _tooltip: "\uB2FF\uC73C\uBA74 \uD3ED\uBC1C\uD55C\uB2E4"
+  _icon: {fileID: 1037468264, guid: 964015c7dfd5a524ca7c38832f904d61, type: 3}
   _droppedItemPrefab: {fileID: 0}
   _attackDamage: 1
   _attackSpeed: 1

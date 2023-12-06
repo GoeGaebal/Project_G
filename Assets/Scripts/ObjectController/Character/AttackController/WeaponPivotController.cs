@@ -8,11 +8,11 @@ public class WeaponPivotController : NetworkObject
     [Tooltip("회전 반경")]
     [SerializeField] private float disFromBody;
     [Tooltip("회전 중심점")]
-    [SerializeField] private Transform pivot;
+    public Transform pivot;
     private Player _player;
 
     private Animator _animator;
-    private Weapon _weapon;
+    private WeaponItem _weapon;
     private BoxCollider2D _collider;
     private ContactFilter2D _filter2D = new ContactFilter2D();
     private Collider2D[] _results = new Collider2D[10];
@@ -30,6 +30,7 @@ public class WeaponPivotController : NetworkObject
 
     void Update()
     {
+        if (pivot == null) return;
         if(_player != Managers.Network.LocalPlayer) return;
         if (_player.IsDead) return;
 
