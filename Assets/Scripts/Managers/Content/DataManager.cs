@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +29,7 @@ public class DataManager
         GatheringDict = LoadJson<GatheringDataLoader, int, GatheringData>("GatheringData").MakeDict();
         
         // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
-        AddItems(new [] {"Apple", "IronIngot", "Sword", "CPU", "Motherboard", "Transistor", "Antenna", "NanoBlade", "RazorGun", "Gauntlet"});
+        AddItems(new [] {"Apple", "IronIngot", "Pipe", "CPU", "Motherboard", "Transistor", "Antenna", "NanoBlade", "RazorGun", "Gauntlet"});
         WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
         CraftDict = LoadJson<CraftDataLoader, int, CraftData>("CraftData").MakeDict();
         Artifact artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_1");
@@ -43,8 +42,9 @@ public class DataManager
 
     private void AddItems(IEnumerable<string> itemList)
     {
-        foreach (var item in itemList.Select(it => Managers.Resource.Load<Item>($"Prefabs/UI/Inventory/Item/{it}")))
+        foreach (var it in itemList)
         {
+            var item = Managers.Resource.Load<Item>($"Prefabs/UI/Inventory/Item/{it}");
             ItemDict.Add(item.ID,item);
         }
     }
