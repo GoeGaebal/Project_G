@@ -32,11 +32,11 @@ public class DataManager
         AddItems(new [] {"Apple", "IronIngot", "Pipe", "CPU", "Motherboard", "Transistor", "Antenna", "NanoBlade", "RazorGun", "Gauntlet"});
         WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
         CraftDict = LoadJson<CraftDataLoader, int, CraftData>("CraftData").MakeDict();
-        Artifact artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_1");
+        Artifact artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifact/Artifacts/Artifact_1");
         ArtifactDict.Add(artifact.ID, artifact);
-        artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_2");
+        artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifact/Artifacts/Artifact_2");
         ArtifactDict.Add(artifact.ID, artifact);
-        artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifacts/Artifact_Deselect");
+        artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifact/Artifacts/Artifact_0");
         ArtifactDict.Add(artifact.ID, artifact);
     }
 

@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Application = UnityEngine.Device.Application;
 
@@ -13,6 +9,8 @@ public class UI_Start : UI_Scene
     public TextMeshProUGUI _loadingText;
     public GameObject LoadingIcon;
     static public Animator animator;
+    private static readonly int PlayButtonClicked = Animator.StringToHash("PlayButtonClicked");
+
     enum Buttons
     {
         StartBtn,
@@ -50,7 +48,7 @@ public class UI_Start : UI_Scene
         _lobbyScene = FindObjectOfType<LobbyScene>();
         GetButton((int)Buttons.StartBtn).onClick.RemoveAllListeners();
         animator = Get<Animator>((int)Animators.UI_Start);
-        GetButton((int)Buttons.StartBtn).onClick.AddListener(() => { animator.SetTrigger("PlayButtonClicked"); });
+        GetButton((int)Buttons.StartBtn).onClick.AddListener(() => { animator.SetTrigger(PlayButtonClicked); });
         GetButton((int)Buttons.ExitBtn).gameObject.BindEvent((evt) => { Application.Quit(); });
         _loadingText = GetTextMeshPro((int)Texts.LoadingText);
         LoadingIcon = GetObject((int)GameObjects.LoadingIcon);

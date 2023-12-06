@@ -618,7 +618,8 @@ AnimationClip:
   - time: 0.41666666
     functionName: ShowUI_Lobby
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: c13c7aa0cb6aeb34992cde755f5ac4e3,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

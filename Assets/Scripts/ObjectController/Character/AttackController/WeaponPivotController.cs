@@ -17,6 +17,7 @@ public class WeaponPivotController : NetworkObject
     private ContactFilter2D _filter2D = new ContactFilter2D();
     private Collider2D[] _results = new Collider2D[10];
     private static readonly int AttackAnimParam = Animator.StringToHash("attack");
+    private static readonly int AttackSpeed = Animator.StringToHash("attackSpeed");
 
     protected override void Awake()
     {
@@ -44,8 +45,9 @@ public class WeaponPivotController : NetworkObject
         transform.rotation = Quaternion.Euler(new Vector3(0.0f,0.0f,(Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg) + 180.0f));
     }
 
-    public void Attack(float realDamage)
+    public void Attack(float realDamage, float attackSpeed = 1.0f)
     {
+        _animator.SetFloat(AttackSpeed,attackSpeed);
         _animator.SetTrigger(AttackAnimParam);
         if (!Managers.Network.IsHost) return;
         

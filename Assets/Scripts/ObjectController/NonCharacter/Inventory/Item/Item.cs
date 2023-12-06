@@ -23,7 +23,7 @@ public class Item : ScriptableObject
 
     public virtual void Deselect()
     {
-        Debug.Log("아이템 " + Name + " 장착됨");
+        Debug.Log("아이템 " + Name + " 해제됨");
     }
 
     public virtual void Skill()

@@ -45,7 +45,7 @@ public class BossMonster : BasicMonster
 
         if (!_canCastingState || (State is not (CreatureState.Run or CreatureState.Idle))) return;
         StartCoroutine(nameof(CooldownTimeCastingState));
-        Animator.SetTrigger(Casting);
+        _animator.SetTrigger(Casting);
     }
 
     public void FinishSpell()

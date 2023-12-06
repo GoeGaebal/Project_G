@@ -17,6 +17,7 @@ public class WeaponItem : EquipableItem
     public override void Select()
     {
         base.Select();
+        Managers.Network.LocalPlayer.EquipWeapon(ID);
     }
 
     public override void Deselect()

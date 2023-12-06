@@ -122,9 +122,7 @@ public class UI_Item : UI_Base
                     }
                     else
                     {
-                        int temp = count;
-                        count = currentItem.count;
-                        currentItem.count = temp;
+                        (count, currentItem.count) = (currentItem.count, count);
                         currentItem.RefreshCount();
                     }
                     RefreshCount();
@@ -186,6 +184,9 @@ public class UI_Item : UI_Base
                 {
                     if (currentItem.item.ID / 100 == item.ID / 100)
                     {
+                        currentItem.item.Deselect();
+                        item.Select();
+
                         var parentTransform = transform.parent.transform;
 
                         parentBeforeDrag = currentItem.parentBeforeDrag;

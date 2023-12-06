@@ -108,7 +108,6 @@ public class UIManager
         _popupStack.Push(popup);
         
         go.transform.SetParent(Root.transform);
-        
         return popup;
     }
     

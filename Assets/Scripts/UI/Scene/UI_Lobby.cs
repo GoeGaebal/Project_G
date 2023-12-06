@@ -17,6 +17,7 @@ public class UI_Lobby : UI_Popup
     public List<UI_RoomItem> RoomList = new List<UI_RoomItem>();
     
     private GameObject _content;
+    private static readonly int ReturnButtonClicked = Animator.StringToHash("ReturnButtonClicked");
 
     enum Buttons
     {
@@ -30,12 +31,10 @@ public class UI_Lobby : UI_Popup
         Content,
         LoadingPane,
     }
-
     
     private void Start()
     {
-        if(CreateBtn == null)
-            Init();
+        if(CreateBtn == null) Init();
     }
 
     public override void Init()
@@ -52,9 +51,10 @@ public class UI_Lobby : UI_Popup
         LoadingPane = GetObject((int)GameObjects.LoadingPane);
         GetButton((int)Buttons.CreateBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_CreateRoomSetting>();});
         RedoBtn.onClick.AddListener(() => {
-            UI_Start.animator.SetTrigger("ReturnButtonClicked");
-        });
+            UI_Start.animator.SetTrigger(ReturnButtonClicked);
             Managers.UI.CloseAllPopupUI();
+        });
+        
         GetButton((int)Buttons.FindBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_FindRoom>(); });
         LoadingPane.SetActive(false);
     }

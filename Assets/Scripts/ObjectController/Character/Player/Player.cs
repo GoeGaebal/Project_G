@@ -12,7 +12,6 @@ using UnityEngine.UI;
 public class Player : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] private float moveSpeed = 5.0f;
-    [SerializeField] private Animator weaponAnimator;
     public float attackSpeed = 10f;
     public float attackDamage = 100f;
 
@@ -30,6 +29,8 @@ public class Player : CreatureController, IAttackable, IMoveable
     private Coroutine resetAttackCountCoroutine;
     private bool _attackInputBuffer = false;
     private Vector2 _runInputBuffer = Vector2.zero;
+
+    private bool _isTwoHand = false;
 
     private AnimationEvent OnFinishDieAnim;
 
@@ -57,8 +58,9 @@ public class Player : CreatureController, IAttackable, IMoveable
         }
     }
     private TextMeshProUGUI _name;
-    
-    
+    private static readonly int AttackSpeed = Animator.StringToHash("attackSpeed");
+
+
     #region UnityMessages
     protected override void Awake()
     {
@@ -77,6 +79,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         _playerLeg = GetComponentInChildren<PlayerLeg>();
         _playerBody.Init();
         _playerLeg.Init();
+        _weapon_pivot = Util.FindChild(gameObject, "WeaponPivot").transform;
 
         PosInfo.Dir = 1;
 
@@ -196,7 +199,7 @@ public class Player : CreatureController, IAttackable, IMoveable
     public void OnAttack(CreatureState prevState)
     {
         if(prevState != CreatureState.Attack)
-            _wpc.Attack(realDamage);
+            _wpc.Attack(realDamage, attackSpeed);
     }
 
     public void EquipWeapon(int itemId)
@@ -204,6 +207,20 @@ public class Player : CreatureController, IAttackable, IMoveable
         Managers.Resource.Destroy(_wpc.gameObject);
         _wpc = Managers.Resource.Instantiate($"Objects/Character/Weapon/{itemId}", parent: this.transform).GetComponent<WeaponPivotController>();
         _wpc.pivot = _weapon_pivot;
+        if (itemId == 1002)
+        {
+            _isTwoHand = true;
+            Left_Arm.SetActive(false);
+            Right_Arm.SetActive(false);
+        }
+        else {
+            Vector3 mousePos = Managers.Input.UIActions.Point.ReadValue<Vector2>();
+            mousePos.z = Camera.main.transform.position.z;
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            _isTwoHand = false;
+            Flip(worldPos.x >=  transform.position.x);
+        }
+        
     }
     
     public override void OnDamage(float damage)
@@ -212,7 +229,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         
         if(IsDead) return;
         base.OnDamage(damage);
-        if(State == CreatureState.Idle || State == CreatureState.Run) 
+        if(State is CreatureState.Idle or CreatureState.Run) 
             State = CreatureState.Hit;
     }
     #endregion
@@ -226,8 +243,6 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private void Flip(bool isFlip)
     {
-        Left_Arm.SetActive(isFlip);
-        Right_Arm.SetActive(!isFlip);
         Vector2 localSc = transform.localScale;
         localSc.x = isFlip ? -1 * Math.Abs(localSc.x) : localSc.x = Math.Abs(localSc.x);
         transform.localScale = localSc;
@@ -236,6 +251,10 @@ public class Player : CreatureController, IAttackable, IMoveable
         Vector2 wpcLocalScale = _wpc.transform.localScale;
         _wpc.transform.localScale = 
             (isFlip) ? new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y)) : new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
+        
+        if (_isTwoHand) return;
+        Left_Arm.SetActive(isFlip);
+        Right_Arm.SetActive(!isFlip);
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -266,8 +285,6 @@ public class Player : CreatureController, IAttackable, IMoveable
 
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
-
-        weaponAnimator.SetFloat("attackSpeed",attackSpeed);
         State = CreatureState.Attack;
     }
     
