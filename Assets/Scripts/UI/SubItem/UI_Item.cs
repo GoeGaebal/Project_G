@@ -17,7 +17,7 @@ public class UI_Item : UI_Base
     public Text countText;//개수 텍스트
 
     [HideInInspector] public Item item;//아이템
-    [HideInInspector] public int count = 1;//아이템 개수
+    public int count = 1;//아이템 개수
     [HideInInspector] public Transform parentBeforeDrag;//복귀용
     public UI_Slot parentSlot;
 
@@ -119,14 +119,15 @@ public class UI_Item : UI_Base
                             currentItem.RemoveItem();
                             UI_Inven.potion1Text.text = count.ToString();
                         }
-                        RefreshCount();
                     }
                     else
                     {
                         int temp = count;
                         count = currentItem.count;
                         currentItem.count = temp;
+                        currentItem.RefreshCount();
                     }
+                    RefreshCount();
                 }
                 else//포션 슬롯이 아닌 경우
                 {//TODO: 무기 이미지 제대로 안 바뀜
