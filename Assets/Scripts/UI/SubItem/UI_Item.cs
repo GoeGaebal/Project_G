@@ -17,7 +17,7 @@ public class UI_Item : UI_Base
     public Text countText;//개수 텍스트
 
     [HideInInspector] public Item item;//아이템
-    [HideInInspector] public int count = 1;//아이템 개수
+    public int count = 1;//아이템 개수
     [HideInInspector] public Transform parentBeforeDrag;//복귀용
     public UI_Slot parentSlot;
 
@@ -95,37 +95,50 @@ public class UI_Item : UI_Base
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
             int idex = currentItem.item.ID / 100;
-            if (idex == item.ID/100)//장비에 해당하는 장비창일 때
+            if (idex == item.ID/100)//같은 장비에 해당하는 장비창일 때
             {
-                if(idex == 40 &&
-                currentItem.item == item &&
-                count < ((CountableItem)item).MaxCount)//포션 슬롯의 경우
+                //포션 슬롯의 경우
+                if (idex == 40 &&
+                currentItem.item == item)
                 {
-                    if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
+                    if(count < ((CountableItem)item).MaxCount)
                     {
-                        currentItem.count -= ((CountableItem)item).MaxCount - count;
-                        currentItem.RefreshCount();
-                        count = ((CountableItem)item).MaxCount;
-                        UI_Inven.potion1Text.text = count.ToString();
-                    }
-                    else//아이템 합침
-                    {
-                        currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
-                        currentItem.parentSlot.ItemInThisSlot = null;
+                        if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
+                        {
+                            currentItem.count -= ((CountableItem)item).MaxCount - count;
+                            currentItem.RefreshCount();
+                            count = ((CountableItem)item).MaxCount;
+                            UI_Inven.potion1Text.text = count.ToString();
+                        }
+                        else//아이템 합침
+                        {
+                            currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                            currentItem.parentSlot.ItemInThisSlot = null;
 
-                        count += currentItem.count;
-                        currentItem.RemoveItem();
-                        UI_Inven.potion1Text.text = count.ToString();
+                            count += currentItem.count;
+                            currentItem.RemoveItem();
+                            UI_Inven.potion1Text.text = count.ToString();
+                        }
+                    }
+                    else
+                    {
+                        int temp = count;
+                        count = currentItem.count;
+                        currentItem.count = temp;
+                        currentItem.RefreshCount();
                     }
                     RefreshCount();
                 }
-                else
+                else//포션 슬롯이 아닌 경우
                 {//TODO: 무기 이미지 제대로 안 바뀜
                     UI_Inven.ChangeQuickslotImage(0, currentItem);
-                    if (currentItem.item.ID == 1001)
+                    if (currentItem.item.ID == 1001)//칼인 경우
                     {
-                        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
+                        //PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
+
+                    item.Deselect();
+                    currentItem.item.Select();
 
                     var parentTransform = transform.parent.transform;
 
@@ -145,9 +158,9 @@ public class UI_Item : UI_Base
             }
         }
 
-        else//슬롯이 인벤토리일 때
+        else//대상 슬롯이 인벤토리, 창고일 때
         {
-            if (currentItem.item is CountableItem &&
+            if (currentItem.item is CountableItem &&//Countable일 때
             currentItem.item == item &&
             count < ((CountableItem)item).MaxCount)
             {
@@ -169,16 +182,39 @@ public class UI_Item : UI_Base
             }
             else//아이템 스왑
             {
-                var parentTransform = transform.parent.transform;
+                if (currentItem.parentBeforeDrag.GetComponent<UI_Slot>().isEquip)//장비창에서 인벤토리,창고로 옮길 때
+                {
+                    if (currentItem.item.ID / 100 == item.ID / 100)
+                    {
+                        var parentTransform = transform.parent.transform;
 
-                parentBeforeDrag = currentItem.parentBeforeDrag;
-                transform.SetParent(currentItem.parentBeforeDrag);
+                        parentBeforeDrag = currentItem.parentBeforeDrag;
+                        transform.SetParent(currentItem.parentBeforeDrag);
 
-                currentItem.parentBeforeDrag = parentTransform;
-                currentItem.transform.SetParent(parentTransform);
+                        currentItem.parentBeforeDrag = parentTransform;
+                        currentItem.transform.SetParent(parentTransform);
 
-                currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
-                currentItem.parentSlot.ItemInThisSlot = currentItem.item;
+                        currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                        currentItem.parentSlot.ItemInThisSlot = currentItem.item;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else//인벤토리, 창고에서 인벤토리, 창고로 옮길 때
+                {
+                    var parentTransform = transform.parent.transform;
+
+                    parentBeforeDrag = currentItem.parentBeforeDrag;
+                    transform.SetParent(currentItem.parentBeforeDrag);
+
+                    currentItem.parentBeforeDrag = parentTransform;
+                    currentItem.transform.SetParent(parentTransform);
+
+                    currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                    currentItem.parentSlot.ItemInThisSlot = currentItem.item;
+                }
             }
         }
 

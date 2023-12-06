@@ -420,7 +420,14 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             if (equips[i].transform.childCount >= 1)
             {
                 Managers.Item.equipSlots[i] = equips[i].transform.GetChild(0).GetComponent<UI_Item>().item;
-                Managers.Item.equipCount[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().count;
+                if (slots[i].transform.childCount >= 1)
+                {
+                    Managers.Item.equipCount[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().count;
+                }
+                else
+                {
+                    Managers.Item.equipCount[i] = 1;
+                }
             }
             else
             {

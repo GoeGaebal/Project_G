@@ -26,7 +26,7 @@ public class AttackController : MonoBehaviour
         if(damageable == null) return;
         if(weaponController.CheckAttackLayer((int)other.gameObject.layer))
         {
-            damageable.OnDamage(20.0f);
+            //damageable.OnDamage(20.0f);
         }
 
     }

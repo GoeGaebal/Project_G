@@ -7,13 +7,13 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
-    [SerializeField] private float detectRadius;
-    [SerializeField] private LayerMask chaseTargetLayerMask;
+    [SerializeField] protected float detectRadius;
+    [SerializeField] protected LayerMask chaseTargetLayerMask;
     [SerializeField] protected float speed;
     [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
     private Vector3 _spawnPosition;
-    protected Animator Animator;
+    protected Animator _animator;
 
     protected SpriteRenderer SpriteRenderer;
 
@@ -21,7 +21,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     public bool HasTarget => hasTarget;
     protected Transform _target;
     public Transform Target => _target;
-    private readonly Collider2D[] _colliders = new Collider2D[1];
+    protected readonly Collider2D[] _colliders = new Collider2D[1];
     protected float lastAttackTime;
 
     private GameObject FloatingDamageObject;
@@ -38,7 +38,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
         base.Awake();
         UpdateState.Add(CreatureState.Attack, OnAttack);
         UpdateState.Add(CreatureState.Run, OnRun);
-        Animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
         FloatingPos = transform.GetChild(0);
     }
@@ -66,13 +66,17 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
         if (hasTarget)
         {
+            if (_target == null)
+            {
+                hasTarget = false;
+                return;
+            }
             var distance = GetDistance(Target.transform.position);
-            if (detectRadius < distance) hasTarget = false;
             State = distance > minDisFromPlayer ? CreatureState.Run : CreatureState.Idle;
-            Animator.SetFloat(DistanceAnimParam, distance);
+            _animator?.SetFloat(DistanceAnimParam, distance);
         }
         // 만일 타겟을 가지고 있지 않다면
-        if(!hasTarget)
+        else
         {
             var distance = GetDistance(_spawnPosition);
             State = distance > 1.0f ? CreatureState.Run : CreatureState.Idle;
@@ -102,7 +106,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     protected override void OnIdle(CreatureState state)
     {
-        Animator.SetBool(RunAnimParam,false);
+        _animator.SetBool(RunAnimParam,false);
         if (!hasTarget || !(Time.timeSinceLevelLoad - lastAttackTime >= attackCooldown)) return;
         lastAttackTime = Time.timeSinceLevelLoad;
         State = CreatureState.Attack;
@@ -110,17 +114,17 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     public virtual void OnRun(CreatureState state)
     {
-        Animator.SetBool(RunAnimParam, true);
+        _animator.SetBool(RunAnimParam, true);
     }
 
     public void OnAttack(CreatureState state)
     {
-        Animator.SetTrigger(AttackAnimParam);
+        _animator.SetTrigger(AttackAnimParam);
     }
 
     public override void OnHit(CreatureState state)
     {
-        Animator.SetTrigger(Hit);
+        _animator.SetTrigger(Hit);
     }
 
     public override void OnDamage(float damage)
@@ -133,14 +137,14 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     protected override void OnDie(CreatureState state)
     {
-        Animator.ResetTrigger(Hit);
-        Animator.SetTrigger(DieAnimParam);
+        _animator.ResetTrigger(Hit);
+        _animator.SetTrigger(DieAnimParam);
     }
 
     private void OnEndDieAnim()
     {
         if (!Managers.Network.IsHost) return;
-        Managers.Network.Server.Room.SpawnLootingItems(1002,5,transform.position,2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
         {
             S_DeSpawn despawn = new S_DeSpawn();
             despawn.ObjectIds.Add(Id);
@@ -165,6 +169,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     protected virtual void DoFlip(bool value)
     {
+        if(GetComponent<SpriteRenderer>() == null) return;
         if(isSpriteRightSide)SpriteRenderer.flipX = value;
         else SpriteRenderer.flipX = !value;
     }

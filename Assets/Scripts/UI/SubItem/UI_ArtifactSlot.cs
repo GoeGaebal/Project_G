@@ -55,22 +55,27 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
         _image.sprite = artifact.Image;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)//아티팩트 클릭 시
     {
-        if (artifact.name == "Artifact_Deselect")
+        if (artifact.name == "Artifact_0")
         {
-            Managers.Artifact.DeselectArtifact();
-            Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex].SetEquipped(false);
-            //UI_Artifact.close();
+            if(Managers.Artifact.artifacts[Managers.Artifact.currentIndex] != null)
+            {
+                Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex].SetEquipped(false);
+                Managers.Artifact.DeselectArtifact();
+                //UI_Artifact.close();
+            }
         }
         else
         {
-            if (!isEquipped)
+            if (!isEquipped)//이미 장착 중인 아티팩트는 선택 불가
             {
                 if(Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex] != null)
-                {
-                    Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex].SetEquipped(false);
+                {//현재 타일셋에 장착된 다른 아티팩트가 있다면
+                    Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex].SetEquipped(false);//해제시킴
                 }
+
+                //내가 클릭한 아티팩트 장착
                 Managers.Artifact.equippedArtifactSlots[Managers.Artifact.currentIndex] = GetComponent<UI_ArtifactSlot>();
                 Managers.Artifact.SelectArtifact(artifact);
                 SetEquipped(true);

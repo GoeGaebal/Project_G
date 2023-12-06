@@ -15,30 +15,19 @@ public class Item : ScriptableObject
     [SerializeField] private string _tooltip = "";
     [SerializeField] private Sprite _icon;
     [SerializeField] GameObject _droppedItemPrefab;
-    /*
-    public ItemType type;
-    public ActionType actionType;
-    public Vector2Int range = new Vector2Int(5, 4);
 
-    public bool stackable = true;
+    public virtual void Select()
+    {
+        Debug.Log("아이템 " + Name + " 장착됨");
+    }
 
-    public Sprite Icon;*/
-}
-/*
-public enum ItemType
-{
-    Resource,
-    Tool,
-    Weapon,
-    Food
-}
+    public virtual void Deselect()
+    {
+        Debug.Log("아이템 " + Name + " 장착됨");
+    }
 
-public enum ActionType
-{
-    Attack,
-    Dig,
-    Chop,
-    Eat,
-    Nothing
+    public virtual void Skill()
+    {
+
+    }
 }
-*/

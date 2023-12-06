@@ -8,6 +8,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
 {
     [SerializeField]private Volume volume;
     [SerializeField]private GameObject rainSystem;
+    [SerializeField]private GameObject rainSystemPrefab;
     
 
     [SerializeField]private VolumeParameter<Color> defaultColor;
@@ -32,7 +33,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
        switch(Managers.Weather.Weather)
         {
             case EnumWeather.Sun:
-                rainSystem.SetActive(false);
+                rainSystem?.SetActive(false);
                 _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
@@ -40,7 +41,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                     this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 break;
             case EnumWeather.Rain:
-                rainSystem.SetActive(true);
+                rainSystem?.SetActive(true);
                  _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);
@@ -48,7 +49,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                     this.colorAdjustments.colorFilter.SetValue(this.rainNightColor);
                 break;
             case EnumWeather.Desert:
-                rainSystem.SetActive(false);
+                rainSystem?.SetActive(false);
                 _universalRenderfeature.SetActive(true);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.desertDayColor);
@@ -65,10 +66,14 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
 
     public void WeatherChangeEventHandler(EnumWeather weather)
     {
+        if(rainSystem == null)
+        {
+            rainSystem = Instantiate<GameObject>(rainSystemPrefab);
+        }
         switch(weather)
         {
             case EnumWeather.Sun:
-                rainSystem.SetActive(false);
+                rainSystem?.SetActive(false);
                 _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.sunDayColor);
@@ -76,7 +81,7 @@ public class ColorPostProcessing : MonoBehaviour, IWeatherChangeEventListener, I
                     this.colorAdjustments.colorFilter.SetValue(this.sunNightColor);
                 break;
             case EnumWeather.Rain:
-                rainSystem.SetActive(true);
+                rainSystem?.SetActive(true);
                 _universalRenderfeature.SetActive(false);
                 if(Managers.TimeSlot.TimeSlot == EnumTimeSlot.Day)
                     this.colorAdjustments.colorFilter.SetValue(this.rainDayColor);

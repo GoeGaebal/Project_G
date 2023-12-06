@@ -11,6 +11,7 @@ public class BossMonster : BasicMonster
     public static Action FinishSpellAction;
     [SerializeField] private Vector2 BossroomLeftDownWorldPos;
     [SerializeField] private Vector2 BossroomRightUpWorldPos;
+    [SerializeField] private GameObject portalPrefab;
     private readonly List<ICastingSpell> _spells = new();
     public List<Transform> Thunders { get; } = new();
 
@@ -76,6 +77,8 @@ public class BossMonster : BasicMonster
     protected override void OnDie(CreatureState state)
     {
         base.OnDie(state);
+        Instantiate(portalPrefab,transform.position, transform.rotation);
+
         if (!Managers.Network.IsHost) return;
         Managers.Network.Server.Room.SpawnLootingItems(5101, 10, transform.position, 2.0f, 1.0f);
         Managers.Network.Server.Room.SpawnLootingItems(5001, 5, transform.position, 2.0f, 1.0f);
