@@ -7,8 +7,8 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
-    [SerializeField] private float detectRadius;
-    [SerializeField] private LayerMask chaseTargetLayerMask;
+    [SerializeField] protected float detectRadius;
+    [SerializeField] protected LayerMask chaseTargetLayerMask;
     [SerializeField] protected float speed;
     [SerializeField] protected float minDisFromPlayer;
     [SerializeField] private bool isSpriteRightSide;
@@ -21,7 +21,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     public bool HasTarget => hasTarget;
     protected Transform _target;
     public Transform Target => _target;
-    private readonly Collider2D[] _colliders = new Collider2D[1];
+    protected readonly Collider2D[] _colliders = new Collider2D[1];
     protected float lastAttackTime;
 
     private GameObject FloatingDamageObject;
@@ -73,7 +73,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
             }
             var distance = GetDistance(Target.transform.position);
             State = distance > minDisFromPlayer ? CreatureState.Run : CreatureState.Idle;
-            _animator.SetFloat(DistanceAnimParam, distance);
+            _animator?.SetFloat(DistanceAnimParam, distance);
         }
         // 만일 타겟을 가지고 있지 않다면
         else
@@ -169,6 +169,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     protected virtual void DoFlip(bool value)
     {
+        if(GetComponent<SpriteRenderer>() == null) return;
         if(isSpriteRightSide)SpriteRenderer.flipX = value;
         else SpriteRenderer.flipX = !value;
     }
