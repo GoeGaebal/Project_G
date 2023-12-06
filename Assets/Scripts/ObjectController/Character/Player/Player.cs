@@ -9,7 +9,8 @@ using Server;
 public class Player : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] private float moveSpeed = 5.0f;
-
+    [SerializeField] private Animator weaponAnimator;
+    public float attackSpeed = 10f;
     public float attackDamage = 100f;
 
     public float[] artifactDamage = new float[] { 0f, 0f, 0f };//유물 대미지 (곱연산)
@@ -30,7 +31,6 @@ public class Player : CreatureController, IAttackable, IMoveable
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
     private bool attackInputBuffer = false;
-    private Vector2 runInputBuffer = Vector2.zero;
 
     private AnimationEvent OnFinishDieAnim;
 
@@ -243,6 +243,8 @@ public class Player : CreatureController, IAttackable, IMoveable
 
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
+
+        weaponAnimator.SetFloat("attackSpeed",attackSpeed);
         State = CreatureState.Attack;
     }
     

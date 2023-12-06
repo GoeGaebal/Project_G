@@ -663,6 +663,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  weaponAnimator: {fileID: 292276533582991692}
+  attackSpeed: 1
   attackDamage: 10
   artifactDamage:
   - 0
