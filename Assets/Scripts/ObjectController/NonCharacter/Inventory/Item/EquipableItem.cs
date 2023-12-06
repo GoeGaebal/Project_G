@@ -13,12 +13,33 @@ public  class EquipableItem : Item
     */
     //이해랑이 추가
 
+    public float HP => _hp;
+    public float Damage => _damage;//공격대미지
 
-    public float AttackDamge => _attackDamage;//공격대미지
-
-
-    [SerializeField] private float _attackDamage = 1f;
+    [SerializeField] private float _hp;
+    [SerializeField] private float _damage;
+    
     public virtual void ChangeEquipableItem()
     {}
+    public override void Select()
+    {
+        base.Select();
 
+        Managers.Network.LocalPlayer.realDamage += Damage;
+        Managers.Network.LocalPlayer.StatInfo.MaxHp += HP;
+        Managers.Network.LocalPlayer.RestoreHP(Managers.Network.LocalPlayer.HP + HP);
+        Debug.Log("플레이어 체력: " + Managers.Network.LocalPlayer.HP + " / " + Managers.Network.LocalPlayer.maxHP);
+        Debug.Log("플레이어 대미지: " + Managers.Network.LocalPlayer.realDamage);
+    }
+    public override void Deselect()
+    {
+        base.Deselect();
+        Managers.Network.LocalPlayer.realDamage -= Damage;
+        Managers.Network.LocalPlayer.StatInfo.MaxHp -= HP;
+        Managers.Network.LocalPlayer.RestoreHP(-HP);
+    }
+    public override void Skill()
+    {
+        base.Skill();
+    }
 }

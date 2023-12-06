@@ -13,20 +13,15 @@ public class Player : CreatureController, IAttackable, IMoveable
     public float attackSpeed = 10f;
     public float attackDamage = 100f;
 
-    public float[] artifactDamage = new float[] { 0f, 0f, 0f };//유물 대미지 (곱연산)
-    public float[] equipDamage = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 대미지 (합연산)
+    public Action[] ArtifactSkills = new Action[3];
 
-    public float[] artifactHP = new float[] { 0f, 0f, 0f };//유물 체력 (곱연산)
-    public float[] equipHP = new float[] { 0f, 0f, 0f, 0f, 0f };//장비 체력 (합연산)
-
-    public float realDamage = 0f;//장비, 유물 스탯 연산 이후 공격력
+    public float realDamage = 100f;//장비, 유물 스탯 연산 이후 공격력
 
     private PlayerCameraController playerCameraController;
     private WeaponPivotController _wpc;
     private Vector2 _moveInput;
 
     private Rigidbody2D _rb;
-
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
@@ -80,11 +75,6 @@ public class Player : CreatureController, IAttackable, IMoveable
     {
         playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
-    }
-
-    private void Update()
-    {
-        realDamage = (attackDamage + equipDamage[0] + equipDamage[1] + equipDamage[2] + equipDamage[3] + equipDamage[4]) * (1 + artifactDamage[0]) * (1 + artifactDamage[1]) * (1 + artifactDamage[2]);
     }
     
     private void FixedUpdate()

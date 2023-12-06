@@ -48,6 +48,7 @@ public class UI_SystemMessage : UI_Scene
         _background = Get<Image>((int)Images.Background);
         _background.gameObject.SetActive(false);
         _MessageText = Get<TMP_Text>((int)TMPs.MessageTMP);
+        _MessageText.gameObject.SetActive(false);
     }
 
     public void Alert(string text, Color color)
@@ -66,10 +67,12 @@ public class UI_SystemMessage : UI_Scene
     public void OpenUI()
     {
         _background.gameObject.SetActive(true);
+        _MessageText.gameObject.SetActive(true);
     }
 
     public void CloseUI()
     {
         _background.gameObject.SetActive(false);
+        _MessageText.gameObject.SetActive(false);
     }
 }

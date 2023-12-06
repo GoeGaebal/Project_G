@@ -5,9 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Item/ArmorItem")]
 public class ArmorItem : EquipableItem
 {
-    public int Damage => _damage;
-    public int Hp => _hp;
+    public override void Select()
+    {
+        base.Select();
+    }
 
-    [SerializeField] private int _damage = 0;
-    [SerializeField] private int _hp = 0;
+    public override void Deselect()
+    {
+        base.Deselect();
+    }
+
+    public override void Skill()
+    {
+        base.Skill();
+    }
 }

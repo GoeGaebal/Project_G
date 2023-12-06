@@ -9,5 +9,18 @@ public class FoodItem : UsableItem
 
     [SerializeField] private float _healAmount = 0;
 
-    //public void UseItem()//음식 먹기
+    public override void Select()
+    {
+        base.Select();
+    }
+
+    public override void Deselect()
+    {
+        base.Deselect();
+    }
+
+    public override void Skill()
+    {
+        base.Skill();
+    }
 }

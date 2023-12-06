@@ -666,27 +666,7 @@ MonoBehaviour:
   weaponAnimator: {fileID: 292276533582991692}
   attackSpeed: 1
   attackDamage: 10
-  artifactDamage:
-  - 0
-  - 0
-  - 0
-  equipDamage:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  artifactHP:
-  - 0
-  - 0
-  - 0
-  equipHP:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  realDamage: 0
+  realDamage: 100
   _playerBody: {fileID: 0}
   _playerLeg: {fileID: 0}
   Left_Arm: {fileID: 4516329075764670868}

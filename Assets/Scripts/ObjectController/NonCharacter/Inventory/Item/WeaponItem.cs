@@ -13,4 +13,19 @@ public class WeaponItem : EquipableItem
     {
         PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
     }
+
+    public override void Select()
+    {
+        base.Select();
+    }
+
+    public override void Deselect()
+    {
+        base.Deselect();
+    }
+
+    public override void Skill()
+    {
+        base.Skill();
+    }
 }
