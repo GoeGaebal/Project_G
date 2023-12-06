@@ -99,26 +99,34 @@ public class UI_Item : UI_Base
             {
                 //포션 슬롯의 경우
                 if (idex == 40 &&
-                currentItem.item == item &&
-                count < ((CountableItem)item).MaxCount)
+                currentItem.item == item)
                 {
-                    if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
+                    if(count < ((CountableItem)item).MaxCount)
                     {
-                        currentItem.count -= ((CountableItem)item).MaxCount - count;
-                        currentItem.RefreshCount();
-                        count = ((CountableItem)item).MaxCount;
-                        UI_Inven.potion1Text.text = count.ToString();
-                    }
-                    else//아이템 합침
-                    {
-                        currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
-                        currentItem.parentSlot.ItemInThisSlot = null;
+                        if (count + currentItem.count > ((CountableItem)item).MaxCount)//아이템 덜어줌
+                        {
+                            currentItem.count -= ((CountableItem)item).MaxCount - count;
+                            currentItem.RefreshCount();
+                            count = ((CountableItem)item).MaxCount;
+                            UI_Inven.potion1Text.text = count.ToString();
+                        }
+                        else//아이템 합침
+                        {
+                            currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+                            currentItem.parentSlot.ItemInThisSlot = null;
 
-                        count += currentItem.count;
-                        currentItem.RemoveItem();
-                        UI_Inven.potion1Text.text = count.ToString();
+                            count += currentItem.count;
+                            currentItem.RemoveItem();
+                            UI_Inven.potion1Text.text = count.ToString();
+                        }
+                        RefreshCount();
                     }
-                    RefreshCount();
+                    else
+                    {
+                        int temp = count;
+                        count = currentItem.count;
+                        currentItem.count = temp;
+                    }
                 }
                 else//포션 슬롯이 아닌 경우
                 {//TODO: 무기 이미지 제대로 안 바뀜
@@ -173,7 +181,7 @@ public class UI_Item : UI_Base
             }
             else//아이템 스왑
             {
-                if (currentItem.transform.parent.GetComponent<UI_Slot>().isEquip)//장비창에서 인벤토리,창고로 옮길 때
+                if (currentItem.parentBeforeDrag.GetComponent<UI_Slot>().isEquip)//장비창에서 인벤토리,창고로 옮길 때
                 {
                     if (currentItem.item.ID / 100 == item.ID / 100)
                     {
