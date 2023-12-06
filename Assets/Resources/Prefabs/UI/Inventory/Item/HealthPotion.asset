@@ -18,4 +18,4 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: e52ea25af699fd445b7046374f81a5b9, type: 3}
   _droppedItemPrefab: {fileID: 0}
   _maxCount: 3
-  recoveryAmount: 0
+  recoveryAmount: 5

@@ -51,15 +51,14 @@ public class UI_Artifact : UI_Scene
         _ui.SetActive(false);
         _content = Get<GameObject>((int)GameObjects.Content);
 
-        Managers.Artifact.AddScroll("Artifact_Deselect");
-        Managers.Artifact.AddScroll("Artifact_1");
-        Managers.Artifact.AddScroll("Artifact_2");
-
-        for (int i = 0; i < Managers.Artifact.artifactScrolls.Length; i++)
+        for (int i = 0; i < Managers.Artifact.artifactScrolls.Count; i++)
         {
             var slot = Managers.Artifact.MakeArtifactSlot(_content.transform);
             slot.Init();
             slot.SetArtifact(Managers.Artifact.artifactScrolls[i]);
+
+            Managers.Artifact.artifactScrollSlots.Add(slot);
+
             for (int j = 0; j < 3; j++)
             {//착용중인 유물이면
                 if(Managers.Artifact.artifacts[j] == slot.artifact)
@@ -72,6 +71,11 @@ public class UI_Artifact : UI_Scene
         }
 
         GetButton((int)Buttons.CloseButton).gameObject.BindEvent(CloseButton);
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Artifact.artifactScrollSlots.Clear();
     }
 
     public void OpenArtifact()

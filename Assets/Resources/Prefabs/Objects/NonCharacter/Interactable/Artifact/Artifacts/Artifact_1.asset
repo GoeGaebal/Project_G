@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3941639603a456d4ba3ea69546fff1e2, type: 3}
-  m_Name: Artifact_2
+  m_Script: {fileID: 11500000, guid: 58c578a4705065647a01beb45b43d4f0, type: 3}
+  m_Name: Artifact_1
   m_EditorClassIdentifier: 
-  _id: 0
+  _id: 1
+  _name: Bush
+  _tooltip: 
   _Image: {fileID: 21300000, guid: 0e10dacefeace894b87a5bb7d30ceb55, type: 3}
-  _hpIncrease: 0
-  _damageIncrease: 0
-  _shipSpeedIncrease: 0

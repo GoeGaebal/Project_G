@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Item/FoodItem")]
-public class FoodItem : UsableItem
+[CreateAssetMenu(menuName = "Artifact/Artifact_0")]
+
+public class Artifact_0 : Artifact
 {
-    public float HealAmount => _healAmount;
-
-    [SerializeField] private float _healAmount = 0;
-
     public override void Select()
     {
         base.Select();
+
+        Debug.Log("아티팩트 장착 해제됨");
     }
 
     public override void Deselect()
