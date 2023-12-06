@@ -31,17 +31,24 @@ public class UI_Leaf : UI_Scene
     // Start is called before the first frame update
     void Start()
     {
-         Bind<GameObject>(typeof(GameObjects));
+        Init();
+    }
+
+    public override void Init()
+    {
+        //base.init();
+        Managers.UI.SetCanvas(gameObject, true);
+
+        Bind<GameObject>(typeof(GameObjects));
         _imageList[0] = Get<GameObject>((int)GameObjects.Leaf1);
         _imageList[1] = Get<GameObject>((int)GameObjects.Leaf2);
         _imageList[2] = Get<GameObject>((int)GameObjects.Leaf3);
 
-
-        for(int i = 0;i<_availableCount;i++)
+        for (int i = 0; i < _availableCount; i++)
         {
             _imageList[i].GetComponent<Image>().color = colorAvailable;
         }
-        for(int i = _availableCount;i<_imageList.Count;i++)
+        for (int i = _availableCount; i < _imageList.Count; i++)
         {
             _imageList[i].GetComponent<Image>().color = colorUnavailable;
         }
