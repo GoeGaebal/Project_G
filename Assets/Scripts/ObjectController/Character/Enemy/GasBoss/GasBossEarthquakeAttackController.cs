@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GasBossAttackController : MonsterAttackController
+public class GasBossEarthquakeAttackController : MonsterAttackController
 {
     private void OnEnable() {
         StartCoroutine(DisappearAttackEffect());

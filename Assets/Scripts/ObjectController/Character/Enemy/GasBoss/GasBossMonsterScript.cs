@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class GasBossMonster : BasicMonster
+public class GasBossMonsterScript : BasicMonster
 {
     
     private enum Attack{
@@ -13,6 +13,7 @@ public class GasBossMonster : BasicMonster
 
     [SerializeField] float attackPeriod;
     [SerializeField] GameObject earthquakeAttackGameObj;
+    [SerializeField] GameObject fireFlamePrefab;
     protected override void Start()
     {
         base.Start();
@@ -54,7 +55,7 @@ public class GasBossMonster : BasicMonster
                     _animator.SetTrigger("fireflame");
                     break;
                     default:
-                        break; 
+                    break; 
                 }
             
                 lastAttackTime = 0;
@@ -77,5 +78,12 @@ public class GasBossMonster : BasicMonster
     {
         earthquakeAttackGameObj.SetActive(true);
     }
-
+    public void DoFireFlameDamage()
+    {
+        List<Player> values = new List<Player>(Managers.Object.PlayerDict.Values);
+        foreach(var player in values)
+        {
+            Instantiate(fireFlamePrefab,player.transform.position, transform.rotation);
+        }
+    }
 }

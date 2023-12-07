@@ -304,7 +304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1404626175306092760
 Transform:
   m_ObjectHideFlags: 0
@@ -516,6 +516,8 @@ MonoBehaviour:
   isSpriteRightSide: 0
   attackPeriod: 5
   earthquakeAttackGameObj: {fileID: 2519255867479916537}
+  fireFlamePrefab: {fileID: 3513432331158423461, guid: b5ffd82ddc446db4dbc34003991e9125,
+    type: 3}
 --- !u!61 &4024575825443991884
 BoxCollider2D:
   m_ObjectHideFlags: 0
