@@ -17,7 +17,6 @@ class MonsterWeaponController : Weapon
 {
     public MonsterWeaponController()
     {
-        Debug.Log("monster weapon controller created");
         AddTargetLayer((int)EnumLayerMask.Player);
     }
 }

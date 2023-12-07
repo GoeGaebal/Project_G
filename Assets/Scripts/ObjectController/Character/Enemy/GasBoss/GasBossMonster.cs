@@ -12,6 +12,7 @@ public class GasBossMonster : BasicMonster
     }
 
     [SerializeField] float attackPeriod;
+    [SerializeField] GameObject earthquakeAttackGameObj;
     protected override void Start()
     {
         base.Start();
@@ -74,7 +75,7 @@ public class GasBossMonster : BasicMonster
 
     public void DoEarthquakeDamage()
     {
-        Debug.Log("지진 데미지");
+        earthquakeAttackGameObj.SetActive(true);
     }
 
 }
