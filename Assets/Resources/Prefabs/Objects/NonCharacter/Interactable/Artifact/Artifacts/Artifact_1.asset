@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Artifact_1
   m_EditorClassIdentifier: 
   _id: 1
-  _name: Bush
+  _name: Cooler
   _tooltip: 
-  _Image: {fileID: 21300000, guid: 0e10dacefeace894b87a5bb7d30ceb55, type: 3}
+  _Image: {fileID: 21300000, guid: 675bc36eb6fb81d4ab91825b04b25ba8, type: 3}
+  _damageAdd: 0
+  _damageMul: 0.2
+  _hpAdd: 0
+  _hpMul: 0.2

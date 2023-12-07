@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Artifact_2
   m_EditorClassIdentifier: 
   _id: 2
-  _name: Shell
+  _name: UPS
   _tooltip: 
-  _Image: {fileID: 21300000, guid: 1da499ead2cc954489679c6779c18f55, type: 3}
+  _Image: {fileID: 21300000, guid: 920afc5e0ef68804d9f3cc34d28f3fff, type: 3}
+  _damageAdd: 0
+  _damageMul: 0.1
+  _hpAdd: 0
+  _hpMul: 0.1

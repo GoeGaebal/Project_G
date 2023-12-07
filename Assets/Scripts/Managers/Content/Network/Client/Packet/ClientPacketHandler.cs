@@ -169,7 +169,15 @@ partial class PacketHandler
 	{
 		if (packet is not S_ArtifactEvent artifactEvent) return;
 		Managers.Artifact.SetCurrentIndex(artifactEvent.CurrentId);
-		Managers.Artifact.SelectArtifact(Managers.Data.ArtifactDict[artifactEvent.ArtifactId]);
+        if (artifactEvent.ArtifactId == 0)
+        {
+			Managers.Artifact.DeselectArtifact();
+        }
+        else
+        {
+			Managers.Artifact.SelectArtifact(Managers.Data.ArtifactDict[artifactEvent.ArtifactId]);
+		}
+		
 	}
 	
 	public static void S_ChangeNameHandler(PacketSession session, IMessage packet)

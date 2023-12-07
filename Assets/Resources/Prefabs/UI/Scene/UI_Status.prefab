@@ -1057,7 +1057,6 @@ GameObject:
   - component: {fileID: 5977300824416186316}
   - component: {fileID: 4953270962889589726}
   - component: {fileID: 3777876916974365124}
-  - component: {fileID: 3741866784497305797}
   m_Layer: 5
   m_Name: ActualMenuBackground
   m_TagString: Untagged
@@ -1123,21 +1122,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3741866784497305797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1531892419140347445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.47058824, g: 0.47058824, b: 0.47058824, a: 0.5019608}
-  m_EffectDistance: {x: 1, y: 0}
-  m_UseGraphicAlpha: 1
 --- !u!1 &1739878950455249558
 GameObject:
   m_ObjectHideFlags: 0
@@ -6695,7 +6679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11466182, guid: d2c67c9f8ecea45ad946dc423474b514, type: 3}
       propertyPath: m_Value
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11466182, guid: d2c67c9f8ecea45ad946dc423474b514, type: 3}
       propertyPath: m_MaxValue
@@ -6857,7 +6841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11466182, guid: d2c67c9f8ecea45ad946dc423474b514, type: 3}
       propertyPath: m_Value
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11466182, guid: d2c67c9f8ecea45ad946dc423474b514, type: 3}
       propertyPath: m_MaxValue

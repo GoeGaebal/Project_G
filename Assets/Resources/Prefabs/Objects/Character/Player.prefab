@@ -280,6 +280,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6945237833950040439}
+  - component: {fileID: 4403425398417111377}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -312,6 +313,17 @@ Transform:
   m_Father: {fileID: 817959898969206247}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &4403425398417111377
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2175868003013974073}
+  m_Enabled: 1
+  m_SortingLayerID: -44025399
+  m_SortingLayer: 2
+  m_SortingOrder: 3
 --- !u!1 &2502271096968898612
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +781,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  weaponAnimator: {fileID: 0}
   attackSpeed: 1
   attackDamage: 10
   realDamage: 100

@@ -25,16 +25,14 @@ public  class EquipableItem : Item
     {
         base.Select();
 
-        Managers.Network.LocalPlayer.realDamage += Damage;
+        Managers.Network.LocalPlayer.attackDamage += Damage;
         Managers.Network.LocalPlayer.StatInfo.MaxHp += HP;
         Managers.Network.LocalPlayer.RestoreHP(Managers.Network.LocalPlayer.HP + HP);
-        Debug.Log("플레이어 체력: " + Managers.Network.LocalPlayer.HP + " / " + Managers.Network.LocalPlayer.maxHP);
-        Debug.Log("플레이어 대미지: " + Managers.Network.LocalPlayer.realDamage);
     }
     public override void Deselect()
     {
         base.Deselect();
-        Managers.Network.LocalPlayer.realDamage -= Damage;
+        Managers.Network.LocalPlayer.attackDamage -= Damage;
         Managers.Network.LocalPlayer.StatInfo.MaxHp -= HP;
         Managers.Network.LocalPlayer.RestoreHP(-HP);
     }

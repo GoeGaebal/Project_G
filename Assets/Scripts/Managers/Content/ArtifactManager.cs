@@ -39,6 +39,7 @@ public class ArtifactManager
         AddScroll("Artifact_0");
         AddScroll("Artifact_1");
         AddScroll("Artifact_2");
+        AddScroll("Artifact_3");
     }
 
     public void AddScroll(string path)//새로운 유물 획득

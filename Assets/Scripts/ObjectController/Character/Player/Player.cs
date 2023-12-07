@@ -13,11 +13,11 @@ public class Player : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] private float moveSpeed = 5.0f;
     public float attackSpeed = 10f;
-    public float attackDamage = 100f;
+    public float attackDamage = 100f;//합연산 스탯
 
     public Action[] ArtifactSkills = new Action[3];
 
-    public float realDamage = 100f;//장비, 유물 스탯 연산 이후 공격력
+    public float damageMultiply = 1f;//곱연산 스탯 적용
 
     private PlayerCameraController playerCameraController;
     private WeaponPivotController _wpc;
@@ -198,8 +198,8 @@ public class Player : CreatureController, IAttackable, IMoveable
     
     public void OnAttack(CreatureState prevState)
     {
-        if(prevState != CreatureState.Attack)
-            _wpc.Attack(realDamage, attackSpeed);
+        if (prevState != CreatureState.Attack)
+            _wpc.Attack(attackDamage * damageMultiply, attackSpeed);
     }
 
     public void EquipWeapon(int itemId)

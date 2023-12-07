@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SoundManager
 {
-    private float _BgmVolume = 0.5f;
-    private float _WeatherVolume = 0.5f;
-    private float _EffectVolume = 0.5f;
+    private float _BgmVolume = 0.2f;
+    private float _WeatherVolume = 0.2f;
+    private float _EffectVolume = 0.2f;
 
     AudioSource[] _audioSources = new AudioSource[(int)Define.Sound.MaxCount];
     Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();

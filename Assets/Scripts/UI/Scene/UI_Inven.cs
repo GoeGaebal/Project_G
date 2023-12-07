@@ -95,13 +95,14 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         if (Managers.Network.LocalPlayer != null)
         {
             _hpText.text = "체력: " + ((int)(Managers.Network.LocalPlayer.HP)).ToString() + " / " + ((int)(Managers.Network.LocalPlayer.maxHP)).ToString();
-            _adText.text = "공격력: " + ((int)(Managers.Network.LocalPlayer.realDamage)).ToString();
+            _adText.text = "공격력: " + ((int)(Managers.Network.LocalPlayer.attackDamage * Managers.Network.LocalPlayer.damageMultiply)).ToString();
         }
     }
 
     public override void Init()
     {
-        base.Init();
+        //base.Init();
+        Managers.UI.SetCanvas(gameObject, true);
 
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
