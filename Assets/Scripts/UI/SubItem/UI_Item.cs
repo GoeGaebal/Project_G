@@ -94,11 +94,11 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            int idex = currentItem.item.ID / 100;
-            if (idex == item.ID/100)//같은 장비에 해당하는 장비창일 때
+            int idex = currentItem.item.ID / 1000;
+            if (idex == item.ID/1000)//같은 장비에 해당하는 장비창일 때
             {
                 //포션 슬롯의 경우
-                if (idex == 40 &&
+                if (idex == 4 &&
                 currentItem.item == item)
                 {
                     if(count < ((CountableItem)item).MaxCount)
@@ -182,7 +182,7 @@ public class UI_Item : UI_Base
             {
                 if (currentItem.parentBeforeDrag.GetComponent<UI_Slot>().isEquip)//장비창에서 인벤토리,창고로 옮길 때
                 {
-                    if (currentItem.item.ID / 100 == item.ID / 100)
+                    if (currentItem.item.ID / 1000 == item.ID / 1000)
                     {
                         currentItem.item.Deselect();
                         item.Select();

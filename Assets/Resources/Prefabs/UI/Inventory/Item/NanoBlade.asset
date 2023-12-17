@@ -17,5 +17,6 @@ MonoBehaviour:
   _tooltip: "\uBD84\uC790\uB2E8\uC704\uB85C \uBCA0\uC5B4\uB0B4\uB294 \uBB34\uAE30"
   _icon: {fileID: 21300000, guid: 3204a2f2c385ee14084b0f3e40befbbd, type: 3}
   _droppedItemPrefab: {fileID: 0}
-  _attackDamage: 1
+  _hp: 0
+  _damage: 3
   _attackSpeed: 1
