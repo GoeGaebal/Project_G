@@ -63,10 +63,10 @@ public abstract class CreatureController : NetworkObject, IDamageable
 
     public abstract void OnHit(CreatureState state);
 
-    public virtual void UpdateHp(float hp, bool dead) 
+    public virtual void UpdateHp(float hp, bool dead)
     {
         StatInfo.Hp = hp;
-        if (dead) State = CreatureState.Dead;
+        State = dead ? CreatureState.Dead : CreatureState.Idle;
     }
 
     protected virtual void OnEnable() { // 객체가 enable 될 때 호출되는 함수

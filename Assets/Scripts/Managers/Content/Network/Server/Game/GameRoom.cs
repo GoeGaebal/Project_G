@@ -103,8 +103,17 @@ public class GameRoom
 
     public void LoadScene(SceneType type)
     {
-        S_LoadScene packet = new S_LoadScene();
-        packet.SceneType = type;
+        S_LoadScene packet = new S_LoadScene
+        {
+            SceneType = type,
+            PosX = 0.0f,
+            PosY = 0.0f
+        };
+        foreach (var player in _players.Values)
+        {
+            player.PosInfo.PosX = packet.PosX;
+            player.PosInfo.PosY = packet.PosY;
+        }
         _objects.Clear();
         Managers.Network.Server.Room.Broadcast(packet);
     }

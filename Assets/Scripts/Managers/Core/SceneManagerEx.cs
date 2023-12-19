@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneManagerEx
 {
-    public BaseScene CurrentScene { get { return GameObject.FindObjectOfType<BaseScene>(); } }
+    public BaseScene CurrentScene => Object.FindObjectOfType<BaseScene>();
     private AsyncOperation _asyncOp = null;
     float minTime = 2.0f;
     float loadedTime = 0;

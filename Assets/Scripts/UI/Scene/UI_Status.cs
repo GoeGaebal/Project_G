@@ -289,4 +289,9 @@ public class UI_Status : UI_Scene
     {
         Managers.Sound.ChangeEffectVolume(volume);
     }
+
+    public void OnDestroy()
+    {
+        Managers.Input.UIActions.Option.RemoveEvent(OnOffOption);
+    }
 }

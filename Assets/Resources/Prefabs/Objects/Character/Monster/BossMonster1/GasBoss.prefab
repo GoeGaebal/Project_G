@@ -103,8 +103,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_Sprite: {fileID: 1980305186, guid: b396977d4da2062438dc168302dd3e8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -187,8 +187,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_Sprite: {fileID: -301728676, guid: b396977d4da2062438dc168302dd3e8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -271,8 +271,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_Sprite: {fileID: 1622165158, guid: b396977d4da2062438dc168302dd3e8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPoint: 0
   attackCooldown: 0
-  detectRadius: 3
+  detectRadius: 8
   chaseTargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -636,8 +636,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_Sprite: {fileID: 1650341135, guid: b396977d4da2062438dc168302dd3e8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

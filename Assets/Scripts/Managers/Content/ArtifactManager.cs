@@ -77,7 +77,7 @@ public class ArtifactManager
 
     public void DeselectArtifact()
     {
-        artifacts[currentIndex].Deselect();
+        artifacts[currentIndex]?.Deselect();
         artifacts[currentIndex] = null;
         equippedArtifactSlots[currentIndex] = null;
         ArtifactTileSet.resetImage(currentIndex);

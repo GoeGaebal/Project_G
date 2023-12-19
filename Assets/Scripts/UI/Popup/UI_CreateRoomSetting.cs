@@ -76,21 +76,26 @@ public class UI_CreateRoomSetting : UI_Popup
         GetButton((int)Buttons.ExitBtn).onClick.AddListener((() => { Managers.UI.ClosePopupUI(); }));
         loadingSet = GetObject((int)GameObjects.LoadingSet);
         loadingSet.SetActive(false);
-        
+
+        roomPort.text = "7777";
         createRoomBtn.onClick.RemoveAllListeners();
         createRoomBtn.onClick.AddListener(() =>
         {
             SetInteractableButtons(false);
             var portText = roomPort.text.Trim((char)8203);;
-            var name = userName.text.Trim((char)8203);
-            if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(() => { _isConnectedSucceed = true;}, () => _isConnectedFailed = true);
+            var networkUserName = userName.text.Trim((char)8203);
+            if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(() =>
+            {
+                Managers.Network.UserName = networkUserName;
+                _isConnectedSucceed = true;
+            }, () => _isConnectedFailed = true);
             else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if (!name.IsNullOrEmpty() && name.Length <= 6)
+                if (!networkUserName.IsNullOrEmpty() && networkUserName.Length <= 6)
                 {
                     Managers.Network.CreateRoom(() =>
                     {
-                        Managers.Network.UserName = name;
+                        Managers.Network.UserName = networkUserName;
                         _isConnectedSucceed = true;
                     }, () => _isConnectedFailed = true ,port);
                 }

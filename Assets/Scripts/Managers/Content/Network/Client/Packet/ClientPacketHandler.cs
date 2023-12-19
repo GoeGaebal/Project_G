@@ -123,6 +123,7 @@ partial class PacketHandler
 		if (loadScenePacket == null) return;
 		
 		Managers.Scene.LoadScene(loadScenePacket.SceneType);
+		if(loadScenePacket.SceneType == SceneType.Ship) Managers.Network.LocalPlayer.UpdateHp(Managers.Network.LocalPlayer.maxHP, false);
 		Managers.Network.LocalPlayer.transform.position = new(loadScenePacket.PosX, loadScenePacket.PosY);
 	}
 

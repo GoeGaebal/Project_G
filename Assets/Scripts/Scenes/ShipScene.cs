@@ -41,6 +41,7 @@ public class ShipScene : BaseScene
 
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
+        // Managers.Network.ResetPlayer();
     }
 
     public override void Clear()

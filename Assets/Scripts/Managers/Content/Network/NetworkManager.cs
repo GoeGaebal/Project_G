@@ -3,6 +3,7 @@
 // 2. Player들을 미리 찾아놓기
 
 using System;
+using UnityEngine;
 
 public class NetworkManager
 {
@@ -17,6 +18,18 @@ public class NetworkManager
     {
         Client.Init();
         Server.Init();
+    }
+
+    public void ResetPlayer()
+    {
+        var player = Managers.Resource.Instantiate("Objects/Character/Player").GetComponent<Player>();
+        player.name = LocalPlayer.name;
+        Managers.Object.PlayerDict[LocalPlayer.Id] = player;
+        LocalPlayer.Info = player.Info;
+        Managers.Resource.Destroy(LocalPlayer.gameObject);
+        LocalPlayer = player;
+        LocalPlayer.BindingAction();
+        GameObject.DontDestroyOnLoad(LocalPlayer.gameObject);
     }
     
     public void CreateRoom(Action onConnectedSucceed, Action onConnectedFailed, int port = 7777)
