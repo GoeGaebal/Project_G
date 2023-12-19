@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387a1275cf852ae40b7651dc9e6cda55, type: 3}
   m_Name: IronIngot
   m_EditorClassIdentifier: 
-  _id: 5101
+  _id: 4101
   _name: "\uCCA0\uAD34"
   _tooltip: "\uCCA0\uAD34, \uB2E4\uC591\uD55C \uAC78 \uB9CC\uB4E4 \uC218 \uC788\uC744
     \uAC83 \uAC19\uB2E4."

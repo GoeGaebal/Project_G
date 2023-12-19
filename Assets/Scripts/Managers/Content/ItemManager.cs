@@ -28,15 +28,9 @@ public class ItemManager
         inventoryCount = new int[_inventoryCount];
         equipCount = new int[_equipCount];
         chestCount = new int[_chestCount];
-        inventorySlots[0] = Managers.Data.ItemDict[1001];
-        inventoryCount[0] = 1;
-        inventorySlots[1] = Managers.Data.ItemDict[1002];
-        inventoryCount[1] = 1;
-        inventorySlots[2] = Managers.Data.ItemDict[1003];
-        inventoryCount[2] = 1;
-        inventorySlots[3] = Managers.Data.ItemDict[1004];
-        inventoryCount[3] = 1;
-        
+
+        equipSlots[0] = Managers.Data.ItemDict[1001];
+        equipCount[0] = 1;
     }
 
     public void SpawnNewItem(Item item, UI_Slot slot)//슬롯에 새로운 아이템 추가

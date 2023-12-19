@@ -18,5 +18,5 @@ MonoBehaviour:
   _icon: {fileID: 1037468264, guid: 964015c7dfd5a524ca7c38832f904d61, type: 3}
   _droppedItemPrefab: {fileID: 0}
   _hp: 0
-  _damage: 30
+  _damage: 2
   _attackSpeed: 1

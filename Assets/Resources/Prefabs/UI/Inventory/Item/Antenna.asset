@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 248982576d4109e4fa19e6da063f4273, type: 3}
   m_Name: Antenna
   m_EditorClassIdentifier: 
-  _id: 5003
+  _id: 2001
   _name: "\uC548\uD14C\uB098"
   _tooltip: "\uC804\uD30C\uC218\uC2E0\uC7A5\uCE58"
   _icon: {fileID: 21300000, guid: ef742996c7c601d4d853f09880c12c12, type: 3}
   _droppedItemPrefab: {fileID: 0}
-  _attackDamage: 1
+  _hp: 1
   _damage: 0
-  _hp: 0
