@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SoundManager
 {
-    private float _BgmVolume = 0.2f;
-    private float _WeatherVolume = 0.2f;
-    private float _EffectVolume = 0.2f;
+    [HideInInspector] public float bgmVolume = 0.2f;
+    [HideInInspector] public float weatherVolume = 0.2f;
+    [HideInInspector] public float effectVolume = 0.2f;
 
     AudioSource[] _audioSources = new AudioSource[(int)Define.Sound.MaxCount];
     Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
@@ -76,7 +76,7 @@ public class SoundManager
 			if (audioSource.isPlaying)
 				audioSource.Stop();
 
-            audioSource.volume = _BgmVolume;
+            audioSource.volume = bgmVolume;
 			audioSource.pitch = pitch;
 			audioSource.clip = audioClip;
 			audioSource.Play();
@@ -87,7 +87,7 @@ public class SoundManager
             if (audioSource.isPlaying)
                 audioSource.Stop();
 
-            audioSource.volume = _WeatherVolume;
+            audioSource.volume = weatherVolume;
             audioSource.pitch = pitch;
             audioSource.clip = audioClip;
             audioSource.Play();
@@ -95,7 +95,7 @@ public class SoundManager
 		else
 		{
 			AudioSource audioSource = _audioSources[(int)Define.Sound.Effect];
-            audioSource.volume = _EffectVolume;
+            audioSource.volume = effectVolume;
             audioSource.pitch = pitch;
 			audioSource.PlayOneShot(audioClip);
 		}
@@ -132,8 +132,8 @@ public class SoundManager
         AudioSource audioSource = _audioSources[(int)Define.Sound.Bgm];
         float tempTime = audioSource.time;
         audioSource.Stop();
-        _BgmVolume = volume;
-        audioSource.volume = _BgmVolume;
+        bgmVolume = volume;
+        audioSource.volume = bgmVolume;
         audioSource.time = tempTime;
         audioSource.Play();
     }
@@ -143,8 +143,8 @@ public class SoundManager
         AudioSource audioSource = _audioSources[(int)Define.Sound.Weather];
         float tempTime = audioSource.time;
         audioSource.Stop();
-        _WeatherVolume = volume;
-        audioSource.volume = _WeatherVolume;
+        weatherVolume = volume;
+        audioSource.volume = weatherVolume;
         audioSource.time = tempTime;
         audioSource.Play();
     }
@@ -154,8 +154,8 @@ public class SoundManager
         AudioSource audioSource = _audioSources[(int)Define.Sound.Effect];
         float tempTime = audioSource.time;
         audioSource.Stop();
-        _EffectVolume = volume;
-        audioSource.volume = _EffectVolume;
+        effectVolume = volume;
+        audioSource.volume = effectVolume;
         audioSource.time = tempTime;
         audioSource.Play();
     }

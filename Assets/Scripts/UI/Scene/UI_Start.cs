@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Application = UnityEngine.Device.Application;
 
 public class UI_Start : UI_Scene
@@ -53,6 +54,8 @@ public class UI_Start : UI_Scene
         _loadingText = GetTextMeshPro((int)Texts.LoadingText);
         LoadingIcon = GetObject((int)GameObjects.LoadingIcon);
         LoadingIcon.SetActive(false);
+
+        GetButton((int)Buttons.OptionBtn).gameObject.BindEvent(OpenOption);
     }
 
     public void SetInteractableButtons(bool value)
@@ -65,5 +68,11 @@ public class UI_Start : UI_Scene
     public void ShowUI_Lobby()
     {
         Managers.UI.ShowPopupUI<UI_Lobby>();
+    }
+
+    private void OpenOption(PointerEventData evt)
+    {
+        Managers.UI.ShowPopupUI<UI_Option>();
+        Managers.Option.isOptionPanelOn = true;
     }
 }
