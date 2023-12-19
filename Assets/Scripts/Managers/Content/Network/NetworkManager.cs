@@ -32,10 +32,11 @@ public class NetworkManager
         GameObject.DontDestroyOnLoad(LocalPlayer.gameObject);
     }
     
-    public void CreateRoom(Action onConnectedSucceed, Action onConnectedFailed, int port = 7777)
+    public bool CreateRoom(Action onConnectedSucceed, Action onConnectedFailed, int port = 7777)
     {
         IsHost = true;
-        Managers.Network.Server.Listen(port);
+        if (!Managers.Network.Server.Listen(port)) return false;
         Managers.Network.Client.Connect(onConnectedSucceed, onConnectedFailed, port);
+        return true;
     }
 }

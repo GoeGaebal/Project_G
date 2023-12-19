@@ -13,17 +13,24 @@ namespace ServerCore
 		Socket _listenSocket;
 		Func<Session> _sessionFactory;
 
-		public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
+		public bool Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
 		{
-			_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-			_sessionFactory += sessionFactory;
+			try
+			{
+				_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+				_sessionFactory += sessionFactory;
 
-			// 문지기 교육
-			_listenSocket.Bind(endPoint);
+				// 문지기 교육
+				_listenSocket.Bind(endPoint);
 
-			// 영업 시작
-			// backlog : 최대 대기수
-			_listenSocket.Listen(backlog);
+				// 영업 시작
+				// backlog : 최대 대기수
+				_listenSocket.Listen(backlog);
+			}
+			catch (SocketException e)
+			{
+				return false;
+			}
 
 			for (int i = 0; i < register; i++)
 			{
@@ -31,6 +38,8 @@ namespace ServerCore
 				args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
 				RegisterAccept(args);
 			}
+
+			return true;
 		}
 
 		void RegisterAccept(SocketAsyncEventArgs args)

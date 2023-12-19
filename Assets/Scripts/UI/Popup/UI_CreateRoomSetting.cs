@@ -84,11 +84,17 @@ public class UI_CreateRoomSetting : UI_Popup
             SetInteractableButtons(false);
             var portText = roomPort.text.Trim((char)8203);;
             var networkUserName = userName.text.Trim((char)8203);
-            if(portText.IsNullOrEmpty()) Managers.Network.CreateRoom(() =>
+            if(portText.IsNullOrEmpty())
             {
-                Managers.Network.UserName = networkUserName;
-                _isConnectedSucceed = true;
-            }, () => _isConnectedFailed = true);
+
+                if (Managers.Network.CreateRoom(() =>
+                    {
+                        Managers.Network.UserName = networkUserName;
+                        _isConnectedSucceed = true;
+                    }, () => _isConnectedFailed = true)) return;
+                warningText.SetText("서버 생성에 실패하였습니다. 이미 사용중인 포트일 가능성이 있습니다.");
+                SetInteractableButtons(true);
+            }
             else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
                 if (!networkUserName.IsNullOrEmpty() && networkUserName.Length <= 6)
