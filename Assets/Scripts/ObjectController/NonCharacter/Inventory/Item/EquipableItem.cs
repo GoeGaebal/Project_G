@@ -9,7 +9,13 @@ public  class EquipableItem : Item
 
     [SerializeField] private float _hp;
     [SerializeField] private float _damage;
-    
+
+    public virtual void Init(int id, string name, string tooltip, string iconPath, float hp, float damage)
+    {
+        base.Init(id,name,tooltip,iconPath);
+        _hp = hp;
+        _damage = damage;
+    }
     public virtual void ChangeEquipableItem()
     {}
     public override void Select()

@@ -62,6 +62,8 @@ public class Portal : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        movable = false;
     }
 
     public void SetColor(Color color)

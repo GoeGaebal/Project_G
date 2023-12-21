@@ -14,7 +14,14 @@ public class Item : ScriptableObject
     [Multiline]
     [SerializeField] private string _tooltip = "";
     [SerializeField] private Sprite _icon;
-    [SerializeField] GameObject _droppedItemPrefab;
+
+    public virtual void Init(int id, string name, string tooltip, string iconPath)
+    {
+        _id = id;
+        _name = name;
+        _tooltip = tooltip;
+        _icon = Managers.Resource.Load<Sprite>(iconPath);
+    }
 
     public virtual void Select()
     {

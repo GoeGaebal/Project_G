@@ -9,6 +9,12 @@ public class FoodItem : UsableItem
 
     [SerializeField] private float _healAmount = 0;
 
+    public virtual void Init(int id, string name, string tooltip, string iconPath, int maxCount, float healAmount)
+    {
+        base.Init(id, name, tooltip, iconPath, maxCount);
+        _healAmount = healAmount;
+    }
+
     public override void Select()
     {
         base.Select();

@@ -30,6 +30,7 @@ public class SceneManagerEx
     /// /param>
 	public void LoadScene(SceneType type)
     {
+        if (nextSceneName == nameof(type)) return;
         Managers.Clear();
         SceneManager.LoadScene(GetSceneName(SceneType.Loading));
         _isLoading = true;

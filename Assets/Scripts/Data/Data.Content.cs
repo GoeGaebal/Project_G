@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
 #region Map
 [Serializable]
 public class MapData
@@ -82,18 +85,79 @@ public class GatheringDataLoader : ILoader<int, GatheringData>
 public class ItemData
 {
     public int id;
-    public string name;
+    public string Name;
+    public string Tooltip;
+    public string icon;
+    public int MaxCount;
+    public float HealAmount;
+    public int Hp;
+    public int Damage;
+    public float AttackSpeed;
+    public int RecoveryAmount;
 }
 
-public class ItemDataLoader : ILoader<int, ItemData>
+public class ItemDataLoader : ILoader<int, Item>
 {
     public List<ItemData> items = new();
-
-    public Dictionary<int, ItemData> MakeDict()
+    
+    public Dictionary<int, Item> MakeDict()
     {
-        Dictionary<int, ItemData> dict = new();
+        Dictionary<int, Item> dict = new();
         foreach (ItemData item in items)
-            dict.Add(item.id, item);
+        {
+            var type = item.id / 1000;
+            string iconPath = null;
+            switch (type)
+            {
+                   
+                case 1:
+                {
+                    var weapon = ScriptableObject.CreateInstance<WeaponItem>();
+                    iconPath = Path.Combine("Art/Item/Weapon", item.icon);
+                    weapon.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, hp: item.Hp, damage: item.Damage, attackSpeed: item.AttackSpeed);
+                    dict.Add(item.id, weapon);
+                    break;
+                }
+                case 2:
+                {
+                    var armor = ScriptableObject.CreateInstance<ArmorItem>();
+                    iconPath = Path.Combine("Art/Item/Armor", item.icon);
+                    armor.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, hp: item.Hp, damage: item.Damage);
+                    dict.Add(item.id, armor);
+                    break;
+                }
+                case 3:
+                {
+                    var healthPotion = ScriptableObject.CreateInstance<HealthPotionItem>();
+                    iconPath = Path.Combine("Art/Item/HealthPotion", item.icon);
+                    healthPotion.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, maxCount: item.MaxCount);
+                    dict.Add(item.id, healthPotion);
+                    break;
+                }
+                case 4:
+                {
+                    var type2 = (item.id % 1000) / 100;
+                    if (type2 == 0)
+                    {
+                        var food = ScriptableObject.CreateInstance<FoodItem>();
+                        iconPath = Path.Combine("Art/Item/Food", item.icon);
+                        food.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, maxCount: item.MaxCount, healAmount: item.HealAmount);
+                        dict.Add(item.id, food);
+                    }
+                    else
+                    {
+                        var resource = ScriptableObject.CreateInstance<ResourceItem>();
+                        iconPath = Path.Combine("Art/Item/Resource", item.icon);
+                        resource.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, maxCount: item.MaxCount);
+                        dict.Add(item.id, resource);
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+            
         return dict;
     }
 }

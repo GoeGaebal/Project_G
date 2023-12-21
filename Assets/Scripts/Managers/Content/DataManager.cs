@@ -30,6 +30,7 @@ public class DataManager
         
         // TODO: ItemDict을 json으로 바꾸던지 아니면 ScriptableObject로 바꿀건지 생각해야 할 듯
         AddItems(new [] {"Apple", "IronIngot", "Pipe", "CPU", "Motherboard", "Transistor", "Antenna", "NanoBlade", "LaserGun", "Gauntlet"});
+        ItemDict = LoadJson<ItemDataLoader, int, Item>("ItemData").MakeDict();
         WorldmapDict = LoadJson<WorldmapDataLoader, int, WorldmapData>("WorldmapData").MakeDict();
         CraftDict = LoadJson<CraftDataLoader, int, CraftData>("CraftData").MakeDict();
         Artifact artifact = Managers.Resource.Load<Artifact>("Prefabs/Objects/NonCharacter/Interactable/Artifact/Artifacts/Artifact_0");

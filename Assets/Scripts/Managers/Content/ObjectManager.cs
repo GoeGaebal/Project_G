@@ -65,9 +65,9 @@ public class ObjectManager
             {
                 go = Managers.Resource.Instantiate(info.Name == "GasBoss" ? $"Objects/Character/Monster/BossMonster1/GasBoss" : $"Objects/Character/Monster/{info.Name}");
                 if(info.Name == "GasBoss")
-                    {
-                        go.transform.localScale = new Vector3(2.5f, 2.5f, 1);
-                    }
+                {
+                    go.transform.localScale = new Vector3(2.5f, 2.5f, 1);
+                }
                 go.name = $"{info.Name}_{info.ObjectId}";
                 var bm = go.GetComponent<BasicMonster>();
                 bm.Id = info.ObjectId;
