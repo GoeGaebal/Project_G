@@ -48,4 +48,11 @@ public class UI_CraftMaterial : UI_Base
         _count.text = n.ToString() + "/" + target.ToString();
         _countGo.SetActive(active);
     }
+
+    public void Clear()
+    {
+        _icon.sprite = null;
+        _count.text = null;
+        _countGo.SetActive(false);
+    }
 }

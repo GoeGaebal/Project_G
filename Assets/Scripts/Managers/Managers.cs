@@ -19,6 +19,7 @@ public class Managers : MonoBehaviour
     private readonly ArtifactManager _artifact = new();
     private readonly WorldMapManager _worldMap = new();
     private readonly WeatherManager _weather = new();
+    private readonly OptionManager _option = new();
     private NetworkManager _network = new();
 
     public static MapManager Map => Instance._map;
@@ -32,6 +33,7 @@ public class Managers : MonoBehaviour
     public static ArtifactManager Artifact => Instance._artifact;
     public static WeatherManager Weather => Instance._weather;
     public static WorldMapManager WorldMap => Instance._worldMap;
+    public static OptionManager Option => Instance._option;
     public static NetworkManager Network => Instance._network;
 
     #endregion
@@ -89,6 +91,7 @@ public class Managers : MonoBehaviour
             _instance._weather.Init();
             _instance._worldMap.Init();
             _instance._item.Init();
+            _instance._option.Init();
 
             // _network.Server.Init();
             //_network.Client.Init();

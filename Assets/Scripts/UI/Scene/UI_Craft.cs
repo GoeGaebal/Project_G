@@ -111,6 +111,8 @@ public class UI_Craft : UI_Scene
 
     public void OpenCraft(int id)
     {
+        ClearMaterials();
+
         var recipe = Managers.Data.CraftDict[id];
 
         SelectedRecipe[0] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.target}");
@@ -127,17 +129,38 @@ public class UI_Craft : UI_Scene
         _craft.SetActive(true);
     }
 
+    public void ClearMaterials()
+    {
+        _target.Clear();
+        _source.Clear();
+        _material_1.Clear();
+        _material_2.Clear();
+    }
+
     public void CheckRecipe()
     {
-        int targetCount = UI_Inven.checkItem(SelectedRecipe[0]);
-        int sourceCount = UI_Inven.checkItem(SelectedRecipe[1]);
-        int material1Count = UI_Inven.checkItem(SelectedRecipe[2]);
-        int material2Count = UI_Inven.checkItem(SelectedRecipe[3]);
+        int targetCount = 0, sourceCount = 0, material1Count = 0, material2Count = 0;
 
+        targetCount = UI_Inven.checkItem(SelectedRecipe[0]);
         _target.SetSlot(SelectedRecipe[0].Icon, targetCount, SelectedRecipeAmount[0]);
-        _source.SetSlot(SelectedRecipe[1].Icon, sourceCount, SelectedRecipeAmount[1]);
-        _material_1.SetSlot(SelectedRecipe[2].Icon, material1Count, SelectedRecipeAmount[2]);
-        _material_2.SetSlot(SelectedRecipe[3].Icon, material2Count, SelectedRecipeAmount[3]);
+
+        if (SelectedRecipeAmount[1] > 0)
+        {
+            sourceCount = UI_Inven.checkItem(SelectedRecipe[1]);
+            _source.SetSlot(SelectedRecipe[1].Icon, sourceCount, SelectedRecipeAmount[1]);
+        }
+
+        if (SelectedRecipeAmount[2] > 0)
+        {
+            material1Count = UI_Inven.checkItem(SelectedRecipe[2]);
+            _material_1.SetSlot(SelectedRecipe[2].Icon, material1Count, SelectedRecipeAmount[2]);
+        }
+
+        if (SelectedRecipeAmount[3] > 0)
+        {
+            material2Count = UI_Inven.checkItem(SelectedRecipe[3]);
+            _material_2.SetSlot(SelectedRecipe[3].Icon, material2Count, SelectedRecipeAmount[3]);
+        }
 
         if(sourceCount >= SelectedRecipeAmount[1] &&
             material1Count >= SelectedRecipeAmount[2] &&
@@ -162,7 +185,10 @@ public class UI_Craft : UI_Scene
         {
             for (int i = 1; i <= 3; i++)
             {
-                UI_Inven.removeItems(SelectedRecipe[i], SelectedRecipeAmount[i]);
+                if (SelectedRecipeAmount[i] > 0)
+                {
+                    UI_Inven.removeItems(SelectedRecipe[i], SelectedRecipeAmount[i]);
+                }
             }
             for (int i = 0; i < SelectedRecipeAmount[0]; i++)
             {
