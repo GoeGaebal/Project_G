@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using Google.Protobuf.Protocol;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -228,11 +229,17 @@ public class UI_Item : UI_Base
         Managers.UI.ResetCanvasOrder();
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
         {
-            if (_player != null)
+            if (Managers.Network.LocalPlayer != null)
             {
-                // TODO : PUN2에서 교체해야함
                 //사과 개수만큼 드랍
-                // Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
+                Managers.Network.Client.Send(
+                    new C_SpawnLooting()
+                    {
+                        ObjectId = item.ID,
+                        Count = count,
+                        PlayerId = Managers.Network.LocalPlayer.Id
+                    }
+                );
                 RemoveItem();//인벤토리에서 삭제
             }
         }

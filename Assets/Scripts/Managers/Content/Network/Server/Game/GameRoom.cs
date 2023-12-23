@@ -219,7 +219,6 @@ public class GameRoom
         S_SpawnLooting spawn = new S_SpawnLooting();
         for (int i = 0; i < count; i++)
         {
-            
             Vector2 randPos = Random.insideUnitCircle * Random.Range(minRadious,maxRadious);
             randPos.x += pos.x;
             randPos.y += pos.y;
@@ -235,6 +234,11 @@ public class GameRoom
             spawn.Infos.Add(info);
         }
         Broadcast(spawn);
+    }
+    public void SpawnLootingItems(int objectId,int count, int playerId, float maxRadious = 10.0f,float minRadious = 0.0f)
+    {
+        SpawnLootingItems(objectId, count,
+            new Vector3(_players[playerId].PosInfo.PosX, _players[playerId].PosInfo.PosY), maxRadious, minRadious);
     }
 
     public ObjectInfo FindPlayerById(int objectId)

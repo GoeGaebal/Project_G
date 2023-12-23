@@ -70,6 +70,14 @@ partial class PacketHandler
 			Name = evt.Name,
 			ObjectId = clientSession.MyPlayerId
 		});
+	}
 
+	public static void C_SpawnLootingHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+		if (packet is not C_SpawnLooting evt) return;
+		if (clientSession == null) return;
+		
+		Managers.Network.Server.Room.SpawnLootingItems(evt.ObjectId, evt.Count, evt.PlayerId, 2.0f,0.0f);
 	}
 }
