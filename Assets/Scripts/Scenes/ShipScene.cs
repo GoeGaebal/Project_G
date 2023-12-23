@@ -34,8 +34,8 @@ public class ShipScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chest>();
         Managers.UI.ShowSceneUI<UI_Artifact>();
         Managers.UI.ShowSceneUI<UI_Craft>();
-        Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
 
