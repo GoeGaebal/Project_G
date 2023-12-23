@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -16,7 +18,7 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
         Equipped,
     }
 
-    [HideInInspector] public Artifact artifact;
+    public Artifact artifact;
     private bool isEquipped;
     private Image _image;
     private GameObject _equippedImage;
@@ -55,7 +57,7 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)//아티팩트 클릭 시
     {
-        if (artifact.name == "Artifact_0")
+        if (artifact.Name == "Deselect")
         {
             if(Managers.Artifact.artifacts[Managers.Artifact.currentIndex] != null)
             {
@@ -80,6 +82,13 @@ public class UI_ArtifactSlot : UI_Base, IPointerClickHandler
                 UI_Artifact.close();
             }
         }
+        
+        C_ArtifactEvent packet = new C_ArtifactEvent()
+        {
+            CurrentId = Managers.Artifact.currentIndex,
+            ArtifactId = artifact.ID
+        };
+        Managers.Network.Client.Send(packet);
     }
 
     public void SetEquipped(bool b)

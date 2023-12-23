@@ -18,13 +18,14 @@ public class Artifact_1 : Artifact
         base.Deselect();
         
         Debug.Log("Artifact1 Deselect 메소드 사용됨");
-        Managers.Network.LocalPlayer.realDamage /= 1.1f;
+
+        Managers.Network.LocalPlayer.damageMultiply -= DamageMul;
     }
 
     public override void Skill()
     {
         base.Skill();
 
-        Managers.Network.LocalPlayer.realDamage *= 1.1f;
+        Managers.Network.LocalPlayer.damageMultiply += DamageMul;
     }
 }

@@ -123,6 +123,7 @@ partial class PacketHandler
 		if (loadScenePacket == null) return;
 		
 		Managers.Scene.LoadScene(loadScenePacket.SceneType);
+		if(loadScenePacket.SceneType == SceneType.Ship) Managers.Network.LocalPlayer.UpdateHp(Managers.Network.LocalPlayer.maxHP, false);
 		Managers.Network.LocalPlayer.transform.position = new(loadScenePacket.PosX, loadScenePacket.PosY);
 	}
 
@@ -142,9 +143,9 @@ partial class PacketHandler
 
 	public static void S_OnDamageHandler(PacketSession session, IMessage packet)
 	{
-		S_OnDamage damagePacket = packet as S_OnDamage;
-		CreatureController cc =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<CreatureController>();
-		cc.UpdateHp(damagePacket.HP, damagePacket.IsDead);
+		if (packet is not S_OnDamage damagePacket) return;
+		var id =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<IDamageable>();
+		id.UpdateHp(damagePacket.HP, damagePacket.IsDead);
 	}
 	
 	public static void S_AddItemHandler(PacketSession session, IMessage packet)
@@ -159,9 +160,31 @@ partial class PacketHandler
 
 	public static void S_SpawnLootingHandler(PacketSession session, IMessage packet)
 	{
-		S_SpawnLooting spawns = packet as S_SpawnLooting;
-		if (spawns == null) return;
+		if (packet is not S_SpawnLooting spawns) return;
 		foreach (var info in spawns.Infos) Managers.Object.Add(info);
+	}
+
+
+	// TODO : Artifact 동기화 덜됨
+	public static void S_ArtifactEventHandler(PacketSession session, IMessage packet)
+	{
+		if (packet is not S_ArtifactEvent artifactEvent) return;
+		Managers.Artifact.SetCurrentIndex(artifactEvent.CurrentId);
+        if (artifactEvent.ArtifactId == 0)
+        {
+			Managers.Artifact.DeselectArtifact();
+        }
+        else
+        {
+			Managers.Artifact.SelectArtifact(Managers.Data.ArtifactDict[artifactEvent.ArtifactId]);
+		}
+		
+	}
+	
+	public static void S_ChangeNameHandler(PacketSession session, IMessage packet)
+	{
+		if (packet is not S_ChangeName changeEvent) return;
+		Managers.Object.PlayerDict[changeEvent.ObjectId].Name = changeEvent.Name;
 	}
 }
 

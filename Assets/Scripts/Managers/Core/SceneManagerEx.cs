@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneManagerEx
 {
-    public BaseScene CurrentScene { get { return GameObject.FindObjectOfType<BaseScene>(); } }
+    public BaseScene CurrentScene => Object.FindObjectOfType<BaseScene>();
     private AsyncOperation _asyncOp = null;
     float minTime = 2.0f;
     float loadedTime = 0;
@@ -30,6 +30,7 @@ public class SceneManagerEx
     /// /param>
 	public void LoadScene(SceneType type)
     {
+        if (nextSceneName == nameof(type)) return;
         Managers.Clear();
         SceneManager.LoadScene(GetSceneName(SceneType.Loading));
         _isLoading = true;
@@ -47,15 +48,14 @@ public class SceneManagerEx
             Managers.Input.Asset.Disable();
             loadedTime += time;
         }
-        else 
+        else
         {
             _asyncOp = SceneManager.LoadSceneAsync(nextSceneName);
             _isLoading = false;
             Managers.Input.Asset.Enable();
         }
-
     }
-    
+
     /// <summary>
     /// Scene을 불러오는 함수, 기존 Unity 방식으로는 type에 따라서 불러오지 못하므로 이를 반영하였다.
     /// </summary>

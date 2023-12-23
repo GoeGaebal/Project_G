@@ -46,10 +46,7 @@ public class MapGenerator
                         sb.Append("    {\n");
                         TileBase tile = tm.GetTile(new Vector3Int(x, y, 0));
                         sb.Append($"      \"key\" : \"{((ulong)(uint)y << Define.INT_SIZE_IN_BITS) | (uint)x}\",\n");
-                        if (tile != null)
-                            sb.Append("     \"isCollision\" : \"1\"\n");
-                        else
-                            sb.Append("     \"isCollision\" : \"0\"\n");
+                        sb.Append(tile != null ? "     \"isCollision\" : \"1\"\n" : "     \"isCollision\" : \"0\"\n");
                         sb.Append("    },\n");
                     }
                 }

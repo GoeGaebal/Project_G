@@ -21,6 +21,16 @@ public class LootingItemController : NetworkObject
             if (shadow == null)
                 shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
             shadow.sprite = value.Icon;
+            if (_item.ID is > 1000 and <= 2000)
+            {
+                mesh.transform.localScale = 5 * Vector3.one;
+                shadow.transform.localScale = 5 * Vector3.one;
+            }
+            else
+            {
+                mesh.transform.localScale = Vector3.one;
+                shadow.transform.localScale = Vector3.one;
+            }
         }
     }
 
@@ -36,7 +46,7 @@ public class LootingItemController : NetworkObject
     [SerializeField] private float threshold;
     private static float Sn;
 
-    private void Awake()
+    protected override void Awake()
     {
         mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
         shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();

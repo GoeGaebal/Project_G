@@ -3,7 +3,6 @@ using System.Linq;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
-using ServerCore;
 using UnityEngine;
 
 public class GameRoom
@@ -13,6 +12,29 @@ public class GameRoom
     private readonly Dictionary<int, ObjectInfo> _players = new Dictionary<int, ObjectInfo>();
     private readonly Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
     public int PlayersCount => _players.Count;
+    
+    private static int _counter = 0;
+    private static int _monsterCounter = 0;
+    private static int _lootingCounter = 0;
+    private static int _gatheringCounter = 0;
+    
+    public static int GenerateId(GameObjectType type)
+    {
+        return type switch
+        {
+            GameObjectType.Player => ((int)type << 24) | (_counter++),
+            GameObjectType.Monster => ((int)type << 24) | (_monsterCounter++),
+            GameObjectType.LootingItem => ((int)type << 24) | (_lootingCounter++),
+            GameObjectType.Gathering => ((int)type << 24) | (_gatheringCounter++),
+            _ => 0
+        };
+    }
+    
+    public void ChangeName(int id, string newName)
+    {
+        if (!_players.TryGetValue(id, out var player)) return;
+        player.Name = newName;
+    }
 
     public void EnterGame(ClientSession session, ObjectInfo gameObject)
     {
@@ -26,11 +48,9 @@ public class GameRoom
             // TODO : 들어왔을 때 정보 초기화
             gameObject.PosInfo = new PositionInfo()
             {
-                PosX = 0.0f,
-                PosY = 0.0f,
-                Dir = 1,
+                PosX = 0.0f, PosY = 0.0f, Dir = 1,
             };
-            
+
             _players.Add(gameObject.ObjectId, gameObject);
             PlayersSessions.Add(gameObject.ObjectId, session);
             // 본인한테 정보 전송
@@ -83,8 +103,17 @@ public class GameRoom
 
     public void LoadScene(SceneType type)
     {
-        S_LoadScene packet = new S_LoadScene();
-        packet.SceneType = type;
+        S_LoadScene packet = new S_LoadScene
+        {
+            SceneType = type,
+            PosX = 0.0f,
+            PosY = 0.0f
+        };
+        foreach (var player in _players.Values)
+        {
+            player.PosInfo.PosX = packet.PosX;
+            player.PosInfo.PosY = packet.PosY;
+        }
         _objects.Clear();
         Managers.Network.Server.Room.Broadcast(packet);
     }
@@ -94,11 +123,12 @@ public class GameRoom
         if (player == null) return;
 
         // TODO : 검증
-        PlayerPosInfo movePosInfo = movePacket.PosInfo;
+        var movePosInfo = movePacket.PosInfo;
         var info = player.Info;
-        _players[info.ObjectId].PosInfo = movePosInfo.PosInfo;
+        if (!_players.TryGetValue(info.ObjectId, out var p)) return;
         
-        S_PlayerMove resMovePacket = new S_PlayerMove
+        p.PosInfo = movePosInfo.PosInfo;
+        var resMovePacket = new S_PlayerMove
         {
             ObjectId = player.Info.ObjectId,
             PosInfo = movePosInfo
@@ -153,64 +183,48 @@ public class GameRoom
                 PlayersSessions[p.ObjectId].Send(despawnPacket);
             }
         }
+        
+        // TODO: 서버 종료
+        if (_players.Count == 0) Clear();
+    }
+    
+    private ObjectInfo SpawnObject(NetworkObject obj, GameObjectType type)
+    {
+        obj.Id = GenerateId(type);
+        string name = obj.gameObject.name;
+        int end = name.IndexOf('(');
+        if (end >= 0) name = name[..end].Trim();
+
+        obj.Info.Name = name;
+        var position = obj.transform.position;
+        obj.PosInfo.PosX = position.x;
+        obj.PosInfo.PosY = position.y;
+        obj.PosInfo.State = CreatureState.Idle;
+        _objects.Add(obj.Id, obj.Info);
+        return obj.Info;
+    }
+    
+    public void SpawnObjects(NetworkObject[] objects, GameObjectType type)
+    {
+        S_Spawn spawn = new S_Spawn();
+        foreach (var obj in objects)
+        {
+            spawn.Objects.Add(SpawnObject(obj, type));
+        }
+        Broadcast(spawn);
     }
 
-    public void SpawnMonsters(BasicMonster[] monsters)
-    {
-        S_Spawn spawn = new S_Spawn();
-        foreach (var monster in monsters)
-        {
-            monster.Id = Managers.Object.GenerateId(GameObjectType.Monster);
-            string name = monster.gameObject.name;
-            int end = name.IndexOf('(');
-            if (end >= 0)
-                name = name.Substring(0, end).Trim();
-            
-            monster.Info.Name = name;
-            var position = monster.transform.position;
-            monster.PosInfo.PosX = position.x;
-            monster.PosInfo.PosY = position.y;
-            monster.PosInfo.State = CreatureState.Idle;
-            spawn.Objects.Add(monster.Info);
-            _objects.Add(monster.Id, monster.Info);
-        }
-        Broadcast(spawn);
-    }
-    
-    public void SpawnGatherings(GatheringController[] gatherings)
-    {
-        S_Spawn spawn = new S_Spawn();
-        foreach (var gathering in gatherings)
-        {
-            gathering.Id = Managers.Object.GenerateId(GameObjectType.Gathering);
-            string name = gathering.gameObject.name;
-            int end = name.IndexOf('(');
-            if (end >= 0)
-                name = name.Substring(0, end).Trim();
-            
-            gathering.Info.Name = name;
-            var position = gathering.transform.position;
-            gathering.PosInfo.PosX = position.x;
-            gathering.PosInfo.PosY = position.y;
-            gathering.PosInfo.State = CreatureState.Idle;
-            spawn.Objects.Add(gathering.Info);
-            _objects.Add(gathering.Id,gathering.Info);
-        }
-        Broadcast(spawn);
-    }
-    
     public void SpawnLootingItems(int objectId,int count, Vector3 pos, float maxRadious = 10.0f,float minRadious = 0.0f)
     {
         S_SpawnLooting spawn = new S_SpawnLooting();
         for (int i = 0; i < count; i++)
         {
-            
             Vector2 randPos = Random.insideUnitCircle * Random.Range(minRadious,maxRadious);
             randPos.x += pos.x;
             randPos.y += pos.y;
             LootingInfo info = new()
             {
-                ObjectId = Managers.Object.GenerateId(GameObjectType.LootingItem),
+                ObjectId = GenerateId(GameObjectType.LootingItem),
                 LootingId = objectId,
                 PosX = pos.x,
                 PosY = pos.y,
@@ -220,6 +234,11 @@ public class GameRoom
             spawn.Infos.Add(info);
         }
         Broadcast(spawn);
+    }
+    public void SpawnLootingItems(int objectId,int count, int playerId, float maxRadious = 10.0f,float minRadious = 0.0f)
+    {
+        SpawnLootingItems(objectId, count,
+            new Vector3(_players[playerId].PosInfo.PosX, _players[playerId].PosInfo.PosY), maxRadious, minRadious);
     }
 
     public ObjectInfo FindPlayerById(int objectId)
@@ -248,5 +267,13 @@ public class GameRoom
         {
             PlayersSessions[p.ObjectId].Send(packet);
         }
+    }
+
+    public void Clear()
+    {
+        _objects.Clear();
+        _players.Clear();
+        _counter = _gatheringCounter = _lootingCounter = _monsterCounter = 0;
+        Managers.Network.Server.ShutDown();
     }
 }

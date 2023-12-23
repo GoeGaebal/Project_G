@@ -28,8 +28,9 @@ public class ItemManager
         inventoryCount = new int[_inventoryCount];
         equipCount = new int[_equipCount];
         chestCount = new int[_chestCount];
-        inventorySlots[0] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/Sword");
-        inventoryCount[0] = 1;
+
+        equipSlots[0] = Managers.Data.ItemDict[1001];
+        equipCount[0] = 1;
     }
 
     public void SpawnNewItem(Item item, UI_Slot slot)//슬롯에 새로운 아이템 추가

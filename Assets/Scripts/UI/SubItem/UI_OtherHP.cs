@@ -30,7 +30,7 @@ public class UI_OtherHP : UI_Base
         transform.localScale = Vector3.one;
     }
 
-    public void InitStatus()
+    private void InitStatus()
     {
         _hpBar.fillAmount = 0;
         _hpText.SetText(0 + " / " + 0);
@@ -38,7 +38,7 @@ public class UI_OtherHP : UI_Base
     
     public void SetStatus(Player player)
     {
-        float temp = player.HP / player.maxHP;
+        var temp = player.HP / player.maxHP;
         _hpBar.fillAmount = temp;
         _hpText.SetText(player.HP + " / " + player.maxHP);
     }

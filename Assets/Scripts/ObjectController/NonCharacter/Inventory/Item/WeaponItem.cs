@@ -8,6 +8,12 @@ public class WeaponItem : EquipableItem
     public float AttackSpeed => _attackSpeed;//공격속도
 
     [SerializeField] private float _attackSpeed = 1f;
+    
+    public virtual void Init(int id, string name, string tooltip, string iconPath, float hp, float damage, float attackSpeed)
+    {
+        base.Init(id,name,tooltip,iconPath, hp, damage);
+        _attackSpeed = attackSpeed;
+    }
 
     public override void ChangeEquipableItem()
     {
@@ -17,6 +23,7 @@ public class WeaponItem : EquipableItem
     public override void Select()
     {
         base.Select();
+        Managers.Network.LocalPlayer.EquipWeapon(ID);
     }
 
     public override void Deselect()

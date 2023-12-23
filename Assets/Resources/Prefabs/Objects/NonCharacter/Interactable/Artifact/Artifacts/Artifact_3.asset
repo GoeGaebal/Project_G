@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee23f1d8def882d42a9d1e229f9f811b, type: 3}
+  m_Name: Artifact_3
+  m_EditorClassIdentifier: 
+  _id: 3
+  _name: Horn
+  _tooltip: 
+  _Image: {fileID: 21300000, guid: e9bcdd80e8bc7b740b9c06c920878864, type: 3}
+  _damageAdd: 0
+  _damageMul: 0.3
+  _hpAdd: 0
+  _hpMul: 0.3

@@ -2,14 +2,25 @@
   "crafts": [
     {
       "id": "1",
-      "target": "Axe",
+      "target": "Gauntlet",
       "targetAmount": "1",
-      "source": "Sword",
+      "source": "Pipe",
       "sourceAmount": "1",
       "material1": "IronIngot",
       "material1Amount": "2",
       "material2": "Apple",
       "material2Amount": "1"
+    },
+    {
+      "id": "2",
+      "target": "LaserGun",
+      "targetAmount": "1",
+      "source": "",
+      "sourceAmount": "0",
+      "material1": "IronIngot",
+      "material1Amount": "3",
+      "material2": "Apple",
+      "material2Amount": "2"
     }
   ]
 }

@@ -15,4 +15,8 @@ MonoBehaviour:
   _id: 0
   _name: Deselect
   _tooltip: 
-  _Image: {fileID: 21300000, guid: 9c8bbf7e6ce8f4eeebcdb9752dc45ea9, type: 3}
+  _Image: {fileID: 21300000, guid: e02e871331885044781233f7c587a7c6, type: 3}
+  _damageAdd: 0
+  _damageMul: 0
+  _hpAdd: 0
+  _hpMul: 0

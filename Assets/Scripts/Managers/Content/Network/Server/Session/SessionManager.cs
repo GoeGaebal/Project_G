@@ -55,6 +55,7 @@ namespace Server
 				var sessions = _sessions.Values.ToArray();
 				foreach(var s in sessions) s.Disconnect();
 				_sessions.Clear();
+				_sessionId = 0;
 			}
 		}
 

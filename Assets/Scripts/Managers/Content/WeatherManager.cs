@@ -50,7 +50,6 @@ public class WeatherManager : IOnEventCallback
     public void AddListener(IWeatherChangeEventListener weatherChangeEventListener) 
     {
         Debug.Log("addListener");
-
         
         this.WeatherChangeEvent += weatherChangeEventListener.WeatherChangeEventHandler;
     }

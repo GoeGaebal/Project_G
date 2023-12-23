@@ -44,4 +44,40 @@ partial class PacketHandler
 		//
 		// room.Push(room.HandleSkill, player, skillPacket);
 	}
+
+	public static void C_ArtifactEventHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+
+		if (packet is not C_ArtifactEvent evt) return;
+		S_ArtifactEvent resEvt = new S_ArtifactEvent()
+		{
+			CurrentId = evt.CurrentId,
+			ArtifactId = evt.ArtifactId
+		};
+		Managers.Network.Server.Room.Broadcast(resEvt);
+	}
+
+	public static void C_ChangeNameHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+		if (packet is not C_ChangeName evt) return;
+		if (clientSession == null) return;
+		
+		Managers.Network.Server.Room.ChangeName(clientSession.MyPlayerId, evt.Name);
+		Managers.Network.Server.Room.Broadcast(new S_ChangeName()
+		{
+			Name = evt.Name,
+			ObjectId = clientSession.MyPlayerId
+		});
+	}
+
+	public static void C_SpawnLootingHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+		if (packet is not C_SpawnLooting evt) return;
+		if (clientSession == null) return;
+		
+		Managers.Network.Server.Room.SpawnLootingItems(evt.ObjectId, evt.Count, evt.PlayerId, 2.0f,0.0f);
+	}
 }

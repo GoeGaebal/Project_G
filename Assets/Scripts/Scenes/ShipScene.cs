@@ -29,23 +29,23 @@ public class ShipScene : BaseScene
     {
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();
-
-        Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Leaf>();
-        Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_Chest>();
         Managers.UI.ShowSceneUI<UI_Artifact>();
         Managers.UI.ShowSceneUI<UI_Craft>();
+        Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
 
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
+        // Managers.Network.ResetPlayer();
     }
 
     public override void Clear()
     {
-        // throw new System.NotImplementedException();
+        Managers.Object.ClearObjects(GameObjectType.Monster, GameObjectType.Gathering);
     }
 }

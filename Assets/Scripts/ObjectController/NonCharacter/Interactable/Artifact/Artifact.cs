@@ -9,10 +9,23 @@ public class Artifact : ScriptableObject
     public string Tooltip => _tooltip;
     public Sprite Image => _Image;
 
+    public int DamageAdd => _damageAdd;
+    public float DamageMul => _damageMul;
+
+    public int HPAdd => _hpAdd;
+    public float HPMul => _hpMul;
+
+
     [SerializeField] private int _id = 0;
     [SerializeField] private string _name = "";
     [SerializeField] private string _tooltip = "";
     [SerializeField] private Sprite _Image;
+
+    [SerializeField] private int _damageAdd = 0;
+    [SerializeField] private float _damageMul = 0;
+
+    [SerializeField] private int _hpAdd = 0;
+    [SerializeField] private float _hpMul = 0;
 
     public virtual void Select()
     {

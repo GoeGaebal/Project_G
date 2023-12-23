@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
@@ -7,17 +8,18 @@ public class WeaponPivotController : NetworkObject
     [Tooltip("회전 반경")]
     [SerializeField] private float disFromBody;
     [Tooltip("회전 중심점")]
-    [SerializeField] private Transform pivot;
+    public Transform pivot;
     private Player _player;
 
     private Animator _animator;
-    private Weapon _weapon;
+    private WeaponItem _weapon;
     private BoxCollider2D _collider;
     private ContactFilter2D _filter2D = new ContactFilter2D();
     private Collider2D[] _results = new Collider2D[10];
     private static readonly int AttackAnimParam = Animator.StringToHash("attack");
+    private static readonly int AttackSpeed = Animator.StringToHash("attackSpeed");
 
-    private void Awake()
+    protected override void Awake()
     {
         _player = transform.parent.gameObject.GetComponent<Player>();
         _animator = GetComponent<Animator>();
@@ -29,6 +31,7 @@ public class WeaponPivotController : NetworkObject
 
     void Update()
     {
+        if (pivot == null) return;
         if(_player != Managers.Network.LocalPlayer) return;
         if (_player.IsDead) return;
 
@@ -42,8 +45,9 @@ public class WeaponPivotController : NetworkObject
         transform.rotation = Quaternion.Euler(new Vector3(0.0f,0.0f,(Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg) + 180.0f));
     }
 
-    public void Attack(float realDamage)
+    public void Attack(float realDamage, float attackSpeed = 1.0f)
     {
+        _animator.SetFloat(AttackSpeed,attackSpeed);
         _animator.SetTrigger(AttackAnimParam);
         if (!Managers.Network.IsHost) return;
         

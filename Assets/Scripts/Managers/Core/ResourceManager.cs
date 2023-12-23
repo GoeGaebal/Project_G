@@ -67,7 +67,6 @@ public class ResourceManager
         go.name = original.name;
         
         // GameObject go = PhotonNetwork.Instantiate($"Prefabs/{path}", position, rotation);
-        
         return go;
     }
 

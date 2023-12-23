@@ -95,13 +95,14 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         if (Managers.Network.LocalPlayer != null)
         {
             _hpText.text = "체력: " + ((int)(Managers.Network.LocalPlayer.HP)).ToString() + " / " + ((int)(Managers.Network.LocalPlayer.maxHP)).ToString();
-            _adText.text = "공격력: " + ((int)(Managers.Network.LocalPlayer.realDamage)).ToString();
+            _adText.text = "공격력: " + ((int)(Managers.Network.LocalPlayer.attackDamage * Managers.Network.LocalPlayer.damageMultiply)).ToString();
         }
     }
 
     public override void Init()
     {
-        base.Init();
+        //base.Init();
+        Managers.UI.SetCanvas(gameObject, true);
 
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
@@ -138,35 +139,13 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             }
         }
 
-        //장비창 슬롯 생성
-        //0: 무기, 1: 모자, 2: 상의, 3: 하의, 4: 신발, 5: 포션
-        equips = new UI_Slot[Enum.GetValues(typeof(EquipSlots)).Length];
-        int idex = 0;
-        foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
-        {
-            equips[idex] = Get<UI_Slot>((int)slot);
-            equips[idex].isEquip = true;
-            equips[idex].invIndex = idex;
-            if(Managers.Item.equipSlots[idex] != null)
-            {
-                Managers.Item.SpawnNewItem(Managers.Item.equipSlots[idex], equips[idex]);
-            }
-            idex++;
-        }
+        //1프레임 기다렸다가 장비창 생성
+        StartCoroutine(WaitForPlayerAndSpawnEquips());
 
         qSlots[0] = Get<Image>((int)Images.WeaponImage);
         qSlots[1] = Get<Image>((int)Images.PotionImage);
         potion1Text = Get<Text>((int)Texts.PotionAmountText);
         potion1Text.gameObject.SetActive(false);
-
-        if (equips[0].transform.childCount >= 1)
-        {
-            ChangeQuickslotImage(0, equips[0].transform.GetChild(0).GetComponent<UI_Item>());
-        }
-        if (equips[5].transform.childCount >= 1)
-        {
-            ChangeQuickslotImage(1, equips[5].transform.GetChild(0).GetComponent<UI_Item>());
-        }
 
         GetButton((int)Buttons.InventoryButton).onClick.AddListener(ClickInventoryButton);
         GetButton((int)Buttons.CloseButton).onClick.AddListener(ClickInventoryButton);
@@ -176,6 +155,37 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         _inventory_activeself = _inventory.activeSelf;
 
         // LoadData();
+    }
+
+    private IEnumerator WaitForPlayerAndSpawnEquips()
+    {
+        yield return 0;
+
+        //장비창 슬롯 생성
+        //0: 무기, 1: 모자, 2: 상의, 3: 하의, 4: 신발, 5: 포션
+        equips = new UI_Slot[Enum.GetValues(typeof(EquipSlots)).Length];
+        int idex = 0;
+        foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
+        {
+            equips[idex] = Get<UI_Slot>((int)slot);
+            equips[idex].isEquip = true;
+            equips[idex].invIndex = idex;
+            if (Managers.Item.equipSlots[idex] != null)
+            {
+                Managers.Item.SpawnNewItem(Managers.Item.equipSlots[idex], equips[idex]);
+                Managers.Item.equipSlots[idex].Select();
+            }
+            idex++;
+        }
+
+        if (equips[0].transform.childCount >= 1)
+        {
+            ChangeQuickslotImage(0, equips[0].transform.GetChild(0).GetComponent<UI_Item>());
+        }
+        if (equips[5].transform.childCount >= 1)
+        {
+            ChangeQuickslotImage(1, equips[5].transform.GetChild(0).GetComponent<UI_Item>());
+        }
     }
 
     private void OnDestroy()
@@ -436,6 +446,7 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             }
         }
     }
+
     /*
     public void SaveData()
     {

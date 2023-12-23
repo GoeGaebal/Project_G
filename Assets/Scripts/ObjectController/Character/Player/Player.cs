@@ -5,17 +5,19 @@ using ObjectController.Character.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Server;
+using TMPro;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Player : CreatureController, IAttackable, IMoveable
 {
     [SerializeField] private float moveSpeed = 5.0f;
-    [SerializeField] private Animator weaponAnimator;
     public float attackSpeed = 10f;
-    public float attackDamage = 100f;
+    public float attackDamage = 100f;//합연산 스탯
 
     public Action[] ArtifactSkills = new Action[3];
 
-    public float realDamage = 100f;//장비, 유물 스탯 연산 이후 공격력
+    public float damageMultiply = 1f;//곱연산 스탯 적용
 
     private PlayerCameraController playerCameraController;
     private WeaponPivotController _wpc;
@@ -25,7 +27,10 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
-    private bool attackInputBuffer = false;
+    private bool _attackInputBuffer = false;
+    private Vector2 _runInputBuffer = Vector2.zero;
+
+    private bool _isTwoHand = false;
 
     private AnimationEvent OnFinishDieAnim;
 
@@ -38,7 +43,24 @@ public class Player : CreatureController, IAttackable, IMoveable
     [SerializeField] private PlayerLeg _playerLeg;
     [SerializeField] private GameObject Left_Arm;
     [SerializeField] private GameObject Right_Arm;
+    [SerializeField] private Transform _weapon_pivot;
     
+    public Image HPBar;
+    public TextMeshProUGUI HPText;
+
+    public string Name
+    {
+        get => _name.text;
+        set
+        {
+            Info.Name = value;
+            _name.SetText(value);
+        }
+    }
+    private TextMeshProUGUI _name;
+    private static readonly int AttackSpeed = Animator.StringToHash("attackSpeed");
+
+
     #region UnityMessages
     protected override void Awake()
     {
@@ -46,13 +68,18 @@ public class Player : CreatureController, IAttackable, IMoveable
         UpdateState.Add(CreatureState.Attack, OnAttack);
         UpdateState.Add(CreatureState.Run, OnRun);
         
+        if (HPBar == null) HPBar = Util.FindChild(gameObject,"HP", true).GetComponent<Image>();
+        var texts = GetComponentsInChildren<TextMeshProUGUI>();
+        _name = texts[1];
+        HPText = texts[0];
         ObjectType = GameObjectType.Player;
-        _wpc = transform.GetComponentInChildren<WeaponPivotController>();
+        _wpc = GetComponentInChildren<WeaponPivotController>();
         _rb = GetComponent<Rigidbody2D>();
         _playerBody = GetComponentInChildren<PlayerBody>();
         _playerLeg = GetComponentInChildren<PlayerLeg>();
         _playerBody.Init();
         _playerLeg.Init();
+        _weapon_pivot = Util.FindChild(gameObject, "WeaponPivot").transform;
 
         PosInfo.Dir = 1;
 
@@ -171,8 +198,29 @@ public class Player : CreatureController, IAttackable, IMoveable
     
     public void OnAttack(CreatureState prevState)
     {
-        if(State == CreatureState.Attack) return;
-        _wpc.Attack(realDamage);
+        if (prevState != CreatureState.Attack)
+            _wpc.Attack(attackDamage * damageMultiply, attackSpeed);
+    }
+
+    public void EquipWeapon(int itemId)
+    {
+        Managers.Resource.Destroy(_wpc.gameObject);
+        _wpc = Managers.Resource.Instantiate($"Objects/Character/Weapon/{itemId}", parent: this.transform).GetComponent<WeaponPivotController>();
+        _wpc.pivot = _weapon_pivot;
+        if (itemId == 1002)
+        {
+            _isTwoHand = true;
+            Left_Arm.SetActive(false);
+            Right_Arm.SetActive(false);
+        }
+        else {
+            Vector3 mousePos = Managers.Input.UIActions.Point.ReadValue<Vector2>();
+            mousePos.z = Camera.main.transform.position.z;
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            _isTwoHand = false;
+            Flip(worldPos.x >=  transform.position.x);
+        }
+        
     }
     
     public override void OnDamage(float damage)
@@ -181,7 +229,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         
         if(IsDead) return;
         base.OnDamage(damage);
-        if(State == CreatureState.Idle || State == CreatureState.Run) 
+        if(State is CreatureState.Idle or CreatureState.Run) 
             State = CreatureState.Hit;
     }
     #endregion
@@ -195,14 +243,18 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private void Flip(bool isFlip)
     {
-        Left_Arm.SetActive(isFlip);
-        Right_Arm.SetActive(!isFlip);
         Vector2 localSc = transform.localScale;
         localSc.x = isFlip ? -1 * Math.Abs(localSc.x) : localSc.x = Math.Abs(localSc.x);
         transform.localScale = localSc;
+        _name.transform.localScale = localSc;
+        HPText.transform.localScale = localSc;
         Vector2 wpcLocalScale = _wpc.transform.localScale;
         _wpc.transform.localScale = 
             (isFlip) ? new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y)) : new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
+        
+        if (_isTwoHand) return;
+        Left_Arm.SetActive(isFlip);
+        Right_Arm.SetActive(!isFlip);
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -229,12 +281,10 @@ public class Player : CreatureController, IAttackable, IMoveable
         // rb.velocity = Vector2.zero;
 
         if( State == CreatureState.Attack)
-            attackInputBuffer = true;
+            _attackInputBuffer = true;
 
         // else if (State == EnumPlayerStates.Run)
         //     animator.SetBool("run",false);
-
-        weaponAnimator.SetFloat("attackSpeed",attackSpeed);
         State = CreatureState.Attack;
     }
     
@@ -267,7 +317,6 @@ public class Player : CreatureController, IAttackable, IMoveable
         S_DeSpawn despawn = new S_DeSpawn();
         despawn.ObjectIds.Add(Id);
         Managers.Network.Server.Room.Broadcast(despawn);
-        Managers.Network.Server.Room.SpawnLootingItems(5001,5,transform.position,2.0f, 1.0f);
     }
 
     private void OnDestroy()
@@ -320,8 +369,19 @@ public class Player : CreatureController, IAttackable, IMoveable
         State = PosInfo.State;
         transform.localScale = new Vector3(PosInfo.Dir,1, 1);
         _wpc.transform.localScale = new Vector3(PosInfo.Dir, PosInfo.Dir, 1);
-        Left_Arm.SetActive(PosInfo.Dir == -1);
-        Right_Arm.SetActive(PosInfo.Dir != -1);
+        var isFlip = PosInfo.Dir == -1;
+        Left_Arm.SetActive(isFlip);
+        Right_Arm.SetActive(!isFlip);
+        Vector2 localSc = transform.localScale;
+        _name.transform.localScale = localSc;
+        HPText.transform.localScale = localSc;
+    }
+
+    public override void UpdateHp(float health, bool dead)
+    {
+        base.UpdateHp(health,dead);
+        HPBar.fillAmount = HP / maxHP;
+        HPText.text = $"{HP / maxHP:P2}";
     }
 
     public void SyncWPos(float WposX, float WposY, float WrotZ)

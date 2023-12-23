@@ -1,16 +1,160 @@
 {
   "items": [
     {
-      "id": "1",
-      "name": "ironIngot"
+      "id": "1001",
+      "Name": "파이프",
+      "Tooltip": "녹슨 파이프",
+      "icon": "Weapon",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "2",
+      "AttackSpeed": "1",
+      "RecoveryAmount": "0"
     },
     {
-      "id": "2",
-      "name": "coin"
+      "id": "1002",
+      "Name": "폭발건틀릿",
+      "Tooltip": "닿으면 폭발한다",
+      "icon": "Gauntlet_1",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "2",
+      "AttackSpeed": "1",
+      "RecoveryAmount": "0"
     },
     {
-      "id": "3",
-      "name": "apple"
+      "id": "1003",
+      "Name": "레이저건",
+      "Tooltip": "무서운 레이저를 쏜다",
+      "icon": "LaserGun",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "1",
+      "AttackSpeed": "1",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "1004",
+      "Name": "나노블레이드",
+      "Tooltip": "분자단위로 베어내는 무기",
+      "icon": "NanoBlade",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "3",
+      "AttackSpeed": "1",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "2001",
+      "Name": "안테나",
+      "Tooltip": "전파수신장치",
+      "icon": "antena",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "1",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "2002",
+      "Name": "CPU",
+      "Tooltip": "중앙처리장치",
+      "icon": "CPU",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "3",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "2003",
+      "Name": "마더보드",
+      "Tooltip": "컴퓨터메인부품",
+      "icon": "motherboard",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "4",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "2004",
+      "Name": "트랜지스터",
+      "Tooltip": "연산보조장치",
+      "icon": "Transistor",
+      "MaxCount": "0",
+      "HealAmount": "0",
+      "Hp": "2",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "3001",
+      "Name": "체력포션",
+      "Tooltip": "체력을 회복한다",
+      "icon": "hp",
+      "MaxCount": "3",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "5"
+    },
+    {
+      "id": "4001",
+      "Name": "사과",
+      "Tooltip": "배가 고플 때 먹으면 좋을 것 같다.",
+      "icon": "apple",
+      "MaxCount": "3",
+      "HealAmount": "1",
+      "Hp": "0",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "4101",
+      "Name": "철덩어리",
+      "Tooltip": "다양한 걸 만들 수 있을 것 같다.",
+      "icon": "iron",
+      "MaxCount": "20",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "4102",
+      "Name": "전선",
+      "Tooltip": "구리로 만들어진 전선.",
+      "icon": "wire",
+      "MaxCount": "20",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
+    },
+    {
+      "id": "4103",
+      "Name": "금가루",
+      "Tooltip": "가치가 높은 금속의 가루",
+      "icon": "gold",
+      "MaxCount": "20",
+      "HealAmount": "0",
+      "Hp": "0",
+      "Damage": "0",
+      "AttackSpeed": "0",
+      "RecoveryAmount": "0"
     }
   ]
 }

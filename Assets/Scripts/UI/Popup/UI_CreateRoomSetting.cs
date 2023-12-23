@@ -1,6 +1,9 @@
+using System;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 public class UI_CreateRoomSetting : UI_Popup
 {
@@ -12,7 +15,7 @@ public class UI_CreateRoomSetting : UI_Popup
 
     enum Texts
     {
-        RoomName,
+        RoomPort,
         UserName,
         WarningText,
     }
@@ -21,14 +24,39 @@ public class UI_CreateRoomSetting : UI_Popup
     {
         LoadingSet,
     }
-    public TextMeshProUGUI RoomName, UserName, WarningText;
-    public Button CreateRoomBtn;
-    public GameObject LoadingSet;
+    public TextMeshProUGUI roomPort, userName, warningText;
+    public Button createRoomBtn;
+    public GameObject loadingSet;
+    
+    private bool _isConnectedFailed;
+    private bool _isConnectedSucceed;
     
     private void Start()
     {
-        if(CreateRoomBtn == null)
+        if(createRoomBtn == null)
             Init();
+    }
+
+    private void Update()
+    {
+        if (_isConnectedFailed)
+        {
+            warningText.SetText($"연결에 실패하였습니다.");
+            SetInteractableButtons(true);
+            _isConnectedFailed = false;
+        }
+        if (_isConnectedSucceed)
+        {
+            Managers.UI.Clear();
+            Managers.UI.SetEventSystem();
+            Managers.UI.ShowSceneUI<UI_Inven>();
+            //Managers.UI.ShowSceneUI<UI_Map>();
+            Managers.UI.ShowSceneUI<UI_Status>();
+            Managers.UI.ShowSceneUI<UI_Chat>();
+            Managers.UI.ShowSceneUI<UI_Leaf>();
+            // Managers.UI.ShowSceneUI<UI_Crosshair>();
+            Managers.Map.LoadMap(5);
+        }
     }
 
     
@@ -39,25 +67,62 @@ public class UI_CreateRoomSetting : UI_Popup
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
         
-        CreateRoomBtn = GetButton((int)Buttons.CreateBtn);
-        RoomName = GetTextMeshPro((int)Texts.RoomName);
-        UserName = GetTextMeshPro((int)Texts.UserName);
+        createRoomBtn = GetButton((int)Buttons.CreateBtn);
+        roomPort = GetTextMeshPro((int)Texts.RoomPort);
+        userName = GetTextMeshPro((int)Texts.UserName);
         
-        WarningText = GetTextMeshPro((int)Texts.WarningText);
+        warningText = GetTextMeshPro((int)Texts.WarningText);
         GetButton((int)Buttons.ExitBtn).onClick.RemoveAllListeners();
         GetButton((int)Buttons.ExitBtn).onClick.AddListener((() => { Managers.UI.ClosePopupUI(); }));
-        LoadingSet = GetObject((int)GameObjects.LoadingSet);
-        LoadingSet.SetActive(false);
-        
-        CreateRoomBtn.onClick.RemoveAllListeners();
-        CreateRoomBtn.onClick.AddListener(() =>
+        loadingSet = GetObject((int)GameObjects.LoadingSet);
+        loadingSet.SetActive(false);
+
+        roomPort.text = "7777";
+        createRoomBtn.onClick.RemoveAllListeners();
+        createRoomBtn.onClick.AddListener(() =>
         {
-            Managers.Network.CreateRoom();
-            
+            SetInteractableButtons(false);
+            var portText = roomPort.text.Trim((char)8203);;
+            var networkUserName = userName.text.Trim((char)8203);
+            if(portText.IsNullOrEmpty())
+            {
+
+                if (Managers.Network.CreateRoom(() =>
+                    {
+                        Managers.Network.UserName = networkUserName;
+                        _isConnectedSucceed = true;
+                    }, () => _isConnectedFailed = true)) return;
+                warningText.SetText("서버 생성에 실패하였습니다. 이미 사용중인 포트일 가능성이 있습니다.");
+                SetInteractableButtons(true);
+            }
+            else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
+            {
+                if (!networkUserName.IsNullOrEmpty() && networkUserName.Length <= 6)
+                {
+                    Managers.Network.CreateRoom(() =>
+                    {
+                        Managers.Network.UserName = networkUserName;
+                        _isConnectedSucceed = true;
+                    }, () => _isConnectedFailed = true ,port);
+                }
+                else
+                {
+                    warningText.SetText($"이름은 비어있지 않거나 6글자 이내여야 합니다.");
+                    SetInteractableButtons(true);
+                }
+            }
+            else
+            {
+                warningText.SetText($"포트번호는 1024~65535 사이의 정수여야 합니다.");
+                SetInteractableButtons(true);
+            }
         });
+        
+        _isConnectedFailed = false;
+        _isConnectedSucceed = false;
     }
-    
-    public void SetInteractableButtons(bool value)
+
+    private void SetInteractableButtons(bool value)
     {
         GetButton((int)Buttons.CreateBtn).interactable = value;
         GetButton((int)Buttons.ExitBtn).interactable = value;

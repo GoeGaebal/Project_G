@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f01f5a94ee7037498e9156553d227dc, type: 3}
+  m_Name: Gauntlet
+  m_EditorClassIdentifier: 
+  _id: 1002
+  _name: "\uD3ED\uBC1C\uAC74\uD2C0\uB9BF"
+  _tooltip: "\uB2FF\uC73C\uBA74 \uD3ED\uBC1C\uD55C\uB2E4"
+  _icon: {fileID: 1037468264, guid: 964015c7dfd5a524ca7c38832f904d61, type: 3}
+  _droppedItemPrefab: {fileID: 0}
+  _hp: 0
+  _damage: 2
+  _attackSpeed: 1

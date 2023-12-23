@@ -4,37 +4,32 @@ using UnityEngine;
 
 public  class EquipableItem : Item
 {
-    /*
-    public int MaxDurability => _maxDurability;//최대 내구도
-    public int CurrentDurability => _currentDurability;//현재 내구도
-
-    [SerializeField] private int _maxDurability = 200;
-    [SerializeField] private int _currentDurability = _maxDurability;
-    */
-    //이해랑이 추가
-
     public float HP => _hp;
     public float Damage => _damage;//공격대미지
 
     [SerializeField] private float _hp;
     [SerializeField] private float _damage;
-    
+
+    public virtual void Init(int id, string name, string tooltip, string iconPath, float hp, float damage)
+    {
+        base.Init(id,name,tooltip,iconPath);
+        _hp = hp;
+        _damage = damage;
+    }
     public virtual void ChangeEquipableItem()
     {}
     public override void Select()
     {
         base.Select();
 
-        Managers.Network.LocalPlayer.realDamage += Damage;
+        Managers.Network.LocalPlayer.attackDamage += Damage;
         Managers.Network.LocalPlayer.StatInfo.MaxHp += HP;
         Managers.Network.LocalPlayer.RestoreHP(Managers.Network.LocalPlayer.HP + HP);
-        Debug.Log("플레이어 체력: " + Managers.Network.LocalPlayer.HP + " / " + Managers.Network.LocalPlayer.maxHP);
-        Debug.Log("플레이어 대미지: " + Managers.Network.LocalPlayer.realDamage);
     }
     public override void Deselect()
     {
         base.Deselect();
-        Managers.Network.LocalPlayer.realDamage -= Damage;
+        Managers.Network.LocalPlayer.attackDamage -= Damage;
         Managers.Network.LocalPlayer.StatInfo.MaxHp -= HP;
         Managers.Network.LocalPlayer.RestoreHP(-HP);
     }

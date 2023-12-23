@@ -24,6 +24,11 @@ enum MsgId {
   S_ON_DAMAGE = 16;
   S_ADD_ITEM = 17;
   S_SPAWN_LOOTING = 18;
+  C_SPAWN_LOOTING = 19;
+  C_ARTIFACT_EVENT = 20;
+  S_ARTIFACT_EVENT = 21;
+  C_CHANGE_NAME = 22;
+  S_CHANGE_NAME = 23;
 }
 
 enum SceneType {
@@ -198,4 +203,29 @@ message LootingInfo {
 
 message S_SpawnLooting {
   repeated LootingInfo infos = 1;
+}
+
+message C_SpawnLooting {
+  int32 objectId = 1;
+  int32 count = 2;
+  int32 playerId = 3;
+}
+
+message S_ArtifactEvent {
+  int32 currentId = 1;
+  int32 artifactId = 2;
+}
+
+message C_ArtifactEvent {
+  int32 currentId = 1;
+  int32 artifactId = 2;
+}
+
+message C_ChangeName {
+  string name = 1;
+}
+
+message S_ChangeName {
+  int32 objectId = 1;
+  string name = 2;
 }

@@ -13,7 +13,7 @@ public class GatheringController : CreatureController
 {
     public int id = 1;
     public int guid = 1;
-    public int lootingId = 5101;
+    public int lootingId = 4101;
     public float flashDuration = 1.0f;
     public Color flashColor = Color.red;
     private Color _originalColor;
@@ -23,6 +23,7 @@ public class GatheringController : CreatureController
     public TextMeshProUGUI HPText;
     private static readonly int Hit = Animator.StringToHash("Hit");
     private static readonly int Die = Animator.StringToHash("Die");
+    private bool _isHitting = false; 
 
 
     protected override void Awake()
@@ -54,7 +55,9 @@ public class GatheringController : CreatureController
 
     public override void OnHit(CreatureState state)
     {
-        if(!IsDead) _anim.SetTrigger(Hit);
+        if (IsDead || _isHitting) return;
+        _anim.SetTrigger(Hit);
+        _isHitting = true;
     }
 
     protected override void OnDie(CreatureState state)
@@ -82,5 +85,6 @@ public class GatheringController : CreatureController
     private void FinishHitAnim()
     {
         State = CreatureState.Idle;
+        _isHitting = false;
     }
 }

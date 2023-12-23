@@ -107,14 +107,10 @@ public class UI_Worldmap : UI_Scene
 
             //TODO: 필드로 이동 가능하게 하는 코드
             //_mapName 이용해서 해당하는 맵 프리팹을 필드에 생성시키기.
-            
-
-            _portal.SetColor(Color.blue);
             _portal.SetPortal(true);
         }
         else
         {
-            _portal.SetColor(Color.gray);
             _portal.SetPortal(false);
         }
     }

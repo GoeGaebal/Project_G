@@ -11,7 +11,7 @@ public class GameScene : BaseScene
     static GameScene _thisScene = null;
     private static int _playerLifeCnt;
     public static int PlayerLifeCnt{
-        get{return _playerLifeCnt;}
+        get => _playerLifeCnt;
         set{
             Debug.Log("PlayerLifeCnt changed"+ _playerLifeCnt);
             _playerLifeCnt = value;
@@ -40,6 +40,8 @@ public class GameScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
+        
+        // Managers.Network.ResetPlayer();
 
         _playerLifeCnt = Managers.Object.PlayerDict.Count;
         foreach (var player in Managers.Object.PlayerDict.Values)
@@ -49,7 +51,8 @@ public class GameScene : BaseScene
     }
 
     public override void Clear()
-    {   
+    {
+        Managers.Object.ClearObjects(GameObjectType.Monster, GameObjectType.Gathering);
     }
 
     IEnumerator FieldGameOverCoroutine()
@@ -58,6 +61,6 @@ public class GameScene : BaseScene
         //Managers.UI.ShowSceneUI<>();
         yield return new WaitForSeconds(3.0f);
         UI_Leaf.AvailableCount--;
-        Managers.Scene.LoadScene(SceneType.Ship);
+        Managers.Network.Server.Room.LoadScene(SceneType.Ship);
     }
 }

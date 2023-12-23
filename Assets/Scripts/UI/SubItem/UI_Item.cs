@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using Google.Protobuf.Protocol;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -94,11 +95,11 @@ public class UI_Item : UI_Base
 
         if (transform.parent.GetComponent<UI_Slot>().isEquip)//슬롯이 장비창일 때
         {
-            int idex = currentItem.item.ID / 100;
-            if (idex == item.ID/100)//같은 장비에 해당하는 장비창일 때
+            int idex = currentItem.item.ID / 1000;
+            if (idex == item.ID/1000)//같은 장비에 해당하는 장비창일 때
             {
                 //포션 슬롯의 경우
-                if (idex == 40 &&
+                if (idex == 4 &&
                 currentItem.item == item)
                 {
                     if(count < ((CountableItem)item).MaxCount)
@@ -122,9 +123,7 @@ public class UI_Item : UI_Base
                     }
                     else
                     {
-                        int temp = count;
-                        count = currentItem.count;
-                        currentItem.count = temp;
+                        (count, currentItem.count) = (currentItem.count, count);
                         currentItem.RefreshCount();
                     }
                     RefreshCount();
@@ -184,8 +183,11 @@ public class UI_Item : UI_Base
             {
                 if (currentItem.parentBeforeDrag.GetComponent<UI_Slot>().isEquip)//장비창에서 인벤토리,창고로 옮길 때
                 {
-                    if (currentItem.item.ID / 100 == item.ID / 100)
+                    if (currentItem.item.ID / 1000 == item.ID / 1000)
                     {
+                        currentItem.item.Deselect();
+                        item.Select();
+
                         var parentTransform = transform.parent.transform;
 
                         parentBeforeDrag = currentItem.parentBeforeDrag;
@@ -227,11 +229,17 @@ public class UI_Item : UI_Base
         Managers.UI.ResetCanvasOrder();
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
         {
-            if (_player != null)
+            if (Managers.Network.LocalPlayer != null)
             {
-                // TODO : PUN2에서 교체해야함
                 //사과 개수만큼 드랍
-                // Managers.Object.SpawnLootingItems(item.ID, count, _player.gameObject.transform.position, 1.5f, 1.0f);
+                Managers.Network.Client.Send(
+                    new C_SpawnLooting()
+                    {
+                        ObjectId = item.ID,
+                        Count = count,
+                        PlayerId = Managers.Network.LocalPlayer.Id
+                    }
+                );
                 RemoveItem();//인벤토리에서 삭제
             }
         }

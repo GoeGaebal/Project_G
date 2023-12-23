@@ -8,7 +8,7 @@ public class UI_Slot : UI_Base
 
     public bool isChest = false;
     public bool isEquip = false;
-    private int[] _itemIndex = { 10, 30, 31, 32, 33, 40 };
+    private int[] _itemIndex = { 1, 2, 2, 2, 2, 3 };
     private Item itemInThisSlot;//이 슬롯의 자식으로 있는 아이템
     private Player _player;
     public Item ItemInThisSlot
@@ -70,7 +70,7 @@ public class UI_Slot : UI_Base
         currentItem.parentSlot.itemInThisSlot = null;//원래 슬롯은 0으로
         if (isEquip)//슬롯이 장비창일 때
         {
-            int checkIndex = currentItem.item.ID / 100;
+            int checkIndex = currentItem.item.ID / 1000;
             if (_itemIndex[invIndex] == checkIndex)
             {
                 currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
@@ -78,9 +78,12 @@ public class UI_Slot : UI_Base
 
                 currentItem.parentBeforeDrag = transform;
 
-                currentItem.item.Select();
+                if(currentItem.parentSlot != GetComponent<UI_Slot>())
+                {
+                    currentItem.item.Select();
+                }
 
-                if (checkIndex == 10)//무기
+                if (checkIndex == 1)//무기
                 {//TODO: 무기 이미지 제대로 안 바뀜
                     UI_Inven.ChangeQuickslotImage(0, currentItem);
                     if (currentItem.item.ID == 1001)
@@ -88,7 +91,7 @@ public class UI_Slot : UI_Base
                         //PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
                     }
                 }
-                else if (checkIndex == 40)//포션
+                else if (checkIndex == 3)//포션
                 {
                     UI_Inven.ChangeQuickslotImage(1, currentItem);
                 }

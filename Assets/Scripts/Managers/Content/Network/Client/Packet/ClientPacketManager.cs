@@ -49,7 +49,11 @@ public class ClientPacketManager
 		_onRecv.Add((ushort)MsgId.SAddItem, MakePacket<S_AddItem>);
 		_handler.Add((ushort)MsgId.SAddItem, PacketHandler.S_AddItemHandler);		
 		_onRecv.Add((ushort)MsgId.SSpawnLooting, MakePacket<S_SpawnLooting>);
-		_handler.Add((ushort)MsgId.SSpawnLooting, PacketHandler.S_SpawnLootingHandler);
+		_handler.Add((ushort)MsgId.SSpawnLooting, PacketHandler.S_SpawnLootingHandler);		
+		_onRecv.Add((ushort)MsgId.SArtifactEvent, MakePacket<S_ArtifactEvent>);
+		_handler.Add((ushort)MsgId.SArtifactEvent, PacketHandler.S_ArtifactEventHandler);		
+		_onRecv.Add((ushort)MsgId.SChangeName, MakePacket<S_ChangeName>);
+		_handler.Add((ushort)MsgId.SChangeName, PacketHandler.S_ChangeNameHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

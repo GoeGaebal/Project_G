@@ -17,6 +17,7 @@ public class UI_Lobby : UI_Popup
     public List<UI_RoomItem> RoomList = new List<UI_RoomItem>();
     
     private GameObject _content;
+    private static readonly int ReturnButtonClicked = Animator.StringToHash("ReturnButtonClicked");
 
     enum Buttons
     {
@@ -30,12 +31,10 @@ public class UI_Lobby : UI_Popup
         Content,
         LoadingPane,
     }
-
     
     private void Start()
     {
-        if(CreateBtn == null)
-            Init();
+        if(CreateBtn == null) Init();
     }
 
     public override void Init()
@@ -43,20 +42,21 @@ public class UI_Lobby : UI_Popup
         base.Init();
         
         Bind<Button>(typeof(Buttons));
-        Bind<GameObject>(typeof(GameObjects));
+        // Bind<GameObject>(typeof(GameObjects));
 
         CreateBtn = GetButton((int)Buttons.CreateBtn);
         RedoBtn = GetButton((int)Buttons.RedoBtn);
 
-        _content = GetObject((int)GameObjects.Content);
-        LoadingPane = GetObject((int)GameObjects.LoadingPane);
+        // _content = GetObject((int)GameObjects.Content);
+        // LoadingPane = GetObject((int)GameObjects.LoadingPane);
         GetButton((int)Buttons.CreateBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_CreateRoomSetting>();});
-        GetButton((int)Buttons.FindBtn).onClick.AddListener(() => { Managers.Network.FindRoom(); });
         RedoBtn.onClick.AddListener(() => {
-            UI_Start.animator.SetTrigger("ReturnButtonClicked");
+            UI_Start.animator.SetTrigger(ReturnButtonClicked);
             Managers.UI.CloseAllPopupUI();
         });
-        LoadingPane.SetActive(false);
+        
+        GetButton((int)Buttons.FindBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_FindRoom>(); });
+        // LoadingPane.SetActive(false);
     }
 
     public UI_RoomItem AddRoom()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class ArtifactManager
@@ -38,6 +39,7 @@ public class ArtifactManager
         AddScroll("Artifact_0");
         AddScroll("Artifact_1");
         AddScroll("Artifact_2");
+        AddScroll("Artifact_3");
     }
 
     public void AddScroll(string path)//새로운 유물 획득
@@ -75,7 +77,7 @@ public class ArtifactManager
 
     public void DeselectArtifact()
     {
-        artifacts[currentIndex].Deselect();
+        artifacts[currentIndex]?.Deselect();
         artifacts[currentIndex] = null;
         equippedArtifactSlots[currentIndex] = null;
         ArtifactTileSet.resetImage(currentIndex);

@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking.Types;
 
 public class ItemInSlot : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -19,14 +21,6 @@ public class ItemInSlot : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEn
     private void Start()
     {
         players = GameObject.FindGameObjectsWithTag("Player");//씬에 있는 플레이어들 중
-        foreach (GameObject p in players)
-        {
-            PhotonView photonView = p.GetPhotonView();
-            if (photonView != null && photonView.IsMine)//내 플레이어 오브젝트 찾기
-            {
-                player = p;
-            }
-        }
         InitializeItem(item);
     }
 
@@ -64,11 +58,18 @@ public class ItemInSlot : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEn
     {
         if (!EventSystem.current.IsPointerOverGameObject())//UI 바깥으로 드래그하면 필드에 아이템 드랍하고 인벤토리에서 제거
         {
-            if (player != null)
+            if (Managers.Network.LocalPlayer != null)
             {
                 // TODO : PUN2에서 교체해야함
                 //사과 개수만큼 드랍
-                // Managers.Object.SpawnLootingItems(item.ID, count, player.gameObject.transform.position, 1.5f, 1.0f);
+                Managers.Network.Client.Send(
+                    new C_SpawnLooting()
+                    {
+                        ObjectId = item.ID,
+                        Count = count,
+                        PlayerId = Managers.Network.LocalPlayer.Id
+                    }
+                );
                 RemoveItem();//인벤토리에서 삭제
             }
             

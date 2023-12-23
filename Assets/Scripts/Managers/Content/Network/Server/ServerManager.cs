@@ -46,18 +46,26 @@ public class ServerManager
         SPM.CustomHandler += (s,m,i) => Managers.Network.Server.PQ.Push(s, i, m);
     }
 
-    public void Listen(int port = 7777)
+    public bool Listen(int port = 7777)
     {
-        if (_isListening) return;
+        if (_isListening) return false;
         _endPoint = new IPEndPoint(_ipAddr, port);
         _listener = new Listener();
-        _listener.Init(_endPoint, () => { return SessionManager.Generate(); });
+        if (!_listener.Init(_endPoint, () => SessionManager.Generate())) return false;
         Debug.Log("Listening...");
         _isListening = true;
+        return _isListening;
     }
 
     public void Update()
     {
         SessionManager.Update();
+    }
+
+    public void ShutDown()
+    {
+        SessionManager.Close();
+        _listener.ShutDown();
+        _isListening = false;
     }
 }
