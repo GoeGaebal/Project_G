@@ -1,12 +1,5 @@
-using System;
 using System.Collections.Generic;
-using Photon.Pun;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class UI_PopupText : UI_Scene
 {

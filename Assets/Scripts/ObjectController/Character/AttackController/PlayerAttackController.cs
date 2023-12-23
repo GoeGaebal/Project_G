@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
-using Photon.Pun;
 
 public enum EnumWeaponList
 {
@@ -41,8 +40,7 @@ public class PlayerAttackController : AttackController
         //     localPlayer = this.gameObject;
         // }        
     }
-
-    [PunRPC]
+    
     private void SyncWeapon(EnumWeaponList changeWeapon)
     {
         if(changeWeapon == currentWeapon) return;        

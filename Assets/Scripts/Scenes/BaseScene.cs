@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Google.Protobuf.Protocol;
-using Photon.Pun;
+﻿using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
-public abstract class BaseScene : MonoBehaviourPunCallbacks
+public abstract class BaseScene : MonoBehaviour
 {
     public SceneType SceneType { get; protected set; } = SceneType.Unknown;
 

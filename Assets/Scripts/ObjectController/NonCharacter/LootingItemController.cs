@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LootingItemController : NetworkObject

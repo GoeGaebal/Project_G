@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
 
 public enum EnumTimeSlot
 {
@@ -11,7 +6,7 @@ public enum EnumTimeSlot
 };
 
 
-public class TimeSlotManager : IOnEventCallback
+public class TimeSlotManager
 {
 
     [SerializeField] private float _timeChangePeriod = 3.0f;
@@ -51,17 +46,8 @@ public class TimeSlotManager : IOnEventCallback
 
     public void Init()
     {
-        
-        PhotonNetwork.AddCallbackTarget(this);
-
-        // if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
-         
     }
 
-
-    private void OnDisable() {
-        PhotonNetwork.RemoveCallbackTarget(this);
-    }
     public void AddListener(ITimeSlotChangeEventListener timeChangeEventListener) 
     {
         Debug.Log("addListener");
@@ -122,10 +108,10 @@ public class TimeSlotManager : IOnEventCallback
             }
     }
 
-    public void OnEvent(EventData photonEvent)
-    {
+ //   public void OnEvent(EventData photonEvent)
+   // {
 
-        byte eventCode = photonEvent.Code;
+   //     byte eventCode = photonEvent.Code;
 
         // switch (eventCode)
         // {
@@ -149,5 +135,5 @@ public class TimeSlotManager : IOnEventCallback
         //         break;
         // }
         
-    }
+    //}
 }

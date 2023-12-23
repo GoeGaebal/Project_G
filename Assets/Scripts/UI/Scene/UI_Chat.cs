@@ -3,7 +3,6 @@ using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using WebSocketSharp;
 
 // TODO : UI_Chat에서 직접 Send 하는 부분을 옮겨야 함
 public class UI_Chat : UI_Scene
@@ -60,7 +59,7 @@ public class UI_Chat : UI_Scene
     private void SendChat()
     {
         TMP_InputField inputField = Get<TMP_InputField>((int)InputFields.InputField);
-        if (inputField.text.IsNullOrEmpty()) return;
+        if (string.IsNullOrEmpty(inputField.text)) return;
         
         C_Chat chat = new C_Chat();
         chat.Msg = String.Copy(inputField.text);

@@ -1,8 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Google.Protobuf.Protocol;
-using UnityEngine;
-using Photon;
 
 public class CreditScene : BaseScene
 {

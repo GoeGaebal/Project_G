@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 using System;
 using Google.Protobuf.Protocol;
 
@@ -25,7 +22,6 @@ public class DamageableEntity : NetworkObject
     ///<summary>
     ///  적이 데미지를 입었을 때 호출되는 함수
     ///</summary>
-    [PunRPC]
     public virtual void OnDamage(float damage)
     {
         if (isDead) return;

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Google.Protobuf.Protocol;
-using Photon.Pun;
+﻿using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -54,22 +51,6 @@ public class SceneManagerEx
             _isLoading = false;
             Managers.Input.Asset.Enable();
         }
-    }
-
-    /// <summary>
-    /// Scene을 불러오는 함수, 기존 Unity 방식으로는 type에 따라서 불러오지 못하므로 이를 반영하였다.
-    /// </summary>
-    /// <remark>
-    /// PUN2의 모든 클라이언트들이 같은 씬을 로드하도록 하는 PhotonNetwork.LoadLevel를 사용한다.
-    /// </remark>
-    /// <param name="type">
-    /// Define에 존재하는 Scene enum class에 존재하는 상수
-    /// /param>
-    public void LoadLevel(SceneType type)
-    {
-        Managers.Clear();
-        
-        PhotonNetwork.LoadLevel(GetSceneName(type));
     }
 
     private string GetSceneName(SceneType type)

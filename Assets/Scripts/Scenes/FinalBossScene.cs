@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
@@ -24,16 +22,16 @@ public class FinalBossScene : BaseScene
 
     private void Start()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            Managers.UI.SetEventSystem();
-            GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
-            // 테스트용 강제 설정
-            PhotonView view = player.GetComponent<PhotonView>();
-            PhotonView[] weaponView = player.GetPhotonViewsInChildren();
-            PhotonNetwork.AllocateViewID(view);
-            PhotonNetwork.AllocateViewID(weaponView[1]);
-        }
+        //if (!PhotonNetwork.IsConnected)
+        //{
+        //    Managers.UI.SetEventSystem();
+        //    GameObject player = Managers.Resource.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        //    // 테스트용 강제 설정
+        //    PhotonView view = player.GetComponent<PhotonView>();
+        //    PhotonView[] weaponView = player.GetPhotonViewsInChildren();
+        //    PhotonNetwork.AllocateViewID(view);
+        //    PhotonNetwork.AllocateViewID(weaponView[1]);
+        // }
         
         Managers.UI.SetEventSystem();
         Managers.UI.ShowSceneUI<UI_Inven>();

@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.Networking.Types;
 
-public class ItemInSlot : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemInSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private Image _icon;//아이템의 이미지
     GameObject[] players;

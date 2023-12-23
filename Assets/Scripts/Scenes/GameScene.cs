@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 
 public class GameScene : BaseScene

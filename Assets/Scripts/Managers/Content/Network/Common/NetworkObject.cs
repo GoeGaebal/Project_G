@@ -1,6 +1,4 @@
-using System;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 
 public class NetworkObject : MonoBehaviour

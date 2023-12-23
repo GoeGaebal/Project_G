@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
 public class ResourceManager
@@ -82,24 +77,16 @@ public class ResourceManager
         if (go == null)
             return;
 
-        Poolable poolable = go.GetComponent<Poolable>();
-        if (poolable != null)
+        Poolable poolAble = go.GetComponent<Poolable>();
+        if (poolAble != null)
         {
-            Managers.Pool.Push(poolable);
+            Managers.Pool.Push(poolAble);
             return;
         }
-
-        PhotonView pv = go.GetComponent<PhotonView>();
-        if (pv != null && pv.IsMine)
-        {
-            PhotonNetwork.Destroy(go);
-        }
+        
+        if (t > 0)
+            Object.Destroy(go,t);
         else
-        {
-            if (t > 0)
-                Object.Destroy(go,t);
-            else
-                Object.Destroy(go);
-        }
+            Object.Destroy(go);
     }
 }

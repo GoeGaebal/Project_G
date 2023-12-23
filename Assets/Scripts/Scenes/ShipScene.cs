@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 
 public class ShipScene : BaseScene

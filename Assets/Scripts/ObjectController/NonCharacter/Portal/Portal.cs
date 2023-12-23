@@ -1,10 +1,6 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
-using ExitGames.Client.Photon.StructWrapping;
 using Google.Protobuf.Protocol;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class Portal : MonoBehaviour
 {
