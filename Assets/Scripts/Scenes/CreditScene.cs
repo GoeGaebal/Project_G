@@ -14,13 +14,11 @@ public class CreditScene : BaseScene
 
     IEnumerator EndCoroutine()
     {
-        Photon.Pun.PhotonNetwork.LeaveRoom();
-        yield return new WaitForSeconds(3f);
-        
-        Managers.Scene.LoadScene(SceneType.Credit);
-        
-        
-        
+        // Photon.Pun.PhotonNetwork.LeaveRoom();
+        //yield return new WaitForSeconds(1f);
+
+        //Managers.Scene.LoadScene(SceneType.Credit);
+        yield break;
     }
 
     public override void Clear()

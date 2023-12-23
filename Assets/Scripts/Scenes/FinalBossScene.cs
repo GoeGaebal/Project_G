@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
+using Cinemachine;
 
 public class FinalBossScene : BaseScene
 {
+    public CinemachineTargetGroup playerCam;
+
+    public Image fade;
     protected override void Init()
     {
         base.Init();
@@ -13,38 +18,8 @@ public class FinalBossScene : BaseScene
         Managers.Map.LoadMap(4);
         Managers.Input.PlayerActionMap.Enable();
 
-        // GameObject player = Managers.Resource.Instantiate("Creature/Player");
-        // player.name = "Player";
-        // Managers.Object.Add(player);
-        //
-        // for (int i = 0; i < 5; i++)
-        // {
-        //     GameObject monster = Managers.Resource.Instantiate("Creature/Monster");
-        //     monster.name = $"Monster_{i+1}";
-        //     
-        //     // 랜덤 위치 스폰 (일단 겹쳐도 OK)
-        //     Vector3Int pos = new Vector3Int()
-        //     {
-        //         x = Random.Range(-15, 15),
-        //         y = Random.Range(-10, 10)
-        //     };
-        //
-        //     MonsterController mc = monster.GetComponent<MonsterController>();
-        //     mc.CellPos = pos;
-        //     
-        //     Managers.Object.Add(monster);
-        // }
-        //Managers.UI.ShowSceneUI<UI_Inven>();
-        //Dictionary<int, Data.Stat> dict = Managers.Data.StatDict;
-        //gameObject.GetOrAddComponent<CursorController>();
-
-        //GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "UnityChan");
-        //Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(player);
-
-        ////Managers.Game.Spawn(Define.WorldObject.Monster, "Knight");
-        //GameObject go = new GameObject { name = "SpawningPool" };
-        //SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
-        //pool.SetKeepMonsterCount(2);
+        playerCam.AddMember(Managers.Network.LocalPlayer.transform, 1f, 7f);
+        StartCoroutine(CamToBoss());
     }
 
     private void Start()
@@ -70,6 +45,33 @@ public class FinalBossScene : BaseScene
 
         var scene = Managers.UI.ShowSceneUI<UI_PopupText>();
         scene.Init();
+    }
+
+    IEnumerator CamToBoss()
+    {
+        yield return new WaitForSeconds(1f);
+        playerCam.m_Targets[0].weight = 1f;
+        playerCam.m_Targets[1].weight = 0f;
+
+        yield return new WaitForSeconds(1.8f);
+        playerCam.m_Targets[1].weight = 1f;
+        playerCam.m_Targets[0].weight = 0f;
+
+        StartCoroutine(Fade());
+    }
+
+    IEnumerator Fade()
+    {
+        while(fade.color.a < 1f)
+        {
+            Color temp = fade.color;
+            temp.a += Time.deltaTime * 0.75f;
+            fade.color = temp;
+            yield return null;
+        }
+
+        Managers.Scene.LoadScene(SceneType.Credit);
+        yield break;
     }
 
     public override void Clear()
