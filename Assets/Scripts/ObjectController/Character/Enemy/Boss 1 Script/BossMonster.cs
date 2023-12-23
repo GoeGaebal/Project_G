@@ -80,14 +80,15 @@ public class BossMonster : BasicMonster
         Instantiate(portalPrefab,transform.position, transform.rotation);
 
         if (!Managers.Network.IsHost) return;
-        Managers.Network.Server.Room.SpawnLootingItems(4101, 10, transform.position, 2.0f, 1.0f);
-        Managers.Network.Server.Room.SpawnLootingItems(4001, 5, transform.position, 2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(4101, 25, transform.position, 2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(4102, 10, transform.position, 2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(4103, 5, transform.position, 2.0f, 1.0f);
     }
     
     private void OnFinishDieAnim()
     {
         if (!Managers.Network.IsHost) return;
-        Managers.Network.Server.Room.SpawnLootingItems(4001,5,transform.position,2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(4101,5,transform.position,2.0f, 1.0f);
         {
             S_DeSpawn despawn = new S_DeSpawn();
             despawn.ObjectIds.Add(Id);

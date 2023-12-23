@@ -62,6 +62,11 @@ public class Portal : MonoBehaviour
     {
         if (!other.gameObject.CompareTag("Player")) return;
         if (!Managers.Network.IsHost) return;
+        CheckPlayers();
+    }
+
+    private void CheckPlayers()
+    {
         var incomingObjectCount = Physics2D.OverlapCollider(_collider,_filter2D,_results);
         if (incomingObjectCount == 0) return;
         
@@ -104,6 +109,7 @@ public class Portal : MonoBehaviour
     {
         Movable = true;
         _isAnimating = false;
+        CheckPlayers();
     }
 
     private void PortalClosed()
