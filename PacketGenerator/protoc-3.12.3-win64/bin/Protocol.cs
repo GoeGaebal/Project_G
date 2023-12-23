@@ -78,16 +78,16 @@ namespace Google.Protobuf.Protocol {
             "QUREX0lURU0QERITCg9TX1NQQVdOX0xPT1RJTkcQEhITCg9DX1NQQVdOX0xP",
             "T1RJTkcQExIUChBDX0FSVElGQUNUX0VWRU5UEBQSFAoQU19BUlRJRkFDVF9F",
             "VkVOVBAVEhEKDUNfQ0hBTkdFX05BTUUQFhIRCg1TX0NIQU5HRV9OQU1FEBcq",
-            "YAoJU2NlbmVUeXBlEgsKB1VOS05PV04QABIJCgVMT0JCWRABEggKBEdBTUUQ",
+            "awoJU2NlbmVUeXBlEgsKB1VOS05PV04QABIJCgVMT0JCWRABEggKBEdBTUUQ",
             "AhIICgRTSElQEAMSDgoKRklOQUxfQk9TUxAEEgsKB0xPQURJTkcQBRIKCgZD",
-            "UkVESVQQBipBCg1DcmVhdHVyZVN0YXRlEggKBElETEUQABIHCgNSVU4QARIK",
-            "CgZBVFRBQ0sQAhIHCgNISVQQAxIICgRERUFEEAQqVAoOR2FtZU9iamVjdFR5",
-            "cGUSCAoETk9ORRAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhINCglHQVRI",
-            "RVJJTkcQAxIQCgxMT09USU5HX0lURU0QBCpBCglTa2lsbFR5cGUSDgoKU0tJ",
-            "TExfTk9ORRAAEg4KClNLSUxMX0FVVE8QARIUChBTS0lMTF9QUk9KRUNUSUxF",
-            "EAIqNQoTVUlXb3JsZE1hcEV2ZW50VHlwZRIOCgpTRVRfVEFSR0VUEAASDgoK",
-            "UEFVU0VfTU9WRRABQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnBy",
-            "b3RvMw=="));
+            "UkVESVQQBhIJCgVJTlRSTxAHKkEKDUNyZWF0dXJlU3RhdGUSCAoESURMRRAA",
+            "EgcKA1JVThABEgoKBkFUVEFDSxACEgcKA0hJVBADEggKBERFQUQQBCpUCg5H",
+            "YW1lT2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoHTU9OU1RF",
+            "UhACEg0KCUdBVEhFUklORxADEhAKDExPT1RJTkdfSVRFTRAEKkEKCVNraWxs",
+            "VHlwZRIOCgpTS0lMTF9OT05FEAASDgoKU0tJTExfQVVUTxABEhQKEFNLSUxM",
+            "X1BST0pFQ1RJTEUQAio1ChNVSVdvcmxkTWFwRXZlbnRUeXBlEg4KClNFVF9U",
+            "QVJHRVQQABIOCgpQQVVTRV9NT1ZFEAFCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Q",
+            "cm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.SceneType), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), typeof(global::Google.Protobuf.Protocol.UIWorldMapEventType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -162,6 +162,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("FINAL_BOSS")] FinalBoss = 4,
     [pbr::OriginalName("LOADING")] Loading = 5,
     [pbr::OriginalName("CREDIT")] Credit = 6,
+    [pbr::OriginalName("INTRO")] Intro = 7,
   }
 
   public enum CreatureState {

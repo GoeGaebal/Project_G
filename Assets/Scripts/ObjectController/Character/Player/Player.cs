@@ -27,8 +27,8 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
-    private bool _attackInputBuffer = false;
-    private Vector2 _runInputBuffer = Vector2.zero;
+    private bool _attackInputBuffer;
+    // private Vector2 _runInputBuffer = Vector2.zero;
 
     private bool _isTwoHand = false;
 

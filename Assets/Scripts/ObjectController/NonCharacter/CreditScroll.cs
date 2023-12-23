@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class CreditScroll : MonoBehaviour
@@ -19,6 +20,9 @@ public class CreditScroll : MonoBehaviour
         _bar.value = 1f;
 
         StartCoroutine(ScrollCoroutine());
+        
+        if(!Managers.Network.IsHost) Managers.Network.Client.DisConnect();
+        Managers.Network.IsEnd = true;
     }
 
     void Update()
@@ -46,15 +50,17 @@ public class CreditScroll : MonoBehaviour
 
     IEnumerator LoadLobby()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1))
+        if (Managers.Input.UIActions.Click.IsPressed() || Managers.Input.UIActions.RightClick.IsPressed())
         {
             yield return null;
             StartCoroutine(LoadLobby());
         }
-        else if (Input.anyKeyDown)
+        // TODO: AnyKey가 없어서 일단 keyboard에서 직접 받도록 하였음
+        else if (Keyboard.current.anyKey.IsPressed())
         {
-            Managers.Scene.LoadScene(SceneType.Lobby);
-            yield break; ;
+            if(Managers.Network.IsHost) Managers.Network.Server.ShutDown();
+            else Managers.Scene.LoadScene(SceneType.Intro);
+            yield break;
         }
         else
         {

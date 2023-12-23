@@ -39,6 +39,7 @@ enum SceneType {
     FINAL_BOSS = 4;
     LOADING = 5;
     CREDIT = 6;
+    INTRO = 7;
 }
 
 enum CreatureState {

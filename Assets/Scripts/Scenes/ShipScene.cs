@@ -45,5 +45,6 @@ public class ShipScene : BaseScene
     public override void Clear()
     {
         Managers.Object.ClearObjects(GameObjectType.Monster, GameObjectType.Gathering);
+        Managers.UI.Clear();
     }
 }

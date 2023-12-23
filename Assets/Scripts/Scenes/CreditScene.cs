@@ -1,4 +1,5 @@
 using System.Collections;
+using Google.Protobuf.Protocol;
 
 public class CreditScene : BaseScene
 {
@@ -6,6 +7,12 @@ public class CreditScene : BaseScene
     void Start()
     {
         StartCoroutine(EndCoroutine());
+    }
+
+    protected override void Init()
+    {
+        base.Init();
+        SceneType = SceneType.Credit;
     }
 
     IEnumerator EndCoroutine()
@@ -19,7 +26,6 @@ public class CreditScene : BaseScene
 
     public override void Clear()
     {
-        
+        Managers.UI.Clear();
     }
-
 }

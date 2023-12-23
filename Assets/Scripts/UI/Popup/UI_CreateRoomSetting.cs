@@ -73,17 +73,15 @@ public class UI_CreateRoomSetting : UI_Popup
         GetButton((int)Buttons.ExitBtn).onClick.AddListener((() => { Managers.UI.ClosePopupUI(); }));
         loadingSet = GetObject((int)GameObjects.LoadingSet);
         loadingSet.SetActive(false);
-
-        roomPort.text = "7777";
+        
         createRoomBtn.onClick.RemoveAllListeners();
         createRoomBtn.onClick.AddListener(() =>
         {
             SetInteractableButtons(false);
             var portText = roomPort.text.Trim((char)8203);;
             var networkUserName = userName.text.Trim((char)8203);
-            if(!string.IsNullOrEmpty(portText))
+            if(string.IsNullOrEmpty(portText))
             {
-
                 if (Managers.Network.CreateRoom(() =>
                     {
                         Managers.Network.UserName = networkUserName;

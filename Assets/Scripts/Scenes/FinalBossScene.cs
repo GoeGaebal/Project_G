@@ -74,6 +74,6 @@ public class FinalBossScene : BaseScene
 
     public override void Clear()
     {
-        // throw new System.NotImplementedException();
+        Managers.UI.Clear();
     }
 }
