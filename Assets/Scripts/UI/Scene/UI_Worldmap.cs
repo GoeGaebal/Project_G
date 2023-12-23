@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using UnityEngine.EventSystems;
 using TMPro;
-using Unity.VisualScripting;
 
 public class UI_Worldmap : UI_Scene
 {

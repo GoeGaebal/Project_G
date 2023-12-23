@@ -75,5 +75,6 @@ public class FinalBossScene : BaseScene
     public override void Clear()
     {
         Managers.UI.Clear();
+        Managers.WorldMap.FinishFinalBoss();
     }
 }
