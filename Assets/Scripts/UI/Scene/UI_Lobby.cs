@@ -42,13 +42,13 @@ public class UI_Lobby : UI_Popup
         base.Init();
         
         Bind<Button>(typeof(Buttons));
-        Bind<GameObject>(typeof(GameObjects));
+        // Bind<GameObject>(typeof(GameObjects));
 
         CreateBtn = GetButton((int)Buttons.CreateBtn);
         RedoBtn = GetButton((int)Buttons.RedoBtn);
 
-        _content = GetObject((int)GameObjects.Content);
-        LoadingPane = GetObject((int)GameObjects.LoadingPane);
+        // _content = GetObject((int)GameObjects.Content);
+        // LoadingPane = GetObject((int)GameObjects.LoadingPane);
         GetButton((int)Buttons.CreateBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_CreateRoomSetting>();});
         RedoBtn.onClick.AddListener(() => {
             UI_Start.animator.SetTrigger(ReturnButtonClicked);
@@ -56,7 +56,7 @@ public class UI_Lobby : UI_Popup
         });
         
         GetButton((int)Buttons.FindBtn).onClick.AddListener(() => { Managers.UI.ShowPopupUI<UI_FindRoom>(); });
-        LoadingPane.SetActive(false);
+        // LoadingPane.SetActive(false);
     }
 
     public UI_RoomItem AddRoom()
