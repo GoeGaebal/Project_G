@@ -1,4 +1,6 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
+using ExitGames.Client.Photon.StructWrapping;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,29 +15,63 @@ public class Portal : MonoBehaviour
     private readonly Collider2D[] _results = new Collider2D[5];
 
     private SpriteRenderer _sprite;
-    [SerializeField] private bool movable = true;
+    private Animator _animator;
+    private bool _isAnimating;
+    [SerializeField] private bool startOpen;
+    private bool Movable
+    {
+        get => _animator.GetBool(IsOpen);
+        set => _animator.SetBool(IsOpen, value);
+    }
+    
+    
+    private static readonly int OpenTrigger = Animator.StringToHash("Open");
+    private static readonly int CloseTrigger = Animator.StringToHash("Close");
+    private static readonly int IsOpen = Animator.StringToHash("isOpen");
 
     private void Start()
     {
         _sprite = GetComponent<SpriteRenderer>();
         _collider = GetComponent<Collider2D>();
+        _animator = GetComponent<Animator>();
         _filter2D.useLayerMask = true;
         _filter2D.useTriggers = true;
         _filter2D.SetLayerMask(LayerMask.GetMask("Player"));
+        
+        _animator.ResetTrigger(OpenTrigger);
+        _animator.ResetTrigger(CloseTrigger);
+        Movable = startOpen;
+        _isAnimating = false;
     }
 
-    private void Update()
+    private void Open()
     {
+        if (Movable || _isAnimating) return;
+        _animator.SetTrigger(OpenTrigger);
+        _isAnimating = true;
+    }
+
+    private void Close()
+    {
+        if (!Movable || _isAnimating) return;
+        _animator.SetTrigger(CloseTrigger);
+        _isAnimating = true;
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!other.gameObject.CompareTag("Player")) return;
         if (!Managers.Network.IsHost) return;
         var incomingObjectCount = Physics2D.OverlapCollider(_collider,_filter2D,_results);
         if (incomingObjectCount == 0) return;
+        
         if (isExitPortal)
         {
             Managers.Network.Server.Room.LeaveGame(_results[0].GetComponent<Player>().Info.ObjectId);
             return;
         }
-
-        if (!movable || Managers.Network.Server.Room.PlayersCount > incomingObjectCount) return;
+        
+        if (!Movable || Managers.Network.Server.Room.PlayersCount > incomingObjectCount) return;
         switch (Managers.Scene.CurrentScene.SceneType)
         {
             case SceneType.Lobby:
@@ -62,17 +98,23 @@ public class Portal : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-        movable = false;
     }
 
-    public void SetColor(Color color)
+    private void PortalOpened()
     {
-        _sprite.color = color;
+        Movable = true;
+        _isAnimating = false;
+    }
+
+    private void PortalClosed()
+    {
+        Movable = false;
+        _isAnimating = false;
     }
 
     public void SetPortal(bool move)
     {
-        movable = move;
+        if (move) Open();
+        else Close();
     }
 }
