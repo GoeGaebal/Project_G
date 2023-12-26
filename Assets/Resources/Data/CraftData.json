@@ -2,25 +2,102 @@
   "crafts": [
     {
       "id": "1",
-      "target": "Gauntlet",
-      "targetAmount": "1",
-      "source": "Pipe",
-      "sourceAmount": "1",
-      "material1": "IronIngot",
-      "material1Amount": "2",
-      "material2": "Apple",
-      "material2Amount": "1"
-    },
-    {
-      "id": "2",
-      "target": "LaserGun",
+      "target": "3001",
       "targetAmount": "1",
       "source": "",
       "sourceAmount": "0",
-      "material1": "IronIngot",
+      "material1": "4001",
+      "material1Amount": "2",
+      "material2": "",
+      "material2Amount": "0"
+    },
+    {
+      "id": "2",
+      "target": "1001",
+      "targetAmount": "1",
+      "source": "",
+      "sourceAmount": "0",
+      "material1": "4101",
       "material1Amount": "3",
-      "material2": "Apple",
+      "material2": "",
+      "material2Amount": "0"
+    },
+    {
+      "id": "3",
+      "target": "1002",
+      "targetAmount": "1",
+      "source": "",
+      "sourceAmount": "0",
+      "material1": "4101",
+      "material1Amount": "3",
+      "material2": "4102",
       "material2Amount": "2"
+    },
+    {
+      "id": "4",
+      "target": "1003",
+      "targetAmount": "1",
+      "source": "1001",
+      "sourceAmount": "1",
+      "material1": "4102",
+      "material1Amount": "2",
+      "material2": "4103",
+      "material2Amount": "1"
+    },
+    {
+      "id": "5",
+      "target": "1004",
+      "targetAmount": "1",
+      "source": "1001",
+      "sourceAmount": "1",
+      "material1": "4101",
+      "material1Amount": "2",
+      "material2": "4102",
+      "material2Amount": "3"
+    },
+    {
+      "id": "6",
+      "target": "2001",
+      "targetAmount": "1",
+      "source": "",
+      "sourceAmount": "0",
+      "material1": "4102",
+      "material1Amount": "3",
+      "material2": "4103",
+      "material2Amount": "1"
+    },
+    {
+      "id": "7",
+      "target": "2002",
+      "targetAmount": "1",
+      "source": "4101",
+      "sourceAmount": "1",
+      "material1": "4102",
+      "material1Amount": "1",
+      "material2": "4103",
+      "material2Amount": "4"
+    },
+    {
+      "id": "8",
+      "target": "2003",
+      "targetAmount": "1",
+      "source": "4101",
+      "sourceAmount": "3",
+      "material1": "4102",
+      "material1Amount": "2",
+      "material2": "4103",
+      "material2Amount": "5"
+    },
+    {
+      "id": "9",
+      "target": "2004",
+      "targetAmount": "1",
+      "source": "",
+      "sourceAmount": "0",
+      "material1": "4101",
+      "material1Amount": "1",
+      "material2": "4102",
+      "material2Amount": "1"
     }
   ]
 }
