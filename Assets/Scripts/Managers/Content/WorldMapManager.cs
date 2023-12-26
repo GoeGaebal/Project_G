@@ -7,7 +7,7 @@ public class WorldMapManager
 {
     private GameObject _ship;
     private GameObject _finalBoss;
-    private float _finalBossMoveSpeed = 100.0f;
+    private float _finalBossMoveSpeed = 1.0f;
     private Vector3 _shipPosition;
 
     private bool _isBossBattle;
