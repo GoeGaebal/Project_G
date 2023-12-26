@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
 #region Map
 [Serializable]
 public class MapData
@@ -32,13 +31,13 @@ public class MapDataLoader : ILoader<ulong,bool>
 public class CraftData
 {
     public int id;
-    public string target;
+    public int target;
     public int targetAmount;
-    public string source;
+    public int source;
     public int sourceAmount;
-    public string material1;
+    public int material1;
     public int material1Amount;
-    public string material2;
+    public int material2;
     public int material2Amount;
 }
 
@@ -98,7 +97,7 @@ public class ItemData
 public class ItemDataLoader : ILoader<int, Item>
 {
     public List<ItemData> items = new();
-    
+
     public Dictionary<int, Item> MakeDict()
     {
         Dictionary<int, Item> dict = new();
@@ -108,7 +107,7 @@ public class ItemDataLoader : ILoader<int, Item>
             string iconPath = null;
             switch (type)
             {
-                   
+
                 case 1:
                 {
                     var weapon = ScriptableObject.CreateInstance<WeaponItem>();
@@ -134,7 +133,6 @@ public class ItemDataLoader : ILoader<int, Item>
                     break;
                 }
                 case 4:
-                {
                     var type2 = (item.id % 1000) / 100;
                     if (type2 == 0)
                     {
@@ -151,12 +149,10 @@ public class ItemDataLoader : ILoader<int, Item>
                         dict.Add(item.id, resource);
                     }
                     break;
-                }
                 default:
                     break;
             }
         }
-            
         return dict;
     }
 }

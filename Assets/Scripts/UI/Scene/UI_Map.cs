@@ -46,7 +46,7 @@ public class UI_Map : UI_Scene
         GetButton((int)Buttons.MapButton).onClick.AddListener(ClickBtn);
         Managers.Input.PlayerActions.MiniMap.AddEvent(PushShortKey);
         
-        GetObject((int)GameObjects.MapPanel).SetActive(false);
+        GetObject((int)GameObjects.MapPanel).SetActive(true);
     }
 
     private void OnDestroy()

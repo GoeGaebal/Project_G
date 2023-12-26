@@ -1,3 +1,4 @@
+using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
@@ -160,6 +161,8 @@ public class UI_Worldmap : UI_Scene
         Managers.WorldMap.FinalBoss = _finalBoss;
 
         Managers.WorldMap.UI = this;
+
+        StartCoroutine(tempStart());
     }
 
     public void SetTarget(GameObject t)//목표 지정
@@ -225,6 +228,29 @@ public class UI_Worldmap : UI_Scene
         _lr.Points[0] = Vector2.zero;
         _lr.Points[1] = _targetPosition - _lrGO.transform.localPosition;
         _lr.SetAllDirty();
+    }
+
+
+    IEnumerator tempStart()//비행선 돌입하자마자 임시로 맵 1로 출발
+    {;
+        yield return new WaitForSeconds(1f);
+        SetTarget(_map1.gameObject);
+        _arriveFlag = false;
+        _moveFlag = true;
+        _lr.enabled = true;
+        _map1.transform.GetChild(0).gameObject.SetActive(true);
+        _map2.transform.GetChild(0).gameObject.SetActive(false);
+        _map3.transform.GetChild(0).gameObject.SetActive(false);
+
+        S_WorldMapEvent packet = new S_WorldMapEvent();
+        packet.Event = UIWorldMapEventType.SetTarget;
+        packet.ShipPosX = _ship.transform.localPosition.x;
+        packet.ShipPosY = _ship.transform.localPosition.y;
+        packet.TargetPosX = _targetPosition.x;
+        packet.TargetPosY = _targetPosition.y;
+        packet.TargetMapId = _targetMapId;
+        Managers.Network.Server.Room.Broadcast(packet);
+        yield break;
     }
 
     public void OnWorldmapButtonClick(PointerEventData evt)

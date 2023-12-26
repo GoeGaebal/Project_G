@@ -54,5 +54,6 @@ public class UI_CraftMaterial : UI_Base
         _icon.sprite = null;
         _count.text = null;
         _countGo.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
