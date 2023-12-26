@@ -73,7 +73,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
             }
             var distance = GetDistance(Target.transform.position);
             State = distance > minDisFromPlayer ? CreatureState.Run : CreatureState.Idle;
-            _animator?.SetFloat(DistanceAnimParam, distance);
+            _animator.SetFloat(DistanceAnimParam, distance);
         }
         // 만일 타겟을 가지고 있지 않다면
         else
@@ -163,7 +163,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
         else State = CreatureState.Idle;
     }
     protected float GetDistance(Vector3 targetPosition)
-    { 
+    {
         return (targetPosition - transform.position).magnitude;
     }
 
