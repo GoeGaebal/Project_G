@@ -96,6 +96,7 @@ partial class PacketHandler
 	public static void S_DieHandler(PacketSession session, IMessage packet)
 	{
 		// S_Die diePacket = packet as S_Die;
+		if (packet is not S_Die dieEvt) return;
 		//
 		// GameObject go = Managers.Object.FindById(diePacket.ObjectId);
 		// if (go == null)

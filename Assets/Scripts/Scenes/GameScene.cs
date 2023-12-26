@@ -37,7 +37,7 @@ public class GameScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
-        
+
         // Managers.Network.ResetPlayer();
 
         _playerLifeCnt = Managers.Object.PlayerDict.Count;
