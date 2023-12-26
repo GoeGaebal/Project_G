@@ -95,7 +95,6 @@ public class ItemData
     public float AttackSpeed;
     public int RecoveryAmount;
 }
-
 public class ItemDataLoader : ILoader<int, Item>
 {
     public List<ItemData> items = new();
@@ -113,7 +112,7 @@ public class ItemDataLoader : ILoader<int, Item>
                 case 1:
                 {
                     var weapon = ScriptableObject.CreateInstance<WeaponItem>();
-                    iconPath = Path.Combine("Art/Item/Weapon", item.icon);
+                    iconPath = Path.Combine(@"Art\Item\Weapon", item.icon);
                     weapon.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, hp: item.Hp, damage: item.Damage, attackSpeed: item.AttackSpeed);
                     dict.Add(item.id, weapon);
                     break;
@@ -121,7 +120,7 @@ public class ItemDataLoader : ILoader<int, Item>
                 case 2:
                 {
                     var armor = ScriptableObject.CreateInstance<ArmorItem>();
-                    iconPath = Path.Combine("Art/Item/Armor", item.icon);
+                    iconPath = Path.Combine(@"Art\Item\Armor", item.icon);
                     armor.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, hp: item.Hp, damage: item.Damage);
                     dict.Add(item.id, armor);
                     break;
@@ -129,7 +128,7 @@ public class ItemDataLoader : ILoader<int, Item>
                 case 3:
                 {
                     var healthPotion = ScriptableObject.CreateInstance<HealthPotionItem>();
-                    iconPath = Path.Combine("Art/Item/HealthPotion", item.icon);
+                    iconPath = Path.Combine(@"Art\Item\HealthPotion", item.icon);
                     healthPotion.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, maxCount: item.MaxCount);
                     dict.Add(item.id, healthPotion);
                     break;
@@ -140,14 +139,14 @@ public class ItemDataLoader : ILoader<int, Item>
                     if (type2 == 0)
                     {
                         var food = ScriptableObject.CreateInstance<FoodItem>();
-                        iconPath = Path.Combine("Art/Item/Food", item.icon);
+                        iconPath = Path.Combine(@"Art\Item\Food", item.icon);
                         food.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, maxCount: item.MaxCount, healAmount: item.HealAmount);
                         dict.Add(item.id, food);
                     }
                     else
                     {
                         var resource = ScriptableObject.CreateInstance<ResourceItem>();
-                        iconPath = Path.Combine("Art/Item/Resource", item.icon);
+                        iconPath = Path.Combine(@"Art\Item\Resource", item.icon);
                         resource.Init(id: item.id, name : item.Name, tooltip: item.Tooltip, iconPath: iconPath, maxCount: item.MaxCount);
                         dict.Add(item.id, resource);
                     }

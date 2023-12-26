@@ -102,8 +102,8 @@ MonoBehaviour:
   m_BoneTransforms:
   - {fileID: 490201940921771520}
   m_Bounds:
-    m_Center: {x: 0.36192977, y: -1.0879341, z: 3.4924597e-10}
-    m_Extent: {x: 0.54626787, y: 0.30527925, z: 0}
+    m_Center: {x: 0.3624266, y: 0.5071227, z: 3.4924597e-10}
+    m_Extent: {x: 0.49868387, y: 0.53931284, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -293,8 +293,8 @@ MonoBehaviour:
   - {fileID: 4098166471816343292}
   - {fileID: 490201940921771520}
   m_Bounds:
-    m_Center: {x: 0.305044, y: -0.7100099, z: 3.4924597e-10}
-    m_Extent: {x: 0.20711093, y: 0.3151037, z: 0}
+    m_Center: {x: 0.11371079, y: 0.4062988, z: 3.4924597e-10}
+    m_Extent: {x: 0.26380426, y: 0.2826689, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -481,7 +481,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.5, y: 0.18}
+  m_Offset: {x: -0.56, y: -0.14}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -492,7 +492,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 1.2}
+  m_Size: {x: 0.8, y: 1.36}
   m_EdgeRadius: 0
 --- !u!95 &7709974150388263899
 Animator:

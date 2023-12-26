@@ -101,7 +101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6363690501425039404
 Transform:
   m_ObjectHideFlags: 0
@@ -3363,7 +3363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3982627190794224828
 Transform:
   m_ObjectHideFlags: 0
@@ -41401,7 +41401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1029844240845266319
 Transform:
   m_ObjectHideFlags: 0
@@ -75119,7 +75119,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: -105541197
+  m_SortingLayerID: -1869315837
   m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &844499230707174656
@@ -75263,7 +75263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7158602918617399405
 Transform:
   m_ObjectHideFlags: 0
