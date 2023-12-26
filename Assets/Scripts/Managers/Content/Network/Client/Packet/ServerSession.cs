@@ -29,7 +29,15 @@ public class ServerSession : PacketSession
 		Debug.Log($"OnDisconnected : {endPoint}");
 		Managers.Network.Server.JobQueue.Enqueue(() =>
 		{
-			Managers.Scene.LoadScene(SceneType.Lobby);
+			if (Managers.Network.IsEnd)
+			{
+				Managers.Scene.LoadScene(SceneType.Intro);
+				Managers.Network.IsEnd = false;
+			}
+			else
+			{
+				Managers.Scene.LoadScene(SceneType.Lobby);
+			}
 			Managers.Object.Clear();
 		});
 	}

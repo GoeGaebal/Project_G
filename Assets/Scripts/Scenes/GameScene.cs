@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 
 public class GameScene : BaseScene
@@ -40,7 +37,7 @@ public class GameScene : BaseScene
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
-        
+
         // Managers.Network.ResetPlayer();
 
         _playerLifeCnt = Managers.Object.PlayerDict.Count;
@@ -53,6 +50,7 @@ public class GameScene : BaseScene
     public override void Clear()
     {
         Managers.Object.ClearObjects(GameObjectType.Monster, GameObjectType.Gathering);
+        Managers.UI.Clear();
     }
 
     IEnumerator FieldGameOverCoroutine()

@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using UnityEngine;
-using Photon;
 
 public class CreditScene : BaseScene
 {
@@ -10,6 +7,12 @@ public class CreditScene : BaseScene
     void Start()
     {
         StartCoroutine(EndCoroutine());
+    }
+
+    protected override void Init()
+    {
+        base.Init();
+        SceneType = SceneType.Credit;
     }
 
     IEnumerator EndCoroutine()
@@ -23,7 +26,6 @@ public class CreditScene : BaseScene
 
     public override void Clear()
     {
-        
+        Managers.UI.Clear();
     }
-
 }

@@ -1,8 +1,5 @@
-using System;
-using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI_PopupNameItem : UI_Base
 {

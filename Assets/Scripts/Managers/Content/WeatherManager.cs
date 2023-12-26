@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
 
 
 public enum EnumWeather
@@ -13,7 +10,7 @@ public enum EnumWeather
     Rain
 }
 
-public class WeatherManager : IOnEventCallback
+public class WeatherManager
 {
 
     private float _curremtTime;
@@ -36,17 +33,8 @@ public class WeatherManager : IOnEventCallback
 
     public void Init()
     {
-
-        PhotonNetwork.AddCallbackTarget(this);
-
-        // if(!PhotonNetwork.IsMasterClient) Managers.Network.RequestSynchronizeTime();
-         
     }
 
-
-    private void OnDisable() {
-        PhotonNetwork.RemoveCallbackTarget(this);
-    }
     public void AddListener(IWeatherChangeEventListener weatherChangeEventListener) 
     {
         Debug.Log("addListener");
@@ -89,8 +77,8 @@ public class WeatherManager : IOnEventCallback
     }
 
     // 서버 동기화 관련. 일단 보류
-    public void OnEvent(EventData photonEvent)
-    {
+    // public void OnEvent(EventData photonEvent)
+    //{
 
     //     byte eventCode = photonEvent.Code;
 
@@ -118,5 +106,5 @@ public class WeatherManager : IOnEventCallback
     //             break;
     //     }
         
-    }
+    // }
 }

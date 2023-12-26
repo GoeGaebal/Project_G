@@ -29,6 +29,7 @@ namespace ServerCore
 			}
 			catch (SocketException e)
 			{
+				Debug.Log(e);
 				return false;
 			}
 

@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-public class Indicator : MonoBehaviourPun
+public class Indicator : MonoBehaviour
 {
 
     [SerializeField] private GameObject indicatorPrefab;
@@ -28,15 +24,15 @@ public class Indicator : MonoBehaviourPun
         Vector2 dir = new Vector2(Screen.width, Screen.height);
         defaultAngle = Vector2.Angle(new Vector2(0, 1), dir);
 
-        if(photonView.IsMine) 
-        {
-            localPlayer = this.gameObject;
-            indicatorUIInstance.SetActive(false);
-        }
+       // if(photonView.IsMine) 
+       // {
+       //     localPlayer = this.gameObject;
+        //    indicatorUIInstance.SetActive(false);
+       // }
     }
  
     private void OnEnable() {
-        if(photonView.IsMine) localPlayer = this.gameObject;
+       // if(photonView.IsMine) localPlayer = this.gameObject;
     }
 
     void Update()
@@ -47,7 +43,7 @@ public class Indicator : MonoBehaviourPun
  
     public void SetIndicator()
     {
-        if(photonView.IsMine) return;
+      //  if(photonView.IsMine) return;
         if (!isOffScreen()) return;
 
         if(localPlayer == null)

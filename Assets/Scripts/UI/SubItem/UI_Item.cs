@@ -1,5 +1,3 @@
-using Photon.Pun;
-using System;
 using Google.Protobuf.Protocol;
 using UnityEngine.UI;
 using UnityEngine;

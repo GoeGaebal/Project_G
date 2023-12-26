@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using System;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class GatheringController : CreatureController

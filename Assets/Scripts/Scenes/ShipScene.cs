@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using Photon.Pun;
 using UnityEngine;
 
 public class ShipScene : BaseScene
@@ -47,5 +45,6 @@ public class ShipScene : BaseScene
     public override void Clear()
     {
         Managers.Object.ClearObjects(GameObjectType.Monster, GameObjectType.Gathering);
+        Managers.UI.Clear();
     }
 }

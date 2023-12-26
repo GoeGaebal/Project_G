@@ -1,14 +1,9 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
-using ExitGames.Client.Photon.StructWrapping;
 using Google.Protobuf.Protocol;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class Portal : MonoBehaviour
 {
-    public bool isExitPortal;
     private static ContactFilter2D _filter2D;
 
     private Collider2D _collider;
@@ -69,12 +64,6 @@ public class Portal : MonoBehaviour
     {
         var incomingObjectCount = Physics2D.OverlapCollider(_collider,_filter2D,_results);
         if (incomingObjectCount == 0) return;
-        
-        if (isExitPortal)
-        {
-            Managers.Network.Server.Room.LeaveGame(_results[0].GetComponent<Player>().Info.ObjectId);
-            return;
-        }
         
         if (!Movable || Managers.Network.Server.Room.PlayersCount > incomingObjectCount) return;
         switch (Managers.Scene.CurrentScene.SceneType)

@@ -157,7 +157,9 @@ public class UIManager
     {
         CloseAllPopupUI();
         foreach (var ui in _sceneUIs)
+        {
             Managers.Resource.Destroy(ui.gameObject);
+        }
         _sceneUIs.Clear();
     }
 

@@ -13,11 +13,13 @@ public class NetworkManager
     public Player LocalPlayer { get; set; }
     public string UserName;
     public bool IsHost;
+    public bool IsEnd;
 
     public void Init()
     {
         Client.Init();
         Server.Init();
+        IsEnd = false;
     }
 
     public void ResetPlayer()

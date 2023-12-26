@@ -124,5 +124,10 @@ public class WorldMapManager
         
         if(currentWeather != Managers.Weather.Weather) Managers.Weather.UpdateWeather(currentWeather);
     }
+    
+    public void FinishFinalBoss()
+    {
+        _isBossBattle = false;
+    }
 }
 

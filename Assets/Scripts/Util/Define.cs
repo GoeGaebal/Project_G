@@ -15,6 +15,7 @@ public class Define
         FinalBoss,
         Loading,
         Credit,
+        Intro
     }
 
     public enum Sound

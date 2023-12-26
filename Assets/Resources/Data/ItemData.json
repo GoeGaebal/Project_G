@@ -28,7 +28,7 @@
       "id": "1003",
       "Name": "레이저건",
       "Tooltip": "무서운 레이저를 쏜다",
-      "icon": "LaserGun",
+      "icon": "LaserGun_icon",
       "MaxCount": "0",
       "HealAmount": "0",
       "Hp": "0",

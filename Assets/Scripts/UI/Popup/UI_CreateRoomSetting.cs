@@ -1,9 +1,6 @@
-using System;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using WebSocketSharp;
 
 public class UI_CreateRoomSetting : UI_Popup
 {
@@ -76,17 +73,15 @@ public class UI_CreateRoomSetting : UI_Popup
         GetButton((int)Buttons.ExitBtn).onClick.AddListener((() => { Managers.UI.ClosePopupUI(); }));
         loadingSet = GetObject((int)GameObjects.LoadingSet);
         loadingSet.SetActive(false);
-
-        roomPort.text = "7777";
+        
         createRoomBtn.onClick.RemoveAllListeners();
         createRoomBtn.onClick.AddListener(() =>
         {
             SetInteractableButtons(false);
             var portText = roomPort.text.Trim((char)8203);;
             var networkUserName = userName.text.Trim((char)8203);
-            if(portText.IsNullOrEmpty())
+            if(string.IsNullOrEmpty(portText))
             {
-
                 if (Managers.Network.CreateRoom(() =>
                     {
                         Managers.Network.UserName = networkUserName;
@@ -97,7 +92,7 @@ public class UI_CreateRoomSetting : UI_Popup
             }
             else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if (!networkUserName.IsNullOrEmpty() && networkUserName.Length <= 6)
+                if (!string.IsNullOrEmpty(networkUserName) && networkUserName.Length <= 6)
                 {
                     Managers.Network.CreateRoom(() =>
                     {

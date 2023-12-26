@@ -27,8 +27,8 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private CreatureState _state;
     private Coroutine resetAttackCountCoroutine;
-    private bool _attackInputBuffer = false;
-    private Vector2 _runInputBuffer = Vector2.zero;
+    private bool _attackInputBuffer;
+    // private Vector2 _runInputBuffer = Vector2.zero;
 
     private bool _isTwoHand = false;
 
@@ -248,6 +248,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         transform.localScale = localSc;
         _name.transform.localScale = localSc;
         HPText.transform.localScale = localSc;
+        HPBar.transform.localScale = localSc;
         Vector2 wpcLocalScale = _wpc.transform.localScale;
         _wpc.transform.localScale = 
             (isFlip) ? new Vector2(-Math.Abs(wpcLocalScale.x), -Math.Abs(wpcLocalScale.y)) : new Vector2(Math.Abs(wpcLocalScale.x), Math.Abs(wpcLocalScale.y));
@@ -375,6 +376,7 @@ public class Player : CreatureController, IAttackable, IMoveable
         Vector2 localSc = transform.localScale;
         _name.transform.localScale = localSc;
         HPText.transform.localScale = localSc;
+        HPBar.transform.localScale = localSc;
     }
 
     public override void UpdateHp(float health, bool dead)
