@@ -26,9 +26,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Credit.unity
     guid: 741fb97d301bdbe4c848adfd6b141f05
-  - enabled: 0
-    path: Assets/Scenes/NetworkTest.unity
-    guid: 81ce56e19a348f14486d9199253974a5
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0a725e8354808a14b9e8f483fe60ac89,
       type: 2}

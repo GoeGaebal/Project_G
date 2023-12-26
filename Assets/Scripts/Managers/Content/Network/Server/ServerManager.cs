@@ -41,7 +41,7 @@ public class ServerManager
         // DNS (Domain Name System)
         _host = Dns.GetHostName();
         _ipHost = Dns.GetHostEntry(_host);
-        _ipAddr = _ipHost.AddressList[0];
+        _ipAddr = _ipHost.AddressList[1];
         
         SPM.CustomHandler += (s,m,i) => Managers.Network.Server.PQ.Push(s, i, m);
     }

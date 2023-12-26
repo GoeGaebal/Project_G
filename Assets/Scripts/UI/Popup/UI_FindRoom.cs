@@ -102,7 +102,7 @@ public class UI_FindRoom : UI_Popup
             var addressText = _address.text.Trim((char)8203);
             if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if (string.IsNullOrEmpty(_nameText) && _nameText.Length <= 6)
+                if (!string.IsNullOrEmpty(_nameText) && _nameText.Length <= 6)
                 {
                     if(Get<Toggle>((int)Toggles.LocalHost).isOn) Managers.Network.Client.Connect(OnConnectedSucceed, OnConnectedFailed, port);
                     else Managers.Network.Client.Connect(addressText, OnConnectedSucceed, OnConnectedFailed, port);

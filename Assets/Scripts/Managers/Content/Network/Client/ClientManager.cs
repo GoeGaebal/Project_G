@@ -36,7 +36,7 @@ public class ClientManager
 	{
 		_host = Dns.GetHostName();
 		_ipHost = Dns.GetHostEntry(_host);
-		_ipAddress = _ipHost.AddressList[0];
+		_ipAddress = _ipHost.AddressList[1];
 		_endPoint = new IPEndPoint(_ipAddress, port);
 		Connector connector = new Connector();
 

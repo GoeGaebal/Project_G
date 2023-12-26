@@ -629,7 +629,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPoint: 10
   attackCooldown: 4
-  detectRadius: 2.8
+  detectRadius: 6
   chaseTargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
