@@ -90,11 +90,13 @@ public class UI_Craft : UI_Scene
         {
             _contents[i] = Managers.UI.MakeSubItem<UI_CraftSlot>(parent: _content.transform);
             _contents[i].Init();
-            string t = Managers.Data.CraftDict[i + 1].target;
-            Item temp = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{t}");
+            string t = Managers.Data.ItemDict[Managers.Data.CraftDict[i + 1].target].Name;
+            Item temp = Managers.Data.ItemDict[Managers.Data.CraftDict[i + 1].target];
+            //Item temp = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{t}");
             _contents[i].SetSlot(i + 1, temp.Icon, Managers.Data.CraftDict[i + 1].targetAmount, temp.Name, temp.Tooltip);
         }
     }
+
 
     public void OpenCraftList()
     {
@@ -115,14 +117,31 @@ public class UI_Craft : UI_Scene
 
         var recipe = Managers.Data.CraftDict[id];
 
-        SelectedRecipe[0] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.target}");
-        SelectedRecipe[1] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.source}");
-        SelectedRecipe[2] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.material1}");
-        SelectedRecipe[3] = Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.material2}");
         SelectedRecipeAmount[0] = recipe.targetAmount;
         SelectedRecipeAmount[1] = recipe.sourceAmount;
         SelectedRecipeAmount[2] = recipe.material1Amount;
         SelectedRecipeAmount[3] = recipe.material2Amount;
+
+        if(SelectedRecipeAmount[0] > 0)
+        {
+            _target.gameObject.SetActive(true);
+            SelectedRecipe[0] = Managers.Data.ItemDict[recipe.target];// Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.target}");
+        }
+        if (SelectedRecipeAmount[1] > 0)
+        {
+            _source.gameObject.SetActive(true);
+            SelectedRecipe[1] = Managers.Data.ItemDict[recipe.source]; //Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.source}");
+        }
+        if (SelectedRecipeAmount[2] > 0)
+        {
+            _material_1.gameObject.SetActive(true);
+            SelectedRecipe[2] = Managers.Data.ItemDict[recipe.material1]; //Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.material1}");
+        }
+        if (SelectedRecipeAmount[3] > 0)
+        {
+            _material_2.gameObject.SetActive(true);
+            SelectedRecipe[3] = Managers.Data.ItemDict[recipe.material2]; //Managers.Resource.Load<Item>($"prefabs/UI/Inventory/Item/{recipe.material2}");
+        }
 
         CheckRecipe();
 
