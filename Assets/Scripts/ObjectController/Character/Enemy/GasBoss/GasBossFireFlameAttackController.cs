@@ -11,7 +11,7 @@ public class GasBossFireFlameAttackController : MonsterAttackController
     IEnumerator DisappearAttackEffect()
     {
         yield return new WaitForSeconds(0.2f);
-        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
         yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
     }
