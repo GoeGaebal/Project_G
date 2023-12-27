@@ -7,33 +7,34 @@ public class LootingItemController : NetworkObject
     private Item _item;
     public Item Item
     {
-        get { return _item; }
+        get => _item;
         set
         {
             // TODO : icon이 인벤토리와 겹침
             _item = value;
-            if (mesh == null)
-                mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
-            mesh.sprite = value.Icon;
-            if (shadow == null)
-                shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
-            shadow.sprite = value.Icon;
+            if (_mesh == null)
+                _mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            _mesh.sprite = value.Icon;
+            if (_shadow == null)
+                _shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
+            _shadow.sprite = value.Icon;
             if (_item.ID is > 1000 and <= 2000)
             {
-                mesh.transform.localScale = 5 * Vector3.one;
-                shadow.transform.localScale = 5 * Vector3.one;
+                _mesh.transform.localScale = 5 * Vector3.one;
+                _shadow.transform.localScale = 5 * Vector3.one;
             }
             else
             {
-                mesh.transform.localScale = Vector3.one;
-                shadow.transform.localScale = Vector3.one;
+                _mesh.transform.localScale = Vector3.one;
+                _shadow.transform.localScale = Vector3.one;
             }
         }
     }
 
-    private UI_Inven ui_inven;
-    private SpriteRenderer mesh;
-    private SpriteRenderer shadow;
+    private UI_Inven _uiInven;
+    private SpriteRenderer _mesh;
+    private SpriteRenderer _shadow;
+    private CircleCollider2D _collider2D;
 
     [Header("Physics")]
     [Tooltip("충돌계수")]
@@ -45,27 +46,32 @@ public class LootingItemController : NetworkObject
 
     protected override void Awake()
     {
-        mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        _mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        _shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        _collider2D = GetComponent<CircleCollider2D>();
+        _collider2D.enabled = false;
     }
 
     private void Start()
     {
-        mesh = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        shadow = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        
         cof = 0.6f;
         threshold = 1.0f;
         Sn = 2.3056f;
         
-        ui_inven = FindObjectOfType<UI_Inven>();
-        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        _uiInven = FindObjectOfType<UI_Inven>();
+        _collider2D.enabled = false;
     }
 
     public void Bounce(Vector3 endPosition,float duration = 1.0f, float maxHeight = 1.0f)
     {
-        Invoke("EnableCollider", 0.7f);
+        StartCoroutine(LazyEnable(2.0f));
         StartCoroutine(CoCalcBouncePos(endPosition, duration, maxHeight));
+    }
+
+    private IEnumerator LazyEnable(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        _collider2D.enabled = true;
     }
 
     private IEnumerator CoCalcBouncePos(Vector3 targetPosition,float duration, float maxHeight)
@@ -116,43 +122,37 @@ public class LootingItemController : NetworkObject
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!Managers.Network.IsHost) return;
+
+        if (collision.gameObject.layer != LayerMask.NameToLayer("Player")) return;
         
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        var player = collision.GetComponent<Player>();
+        if (player == null) return;
+        if (player == Managers.Network.LocalPlayer)
         {
-            var player = collision.GetComponent<Player>();
-            if (player == null) return;
-            if (player == Managers.Network.LocalPlayer)
+            if (_uiInven.AddItem(Item))
             {
-                if (ui_inven.AddItem(Item))
-                {
-                    Debug.Log("아이템 획득 성공");
-                    S_DeSpawn packet = new S_DeSpawn();
-                    packet.ObjectIds.Add(Id);
-                    Managers.Network.Server.Room.Broadcast(packet);
-                }
-                else
-                {
-                    Debug.Log("아이템 획득 실패");
-                }
+                Debug.Log("아이템 획득 성공");
+                S_DeSpawn packet = new S_DeSpawn();
+                packet.ObjectIds.Add(Id);
+                Managers.Network.Server.Room.Broadcast(packet);
             }
             else
             {
-                // TODO : 이후에 각 클라이언트가 먼저 먹겠다고 패킷을 날리고 서버측에서 가장 빨리 온 녀석에게 주는 방식으로 바꿔야 할듯
-                S_AddItem itemPacket = new S_AddItem();
-                itemPacket.ObjectId = Id;
-                itemPacket.ItemId = Item.ID;
-                player.Session.Send(itemPacket);
-                S_DeSpawn packet = new S_DeSpawn();
-                packet.ObjectIds.Add(Id);
-                Managers.Network.Server.Room.Broadcast(player.Id, packet);
+                Debug.Log("아이템 획득 실패");
             }
         }
-    }
-
-    public void ApplyDie()
-    {
-        // Managers.Object.LocalObjectsDict.Remove(guid);
-        // Managers.Object.ObjectInfos.Remove(guid);
-        Managers.Resource.Destroy(gameObject);
+        else
+        {
+            // TODO : 이후에 각 클라이언트가 먼저 먹겠다고 패킷을 날리고 서버측에서 가장 빨리 온 녀석에게 주는 방식으로 바꿔야 할듯
+            S_AddItem itemPacket = new S_AddItem
+            {
+                ObjectId = Id,
+                ItemId = Item.ID
+            };
+            player.Session.Send(itemPacket);
+            S_DeSpawn packet = new S_DeSpawn();
+            packet.ObjectIds.Add(Id);
+            Managers.Network.Server.Room.Broadcast(player.Id, packet);
+        }
     }
 }

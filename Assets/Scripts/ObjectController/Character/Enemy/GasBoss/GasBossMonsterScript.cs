@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using Google.Protobuf.Protocol;
 
 public class GasBossMonsterScript : BasicMonster
 {
-    
     private enum Attack{
         EARTHQUAKE,
         FIREFLAME,
@@ -21,10 +21,15 @@ public class GasBossMonsterScript : BasicMonster
         _animator = GetComponent<Animator>();
     }
 
+    protected override void OnDie(CreatureState state)
+    {
+        base.OnDie(state);
+    }
+
     // Update is called once per frame
     void Update()
     {
-         if(IsDead || !Managers.Network.IsHost) return;
+        if(IsDead || !Managers.Network.IsHost) return;
         if (!hasTarget)
         {
             var size = Physics2D.OverlapCircleNonAlloc(gameObject.transform.position, detectRadius, _colliders, chaseTargetLayerMask);

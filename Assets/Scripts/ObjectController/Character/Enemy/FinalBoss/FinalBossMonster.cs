@@ -7,7 +7,7 @@ public partial class FinalBossMonster : DamageableEntity
 {
     [SerializeField] private float attackPeriod;
     private float fromLastAttackTime;
-    private List< ICastingSpell> spells = new();
+    private List<ICastingSpell> spells = new();
 
     [SerializeField] private List<GameObject> thunders;
     private Renderer dissolveMat;
@@ -38,7 +38,6 @@ public partial class FinalBossMonster : DamageableEntity
 
     IEnumerator Diecoroutine()
     {
-
         while(dissolveMat.material.GetFloat("_DissolveStep") >= -0.2f)
         {
             dissolveMat.material.SetFloat("_DissolveStep", dissolveMat.material.GetFloat("_DissolveStep") - dissolveSpeed);
