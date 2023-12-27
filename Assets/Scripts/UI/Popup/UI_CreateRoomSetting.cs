@@ -86,7 +86,7 @@ public class UI_CreateRoomSetting : UI_Popup
             }
             else if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if (!string.IsNullOrEmpty(networkUserName) && networkUserName.Length <= 6)
+                if (networkUserName is { Length: <= 6 and >= 2 })
                 {
                     Managers.Network.CreateRoom(() =>
                     {
@@ -96,7 +96,7 @@ public class UI_CreateRoomSetting : UI_Popup
                 }
                 else
                 {
-                    warningText.SetText($"이름은 비어있지 않거나 6글자 이내여야 합니다.");
+                    warningText.SetText($"이름은 2자 이상 6자 미만입니다.");
                     SetInteractableButtons(true);
                 }
             }

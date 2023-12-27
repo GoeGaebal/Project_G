@@ -96,14 +96,14 @@ public class UI_FindRoom : UI_Popup
             var addressText = _address.text.Trim((char)8203);
             if (int.TryParse(portText, out var port) && port is >= 1024 and < 65536)
             {
-                if (!string.IsNullOrEmpty(_nameText) && _nameText.Length <= 6)
+                if (_nameText is { Length: <= 6 and >= 2 })
                 {
                     if(Get<Toggle>((int)Toggles.LocalHost).isOn) Managers.Network.Client.Connect(OnConnectedSucceed, OnConnectedFailed, port);
                     else Managers.Network.Client.Connect(addressText, OnConnectedSucceed, OnConnectedFailed, port);
                 }
                 else
                 {
-                    _warningText.SetText($"이름은 비어있지 않거나 6글자 이내여야 합니다.");
+                    _warningText.SetText($"이름은 2자 이상 6자 미만입니다.");
                     SetInteractableButtons(true);
                 }
             }

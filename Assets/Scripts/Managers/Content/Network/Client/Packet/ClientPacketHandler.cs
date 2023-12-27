@@ -1,7 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
-using UnityEditor.VersionControl;
 
 partial class PacketHandler
 {
