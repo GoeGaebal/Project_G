@@ -380,7 +380,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2519255867479916537}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPoint: 0
   attackCooldown: 0
-  detectRadius: 8
+  detectRadius: 20
   chaseTargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
