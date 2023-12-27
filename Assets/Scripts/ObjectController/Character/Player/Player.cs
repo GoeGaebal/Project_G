@@ -112,6 +112,7 @@ public class Player : CreatureController, IAttackable, IMoveable
     {
         playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
+        if (Managers.Network.LocalPlayer != this) cam.gameObject.SetActive(false);
     }
     
     private void FixedUpdate()

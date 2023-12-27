@@ -34,6 +34,8 @@ public class WeaponPivotController : NetworkObject
 
     private void Start()
     {
+        if (_player != Managers.Network.LocalPlayer) return;
+
         Managers.Network.LocalPlayer.cam.Follow = _cam;
         Managers.Network.LocalPlayer.cam.LookAt = _cam;
         Managers.Network.LocalPlayer.camFollow = _cam;
