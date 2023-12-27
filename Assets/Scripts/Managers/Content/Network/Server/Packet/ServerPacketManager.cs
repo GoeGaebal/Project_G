@@ -17,7 +17,7 @@ public class ServerPacketManager
 	public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
 
 	public void Register()
-	{		
+	{
 		_onRecv.Add((ushort)MsgId.CPlayerMove, MakePacket<C_PlayerMove>);
 		_handler.Add((ushort)MsgId.CPlayerMove, PacketHandler.C_PlayerMoveHandler);		
 		_onRecv.Add((ushort)MsgId.CSkill, MakePacket<C_Skill>);
@@ -28,6 +28,8 @@ public class ServerPacketManager
 		_handler.Add((ushort)MsgId.CArtifactEvent, PacketHandler.C_ArtifactEventHandler);		
 		_onRecv.Add((ushort)MsgId.CChangeName, MakePacket<C_ChangeName>);
 		_handler.Add((ushort)MsgId.CChangeName, PacketHandler.C_ChangeNameHandler);
+		_onRecv.Add((ushort)MsgId.CSpawnLooting, MakePacket<C_SpawnLooting>);
+		_handler.Add((ushort)MsgId.CSpawnLooting, PacketHandler.C_SpawnLootingHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

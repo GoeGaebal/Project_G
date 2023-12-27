@@ -177,7 +177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3864668449649255903}
-  - component: {fileID: 2351187298703093939}
+  - component: {fileID: 6486553817248315788}
   - component: {fileID: 2032360475413248509}
   - component: {fileID: 6723205299975973355}
   m_Layer: 0
@@ -204,7 +204,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &2351187298703093939
+--- !u!58 &6486553817248315788
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,9 +217,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.18047392}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.3402113
+  m_Radius: 1.35
 --- !u!114 &2032360475413248509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99527b3503efe984f8a0e28ffdb9fd32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restTime: 2
   cof: 0
   threshold: 0
 --- !u!114 &6723205299975973355

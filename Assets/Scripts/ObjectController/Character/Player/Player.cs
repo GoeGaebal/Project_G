@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class Player : CreatureController, IAttackable, IMoveable
 {
+    [Space]
     [SerializeField] private float moveSpeed = 5.0f;
     public float attackSpeed = 10f;
     public float attackDamage = 100f;//합연산 스탯

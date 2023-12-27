@@ -29,16 +29,6 @@ public class UI_Artifact : UI_Scene
         close = () => { CloseArtifact(); };
     }
 
-    void Start()
-    {
-        Init();
-    }
-
-    void Update()
-    {
-        
-    }
-
     public override void Init()
     {
         //base.Init();

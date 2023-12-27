@@ -34,11 +34,6 @@ public class UI_Start : UI_Scene
         UI_Start
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();

@@ -16,11 +16,6 @@ public class UI_Chat : UI_Scene
         InputField
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();

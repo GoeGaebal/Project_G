@@ -141,7 +141,6 @@ partial class PacketHandler
 		
 		var id =  obj.GetComponent<IDamageable>();
 		id.UpdateHp(damagePacket.HP, damagePacket.IsDead);
-
 	}
 	
 	public static void S_AddItemHandler(PacketSession session, IMessage packet)

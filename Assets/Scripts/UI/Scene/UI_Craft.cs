@@ -52,17 +52,7 @@ public class UI_Craft : UI_Scene
         open = (n) => { OpenCraft(n); };
         openUI = () => { OpenCraftList(); };
     }
-
-    void Start()
-    {
-        Init();
-    }
-
-    void Update()
-    {
-        
-    }
-
+    
     public override void Init()
     {
         //base.init();

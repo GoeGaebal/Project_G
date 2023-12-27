@@ -30,11 +30,6 @@ public class UI_Option : UI_Popup
 
     //static public GameObject optionPanel;
 
-    void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();

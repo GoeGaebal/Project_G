@@ -31,11 +31,6 @@ public class UI_Lobby : UI_Popup
         Content,
         LoadingPane,
     }
-    
-    private void Start()
-    {
-        if(CreateBtn == null) Init();
-    }
 
     public override void Init()
     {

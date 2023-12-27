@@ -29,11 +29,6 @@ public class UI_Status : UI_Scene
 
     private readonly List<UI_OtherHP> _uiOtherHps = new List<UI_OtherHP>();
 
-    private void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();

@@ -28,11 +28,6 @@ public class UI_Map : UI_Scene
         MapButton
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();

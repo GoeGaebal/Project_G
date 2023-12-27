@@ -12,7 +12,21 @@ public class GameRoom
     private readonly Dictionary<int, ObjectInfo> _players = new Dictionary<int, ObjectInfo>();
     private readonly Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
     public int PlayersCount => _players.Count;
-    
+
+    public int LivePlayerCount
+    {
+        get
+        {
+            int ret = 0;
+            foreach (var player in _players.Values)
+            {
+                if (player.PosInfo.State != CreatureState.Dead) ret++;
+            }
+
+            return ret;
+        }
+    }
+
     private static int _counter = 0;
     private static int _monsterCounter = 0;
     private static int _lootingCounter = 0;
@@ -208,10 +222,12 @@ public class GameRoom
         if (end >= 0) name = name[..end].Trim();
 
         obj.Info.Name = name;
-        var position = obj.transform.position;
+        var transform = obj.transform;
+        var position = transform.position;
         obj.PosInfo.PosX = position.x;
         obj.PosInfo.PosY = position.y;
         obj.PosInfo.State = CreatureState.Idle;
+        obj.PosInfo.LocalScale = transform.localScale.x;
         _objects.Add(obj.Id, obj.Info);
         return obj.Info;
     }

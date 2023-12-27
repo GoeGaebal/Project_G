@@ -135,6 +135,7 @@ message PositionInfo {
   int32 dir = 2;
   float posX = 3;
   float posY = 4;
+  float localScale = 5;
 }
 
 message PlayerPosInfo {

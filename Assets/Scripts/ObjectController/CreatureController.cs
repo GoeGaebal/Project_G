@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class CreatureController : NetworkObject, IDamageable
 {
@@ -12,6 +14,10 @@ public abstract class CreatureController : NetworkObject, IDamageable
         private set => StatInfo.Hp = value;
     }
     public float maxHP => StatInfo.MaxHp;
+    [Tooltip("초기 최대 체력 설정")]
+    [Header("초기 최대 체력")]
+    [SerializeField] protected float initMaxHp;
+    
 
     protected CreatureState State
     {
@@ -27,7 +33,8 @@ public abstract class CreatureController : NetworkObject, IDamageable
     protected override void Awake()
     {
         base.Awake();
-        StatInfo.MaxHp = 100;
+        if (initMaxHp > 0) StatInfo.MaxHp = initMaxHp;
+        else StatInfo.MaxHp = 100;
         StatInfo.Hp = StatInfo.MaxHp;
         UpdateState.Clear();
         UpdateState.Add(CreatureState.Idle, OnIdle);
@@ -66,7 +73,7 @@ public abstract class CreatureController : NetworkObject, IDamageable
     public virtual void UpdateHp(float hp, bool dead)
     {
         StatInfo.Hp = hp;
-        State = dead ? CreatureState.Dead : CreatureState.Idle;
+        if (dead) State = CreatureState.Dead;
     }
 
     protected virtual void OnEnable() { // 객체가 enable 될 때 호출되는 함수

@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f986550232b62048854d0300623cd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initMaxHp: 0
   attackPoint: 10
   attackCooldown: 4
   detectRadius: 6
@@ -439,6 +440,7 @@ MonoBehaviour:
   speed: 1.1
   minDisFromPlayer: 0.8
   isSpriteRightSide: 1
+  isFly: 1
 --- !u!1 &4464016567616996590
 GameObject:
   m_ObjectHideFlags: 0

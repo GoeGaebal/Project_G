@@ -41,12 +41,6 @@ public class UI_FindRoom : UI_Popup
     private bool _isConnectedFailed;
     private bool _isConnectedSucceed;
     
-    private void Start()
-    {
-        if(_findBtn == null)
-            Init();
-    }
-
     private void Update()
     {
         if (_isConnectedFailed)

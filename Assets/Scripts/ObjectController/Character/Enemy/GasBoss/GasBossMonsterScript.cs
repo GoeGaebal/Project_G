@@ -76,6 +76,10 @@ public class GasBossMonsterScript : BasicMonster
 		return (Attack)values.GetValue(index);
     }
 
+    public override void OnHit(CreatureState state)
+    {
+    }
+
     public void DoEarthquakeDamage()
     {
         earthquakeAttackGameObj.SetActive(true);

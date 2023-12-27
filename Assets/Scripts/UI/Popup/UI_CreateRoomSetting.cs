@@ -27,12 +27,6 @@ public class UI_CreateRoomSetting : UI_Popup
     
     private bool _isConnectedFailed;
     private bool _isConnectedSucceed;
-    
-    private void Start()
-    {
-        if(createRoomBtn == null)
-            Init();
-    }
 
     private void Update()
     {

@@ -16,12 +16,6 @@ public class UI_Crosshair : UI_Scene
     [SerializeField] private Sprite crossHair;
     private GameObject _cursor;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();   
-    }
-
     public override void Init()
     {
         //base.Init();

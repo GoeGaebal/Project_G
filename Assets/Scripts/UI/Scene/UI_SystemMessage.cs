@@ -26,17 +26,6 @@ public class UI_SystemMessage : UI_Scene
         alert = (t, c) => { Alert(t, c); };
     }
 
-    void Start()
-    {
-        Init();
-    }
-
-
-    void Update()
-    {
-
-    }
-
     public override void Init()
     {
         //base.Init();

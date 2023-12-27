@@ -27,11 +27,6 @@ public class UI_Chest : UI_Scene
         open = () => { OpenChest(); };
     }
 
-    void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         Managers.UI.SetCanvas(gameObject, true);

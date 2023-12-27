@@ -27,13 +27,6 @@ public class UI_Leaf : UI_Scene
 
     [SerializeField] List<GameObject> _imageList;
 
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         //base.init();

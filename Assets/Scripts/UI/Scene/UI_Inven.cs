@@ -75,11 +75,6 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         additem = (itm) => { return AddItem(itm); };
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     private void Update()
     {
         if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
