@@ -184,7 +184,10 @@ partial class PacketHandler
 	public static void S_ReviveHandler(PacketSession session, IMessage packet)
 	{
 		if (packet is not S_Revive revive) return;
-		Managers.Object.PlayerDict[revive.PlayerId].Revive(revive.Hp);
+		foreach (var player in Managers.Object.PlayerDict.Values)
+		{
+			player.Revive(revive.Hp);
+		}
 	}
 }
 

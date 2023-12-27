@@ -17,7 +17,7 @@ public class GameRoom
     {
         get
         {
-            int ret = 0;
+            var ret = 0;
             foreach (var player in _players.Values)
             {
                 if (player.PosInfo.State != CreatureState.Dead) ret++;
@@ -113,6 +113,16 @@ public class GameRoom
                     PlayersSessions[p.ObjectId].Send(spawnPacket);
             }
         }
+    }
+
+    public void PlayerDie(int id)
+    {
+        var die = new S_Die
+        {
+            ObjectId = id
+        };
+        _players[id].PosInfo.State = CreatureState.Dead;
+        Managers.Network.Server.Room.Broadcast(die);
     }
 
     public void ReviveAll(float hp)

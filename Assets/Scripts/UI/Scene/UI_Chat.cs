@@ -56,8 +56,10 @@ public class UI_Chat : UI_Scene
         TMP_InputField inputField = Get<TMP_InputField>((int)InputFields.InputField);
         if (string.IsNullOrEmpty(inputField.text)) return;
         
-        C_Chat chat = new C_Chat();
-        chat.Msg = String.Copy(inputField.text);
+        var chat = new C_Chat
+        {
+            Msg = string.Copy(inputField.text)
+        };
         Managers.Network.Client.Send(chat);
         inputField.text = "";
     }

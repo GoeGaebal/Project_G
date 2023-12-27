@@ -316,11 +316,8 @@ public class Player : CreatureController, IAttackable, IMoveable
         }
 
         if (!Managers.Network.IsHost) yield break;
-        var die = new S_Die
-        {
-            ObjectId = Id
-        };
-        Managers.Network.Server.Room.Broadcast(die);
+        Managers.Network.Server.Room.PlayerDie(Id);
+
     }
 
     private void OnDestroy()

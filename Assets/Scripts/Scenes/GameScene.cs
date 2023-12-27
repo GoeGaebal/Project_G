@@ -42,10 +42,6 @@ public class GameScene : BaseScene
         // Managers.Network.ResetPlayer();
 
         _playerLifeCnt = Managers.Object.PlayerDict.Count;
-        foreach (var player in Managers.Object.PlayerDict.Values)
-        {
-            player.transform.position = Vector3.zero;
-        }
     }
 
     public override void Clear()
