@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Google.Protobuf.Protocol;
 
 public class GasBossMonsterScript : BasicMonster
 {
@@ -63,6 +64,12 @@ public class GasBossMonsterScript : BasicMonster
         }
     }
 
+    protected override void OnDie(CreatureState state)
+    {
+        base.OnDie(state);
+    }
+
+   
     private Attack ChooseNextAttack()
     {
         System.Random random = new System.Random();
