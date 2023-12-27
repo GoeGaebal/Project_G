@@ -24,11 +24,17 @@ public class UIManager
         }
     }
 
-    public void SetCanvas(GameObject go, bool sort = true)
+    public void SetCanvas(GameObject go, bool sort = true, int manual = 0)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;  // 부모 캔버스가 존재하더라도 독립적인 sortingOrder를 갖는다.
+
+        if(manual > 0)
+        {
+            canvas.sortingOrder = manual;
+            return;
+        }
 
         if (sort)
         {

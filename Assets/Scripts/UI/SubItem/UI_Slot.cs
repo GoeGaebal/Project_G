@@ -104,6 +104,19 @@ public class UI_Slot : UI_Base
         else//슬롯이 인벤토리, 창고일 때
         {
             currentItem.parentSlot = currentItem.parentBeforeDrag.GetComponent<UI_Slot>();//아이템매니저 동기화
+
+            if (currentItem.parentSlot.isEquip)
+            {
+                if (currentItem.item.ID / 1000 == 1)
+                {
+                    UI_Inven.EmptyQuickSlotImage(0);
+                }
+                else if (currentItem.item.ID / 1000 == 3)
+                {
+                    UI_Inven.EmptyQuickSlotImage(1);
+                }
+            }
+
             if (currentItem.parentSlot.isEquip)
             {
                 currentItem.item.Deselect();

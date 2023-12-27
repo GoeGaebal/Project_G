@@ -40,16 +40,16 @@ public class UI_CreateRoomSetting : UI_Popup
         {
             Managers.UI.Clear();
             Managers.UI.SetEventSystem();
-            Managers.UI.ShowSceneUI<UI_Inven>();
-            //Managers.UI.ShowSceneUI<UI_Map>();
-            Managers.UI.ShowSceneUI<UI_Status>();
+
             Managers.UI.ShowSceneUI<UI_Chat>();
+            Managers.UI.ShowSceneUI<UI_Status>();
             Managers.UI.ShowSceneUI<UI_Leaf>();
-            // Managers.UI.ShowSceneUI<UI_Crosshair>();
+            Managers.UI.ShowSceneUI<UI_Inven>();
+            Managers.UI.ShowSceneUI<UI_Crosshair>();
+
             Managers.Map.LoadMap(5);
         }
     }
-
     
     public override void Init()
     {

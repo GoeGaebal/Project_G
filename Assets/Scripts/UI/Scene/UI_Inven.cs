@@ -294,6 +294,12 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         }
     }
 
+    public static void EmptyQuickSlotImage(int index)
+    {
+        qSlots[index].sprite = null;
+        potion1Text.gameObject.SetActive(false);
+    }
+
     public static void ChangeQuickslotImage(int index, UI_Item item)
     {
         qSlots[index].sprite = item.item.Icon;
