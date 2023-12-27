@@ -97,6 +97,11 @@ public class Player : CreatureController, IAttackable, IMoveable
                 playerCameraController.SetPosition(transform.position);
             }
         };
+        _playerBody.OnFinishHit = null;
+        _playerBody.OnFinishHit = () =>
+        {
+            if (State == CreatureState.Hit) State = CreatureState.Idle;
+        };
     }
     
     void Start()
@@ -295,11 +300,6 @@ public class Player : CreatureController, IAttackable, IMoveable
         if (this == Managers.Network.LocalPlayer)
             State = Managers.Input.PlayerActions.Move.IsPressed() ? CreatureState.Run : CreatureState.Idle;
         else State = CreatureState.Idle;
-    }
-
-    public void FinishDieAnimClip()
-    {
-        
     }
 
     private IEnumerator FinishDie()

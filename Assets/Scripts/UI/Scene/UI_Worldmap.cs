@@ -70,11 +70,6 @@ public class UI_Worldmap : UI_Scene
         open = () => { OpenWorldmapUI(); };
     }
 
-    void Start()
-    {
-        Init();
-    }
-
     private void Update()
     {
         //UpdateWeatherUI();

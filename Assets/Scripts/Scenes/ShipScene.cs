@@ -23,7 +23,7 @@ public class ShipScene : BaseScene
     private void Start()
     {
         Managers.UI.SetEventSystem();
-
+        
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Status>();
         Managers.UI.ShowSceneUI<UI_Leaf>();
