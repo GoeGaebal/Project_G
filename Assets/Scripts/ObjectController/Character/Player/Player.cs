@@ -8,6 +8,7 @@ using Server;
 using TMPro;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class Player : CreatureController, IAttackable, IMoveable
 {
@@ -33,6 +34,9 @@ public class Player : CreatureController, IAttackable, IMoveable
     private bool _isTwoHand = false;
 
     private AnimationEvent OnFinishDieAnim;
+
+    public CinemachineVirtualCamera cam;
+    public Transform camFollow;
 
     public ClientSession Session => Managers.Network.Server.Room.PlayersSessions[Id];
 
