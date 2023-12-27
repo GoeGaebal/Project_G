@@ -7,8 +7,8 @@ public class WorldMapManager
 {
     private GameObject _ship;
     private GameObject _finalBoss;
-    private float _finalBossMoveSpeed = 1.0f;
-    private Vector3 _shipPosition;
+    private float _finalBossMoveSpeed = 15f;
+    public Vector3 shipPosition;
 
     private bool _isBossBattle;
     private float _minDistacnceBetShipBoss;
@@ -45,8 +45,8 @@ public class WorldMapManager
             UpdateShipPosition();
             UpdateFinalBossPosition(deltaTime);
             S_WorldMap worldMap = new S_WorldMap();
-            worldMap.ShipPosX = _shipPosition.x;
-            worldMap.ShipPosY = _shipPosition.y;
+            worldMap.ShipPosX = shipPosition.x;
+            worldMap.ShipPosY = shipPosition.y;
             worldMap.FinalBossX = _finalBoss.transform.localPosition.x;
             worldMap.FinalBossY = _finalBoss.transform.localPosition.y;
             Managers.Network.Server.Room.Broadcast(worldMap);
@@ -56,8 +56,8 @@ public class WorldMapManager
     public void UpdateByPacket(S_WorldMap worldMap)
     {
         if (UI == null) return;
-        _shipPosition.x = worldMap.ShipPosX;
-        _shipPosition.y = worldMap.ShipPosY;
+        shipPosition.x = worldMap.ShipPosX;
+        shipPosition.y = worldMap.ShipPosY;
         _finalBoss.transform.localPosition = new Vector3(worldMap.FinalBossX, worldMap.FinalBossY);
     }
     private void UpdateShipPosition()
@@ -66,19 +66,19 @@ public class WorldMapManager
         {
             return;
         }
-        _shipPosition = _ship.transform.localPosition;
+        shipPosition = _ship.transform.localPosition;
         CheckWeather();
     }
     private void UpdateFinalBossPosition(float deltaTime)
     {
-        if(_finalBoss == null || _shipPosition == null)
+        if(_finalBoss == null || shipPosition == null)
             return;
-        Vector3 direction = (_shipPosition - _finalBoss.transform.localPosition).normalized;
+        Vector3 direction = (shipPosition - _finalBoss.transform.localPosition).normalized;
 
         _finalBoss.transform.localPosition = _finalBoss.transform.localPosition + direction * _finalBossMoveSpeed * deltaTime;
 
 
-        float distance = (_shipPosition - _finalBoss.transform.localPosition).sqrMagnitude;
+        float distance = (shipPosition - _finalBoss.transform.localPosition).sqrMagnitude;
         if (1998f < distance && distance < 2000f)
         {
             UI_SystemMessage.alert("최종보스가 가까이 있습니다!", Color.red);
@@ -97,10 +97,10 @@ public class WorldMapManager
         EnumWeather currentWeather = EnumWeather.Sun;
         for (int i = 1; i <= Managers.Data.WorldmapDict.Count; i++)
         {
-            if (_shipPosition.x >= Managers.Data.WorldmapDict[i].minX
-            && _shipPosition.x <= Managers.Data.WorldmapDict[i].maxX
-            && _shipPosition.y >= Managers.Data.WorldmapDict[i].minY
-            && _shipPosition.y <= Managers.Data.WorldmapDict[i].maxY)
+            if (shipPosition.x >= Managers.Data.WorldmapDict[i].minX
+            && shipPosition.x <= Managers.Data.WorldmapDict[i].maxX
+            && shipPosition.y >= Managers.Data.WorldmapDict[i].minY
+            && shipPosition.y <= Managers.Data.WorldmapDict[i].maxY)
             {
 
                 string weather = Managers.Data.WorldmapDict[i].weather;

@@ -115,8 +115,7 @@ public class UI_Worldmap : UI_Scene
     public override void Init()
     {
         //TODO: Worldmap UI가 sorting order가 밀려서 밑으로 깔리는 문제 발생.
-        //base.Init();
-        Managers.UI.SetCanvas(gameObject, true);
+        base.Init();
 
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
@@ -124,6 +123,7 @@ public class UI_Worldmap : UI_Scene
         _worldmap=Get<GameObject>((int)GameObjects.Worldmap_Background);
         _worldmap.SetActive(false);
         _ship = Get<GameObject>((int)GameObjects.Worldmap_Ship);
+        _ship.transform.localPosition = Managers.WorldMap.shipPosition;
         _rightShip = Managers.Resource.Load<Sprite>("Art/UI/WorldMap/Worldmap_Ship");
         _leftShip = Managers.Resource.Load<Sprite>("Art/UI/WorldMap/Worldmap_Ship_Left");
         _targetPosition = _ship.transform.localPosition;

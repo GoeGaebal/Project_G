@@ -12,6 +12,7 @@ public class LobbyScene : BaseScene
         base.Init();
         SceneType = SceneType.Lobby;
         _startScreen = Managers.UI.ShowSceneUI<UI_Start>();
+        Managers.UI.ShowSceneUI<UI_Crosshair>();
     }
     public override void Clear()
     {

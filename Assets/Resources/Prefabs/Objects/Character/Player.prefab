@@ -1743,7 +1743,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 1.693}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8847608920545027596
 CanvasRenderer:
@@ -1817,7 +1817,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -2370,6 +2370,46 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2214086747108851201}
     m_Modifications:
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.x
+      value: -0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.y
+      value: -0.00000011920929
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.x
+      value: 0.31249997
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.y
+      value: 0.20312497
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.x
+      value: 0.0000002682209
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.y
+      value: -0.000000059604645
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.x
+      value: 0.26562503
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.y
+      value: 0.54687506
+      objectReference: {fileID: 0}
     - target: {fileID: 7049332088443668978, guid: 0371603104e17574e8c5b1560e1407ec,
         type: 3}
       propertyPath: m_Name

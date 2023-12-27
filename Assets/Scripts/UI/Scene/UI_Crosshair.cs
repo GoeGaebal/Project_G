@@ -25,7 +25,7 @@ public class UI_Crosshair : UI_Scene
     public override void Init()
     {
         //base.Init();
-        Managers.UI.SetCanvas(gameObject, true);
+        Managers.UI.SetCanvas(gameObject, true, 50);
 
         Bind<GameObject>(typeof(GameObjects));
         _cursor = Get<GameObject>((int)GameObjects.Cursor);

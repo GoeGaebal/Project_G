@@ -26,13 +26,14 @@ public class ShipScene : BaseScene
     private void Start()
     {
         Managers.UI.SetEventSystem();
-        Managers.UI.ShowSceneUI<UI_Inven>();
+
         Managers.UI.ShowSceneUI<UI_Chat>();
-        Managers.UI.ShowSceneUI<UI_Leaf>();
-        Managers.UI.ShowSceneUI<UI_Chest>();
-        Managers.UI.ShowSceneUI<UI_Artifact>();
-        Managers.UI.ShowSceneUI<UI_Craft>();
         Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Leaf>();
+        Managers.UI.ShowSceneUI<UI_Inven>();
+        Managers.UI.ShowSceneUI<UI_Chest>();
+        Managers.UI.ShowSceneUI<UI_Craft>();
+        Managers.UI.ShowSceneUI<UI_Artifact>();
         Managers.UI.ShowSceneUI<UI_Worldmap>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
