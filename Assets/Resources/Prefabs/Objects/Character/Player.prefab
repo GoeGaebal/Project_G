@@ -309,7 +309,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5188578483278898374
 Transform:
   m_ObjectHideFlags: 0
@@ -1155,6 +1155,7 @@ MonoBehaviour:
   attackDamage: 10
   damageMultiply: 1
   cam: {fileID: 5894153653500033644}
+  camFollow: {fileID: 0}
   _playerBody: {fileID: 4787654413121511495}
   _playerLeg: {fileID: 4367331511560635524}
   Left_Arm: {fileID: 1261511120037092101}
@@ -1632,9 +1633,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 100%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 32eabeb1f32c384468bbd7282e4148be, type: 2}
-  m_sharedMaterial: {fileID: -1482212723388508714, guid: 32eabeb1f32c384468bbd7282e4148be,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1937,9 +1937,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Player
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 32638820cfe9bab4b8991f37865bdece, type: 2}
-  m_sharedMaterial: {fileID: 523095442514849817, guid: 32638820cfe9bab4b8991f37865bdece,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
