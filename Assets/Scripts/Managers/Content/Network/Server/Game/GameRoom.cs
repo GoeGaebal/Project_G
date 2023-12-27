@@ -101,6 +101,18 @@ public class GameRoom
         }
     }
 
+    public void ReviveAll(float hp)
+    {
+        foreach (var player in _players.Values)
+        {
+            PlayersSessions[player.ObjectId].Send(new S_Revive()
+            {
+                PlayerId = player.ObjectId,
+                Hp = hp
+            });
+        }
+    }
+
     public void LoadScene(SceneType type)
     {
         S_LoadScene packet = new S_LoadScene

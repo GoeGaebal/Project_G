@@ -21,11 +21,6 @@ public class GasBossMonsterScript : BasicMonster
         _animator = GetComponent<Animator>();
     }
 
-    protected override void OnDie(CreatureState state)
-    {
-        base.OnDie(state);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -67,11 +62,6 @@ public class GasBossMonsterScript : BasicMonster
                 lastAttackTime = 0;
             }
         }
-    }
-
-    protected override void OnDie(CreatureState state)
-    {
-        base.OnDie(state);
     }
 
    

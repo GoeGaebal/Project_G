@@ -78,8 +78,9 @@ public abstract class CreatureController : NetworkObject, IDamageable
     public void Revive(float heal)
     {
         if(!IsDead) return;
-        State = CreatureState.Idle;
+        _state = CreatureState.Idle;
         RestoreHP(heal);
+        gameObject.SetActive(true);
     }
     
     public virtual void RestoreHP(float restoreHP)

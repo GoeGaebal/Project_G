@@ -309,7 +309,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5188578483278898374
 Transform:
   m_ObjectHideFlags: 0
@@ -2370,6 +2370,46 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2214086747108851201}
     m_Modifications:
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.x
+      value: -0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.y
+      value: -0.00000011920929
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.x
+      value: 0.31249997
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074707040247338654, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.y
+      value: 0.20312497
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.x
+      value: 0.0000002682209
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Center.y
+      value: -0.000000059604645
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.x
+      value: 0.26562503
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569314648829760804, guid: 0371603104e17574e8c5b1560e1407ec,
+        type: 3}
+      propertyPath: m_Bounds.m_Extent.y
+      value: 0.54687506
+      objectReference: {fileID: 0}
     - target: {fileID: 7049332088443668978, guid: 0371603104e17574e8c5b1560e1407ec,
         type: 3}
       propertyPath: m_Name

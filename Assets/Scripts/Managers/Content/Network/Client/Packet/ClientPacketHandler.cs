@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using UnityEditor.VersionControl;
 
 partial class PacketHandler
 {
@@ -97,17 +98,7 @@ partial class PacketHandler
 	{
 		// S_Die diePacket = packet as S_Die;
 		if (packet is not S_Die dieEvt) return;
-		//
-		// GameObject go = Managers.Object.FindById(diePacket.ObjectId);
-		// if (go == null)
-		// 	return;
-		//
-		// CreatureController cc = go.GetComponent<CreatureController>();
-		// if (cc != null)
-		// {
-		// 	cc.Hp = 0;
-		// 	cc.OnDead();
-		// }
+		Managers.Object.PlayerDict[dieEvt.ObjectId].gameObject.SetActive(false);
 	}
 	
 	public static void S_ChatHandler(PacketSession session, IMessage packet)
@@ -145,8 +136,12 @@ partial class PacketHandler
 	public static void S_OnDamageHandler(PacketSession session, IMessage packet)
 	{
 		if (packet is not S_OnDamage damagePacket) return;
-		var id =  Managers.Object.FindById(damagePacket.ObjectId).GetComponent<IDamageable>();
+		var obj = Managers.Object.FindById(damagePacket.ObjectId);
+		if (obj == null) return;
+		
+		var id =  obj.GetComponent<IDamageable>();
 		id.UpdateHp(damagePacket.HP, damagePacket.IsDead);
+
 	}
 	
 	public static void S_AddItemHandler(PacketSession session, IMessage packet)
@@ -186,6 +181,12 @@ partial class PacketHandler
 	{
 		if (packet is not S_ChangeName changeEvent) return;
 		Managers.Object.PlayerDict[changeEvent.ObjectId].Name = changeEvent.Name;
+	}
+
+	public static void S_ReviveHandler(PacketSession session, IMessage packet)
+	{
+		if (packet is not S_Revive revive) return;
+		Managers.Object.PlayerDict[revive.PlayerId].Revive(revive.Hp);
 	}
 }
 

@@ -29,6 +29,7 @@ enum MsgId {
   S_ARTIFACT_EVENT = 21;
   C_CHANGE_NAME = 22;
   S_CHANGE_NAME = 23;
+  S_REVIVE = 24;
 }
 
 enum SceneType {
@@ -74,6 +75,11 @@ message S_EnterGame {
 }
 
 message S_LeaveGame {
+}
+
+message S_Revive {
+  int32 playerId = 1;
+  float hp = 2;
 }
 
 message S_Spawn {

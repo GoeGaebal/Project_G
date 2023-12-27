@@ -54,6 +54,8 @@ public class ClientPacketManager
 		_handler.Add((ushort)MsgId.SArtifactEvent, PacketHandler.S_ArtifactEventHandler);		
 		_onRecv.Add((ushort)MsgId.SChangeName, MakePacket<S_ChangeName>);
 		_handler.Add((ushort)MsgId.SChangeName, PacketHandler.S_ChangeNameHandler);
+		_onRecv.Add((ushort)MsgId.SRevive, MakePacket<S_Revive>);
+		_handler.Add((ushort)MsgId.SRevive, PacketHandler.S_ReviveHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

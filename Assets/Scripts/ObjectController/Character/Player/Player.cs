@@ -315,9 +315,11 @@ public class Player : CreatureController, IAttackable, IMoveable
         }
 
         if (!Managers.Network.IsHost) yield break;
-        S_DeSpawn despawn = new S_DeSpawn();
-        despawn.ObjectIds.Add(Id);
-        Managers.Network.Server.Room.Broadcast(despawn);
+        var die = new S_Die
+        {
+            ObjectId = Id
+        };
+        Managers.Network.Server.Room.Broadcast(die);
     }
 
     private void OnDestroy()

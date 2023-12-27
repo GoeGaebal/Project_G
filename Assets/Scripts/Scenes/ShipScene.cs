@@ -12,12 +12,9 @@ public class ShipScene : BaseScene
         SceneType = SceneType.Ship;
         Managers.Map.LoadMap(4);
 
-        Dictionary<int, Player>.ValueCollection playerComponents = Managers.Object.PlayerDict.Values; 
-        foreach(Player playerComponent in playerComponents)
-        {   
-            playerComponent.gameObject.SetActive(true);
-            playerComponent.Revive(5f);
-        }
+        if(Managers.Network.IsHost)
+            Managers.Network.Server.Room.ReviveAll(5.0f);
+
 
         GameObject ui_LeafObj = GameObject.Find("UI_Leaf");
         if(ui_LeafObj != null) ui_LeafObj.GetComponent<UI_Leaf>().HealPlayers();

@@ -35,6 +35,7 @@ public class LootingItemController : NetworkObject
     private SpriteRenderer _mesh;
     private SpriteRenderer _shadow;
     private CircleCollider2D _collider2D;
+    [SerializeField] private float restTime;
 
     [Header("Physics")]
     [Tooltip("충돌계수")]
@@ -57,14 +58,14 @@ public class LootingItemController : NetworkObject
         cof = 0.6f;
         threshold = 1.0f;
         Sn = 2.3056f;
-        
+
         _uiInven = FindObjectOfType<UI_Inven>();
-        _collider2D.enabled = false;
     }
 
     public void Bounce(Vector3 endPosition,float duration = 1.0f, float maxHeight = 1.0f)
     {
-        StartCoroutine(LazyEnable(2.0f));
+        _collider2D.enabled = false;
+        StartCoroutine(LazyEnable(restTime));
         StartCoroutine(CoCalcBouncePos(endPosition, duration, maxHeight));
     }
 
