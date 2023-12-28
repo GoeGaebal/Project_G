@@ -1,4 +1,3 @@
-using System;
 using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
@@ -16,11 +15,6 @@ public class UI_Chat : UI_Scene
         InputField
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();
@@ -34,9 +28,16 @@ public class UI_Chat : UI_Scene
                 Managers.Resource.Destroy(child.gameObject);
         }
         
+       
         Managers.Input.UIActions.Submit.AddEvent(FocusInputField);
-        Get<TMP_InputField>((int)InputFields.InputField).onSelect.AddListener(delegate { Managers.Input.PlayerActionMap.Disable(); });
-        Get<TMP_InputField>((int)InputFields.InputField).onDeselect.AddListener(delegate { Managers.Input.PlayerActionMap.Enable(); });
+        Get<TMP_InputField>((int)InputFields.InputField).onSelect.AddListener(delegate
+        {
+            Managers.Input.PlayerActionMap.Disable();
+        });
+        Get<TMP_InputField>((int)InputFields.InputField).onDeselect.AddListener(delegate
+        {
+            Managers.Input.PlayerActionMap.Enable();
+        });
         Managers.Network.UIChat = this;
         Get<TMP_InputField>((int)InputFields.InputField).onSubmit.AddListener(delegate { SendChat(); } );
         // Get<TMP_InputField>((int)InputFields.InputField).onEndEdit.AddListener(OnEndEditEventMethod);
@@ -45,6 +46,19 @@ public class UI_Chat : UI_Scene
     private void OnDestroy()
     {
         Managers.Input.UIActions.Submit.RemoveEvent(FocusInputField);
+        Managers.Network.UIChat = null;
+    }
+    
+    public void Focus()
+    {
+        if (Keyboard.current.enterKey.IsPressed())
+        {
+            TMP_InputField inputField = Get<TMP_InputField>((int)InputFields.InputField);
+            if (!inputField.isFocused)
+            {
+                inputField.ActivateInputField();
+            }
+        }
     }
 
     public void FocusInputField(InputAction.CallbackContext context)
@@ -61,8 +75,10 @@ public class UI_Chat : UI_Scene
         TMP_InputField inputField = Get<TMP_InputField>((int)InputFields.InputField);
         if (string.IsNullOrEmpty(inputField.text)) return;
         
-        C_Chat chat = new C_Chat();
-        chat.Msg = String.Copy(inputField.text);
+        var chat = new C_Chat
+        {
+            Msg = string.Copy(inputField.text)
+        };
         Managers.Network.Client.Send(chat);
         inputField.text = "";
     }

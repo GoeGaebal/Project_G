@@ -8,9 +8,11 @@ using Server;
 using TMPro;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class Player : CreatureController, IAttackable, IMoveable
 {
+    [Space]
     [SerializeField] private float moveSpeed = 5.0f;
     public float attackSpeed = 10f;
     public float attackDamage = 100f;//합연산 스탯
@@ -34,6 +36,9 @@ public class Player : CreatureController, IAttackable, IMoveable
 
     private AnimationEvent OnFinishDieAnim;
 
+    public CinemachineVirtualCamera cam;
+    public Transform camFollow;
+
     public ClientSession Session => Managers.Network.Server.Room.PlayersSessions[Id];
 
     IInteractable interactable;
@@ -47,6 +52,10 @@ public class Player : CreatureController, IAttackable, IMoveable
     
     public Image HPBar;
     public TextMeshProUGUI HPText;
+
+    private BoxCollider2D _collider;
+    private Collider2D[] _results = new Collider2D[2];
+    private ContactFilter2D _filter2D = new ContactFilter2D();
 
     public string Name
     {
@@ -96,12 +105,23 @@ public class Player : CreatureController, IAttackable, IMoveable
                 playerCameraController.SetPosition(transform.position);
             }
         };
+        _playerBody.OnFinishHit = null;
+        _playerBody.OnFinishHit = () =>
+        {
+            if (State == CreatureState.Hit) State = CreatureState.Idle;
+        };
+
+        _collider = GetComponent<BoxCollider2D>();
+        _filter2D.useLayerMask = true;
+        _filter2D.useTriggers = true;
+        _filter2D.SetLayerMask(LayerMask.GetMask("Interactable"));
     }
     
     void Start()
     {
         playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
         playerCameraController.enabled = false;
+        if (Managers.Network.LocalPlayer != this) cam.gameObject.SetActive(false);
     }
     
     private void FixedUpdate()
@@ -296,11 +316,6 @@ public class Player : CreatureController, IAttackable, IMoveable
         else State = CreatureState.Idle;
     }
 
-    public void FinishDieAnimClip()
-    {
-        
-    }
-
     private IEnumerator FinishDie()
     {
         yield return new WaitForSeconds(5.0f);
@@ -315,53 +330,26 @@ public class Player : CreatureController, IAttackable, IMoveable
         }
 
         if (!Managers.Network.IsHost) yield break;
-        S_DeSpawn despawn = new S_DeSpawn();
-        despawn.ObjectIds.Add(Id);
-        Managers.Network.Server.Room.Broadcast(despawn);
+        Managers.Network.Server.Room.PlayerDie(Id);
+
     }
 
     private void OnDestroy()
     {
         Managers.Input.PlayerActions.Move.RemoveEvent(OnMoveInput);
         Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttackInput);
+        Managers.Input.PlayerActions.Interact.RemoveEvent(OnInteract);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Interact()
     {
-        if(interactable == null)
-        {
-            interactable = collision.GetComponent<IInteractable>();
-            interactableName = collision.gameObject.name;
-        }
-        else
-        {
-            return;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (interactableName == collision.gameObject.name)
-        {
-            interactable = null;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if(interactable == null)
-        {
-            interactable = collision.GetComponent<IInteractable>();
-            interactableName = collision.gameObject.name;
-        }
+        var numResults = Physics2D.OverlapCollider(_collider,_filter2D,_results);
+        for (var i = 0; i < numResults; i++)  _results[i].gameObject.GetComponent<IInteractable>()?.Interact();
     }
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (interactable != null)
-        {
-            interactable.Interact();
-        }
+        Interact();
     }
 
     public override void SyncPos()

@@ -24,13 +24,6 @@ public class UI_InputNamePopup : UI_Popup
     public GameObject LoadingPane;
     public TextMeshProUGUI UserName, WarningText;
     public Button EnterBtn;
-
-    private void Start()
-    {
-        if(EnterBtn == null)
-            Init();
-    }
-
     
     public override void Init()
     {

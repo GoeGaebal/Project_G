@@ -10,6 +10,7 @@ public class WeaponPivotController : NetworkObject
     [Tooltip("회전 중심점")]
     public Transform pivot;
     private Player _player;
+    private Transform _cam;
 
     private Animator _animator;
     private WeaponItem _weapon;
@@ -27,11 +28,25 @@ public class WeaponPivotController : NetworkObject
         _filter2D.useLayerMask = true;
         _filter2D.useTriggers = true;
         _filter2D.SetLayerMask(LayerMask.GetMask("Monster"));
+
+        _cam = transform.GetChild(0);
+    }
+
+    private void Start()
+    {
+        if (_player != Managers.Network.LocalPlayer) return;
+
+        Managers.Network.LocalPlayer.cam.Follow = _cam;
+        Managers.Network.LocalPlayer.cam.LookAt = _cam;
+        Managers.Network.LocalPlayer.camFollow = _cam;
     }
 
     void Update()
     {
-        if (pivot == null) return;
+        if (pivot == null)
+        {
+            pivot = Util.FindChild(transform.parent.gameObject, "WeaponPivot").transform;
+        }
         if(_player != Managers.Network.LocalPlayer) return;
         if (_player.IsDead) return;
 

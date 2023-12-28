@@ -75,11 +75,6 @@ public class UI_Inven : UI_Scene//, IDataPersistence
         additem = (itm) => { return AddItem(itm); };
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     private void Update()
     {
         if (Managers.Input.PlayerActions.QuickSlot3.IsPressed())//포션 먹게
@@ -170,13 +165,18 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             equips[idex] = Get<UI_Slot>((int)slot);
             equips[idex].isEquip = true;
             equips[idex].invIndex = idex;
+
             if (Managers.Item.equipSlots[idex] != null)
             {
                 Managers.Item.SpawnNewItem(Managers.Item.equipSlots[idex], equips[idex]);
-                Managers.Item.equipSlots[idex].Select();
+                if (Managers.Item.onceFlag)
+                {
+                    Managers.Item.equipSlots[idex].Select();
+                }
             }
             idex++;
         }
+        Managers.Item.onceFlag = false;
 
         if (equips[0].transform.childCount >= 1)
         {
@@ -297,6 +297,12 @@ public class UI_Inven : UI_Scene//, IDataPersistence
                 }
             }
         }
+    }
+
+    public static void EmptyQuickSlotImage(int index)
+    {
+        qSlots[index].sprite = null;
+        potion1Text.gameObject.SetActive(false);
     }
 
     public static void ChangeQuickslotImage(int index, UI_Item item)
@@ -430,14 +436,7 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             if (equips[i].transform.childCount >= 1)
             {
                 Managers.Item.equipSlots[i] = equips[i].transform.GetChild(0).GetComponent<UI_Item>().item;
-                if (slots[i].transform.childCount >= 1)
-                {
-                    Managers.Item.equipCount[i] = slots[i].transform.GetChild(0).GetComponent<UI_Item>().count;
-                }
-                else
-                {
-                    Managers.Item.equipCount[i] = 1;
-                }
+                Managers.Item.equipCount[i] = equips[i].transform.GetChild(0).GetComponent<UI_Item>().count;
             }
             else
             {

@@ -65,7 +65,7 @@ public class Portal : MonoBehaviour
         var incomingObjectCount = Physics2D.OverlapCollider(_collider,_filter2D,_results);
         if (incomingObjectCount == 0) return;
         
-        if (!Movable || Managers.Network.Server.Room.PlayersCount > incomingObjectCount) return;
+        if (!Movable || Managers.Network.Server.Room.LivePlayerCount > incomingObjectCount) return;
         switch (Managers.Scene.CurrentScene.SceneType)
         {
             case SceneType.Lobby:

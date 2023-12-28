@@ -24,16 +24,23 @@ public class UIManager
         }
     }
 
-    public void SetCanvas(GameObject go, bool sort = true)
+    public void SetCanvas(GameObject go, bool sort = true, int manual = 0)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;  // 부모 캔버스가 존재하더라도 독립적인 sortingOrder를 갖는다.
 
+        if(manual > 0)
+        {
+            canvas.sortingOrder = manual;
+            return;
+        }
+
         if (sort)
         {
             canvas.sortingOrder = _order;
             _order++;
+            Debug.Log(go.name+": "+_order);
         }
         else
         {
@@ -85,6 +92,7 @@ public class UIManager
         
         GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}", Vector3.zero, Quaternion.identity);
         T sceneUI = Util.GetOrAddComponent<T>(go);
+        sceneUI.Init();
         _sceneUIs.Add(sceneUI);
 
         go.transform.SetParent(Root.transform);
@@ -105,6 +113,7 @@ public class UIManager
         
         GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}", Vector3.zero, Quaternion.identity);
         T popup = Util.GetOrAddComponent<T>(go);
+        popup.Init();
         _popupStack.Push(popup);
         
         go.transform.SetParent(Root.transform);
@@ -161,6 +170,7 @@ public class UIManager
             Managers.Resource.Destroy(ui.gameObject);
         }
         _sceneUIs.Clear();
+        _order = 10;
     }
 
     public void SetCurrentCanvas(Canvas temp)

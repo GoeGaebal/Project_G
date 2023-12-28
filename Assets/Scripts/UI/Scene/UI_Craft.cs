@@ -52,17 +52,7 @@ public class UI_Craft : UI_Scene
         open = (n) => { OpenCraft(n); };
         openUI = () => { OpenCraftList(); };
     }
-
-    void Start()
-    {
-        Init();
-    }
-
-    void Update()
-    {
-        
-    }
-
+    
     public override void Init()
     {
         //base.init();
@@ -81,6 +71,7 @@ public class UI_Craft : UI_Scene
         _source = Get<UI_CraftMaterial>((int)Slots.SourceItem);
         _material_1 = Get<UI_CraftMaterial>((int)Slots.Material1);
         _material_2 = Get<UI_CraftMaterial>((int)Slots.Material2);
+        _target.Init(); _source.Init(); _material_1.Init(); _material_2.Init();
 
         Get<Button>((int)Buttons.CloseButton).onClick.AddListener(CloseCraftList);
         Get<Button>((int)Buttons.CraftButton).onClick.AddListener(Craft);

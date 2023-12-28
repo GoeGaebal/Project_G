@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BasicMonster : CreatureController, IAttackable, IMoveable
 {
+    [Space]
     [SerializeField] protected float attackPoint; 
     [SerializeField] protected float attackCooldown;
     [SerializeField] protected float detectRadius;
@@ -26,6 +27,7 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
 
     private GameObject FloatingDamageObject;
     private Transform FloatingPos;
+    [SerializeField] private bool isFly;
     
     private static readonly int RunAnimParam = Animator.StringToHash("run");
     private static readonly int Hit = Animator.StringToHash("hit");
@@ -94,7 +96,8 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
             var position = transform.position;
             Vector2 targetPosition = hasTarget ? Target.transform.position : _spawnPosition;
             DoFlip(targetPosition.x < position.x);
-            transform.position = Vector2.MoveTowards(position, targetPosition, speed * Time.deltaTime);
+            var nextPosition = Vector2.MoveTowards(position, targetPosition, speed * Time.deltaTime);
+            if (isFly || Managers.Map.CheckCanGo(nextPosition)) transform.position = nextPosition;
         }
 
         var packet = new S_Move
@@ -151,7 +154,9 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     private void OnEndDieAnim()
     {
         if (!Managers.Network.IsHost) return;
-        Managers.Network.Server.Room.SpawnLootingItems(4102,5,transform.position,2.0f, 1.0f);
+        var position = transform.position;
+        Managers.Network.Server.Room.SpawnLootingItems(4102,5,position,2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(4103,2,position,2.0f, 1.0f);
         {
             S_DeSpawn despawn = new S_DeSpawn();
             despawn.ObjectIds.Add(Id);

@@ -12,7 +12,21 @@ public class GameRoom
     private readonly Dictionary<int, ObjectInfo> _players = new Dictionary<int, ObjectInfo>();
     private readonly Dictionary<int, ObjectInfo> _objects = new Dictionary<int, ObjectInfo>();
     public int PlayersCount => _players.Count;
-    
+
+    public int LivePlayerCount
+    {
+        get
+        {
+            var ret = 0;
+            foreach (var player in _players.Values)
+            {
+                if (player.PosInfo.State != CreatureState.Dead) ret++;
+            }
+
+            return ret;
+        }
+    }
+
     private static int _counter = 0;
     private static int _monsterCounter = 0;
     private static int _lootingCounter = 0;
@@ -98,6 +112,28 @@ public class GameRoom
                 if (p.ObjectId != gameObject.ObjectId)
                     PlayersSessions[p.ObjectId].Send(spawnPacket);
             }
+        }
+    }
+
+    public void PlayerDie(int id)
+    {
+        var die = new S_Die
+        {
+            ObjectId = id
+        };
+        _players[id].PosInfo.State = CreatureState.Dead;
+        Managers.Network.Server.Room.Broadcast(die);
+    }
+
+    public void ReviveAll(float hp)
+    {
+        foreach (var player in _players.Values)
+        {
+            PlayersSessions[player.ObjectId].Send(new S_Revive()
+            {
+                PlayerId = player.ObjectId,
+                Hp = hp
+            });
         }
     }
 
@@ -196,10 +232,12 @@ public class GameRoom
         if (end >= 0) name = name[..end].Trim();
 
         obj.Info.Name = name;
-        var position = obj.transform.position;
+        var transform = obj.transform;
+        var position = transform.position;
         obj.PosInfo.PosX = position.x;
         obj.PosInfo.PosY = position.y;
         obj.PosInfo.State = CreatureState.Idle;
+        obj.PosInfo.LocalScale = transform.localScale.x;
         _objects.Add(obj.Id, obj.Info);
         return obj.Info;
     }

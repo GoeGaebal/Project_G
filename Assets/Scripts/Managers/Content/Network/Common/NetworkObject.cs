@@ -36,5 +36,6 @@ public class NetworkObject : MonoBehaviour
     {
         var t = transform;
         t.position = new Vector3(PosInfo.PosX, PosInfo.PosY);
+        if (PosInfo.LocalScale != 0) t.localScale = PosInfo.LocalScale * Vector3.one;
     }
 }

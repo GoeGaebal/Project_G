@@ -20,18 +20,6 @@ public class UI_CraftMaterial : UI_Base
     private GameObject _countGo;
     private TMP_Text _count;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public override void Init()
     {
         Bind<GameObject>(typeof(GameObjects));

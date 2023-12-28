@@ -31,20 +31,17 @@ public class GameScene : BaseScene
     private void Start()
     {
         Managers.UI.SetEventSystem();
-        Managers.UI.ShowSceneUI<UI_Inven>();
-        Managers.UI.ShowSceneUI<UI_Map>();
+        
         Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Chat>();
+        Managers.UI.ShowSceneUI<UI_Inven>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();
         Managers.UI.ShowSceneUI<UI_Crosshair>();
 
         // Managers.Network.ResetPlayer();
 
         _playerLifeCnt = Managers.Object.PlayerDict.Count;
-        foreach (var player in Managers.Object.PlayerDict.Values)
-        {
-            player.transform.position = Vector3.zero;
-        }
     }
 
     public override void Clear()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -16,16 +17,10 @@ public class UI_Crosshair : UI_Scene
     [SerializeField] private Sprite crossHair;
     private GameObject _cursor;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();   
-    }
-
     public override void Init()
     {
         //base.Init();
-        Managers.UI.SetCanvas(gameObject, true);
+        Managers.UI.SetCanvas(gameObject, true, 50);
 
         Bind<GameObject>(typeof(GameObjects));
         _cursor = Get<GameObject>((int)GameObjects.Cursor);
@@ -37,8 +32,7 @@ public class UI_Crosshair : UI_Scene
     // Update is called once per frame
     void Update()
     {
-        _cursor.transform.position = Input.mousePosition;
-
+        _cursor.transform.position = Mouse.current.position.value;
     }
 
     private void OnDestroy()
