@@ -43,7 +43,10 @@ public class WeaponPivotController : NetworkObject
 
     void Update()
     {
-        if (pivot == null) return;
+        if (pivot == null)
+        {
+            pivot = Util.FindChild(transform.parent.gameObject, "WeaponPivot").transform;
+        }
         if(_player != Managers.Network.LocalPlayer) return;
         if (_player.IsDead) return;
 

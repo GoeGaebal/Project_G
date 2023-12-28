@@ -11,7 +11,8 @@ public class UI_Option : UI_Popup
     enum Buttons
     {
         ResumeButton,
-        QuitButton
+        QuitButton,
+        ExitRoomButton
     }
     enum Sliders
     {
@@ -49,7 +50,8 @@ public class UI_Option : UI_Popup
         Get<Slider>((int)Sliders.EffectVolumeSlider).value = Managers.Sound.effectVolume;
 
         GetButton((int)Buttons.ResumeButton).gameObject.BindEvent(CloseOption);
-        GetButton((int)Buttons.ResumeButton).gameObject.BindEvent(QuitGame);
+        GetButton((int)Buttons.QuitButton).gameObject.BindEvent(QuitGame);
+        GetButton((int)Buttons.ExitRoomButton).onClick.AddListener(ExitRoom);
         Get<Toggle>((int)Toggles.QHD).onValueChanged.AddListener(ChangeResolutionQHD);
         Get<Toggle>((int)Toggles.FHD).onValueChanged.AddListener(ChangeResolutionFHD);
         Get<Toggle>((int)Toggles.HD).onValueChanged.AddListener(ChangeResolutionHD);
@@ -71,6 +73,12 @@ public class UI_Option : UI_Popup
     private void QuitGame(PointerEventData evt)
     {
         Application.Quit();
+    }
+    
+    private void ExitRoom()
+    {
+        if (Managers.Network.IsHost) Managers.Network.Server.ShutDown();
+        else Managers.Network.Client.DisConnect();
     }
 
     public void CheckResolution()//모니터 해상도 체크해서 설정 적용
