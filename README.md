@@ -5,6 +5,11 @@
 ## 운영 환경
 Windows 10
 
+## 설치방법
+Release나 아래 링크를 통해 REWILDERS.zip파일을 다운 받고 압축을 풉니다.
+
+[다운로드](https://github.com/GoeGaebal/Project_G/releases/download/v0.1.0/REWILDERS.zip)
+
 ## 실행 방법
 실행파일 폴더 내부의 REWILDERS.exe 파일을 실행합니다.
 게임 내부에서는 Play 버튼을 누르고 방을 생성하면 플레이가 가능합니다.
