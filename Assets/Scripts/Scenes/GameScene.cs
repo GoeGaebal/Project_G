@@ -32,8 +32,8 @@ public class GameScene : BaseScene
     {
         Managers.UI.SetEventSystem();
         
-        Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Status>();
+        Managers.UI.ShowSceneUI<UI_Map>();
         Managers.UI.ShowSceneUI<UI_Chat>();
         Managers.UI.ShowSceneUI<UI_Inven>();
         Managers.UI.ShowSceneUI<UI_SystemMessage>();

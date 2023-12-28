@@ -338,6 +338,7 @@ public class Player : CreatureController, IAttackable, IMoveable
     {
         Managers.Input.PlayerActions.Move.RemoveEvent(OnMoveInput);
         Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttackInput);
+        Managers.Input.PlayerActions.Interact.RemoveEvent(OnInteract);
     }
 
     private void Interact()
