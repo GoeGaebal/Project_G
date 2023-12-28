@@ -154,7 +154,9 @@ public class BasicMonster : CreatureController, IAttackable, IMoveable
     private void OnEndDieAnim()
     {
         if (!Managers.Network.IsHost) return;
-        Managers.Network.Server.Room.SpawnLootingItems(4102,5,transform.position,2.0f, 1.0f);
+        var position = transform.position;
+        Managers.Network.Server.Room.SpawnLootingItems(4102,5,position,2.0f, 1.0f);
+        Managers.Network.Server.Room.SpawnLootingItems(4103,2,position,2.0f, 1.0f);
         {
             S_DeSpawn despawn = new S_DeSpawn();
             despawn.ObjectIds.Add(Id);

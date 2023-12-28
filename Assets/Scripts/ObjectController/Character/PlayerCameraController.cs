@@ -14,13 +14,13 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     private void Update() {
-        if(Input.GetKeyDown(KeyCode.F1))
+        if(Keyboard.current.f1Key.IsPressed())
             targetPlayer = null;
-        else if(Input.GetKeyDown(KeyCode.F2))
+        else if(Keyboard.current.f2Key.IsPressed())
             targetPlayer = GetPlayer(0);
-        else if(Input.GetKeyDown(KeyCode.F3))
+        else if(Keyboard.current.f3Key.IsPressed())
             targetPlayer = GetPlayer(1);
-        else if(Input.GetKeyDown(KeyCode.F4))
+        else if(Keyboard.current.f4Key.IsPressed())
             targetPlayer = GetPlayer(2);
       
 

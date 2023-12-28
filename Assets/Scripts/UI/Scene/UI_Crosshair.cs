@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -31,8 +32,7 @@ public class UI_Crosshair : UI_Scene
     // Update is called once per frame
     void Update()
     {
-        _cursor.transform.position = Input.mousePosition;
-
+        _cursor.transform.position = Mouse.current.position.value;
     }
 
     private void OnDestroy()
