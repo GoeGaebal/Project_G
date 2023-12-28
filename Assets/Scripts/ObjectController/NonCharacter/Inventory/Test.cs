@@ -5,19 +5,11 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     public UI_Inven ui_inven;
-    public Item[] itemsToPickUp;
+    private int[] itemsToPickUp = { 4001, 4101, 4102, 4103, 1001, 1002, 1003, 1004, 2001, 2002, 2003, 2004, 3001 };
 
     public void PickUpItem(int id)
     {
-        bool result = ui_inven.AddItem(itemsToPickUp[id]);
-        /*if (result)
-        {
-            //Debug.Log("아이템 추가됨");
-        }
-        else
-        {
-            Debug.Log("아이템 추가 안 됨");
-        }*/
+        ui_inven.AddItem(Managers.Data.ItemDict[itemsToPickUp[id]]);
     }
 
     public void SortItem()

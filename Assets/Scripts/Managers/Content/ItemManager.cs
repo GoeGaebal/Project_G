@@ -14,6 +14,8 @@ public class ItemManager
     private int _inventoryCount = 24;
     private int _equipCount = 6;
     private int _chestCount = 49;
+
+    [HideInInspector] public bool onceFlag = true;
     public void Init()
     {
         GameObject root = GameObject.Find("@Item");

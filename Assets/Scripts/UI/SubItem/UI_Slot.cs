@@ -19,10 +19,10 @@ public class UI_Slot : UI_Base
             if (itemInThisSlot != value)
             {//슬롯에 들어 있는 아이템이 바뀌면 아이템 매니저에 연동시켜줌
                 itemInThisSlot = value;
-                if (isEquip)//장비창의 경우에는 스탯 동기화도 같이
+                /*if (isEquip)//장비창의 경우에는 스탯 동기화도 같이
                 {
                     Managers.Item.equipSlots[invIndex] = value;
-                    /*
+                    
                     if(invIndex < 5)
                     {
                         if(value != null)
@@ -34,7 +34,7 @@ public class UI_Slot : UI_Base
 
                         }   
                     }
-                    */
+                    
                 }
                 else if(isChest)
                 {
@@ -43,7 +43,7 @@ public class UI_Slot : UI_Base
                 else
                 {
                     Managers.Item.inventorySlots[invIndex] = value;
-                }
+                }*/
             }
         }
     }
