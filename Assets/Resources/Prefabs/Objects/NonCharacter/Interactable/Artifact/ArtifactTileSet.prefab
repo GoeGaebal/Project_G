@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1969079089133650517}
   - component: {fileID: 1969079089133650516}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ArtifactTileSet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,6 +58,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1969079089133650517}
     m_Modifications:
+    - target: {fileID: 1332100163721849512, guid: 9fe1adb1b91111f46926928e81a7c1b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 1332100163721849513, guid: 9fe1adb1b91111f46926928e81a7c1b1,
         type: 3}
       propertyPath: m_Sprite
@@ -144,6 +149,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Artifact1
       objectReference: {fileID: 0}
+    - target: {fileID: 6818686146054234963, guid: 9fe1adb1b91111f46926928e81a7c1b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8619354137910394163, guid: 9fe1adb1b91111f46926928e81a7c1b1,
         type: 3}
       propertyPath: m_RootOrder
@@ -214,6 +224,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1969079089133650517}
     m_Modifications:
+    - target: {fileID: 1332100163721849512, guid: 9fe1adb1b91111f46926928e81a7c1b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 1332100163721849513, guid: 9fe1adb1b91111f46926928e81a7c1b1,
         type: 3}
       propertyPath: m_Sprite
@@ -300,6 +315,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Artifact0
       objectReference: {fileID: 0}
+    - target: {fileID: 6818686146054234963, guid: 9fe1adb1b91111f46926928e81a7c1b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8619354137910394163, guid: 9fe1adb1b91111f46926928e81a7c1b1,
         type: 3}
       propertyPath: m_RootOrder
@@ -370,6 +390,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1969079089133650517}
     m_Modifications:
+    - target: {fileID: 1332100163721849512, guid: 9fe1adb1b91111f46926928e81a7c1b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 1332100163721849513, guid: 9fe1adb1b91111f46926928e81a7c1b1,
         type: 3}
       propertyPath: m_Sprite
@@ -455,6 +480,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Artifact2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818686146054234963, guid: 9fe1adb1b91111f46926928e81a7c1b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8619354137910394163, guid: 9fe1adb1b91111f46926928e81a7c1b1,
         type: 3}

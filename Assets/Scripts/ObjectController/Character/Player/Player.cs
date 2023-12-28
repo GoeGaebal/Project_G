@@ -53,6 +53,10 @@ public class Player : CreatureController, IAttackable, IMoveable
     public Image HPBar;
     public TextMeshProUGUI HPText;
 
+    private BoxCollider2D _collider;
+    private Collider2D[] _results = new Collider2D[2];
+    private ContactFilter2D _filter2D = new ContactFilter2D();
+
     public string Name
     {
         get => _name.text;
@@ -106,6 +110,11 @@ public class Player : CreatureController, IAttackable, IMoveable
         {
             if (State == CreatureState.Hit) State = CreatureState.Idle;
         };
+
+        _collider = GetComponent<BoxCollider2D>();
+        _filter2D.useLayerMask = true;
+        _filter2D.useTriggers = true;
+        _filter2D.SetLayerMask(LayerMask.GetMask("Interactable"));
     }
     
     void Start()
@@ -331,42 +340,15 @@ public class Player : CreatureController, IAttackable, IMoveable
         Managers.Input.PlayerActions.Attack.RemoveEvent(OnAttackInput);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Interact()
     {
-        if(interactable == null)
-        {
-            interactable = collision.GetComponent<IInteractable>();
-            interactableName = collision.gameObject.name;
-        }
-        else
-        {
-            return;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (interactableName == collision.gameObject.name)
-        {
-            interactable = null;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if(interactable == null)
-        {
-            interactable = collision.GetComponent<IInteractable>();
-            interactableName = collision.gameObject.name;
-        }
+        var numResults = Physics2D.OverlapCollider(_collider,_filter2D,_results);
+        for (var i = 0; i < numResults; i++)  _results[i].gameObject.GetComponent<IInteractable>()?.Interact();
     }
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (interactable != null)
-        {
-            interactable.Interact();
-        }
+        Interact();
     }
 
     public override void SyncPos()
