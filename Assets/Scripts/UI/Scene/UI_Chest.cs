@@ -44,9 +44,9 @@ public class UI_Chest : UI_Scene
             chestSlots[i].transform.localScale = Vector3.one;
             if(Managers.Item.chestSlots[i] != null)
             {
-                Managers.Item.SpawnNewItem(Managers.Item.chestSlots[i], chestSlots[i]);
                 chestSlots[i].isChest = true;
                 chestSlots[i].invIndex = i;
+                Managers.Item.SpawnNewItem(Managers.Item.chestSlots[i], chestSlots[i]);
             }
         }
 

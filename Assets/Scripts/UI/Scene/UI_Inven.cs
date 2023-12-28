@@ -165,13 +165,18 @@ public class UI_Inven : UI_Scene//, IDataPersistence
             equips[idex] = Get<UI_Slot>((int)slot);
             equips[idex].isEquip = true;
             equips[idex].invIndex = idex;
+
             if (Managers.Item.equipSlots[idex] != null)
             {
                 Managers.Item.SpawnNewItem(Managers.Item.equipSlots[idex], equips[idex]);
-                Managers.Item.equipSlots[idex].Select();
+                if (Managers.Item.onceFlag)
+                {
+                    Managers.Item.equipSlots[idex].Select();
+                }
             }
             idex++;
         }
+        Managers.Item.onceFlag = false;
 
         if (equips[0].transform.childCount >= 1)
         {

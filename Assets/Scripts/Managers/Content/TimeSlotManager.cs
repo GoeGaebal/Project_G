@@ -9,7 +9,7 @@ public enum EnumTimeSlot
 public class TimeSlotManager
 {
 
-    [SerializeField] private float _timeChangePeriod = 3.0f;
+    [SerializeField] private float _timeChangePeriod = 30.0f;
     public float TimeChangePeriod{
         get { return _timeChangePeriod;}
     }
