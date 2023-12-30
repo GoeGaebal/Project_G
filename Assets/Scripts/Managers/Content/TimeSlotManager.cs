@@ -108,32 +108,4 @@ public class TimeSlotManager
             }
     }
 
- //   public void OnEvent(EventData photonEvent)
-   // {
-
-   //     byte eventCode = photonEvent.Code;
-
-        // switch (eventCode)
-        // {
-        //     case (byte)NetworkManager.CustomRaiseEventCode.SynchronizeTime:
-        //         if (!PhotonNetwork.IsMasterClient)
-        //         {
-        //             Debug.Log("recieved time event");
-        //             object[] data = (object[])photonEvent.CustomData;
-        //             
-        //             CurrentTime = (float)data[0];
-        //             TimeSlot = (EnumTimeSlot)data[1];
-        //             RotateTimer.SetTimerAngle((Quaternion)data[2]);
-        //         }
-        //         UpdateTimeSlot(TimeSlot);
-        //         break;
-        //     case (byte)NetworkManager.CustomRaiseEventCode.RequestSynchronizeTime:
-        //         if(!PhotonNetwork.IsMasterClient) break;
-        //         Managers.Network.SynchronizeTime();
-        //         break;
-        //     default:
-        //         break;
-        // }
-        
-    //}
 }

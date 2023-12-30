@@ -75,36 +75,4 @@ public class WeatherManager
                     break;
             }
     }
-
-    // 서버 동기화 관련. 일단 보류
-    // public void OnEvent(EventData photonEvent)
-    //{
-
-    //     byte eventCode = photonEvent.Code;
-
-    //     switch (eventCode)
-
-    //     {
-    //         case (byte)NetworkManager.CustomRaiseEventCode.SynchronizeTime:
-    //             if (!PhotonNetwork.IsMasterClient)
-    //             {
-    //                 Debug.Log("recieved time event");
-    //                 object[] data = (object[])photonEvent.CustomData;
-                    
-    //                 CurrentTime = (float)data[0];
-    //                 TimeSlot = (EnumTimeSlot)data[1];
-    //                 CountTimeSlotChanged = (int)data[2];
-    //                 RotateTimer.SetTimerAngle((Quaternion)data[3]);
-    //             }
-    //             UpdateTimeSlot(TimeSlot);
-    //             break;
-    //         case (byte)NetworkManager.CustomRaiseEventCode.RequestSynchronizeTime:
-    //             if(!PhotonNetwork.IsMasterClient) break;
-    //             Managers.Network.SynchronizeTime();
-    //             break;
-    //         default:
-    //             break;
-    //     }
-        
-    // }
 }
