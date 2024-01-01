@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5326072701408053839}
   - component: {fileID: 9182979680830000086}
+  - component: {fileID: 1628694150547761056}
   m_Layer: 7
   m_Name: VisualEffect
   m_TagString: Untagged
@@ -47,7 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 7296600270386754450}
-  rainSystem: {fileID: 1614032293231672280}
   defaultColor:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 0}
@@ -69,7 +69,22 @@ MonoBehaviour:
   rainNightColor:
     m_OverrideState: 0
     m_Value: {r: 0.2540495, g: 0.25794128, b: 0.31132078, a: 0}
-  _universalRenderfeature: {fileID: 2491696103660070196, guid: c40be3174f62c4acf8c1216858c64956,
+--- !u!114 &1628694150547761056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085815762477524167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a86a694437619da41be2ecbd5d5be89b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rainSystem: {fileID: 1614032293231672280}
+  rainSystemPrefab: {fileID: 4870248127182101245, guid: e07f7903216163247bb6a350053e2505,
+    type: 3}
+  heatDistortionWeatherRenderfeature: {fileID: 2491696103660070196, guid: c40be3174f62c4acf8c1216858c64956,
     type: 2}
 --- !u!1001 &2474042711639176683
 PrefabInstance:

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using Google.Protobuf.Protocol;
 using UnityEngine;
-using Google.Protobuf.Protocol;
+
 
 public class GasBossMonsterScript : BasicMonster
 {

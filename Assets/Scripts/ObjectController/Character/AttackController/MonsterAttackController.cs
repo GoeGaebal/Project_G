@@ -5,7 +5,7 @@ using UnityEngine;
 public class MonsterAttackController : AttackController
 {
     private void Start() {
-        weaponController = new MonsterWeaponController();
+        AddTargetLayer((int)EnumLayerMask.Player);
     }
     
     public void SetActive(bool active) {
@@ -13,10 +13,4 @@ public class MonsterAttackController : AttackController
     }
 }
 
-class MonsterWeaponController : Weapon
-{
-    public MonsterWeaponController()
-    {
-        AddTargetLayer((int)EnumLayerMask.Player);
-    }
-}
+
