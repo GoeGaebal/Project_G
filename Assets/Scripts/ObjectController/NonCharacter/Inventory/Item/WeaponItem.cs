@@ -15,11 +15,6 @@ public class WeaponItem : EquipableItem
         _attackSpeed = attackSpeed;
     }
 
-    public override void ChangeEquipableItem()
-    {
-        PlayerAttackController.ChangeWeapon(EnumWeaponList.Sword);
-    }
-
     public override void Select()
     {
         base.Select();
