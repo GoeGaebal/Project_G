@@ -6,12 +6,13 @@ using UnityEngine;
 
 
 
-public class BossMonster : BasicMonster
+public partial class BossMonster : BasicMonster
 {   
     public static Action FinishSpellAction;
     [SerializeField] private Vector2 BossroomLeftDownWorldPos;
     [SerializeField] private Vector2 BossroomRightUpWorldPos;
     [SerializeField] private GameObject portalPrefab;
+    [SerializeField] float cooltimeCasting;
     private readonly List<ICastingSpell> _spells = new();
     public List<Transform> Thunders { get; } = new();
 
@@ -22,7 +23,7 @@ public class BossMonster : BasicMonster
 
         FinishSpellAction = FinishSpell; 
         
-        _spells.Add(new NEWSSpell(this));
+        _spells.Add(new ThunderSpell(this));
         _spells.Add(new TeleportTargetSpell(this));
 
         for(int i = 0;i< 4;i++)
@@ -32,7 +33,7 @@ public class BossMonster : BasicMonster
         }
     }
 
-    [SerializeField] float cooltimeCasting;
+
     private static readonly int Casting = Animator.StringToHash("casting");
 
     protected override void FixedUpdate() {
@@ -93,51 +94,6 @@ public class BossMonster : BasicMonster
             S_DeSpawn despawn = new S_DeSpawn();
             despawn.ObjectIds.Add(Id);
             Managers.Network.Server.Room.Broadcast(despawn);
-        }
-    }
-
-    class NEWSSpell: ICastingSpell
-    {
-        BossMonster _bossMonster;
-        public NEWSSpell(BossMonster bm)
-        {
-            _bossMonster = bm;
-        }
-        public void Spell()
-        {
-            Debug.Log("do spell");
-            List<Transform> tfs = _bossMonster.Thunders;
-            foreach(Transform tf in tfs)
-            {
-                tf.gameObject.SetActive(true);
-            }
-            tfs[0].localPosition = new Vector2(0f,0.5f);
-            tfs[1].localPosition = new Vector2(0.5f,0f);
-            tfs[2].localPosition = new Vector2(0f,-0.5f);
-            tfs[3].localPosition = new Vector2(-0.5f,0f);
-
-            foreach(Transform tf in tfs)
-            {
-                tf.SetParent(null);
-            }
-            
-        }
-    }
-
-    class TeleportTargetSpell:ICastingSpell
-    {
-        BossMonster _bossMonster;
-        public TeleportTargetSpell(BossMonster bm)
-        {
-            _bossMonster = bm;
-        }
-        public void Spell()
-        {
-            if (_bossMonster.Target == null)
-            {
-                return;
-            }
-            _bossMonster.Target.transform.position = (Vector2)_bossMonster.transform.position + Vector2.right * 0.5f;
         }
     }
 
